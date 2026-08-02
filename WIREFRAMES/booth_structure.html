@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>MLA E-Office — Booth Structure</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--sb:#1B3A5C;--sw:240px;--th:56px;--p:#1B3A5C;--pl:#EFF4F9;--bg:#F5F7FA;--c:#FFF;--t1:#0F172A;--t2:#475569;--t3:#64748B;--t4:#94A3B8;--b:#DDE3EB;--ok:#16A34A;--okb:#F0FDF4;--wr:#D97706;--wrb:#FFFBEB;--er:#DC2626;--in:#2563EB;--inb:#EFF6FF;--pu:#7C3AED;--pub:#F5F3FF;--r:3px;--ss:0 1px 3px rgba(15,23,42,.08)}
+    [data-theme="dark"]{--sb:#0D1B2A;--p:#5A9BD5;--pl:#1A3355;--bg:#0F1419;--c:#1A2332;--t1:#E2ECF4;--t2:#8EA3B8;--t3:#6B8299;--t4:#4F6479;--b:#2A3A4E;--ok:#22C55E;--wr:#F59E0B;--er:#EF4444;--in:#3B82F6;--pu:#A78BFA;--ss:0 1px 3px rgba(0,0,0,.4)}
+    body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--t1);transition:background .2s,color .2s}
+    .mr{font-family:'Noto Sans Devanagari',sans-serif}
+    .app{display:flex;min-height:100vh}
+    .sidebar{width:var(--sw);background:var(--sb);color:#fff;position:fixed;top:0;left:0;bottom:0;z-index:200;display:flex;flex-direction:column;overflow:hidden}
+    .sidebar-logo{height:var(--th);display:flex;align-items:center;padding:0 16px;gap:10px;border-bottom:1px solid rgba(255,255,255,.1)}
+    .sidebar-logo .icon{width:32px;height:32px;background:rgba(255,255,255,.12);border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:16px}
+    .sidebar-logo .name{font-size:15px;font-weight:700}
+    .sidebar-nav{flex:1;padding:8px 0;overflow-y:auto}
+    .ns{padding:16px 16px 4px;font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:rgba(255,255,255,.35);font-weight:600}
+    .ni{display:flex;align-items:center;gap:12px;padding:9px 16px;margin:1px 8px;border-radius:var(--r);cursor:pointer;font-size:13px;font-weight:500;color:rgba(255,255,255,.7);text-decoration:none;transition:background .12s}
+    .ni:hover{background:rgba(255,255,255,.08);color:#fff}.ni.active{background:rgba(255,255,255,.12);color:#fff}
+    .ni .ic{width:20px;text-align:center;font-size:15px;opacity:.7}.ni.active .ic{opacity:1}
+    .topbar{position:fixed;top:0;left:var(--sw);right:0;height:var(--th);background:var(--c);border-bottom:1px solid var(--b);display:flex;align-items:center;padding:0 24px;z-index:300;gap:16px}
+    .tb-toggle{width:36px;height:36px;border:none;background:none;cursor:pointer;border-radius:var(--r);font-size:18px;color:var(--t3);display:flex;align-items:center;justify-content:center}
+    .tb-actions{display:flex;align-items:center;gap:8px;margin-left:auto}
+    .tb-btn{width:36px;height:36px;border:1px solid var(--b);background:var(--c);border-radius:var(--r);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--t3)}
+    .tb-avatar{width:32px;height:32px;border-radius:var(--r);background:var(--p);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;cursor:pointer}
+    [data-theme="dark"] .tb-avatar{background:#1A3355;color:#5A9BD5}
+    .main{margin-left:var(--sw);margin-top:var(--th);padding:24px}
+    .ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px}
+    .ph .title{font-size:22px;font-weight:700}
+    .ph .sub{font-size:13px;color:var(--t3);margin-top:2px}
+    .btn{height:36px;padding:0 16px;border-radius:var(--r);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;border:none;transition:all .12s}
+    .btn-p{background:var(--p);color:#fff}.btn-o{background:transparent;color:var(--t2);border:1px solid var(--b)}
+
+    /* Two column: Tree + Detail */
+    .layout{display:grid;grid-template-columns:360px 1fr;gap:16px}
+
+    /* Tree Panel */
+    .tree-panel{background:var(--c);border:1px solid var(--b);border-radius:var(--r);box-shadow:var(--ss);overflow:hidden}
+    .tree-header{padding:14px 16px;border-bottom:1px solid var(--b);display:flex;align-items:center;justify-content:space-between}
+    .tree-header-title{font-size:14px;font-weight:600}
+    .tree-search{padding:12px 16px;border-bottom:1px solid var(--b)}
+    .tree-search input{width:100%;height:32px;padding:0 10px;border:1px solid var(--b);border-radius:var(--r);font-size:12px;background:var(--bg);color:var(--t1);font-family:inherit;outline:none}
+    .tree-body{padding:8px 0;max-height:calc(100vh - 200px);overflow-y:auto}
+
+    /* Tree Nodes */
+    .tree-node{padding:0 8px}
+    .tn-row{display:flex;align-items:center;gap:6px;padding:7px 8px;border-radius:var(--r);cursor:pointer;transition:background .1s;font-size:13px;color:var(--t2)}
+    .tn-row:hover{background:var(--pl)}
+    .tn-row.active{background:var(--pl);color:var(--p);font-weight:600}
+    .tn-toggle{width:16px;font-size:10px;color:var(--t4);text-align:center;flex-shrink:0;cursor:pointer}
+    .tn-icon{font-size:14px;flex-shrink:0}
+    .tn-label{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .tn-count{font-size:11px;color:var(--t4);background:var(--bg);padding:1px 6px;border-radius:10px;font-weight:500}
+    .tn-children{padding-left:22px}
+
+    /* Detail Panel */
+    .detail-panel{background:var(--c);border:1px solid var(--b);border-radius:var(--r);box-shadow:var(--ss);overflow:hidden}
+    .dp-header{padding:20px;border-bottom:1px solid var(--b)}
+    .dp-title{font-size:18px;font-weight:700;margin-bottom:4px}
+    .dp-sub{font-size:13px;color:var(--t3)}
+    .dp-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}
+    .dp-stat{text-align:center;padding:12px;background:var(--bg);border-radius:var(--r)}
+    .dp-stat-val{font-size:20px;font-weight:700}
+    .dp-stat-label{font-size:11px;color:var(--t3)}
+
+    .dp-body{padding:20px}
+    .dp-section-title{font-size:13px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px}
+    .booth-card{display:flex;align-items:center;gap:12px;padding:10px 12px;border:1px solid var(--b);border-radius:var(--r);margin-bottom:8px;transition:border .12s;cursor:pointer}
+    .booth-card:hover{border-color:var(--p)}
+    .booth-num{width:40px;height:40px;border-radius:var(--r);background:var(--pl);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--p);flex-shrink:0}
+    .booth-info{flex:1}
+    .booth-name{font-size:13px;font-weight:600;color:var(--t1)}
+    .booth-meta{font-size:11px;color:var(--t3)}
+    .booth-voters{font-size:12px;font-weight:600;color:var(--t2)}
+
+    .tt{position:fixed;top:10px;right:16px;z-index:400;display:flex;gap:4px}
+    .tt button{background:var(--c);border:1px solid var(--b);border-radius:var(--r);padding:5px 10px;cursor:pointer;font-size:11px;font-family:inherit;color:var(--t3)}
+    .tt button.active{background:#1B3A5C;color:#fff;border-color:#1B3A5C}
+    [data-theme="dark"] .tt button.active{background:#5A9BD5;color:#0F1419}
+    .wfb{position:fixed;bottom:16px;right:16px;z-index:400;background:#1B3A5C;color:#fff;padding:5px 10px;font-size:10px;font-weight:600;border-radius:var(--r);text-transform:uppercase;letter-spacing:1px;opacity:.8}
+    @media(max-width:1024px){.layout{grid-template-columns:1fr}}
+    @media(max-width:768px){.sidebar{transform:translateX(-100%)}.topbar{left:0}.main{margin-left:0;padding:16px}}
+  </style>
+</head>
+<body>
+  <div class="tt"><button class="active" onclick="setTheme('light')">☀ Light</button><button onclick="setTheme('dark')">🌙 Dark</button></div>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="sidebar-logo"><div class="icon">🏛️</div><div class="name">MLA E-Office</div></div>
+      <nav class="sidebar-nav">
+        <div class="ns">Office</div><a class="ni"><span class="ic">📊</span>Dashboard</a><a class="ni"><span class="ic">📨</span>Inward</a><a class="ni"><span class="ic">👤</span>Visitors</a>
+        <div class="ns">Public</div><a class="ni"><span class="ic">📝</span>Nivedans</a><a class="ni"><span class="ic">🏗️</span>Dev Works</a>
+        <div class="ns">Network</div><a class="ni"><span class="ic">👥</span>Karyakarta</a><a class="ni"><span class="ic">📍</span>Gram/Ward</a><a class="ni active"><span class="ic">🗳️</span>Booths</a>
+        <div class="ns">Tools</div><a class="ni"><span class="ic">📅</span>Calendar</a><a class="ni"><span class="ic">💬</span>WhatsApp</a><a class="ni"><span class="ic">📑</span>Reports</a>
+      </nav>
+    </aside>
+    <header class="topbar">
+      <button class="tb-toggle">☰</button>
+      <div class="tb-actions"><button class="tb-btn">🌐</button><button class="tb-btn">🔔</button><div class="tb-avatar">RP</div></div>
+    </header>
+    <main class="main">
+      <div class="ph">
+        <div><h1 class="title">Booth Structure · <span class="mr">बूथ रचना</span></h1><p class="sub">Constituency hierarchy: Taluka → Gram Panchayat → Village → Booth</p></div>
+        <div style="display:flex;gap:8px"><button class="btn btn-o">📥 Export</button><button class="btn btn-p">+ Add Booth</button></div>
+      </div>
+
+      <div class="layout">
+        <!-- Tree -->
+        <div class="tree-panel">
+          <div class="tree-header"><span class="tree-header-title">🗳️ Constituency Tree</span><span style="font-size:11px;color:var(--t4)">156 booths</span></div>
+          <div class="tree-search"><input placeholder="Search taluka, village, booth..."></div>
+          <div class="tree-body">
+            <div class="tree-node">
+              <div class="tn-row"><span class="tn-toggle">▼</span><span class="tn-icon">🏛️</span><span class="tn-label">Haveli Constituency</span><span class="tn-count">156</span></div>
+              <div class="tn-children">
+                <div class="tree-node">
+                  <div class="tn-row"><span class="tn-toggle">▼</span><span class="tn-icon">📍</span><span class="tn-label">Haveli Taluka</span><span class="tn-count">92</span></div>
+                  <div class="tn-children">
+                    <div class="tree-node">
+                      <div class="tn-row active"><span class="tn-toggle">▼</span><span class="tn-icon">🏘️</span><span class="tn-label">Pimpri (Ward 5)</span><span class="tn-count">12</span></div>
+                      <div class="tn-children">
+                        <div class="tree-node"><div class="tn-row"><span class="tn-toggle"></span><span class="tn-icon">🗳️</span><span class="tn-label">Booth 145</span><span class="tn-count">845</span></div></div>
+                        <div class="tree-node"><div class="tn-row"><span class="tn-toggle"></span><span class="tn-icon">🗳️</span><span class="tn-label">Booth 146</span><span class="tn-count">912</span></div></div>
+                        <div class="tree-node"><div class="tn-row"><span class="tn-toggle"></span><span class="tn-icon">🗳️</span><span class="tn-label">Booth 147</span><span class="tn-count">738</span></div></div>
+                        <div class="tree-node"><div class="tn-row"><span class="tn-toggle"></span><span class="tn-icon">🗳️</span><span class="tn-label">Booth 148</span><span class="tn-count">801</span></div></div>
+                      </div>
+                    </div>
+                    <div class="tree-node">
+                      <div class="tn-row"><span class="tn-toggle">▶</span><span class="tn-icon">🏘️</span><span class="tn-label">Shivaji Nagar (Ward 1)</span><span class="tn-count">8</span></div>
+                    </div>
+                    <div class="tree-node">
+                      <div class="tn-row"><span class="tn-toggle">▶</span><span class="tn-icon">🏡</span><span class="tn-label">Wadgaon Village</span><span class="tn-count">6</span></div>
+                    </div>
+                    <div class="tree-node">
+                      <div class="tn-row"><span class="tn-toggle">▶</span><span class="tn-icon">🏡</span><span class="tn-label">Ambegaon Village</span><span class="tn-count">4</span></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="tree-node">
+                  <div class="tn-row"><span class="tn-toggle">▶</span><span class="tn-icon">📍</span><span class="tn-label">Maval Taluka</span><span class="tn-count">38</span></div>
+                </div>
+                <div class="tree-node">
+                  <div class="tn-row"><span class="tn-toggle">▶</span><span class="tn-icon">📍</span><span class="tn-label">Shirur Taluka</span><span class="tn-count">26</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Detail -->
+        <div class="detail-panel">
+          <div class="dp-header">
+            <div class="dp-title">Pimpri (Ward 5) · <span class="mr">पिंपरी (वॉर्ड ५)</span></div>
+            <div class="dp-sub">Haveli Taluka · 12 Booths · 10,245 Total Voters</div>
+            <div class="dp-stats">
+              <div class="dp-stat"><div class="dp-stat-val" style="color:var(--in)">12</div><div class="dp-stat-label">Booths · बूथ</div></div>
+              <div class="dp-stat"><div class="dp-stat-val" style="color:var(--pu)">12</div><div class="dp-stat-label">Booth Pramukh</div></div>
+              <div class="dp-stat"><div class="dp-stat-val" style="color:var(--ok)">10,245</div><div class="dp-stat-label">Total Voters</div></div>
+            </div>
+          </div>
+          <div class="dp-body">
+            <div class="dp-section-title">Booths in Pimpri (Ward 5)</div>
+            <div class="booth-card">
+              <div class="booth-num">145</div>
+              <div class="booth-info"><div class="booth-name">Booth 145 — ZP School, Pimpri</div><div class="booth-meta">Pramukh: Ramesh Patil · 3 workers</div></div>
+              <div class="booth-voters">845 voters</div>
+            </div>
+            <div class="booth-card">
+              <div class="booth-num">146</div>
+              <div class="booth-info"><div class="booth-name">Booth 146 — Gram Panchayat Office</div><div class="booth-meta">Pramukh: Mangesh Jadhav · 5 workers</div></div>
+              <div class="booth-voters">912 voters</div>
+            </div>
+            <div class="booth-card">
+              <div class="booth-num">147</div>
+              <div class="booth-info"><div class="booth-name">Booth 147 — Community Hall</div><div class="booth-meta">Pramukh: Sachin Kale · 4 workers</div></div>
+              <div class="booth-voters">738 voters</div>
+            </div>
+            <div class="booth-card">
+              <div class="booth-num">148</div>
+              <div class="booth-info"><div class="booth-name">Booth 148 — Primary School</div><div class="booth-meta">Pramukh: Priya Deshmukh · 2 workers</div></div>
+              <div class="booth-voters">801 voters</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <div class="wfb">Wireframe · Booth Structure</div>
+  <script>function setTheme(t){document.documentElement.setAttribute('data-theme',t);document.querySelectorAll('.tt button').forEach(b=>b.classList.remove('active'));event.target.classList.add('active');}</script>
+</body>
+</html>

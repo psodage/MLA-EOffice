@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MLA E-Office — Nivedan List</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--sb:#1B3A5C;--sw:240px;--th:56px;--p:#1B3A5C;--ph:#152E49;--pl:#EFF4F9;--a:#FFC107;--bg:#F5F7FA;--c:#FFF;--t1:#0F172A;--t2:#475569;--t3:#64748B;--t4:#94A3B8;--b:#DDE3EB;--bs:#C5CED8;--ok:#16A34A;--okb:#F0FDF4;--okr:#BBF7D0;--wr:#D97706;--wrb:#FFFBEB;--wrr:#FDE68A;--er:#DC2626;--erb:#FEF2F2;--err:#FECACA;--in:#2563EB;--inb:#EFF6FF;--inr:#BFDBFE;--pu:#7C3AED;--pub:#F5F3FF;--pur:#DDD6FE;--or:#EA580C;--orb:#FFF7ED;--orr:#FED7AA;--ne:#6B7280;--neb:#F3F4F6;--ner:#D1D5DB;--r:3px;--ss:0 1px 3px rgba(15,23,42,.08),0 1px 2px rgba(15,23,42,.04);--sm:0 4px 6px rgba(15,23,42,.07),0 2px 4px rgba(15,23,42,.04)}
+    [data-theme="dark"]{--sb:#0D1B2A;--p:#5A9BD5;--ph:#7AB3E0;--pl:#1A3355;--bg:#0F1419;--c:#1A2332;--t1:#E2ECF4;--t2:#8EA3B8;--t3:#6B8299;--t4:#4F6479;--b:#2A3A4E;--bs:#3A4D63;--ok:#22C55E;--okb:#052E16;--okr:#166534;--wr:#F59E0B;--wrb:#2E1D05;--wrr:#78350F;--er:#EF4444;--erb:#2E0505;--err:#7F1D1D;--in:#3B82F6;--inb:#0C1929;--inr:#1E3A5F;--pu:#A78BFA;--pub:#1E0A3E;--pur:#4C1D95;--or:#F97316;--orb:#2E1505;--orr:#7C2D12;--ne:#9CA3AF;--neb:#1F2937;--ner:#374151;--ss:0 1px 3px rgba(0,0,0,.4);--sm:0 4px 6px rgba(0,0,0,.4)}
+    body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--t1);transition:background .2s,color .2s}
+    .mr{font-family:'Noto Sans Devanagari',sans-serif}.mono{font-family:'JetBrains Mono',monospace}
+    .app{display:flex;min-height:100vh}
+
+    /* Sidebar */
+    .sidebar{width:var(--sw);background:var(--sb);color:#fff;position:fixed;top:0;left:0;bottom:0;z-index:200;display:flex;flex-direction:column;overflow:hidden}
+    .sidebar-logo{height:var(--th);display:flex;align-items:center;padding:0 16px;gap:10px;border-bottom:1px solid rgba(255,255,255,.1);flex-shrink:0}
+    .sidebar-logo .icon{width:32px;height:32px;background:rgba(255,255,255,.12);border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:16px}
+    .sidebar-logo .name{font-size:15px;font-weight:700;white-space:nowrap}
+    .sidebar-nav{flex:1;padding:8px 0;overflow-y:auto}
+    .nav-s{padding:16px 16px 4px;font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:rgba(255,255,255,.35);font-weight:600}
+    .nav-i{display:flex;align-items:center;gap:12px;padding:9px 16px;margin:1px 8px;border-radius:var(--r);cursor:pointer;font-size:13px;font-weight:500;color:rgba(255,255,255,.7);white-space:nowrap;text-decoration:none;transition:background .12s}
+    .nav-i:hover{background:rgba(255,255,255,.08);color:#fff}
+    .nav-i.active{background:rgba(255,255,255,.12);color:#fff}
+    .nav-i .ic{width:20px;text-align:center;font-size:15px;opacity:.7;flex-shrink:0}
+    .nav-i.active .ic{opacity:1}
+    .nav-d{height:1px;background:rgba(255,255,255,.1);margin:8px 16px}
+
+    /* Topbar */
+    .topbar{position:fixed;top:0;left:var(--sw);right:0;height:var(--th);background:var(--c);border-bottom:1px solid var(--b);display:flex;align-items:center;padding:0 24px;z-index:300;gap:16px}
+    .tb-toggle{width:36px;height:36px;border:none;background:none;cursor:pointer;border-radius:var(--r);font-size:18px;color:var(--t3);display:flex;align-items:center;justify-content:center}
+    .tb-search{flex:1;max-width:520px;position:relative;margin:0 auto}
+    .tb-search input{width:100%;height:36px;padding:0 12px 0 36px;border:1px solid var(--b);border-radius:var(--r);background:var(--bg);font-size:13px;color:var(--t1);font-family:inherit;outline:none}
+    .tb-search input:focus{border-color:var(--p);box-shadow:0 0 0 3px rgba(27,58,92,.1)}
+    .tb-search .si{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:14px;color:var(--t4)}
+    .tb-actions{display:flex;align-items:center;gap:8px}
+    .tb-btn{width:36px;height:36px;border:1px solid var(--b);background:var(--c);border-radius:var(--r);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--t3);position:relative}
+    .tb-btn .bdg{position:absolute;top:-4px;right:-4px;width:18px;height:18px;border-radius:9px;background:var(--er);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center}
+    .tb-user{display:flex;align-items:center;gap:8px;padding:4px 8px;border-radius:var(--r);cursor:pointer}
+    .tb-avatar{width:32px;height:32px;border-radius:var(--r);background:var(--p);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+    [data-theme="dark"] .tb-avatar{background:#1A3355;color:#5A9BD5}
+    .tb-uname{font-size:13px;font-weight:600;color:var(--t1)}
+    .tb-urole{font-size:11px;color:var(--t3)}
+
+    /* Main */
+    .main{margin-left:var(--sw);margin-top:var(--th);padding:24px;min-height:calc(100vh - var(--th))}
+
+    /* Page Header */
+    .ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px}
+    .ph-left .title{font-size:22px;font-weight:700}
+    .ph-left .sub{font-size:13px;color:var(--t3);margin-top:2px}
+    .ph-right{display:flex;gap:8px}
+    .btn{height:36px;padding:0 16px;border-radius:var(--r);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;border:none;transition:all .12s}
+    .btn-p{background:var(--p);color:#fff}.btn-p:hover{filter:brightness(.92)}
+    .btn-o{background:transparent;color:var(--p);border:1px solid var(--p)}
+    .btn-a{background:var(--a);color:#1E293B;font-weight:600}
+
+    /* Filter Bar */
+    .filter-bar{background:var(--c);border:1px solid var(--b);border-radius:var(--r);padding:16px;margin-bottom:16px;display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;box-shadow:var(--ss)}
+    .filter-group{display:flex;flex-direction:column;gap:4px}
+    .filter-label{font-size:11px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.5px}
+    .filter-input{height:32px;padding:0 10px;border:1px solid var(--b);border-radius:var(--r);font-size:12px;color:var(--t1);font-family:inherit;background:var(--bg);outline:none;min-width:140px}
+    .filter-input:focus{border-color:var(--p)}
+    select.filter-input{appearance:auto;cursor:pointer}
+    .filter-actions{display:flex;gap:6px;margin-left:auto;align-self:flex-end}
+    .btn-sm{height:32px;padding:0 12px;font-size:12px;border-radius:var(--r);font-weight:500;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:4px;border:none;transition:all .12s}
+
+    /* Stats Chips */
+    .stats-bar{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+    .stat-chip{display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:var(--r);font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--b);background:var(--c);color:var(--t2);transition:all .12s}
+    .stat-chip:hover{border-color:var(--p)}
+    .stat-chip.active{border-color:var(--p);background:var(--pl);color:var(--p);font-weight:600}
+    .stat-chip .dot{width:8px;height:8px;border-radius:2px}
+    .stat-chip .count{font-weight:700;color:var(--t1)}
+
+    /* Data Table */
+    .table-wrap{background:var(--c);border:1px solid var(--b);border-radius:var(--r);box-shadow:var(--ss);overflow:hidden}
+    table{width:100%;border-collapse:collapse}
+    thead th{background:var(--bg);padding:10px 16px;font-size:11px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;text-align:left;border-bottom:2px solid var(--b);white-space:nowrap;cursor:pointer;user-select:none;position:sticky;top:0}
+    thead th:hover{color:var(--t1)}
+    thead th .sort{font-size:10px;margin-left:4px;opacity:.4}
+    tbody tr{border-bottom:1px solid var(--b);transition:background .12s}
+    tbody tr:last-child{border-bottom:none}
+    tbody tr:hover{background:var(--pl)}
+    tbody td{padding:10px 16px;font-size:13px;color:var(--t1);vertical-align:middle}
+    .td-id{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;color:var(--p);white-space:nowrap}
+    .td-name{font-weight:600}
+    .td-mobile{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--t2)}
+    .td-cat{font-size:12px;color:var(--t2)}
+    .td-date{font-size:12px;color:var(--t3);white-space:nowrap}
+
+    /* Status Badge */
+    .badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:2px;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.3px;white-space:nowrap}
+    .badge-pending{background:var(--wrb);color:var(--wr);border:1px solid var(--wrr)}
+    .badge-progress{background:var(--inb);color:var(--in);border:1px solid var(--inr)}
+    .badge-forwarded{background:var(--orb);color:var(--or);border:1px solid var(--orr)}
+    .badge-awaiting{background:var(--pub);color:var(--pu);border:1px solid var(--pur)}
+    .badge-resolved{background:var(--okb);color:var(--ok);border:1px solid var(--okr)}
+    .badge-rejected{background:var(--erb);color:var(--er);border:1px solid var(--err)}
+    .badge-cancelled{background:var(--neb);color:var(--ne);border:1px solid var(--ner)}
+
+    /* Priority Dot */
+    .pri{width:8px;height:8px;border-radius:2px;display:inline-block}
+    .pri-h{background:var(--er)}.pri-m{background:var(--wr)}.pri-l{background:var(--ok)}
+
+    /* Action Buttons */
+    .td-actions{display:flex;gap:4px}
+    .act-btn{width:28px;height:28px;border:1px solid var(--b);background:var(--c);border-radius:var(--r);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--t3);transition:all .12s}
+    .act-btn:hover{border-color:var(--p);color:var(--p);background:var(--pl)}
+
+    /* Pagination */
+    .table-footer{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-top:1px solid var(--b);background:var(--bg)}
+    .table-info{font-size:12px;color:var(--t3)}
+    .pagination{display:flex;gap:4px}
+    .pg-btn{width:32px;height:32px;border:1px solid var(--b);background:var(--c);border-radius:var(--r);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--t2);font-weight:500;font-family:inherit}
+    .pg-btn:hover{border-color:var(--p);color:var(--p)}
+    .pg-btn.active{background:var(--p);color:#fff;border-color:var(--p)}
+    [data-theme="dark"] .pg-btn.active{background:#5A9BD5;color:#0F1419}
+
+    /* Theme Toggle */
+    .tt{position:fixed;top:10px;right:16px;z-index:400;display:flex;gap:4px}
+    .tt button{background:var(--c);border:1px solid var(--b);border-radius:var(--r);padding:5px 10px;cursor:pointer;font-size:11px;font-family:inherit;color:var(--t3)}
+    .tt button.active{background:#1B3A5C;color:#fff;border-color:#1B3A5C}
+    [data-theme="dark"] .tt button.active{background:#5A9BD5;color:#0F1419}
+    .wfb{position:fixed;bottom:16px;right:16px;z-index:400;background:#1B3A5C;color:#fff;padding:5px 10px;font-size:10px;font-weight:600;border-radius:var(--r);text-transform:uppercase;letter-spacing:1px;opacity:.8}
+
+    @media(max-width:1024px){.filter-bar{flex-direction:column}.filter-actions{margin-left:0}}
+    @media(max-width:768px){.sidebar{transform:translateX(-100%)}.topbar{left:0}.main{margin-left:0}.table-wrap{overflow-x:auto}table{min-width:900px}}
+  </style>
+</head>
+<body>
+  <div class="tt">
+    <button class="active" onclick="setTheme('light')">☀ Light</button>
+    <button onclick="setTheme('dark')">🌙 Dark</button>
+  </div>
+  <div class="app">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo"><div class="icon">🏛️</div><div class="name">MLA E-Office</div></div>
+      <nav class="sidebar-nav">
+        <div class="nav-s">Office · कार्यालय</div>
+        <a class="nav-i"><span class="ic">📊</span> Dashboard</a>
+        <a class="nav-i"><span class="ic">📨</span> Inward & Outward</a>
+        <a class="nav-i"><span class="ic">👤</span> Visitor Book</a>
+        <div class="nav-s">Public · जनता</div>
+        <a class="nav-i active"><span class="ic">📝</span> Nivedans · निवेदने</a>
+        <a class="nav-i"><span class="ic">🏗️</span> Dev Works</a>
+        <div class="nav-s">Network · संघटन</div>
+        <a class="nav-i"><span class="ic">👥</span> Karyakarta</a>
+        <a class="nav-i"><span class="ic">📍</span> Gram / Ward</a>
+        <a class="nav-i"><span class="ic">🗳️</span> Booth Structure</a>
+        <div class="nav-s">Tools · साधने</div>
+        <a class="nav-i"><span class="ic">📅</span> Calendar</a>
+        <a class="nav-i"><span class="ic">💬</span> WhatsApp</a>
+        <a class="nav-i"><span class="ic">📑</span> Reports</a>
+        <div class="nav-d"></div>
+        <a class="nav-i"><span class="ic">⚙️</span> Settings</a>
+      </nav>
+    </aside>
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <button class="tb-toggle">☰</button>
+      <div class="tb-search"><span class="si">🔍</span><input placeholder="Search... / शोधा..."></div>
+      <div class="tb-actions">
+        <button class="tb-btn">🌐</button>
+        <button class="tb-btn">🔔<span class="bdg">5</span></button>
+        <div class="tb-user"><div class="tb-avatar">RP</div><div><span class="tb-uname">Rajesh Patil</span><br><span class="tb-urole">Personal Assistant</span></div></div>
+      </div>
+    </header>
+
+    <!-- Main -->
+    <main class="main">
+      <!-- Page Header -->
+      <div class="ph">
+        <div class="ph-left">
+          <h1 class="title">Nivedans · <span class="mr">निवेदने</span></h1>
+          <p class="sub">Citizen complaints & petitions · नागरिक तक्रारी व निवेदने</p>
+        </div>
+        <div class="ph-right">
+          <button class="btn btn-o">📥 Export</button>
+          <button class="btn btn-o">🖨️ Print</button>
+          <button class="btn btn-p">+ New Nivedan · नवीन निवेदन</button>
+        </div>
+      </div>
+
+      <!-- Status Chips -->
+      <div class="stats-bar">
+        <div class="stat-chip active"><span class="dot" style="background:var(--t4)"></span> All <span class="count">1,247</span></div>
+        <div class="stat-chip"><span class="dot" style="background:var(--wr)"></span> Pending <span class="count">342</span></div>
+        <div class="stat-chip"><span class="dot" style="background:var(--in)"></span> In Progress <span class="count">274</span></div>
+        <div class="stat-chip"><span class="dot" style="background:var(--or)"></span> Forwarded <span class="count">89</span></div>
+        <div class="stat-chip"><span class="dot" style="background:var(--pu)"></span> Awaiting <span class="count">53</span></div>
+        <div class="stat-chip"><span class="dot" style="background:var(--ok)"></span> Resolved <span class="count">398</span></div>
+        <div class="stat-chip"><span class="dot" style="background:var(--er)"></span> Rejected <span class="count">91</span></div>
+      </div>
+
+      <!-- Filter Bar -->
+      <div class="filter-bar">
+        <div class="filter-group">
+          <span class="filter-label">Search · शोधा</span>
+          <input class="filter-input" placeholder="Name, mobile, ID..." style="min-width:200px">
+        </div>
+        <div class="filter-group">
+          <span class="filter-label">Category · वर्गवारी</span>
+          <select class="filter-input">
+            <option>All Categories</option>
+            <option>Water Supply · पाणीपुरवठा</option>
+            <option>Road / Drainage · रस्ते/गटार</option>
+            <option>Electricity · वीज</option>
+            <option>Land / Revenue · जमीन</option>
+            <option>Health · आरोग्य</option>
+            <option>Education · शिक्षण</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <span class="filter-label">Date Range</span>
+          <input class="filter-input" type="date" value="2026-07-01">
+        </div>
+        <div class="filter-group">
+          <span class="filter-label">To</span>
+          <input class="filter-input" type="date" value="2026-08-02">
+        </div>
+        <div class="filter-group">
+          <span class="filter-label">Ward / Village</span>
+          <select class="filter-input">
+            <option>All Areas</option>
+            <option>Ward 1 - Shivaji Nagar</option>
+            <option>Ward 5 - Pimpri</option>
+            <option>Wadgaon Village</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <span class="filter-label">Assigned To</span>
+          <select class="filter-input">
+            <option>All Staff</option>
+            <option>Ramesh Patil</option>
+            <option>Sunil More</option>
+            <option>Priya Deshmukh</option>
+          </select>
+        </div>
+        <div class="filter-actions">
+          <button class="btn-sm btn-p" style="background:var(--p);color:#fff">🔍 Apply</button>
+          <button class="btn-sm" style="background:var(--bg);color:var(--t3);border:1px solid var(--b)">✕ Clear</button>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Tracking ID <span class="sort">↕</span></th>
+              <th>Date <span class="sort">↓</span></th>
+              <th>Citizen Name · नागरिक <span class="sort">↕</span></th>
+              <th>Mobile</th>
+              <th>Category · वर्गवारी</th>
+              <th>Subject · विषय</th>
+              <th>Priority</th>
+              <th>Status · स्थिती</th>
+              <th>Assigned To</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="td-id">NIV-2026-01247</td>
+              <td class="td-date">02 Aug 2026</td>
+              <td class="td-name">Suresh Jadhav</td>
+              <td class="td-mobile">98765 43210</td>
+              <td class="td-cat">💧 Water Supply</td>
+              <td>No water supply since 3 days in Ward 5</td>
+              <td><span class="pri pri-h" title="High"></span></td>
+              <td><span class="badge badge-pending">Pending</span></td>
+              <td style="font-size:12px;color:var(--t3)">Unassigned</td>
+              <td class="td-actions"><button class="act-btn" title="View">👁</button><button class="act-btn" title="Edit">✏️</button><button class="act-btn" title="Assign">👤+</button></td>
+            </tr>
+            <tr>
+              <td class="td-id">NIV-2026-01246</td>
+              <td class="td-date">02 Aug 2026</td>
+              <td class="td-name">Meena Shinde</td>
+              <td class="td-mobile">87654 32109</td>
+              <td class="td-cat">🛣️ Road / Drainage</td>
+              <td>Pothole on main road near bus stop</td>
+              <td><span class="pri pri-m" title="Medium"></span></td>
+              <td><span class="badge badge-progress">In Progress</span></td>
+              <td style="font-size:12px">Ramesh Patil</td>
+              <td class="td-actions"><button class="act-btn" title="View">👁</button><button class="act-btn" title="Edit">✏️</button><button class="act-btn" title="Assign">👤+</button></td>
+            </tr>
+            <tr>
+              <td class="td-id">NIV-2026-01245</td>
+              <td class="td-date">01 Aug 2026</td>
+              <td class="td-name">Ganesh Pawar</td>
+              <td class="td-mobile">76543 21098</td>
+              <td class="td-cat">⚡ Electricity</td>
+              <td>Street light not working in Gram Panchayat area</td>
+              <td><span class="pri pri-m" title="Medium"></span></td>
+              <td><span class="badge badge-forwarded">Forwarded</span></td>
+              <td style="font-size:12px">→ MSEDCL</td>
+              <td class="td-actions"><button class="act-btn" title="View">👁</button><button class="act-btn" title="Edit">✏️</button><button class="act-btn" title="Assign">👤+</button></td>
+            </tr>
+            <tr>
+              <td class="td-id">NIV-2026-01244</td>
+              <td class="td-date">01 Aug 2026</td>
+              <td class="td-name">Priya Kamble</td>
+              <td class="td-mobile">65432 10987</td>
+              <td class="td-cat">📋 Certificate</td>
+              <td>Caste certificate not issued since 6 months</td>
+              <td><span class="pri pri-h" title="High"></span></td>
+              <td><span class="badge badge-awaiting">Awaiting</span></td>
+              <td style="font-size:12px">→ Tahsildar</td>
+              <td class="td-actions"><button class="act-btn" title="View">👁</button><button class="act-btn" title="Edit">✏️</button><button class="act-btn" title="Assign">👤+</button></td>
+            </tr>
+            <tr>
+              <td class="td-id">NIV-2026-01243</td>
+              <td class="td-date">31 Jul 2026</td>
+              <td class="td-name">Rajendra Mane</td>
+              <td class="td-mobile">54321 09876</td>
+              <td class="td-cat">🏥 Health</td>
+              <td>PHC doctor not available in Shirur</td>
+              <td><span class="pri pri-h" title="High"></span></td>
+              <td><span class="badge badge-resolved">Resolved</span></td>
+              <td style="font-size:12px">Sunil More</td>
+              <td class="td-actions"><button class="act-btn" title="View">👁</button><button class="act-btn" title="Edit">✏️</button><button class="act-btn" title="Assign">👤+</button></td>
+            </tr>
+            <tr>
+              <td class="td-id">NIV-2026-01242</td>
+              <td class="td-date">30 Jul 2026</td>
+              <td class="td-name">Anita Deshmukh</td>
+              <td class="td-mobile">43210 98765</td>
+              <td class="td-cat">🏠 Housing</td>
+              <td>PMAY application rejected — request review</td>
+              <td><span class="pri pri-l" title="Low"></span></td>
+              <td><span class="badge badge-rejected">Rejected</span></td>
+              <td style="font-size:12px">Priya Deshmukh</td>
+              <td class="td-actions"><button class="act-btn" title="View">👁</button><button class="act-btn" title="Edit">✏️</button><button class="act-btn" title="Assign">👤+</button></td>
+            </tr>
+            <tr>
+              <td class="td-id">NIV-2026-01241</td>
+              <td class="td-date">30 Jul 2026</td>
+              <td class="td-name">Vishnu Gaikwad</td>
+              <td class="td-mobile">32109 87654</td>
+              <td class="td-cat">💧 Water Supply</td>
+              <td>Borewell not working — village Ambegaon</td>
+              <td><span class="pri pri-m" title="Medium"></span></td>
+              <td><span class="badge badge-progress">In Progress</span></td>
+              <td style="font-size:12px">Ramesh Patil</td>
+              <td class="td-actions"><button class="act-btn" title="View">👁</button><button class="act-btn" title="Edit">✏️</button><button class="act-btn" title="Assign">👤+</button></td>
+            </tr>
+            <tr>
+              <td class="td-id">NIV-2026-01240</td>
+              <td class="td-date">29 Jul 2026</td>
+              <td class="td-name">Sanjay Bhosle</td>
+              <td class="td-mobile">21098 76543</td>
+              <td class="td-cat">🌾 Agriculture</td>
+              <td>Crop insurance claim pending since last year</td>
+              <td><span class="pri pri-m" title="Medium"></span></td>
+              <td><span class="badge badge-cancelled">Cancelled</span></td>
+              <td style="font-size:12px">—</td>
+              <td class="td-actions"><button class="act-btn" title="View">👁</button><button class="act-btn" title="Edit">✏️</button><button class="act-btn" title="Assign">👤+</button></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="table-footer">
+          <div class="table-info">Showing <strong>1–25</strong> of <strong>1,247</strong> nivedans · Rows per page: <select style="border:1px solid var(--b);border-radius:2px;padding:2px 4px;font-size:12px;background:var(--c);color:var(--t1)"><option>25</option><option>50</option><option>100</option></select></div>
+          <div class="pagination">
+            <button class="pg-btn">‹</button>
+            <button class="pg-btn active">1</button>
+            <button class="pg-btn">2</button>
+            <button class="pg-btn">3</button>
+            <button class="pg-btn">...</button>
+            <button class="pg-btn">50</button>
+            <button class="pg-btn">›</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <div class="wfb">Wireframe · Nivedan List</div>
+  <script>function setTheme(t){document.documentElement.setAttribute('data-theme',t);document.querySelectorAll('.tt button').forEach(b=>b.classList.remove('active'));event.target.classList.add('active');}</script>
+</body>
+</html>

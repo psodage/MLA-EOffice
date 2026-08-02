@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>MLA E-Office — Calendar</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--sb:#1B3A5C;--sw:240px;--th:56px;--p:#1B3A5C;--pl:#EFF4F9;--bg:#F5F7FA;--c:#FFF;--t1:#0F172A;--t2:#475569;--t3:#64748B;--t4:#94A3B8;--b:#DDE3EB;--ok:#16A34A;--okb:#F0FDF4;--wr:#D97706;--wrb:#FFFBEB;--er:#DC2626;--erb:#FEF2F2;--in:#2563EB;--inb:#EFF6FF;--pu:#7C3AED;--pub:#F5F3FF;--or:#EA580C;--orb:#FFF7ED;--r:3px;--ss:0 1px 3px rgba(15,23,42,.08)}
+    [data-theme="dark"]{--sb:#0D1B2A;--p:#5A9BD5;--pl:#1A3355;--bg:#0F1419;--c:#1A2332;--t1:#E2ECF4;--t2:#8EA3B8;--t3:#6B8299;--t4:#4F6479;--b:#2A3A4E;--ok:#22C55E;--okb:#052E16;--wr:#F59E0B;--wrb:#2E1D05;--er:#EF4444;--erb:#2E0505;--in:#3B82F6;--inb:#0C1929;--pu:#A78BFA;--pub:#1E0A3E;--or:#F97316;--orb:#2E1505;--ss:0 1px 3px rgba(0,0,0,.4)}
+    body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--t1);transition:background .2s,color .2s}
+    .mr{font-family:'Noto Sans Devanagari',sans-serif}
+    .app{display:flex;min-height:100vh}
+    .sidebar{width:var(--sw);background:var(--sb);color:#fff;position:fixed;top:0;left:0;bottom:0;z-index:200;display:flex;flex-direction:column;overflow:hidden}
+    .sidebar-logo{height:var(--th);display:flex;align-items:center;padding:0 16px;gap:10px;border-bottom:1px solid rgba(255,255,255,.1)}
+    .sidebar-logo .icon{width:32px;height:32px;background:rgba(255,255,255,.12);border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:16px}
+    .sidebar-logo .name{font-size:15px;font-weight:700}
+    .sidebar-nav{flex:1;padding:8px 0;overflow-y:auto}
+    .ns{padding:16px 16px 4px;font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:rgba(255,255,255,.35);font-weight:600}
+    .ni{display:flex;align-items:center;gap:12px;padding:9px 16px;margin:1px 8px;border-radius:var(--r);cursor:pointer;font-size:13px;font-weight:500;color:rgba(255,255,255,.7);text-decoration:none;transition:background .12s}
+    .ni:hover{background:rgba(255,255,255,.08);color:#fff}.ni.active{background:rgba(255,255,255,.12);color:#fff}
+    .ni .ic{width:20px;text-align:center;font-size:15px;opacity:.7}.ni.active .ic{opacity:1}
+    .topbar{position:fixed;top:0;left:var(--sw);right:0;height:var(--th);background:var(--c);border-bottom:1px solid var(--b);display:flex;align-items:center;padding:0 24px;z-index:300;gap:16px}
+    .tb-toggle{width:36px;height:36px;border:none;background:none;cursor:pointer;border-radius:var(--r);font-size:18px;color:var(--t3);display:flex;align-items:center;justify-content:center}
+    .tb-actions{display:flex;align-items:center;gap:8px;margin-left:auto}
+    .tb-btn{width:36px;height:36px;border:1px solid var(--b);background:var(--c);border-radius:var(--r);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--t3)}
+    .tb-avatar{width:32px;height:32px;border-radius:var(--r);background:var(--p);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;cursor:pointer}
+    [data-theme="dark"] .tb-avatar{background:#1A3355;color:#5A9BD5}
+    .main{margin-left:var(--sw);margin-top:var(--th);padding:24px}
+    .ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+    .btn{height:36px;padding:0 16px;border-radius:var(--r);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;border:none;transition:all .12s}
+    .btn-p{background:var(--p);color:#fff}.btn-o{background:transparent;color:var(--t2);border:1px solid var(--b)}
+
+    /* Calendar Nav */
+    .cal-nav{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+    .cal-nav-btn{width:36px;height:36px;border:1px solid var(--b);background:var(--c);border-radius:var(--r);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--t3)}
+    .cal-nav-btn:hover{border-color:var(--p);color:var(--p)}
+    .cal-month{font-size:20px;font-weight:700;color:var(--t1)}
+    .cal-today{height:32px;padding:0 12px;border:1px solid var(--b);background:var(--c);border-radius:var(--r);cursor:pointer;font-size:12px;font-weight:500;font-family:inherit;color:var(--t2)}
+    .cal-view-toggle{display:flex;gap:0;margin-left:auto}
+    .cvt{padding:6px 14px;font-size:12px;font-weight:500;color:var(--t3);cursor:pointer;border:1px solid var(--b);background:var(--c);font-family:inherit}
+    .cvt:first-child{border-radius:var(--r) 0 0 var(--r)}.cvt:last-child{border-radius:0 var(--r) var(--r) 0}
+    .cvt.active{background:var(--p);color:#fff;border-color:var(--p)}
+
+    /* Calendar Grid */
+    .cal-grid{background:var(--c);border:1px solid var(--b);border-radius:var(--r);box-shadow:var(--ss);overflow:hidden}
+    .cal-header{display:grid;grid-template-columns:repeat(7,1fr);border-bottom:2px solid var(--b)}
+    .cal-day-name{padding:10px 8px;font-size:11px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;text-align:center}
+    .cal-body{display:grid;grid-template-columns:repeat(7,1fr)}
+    .cal-cell{min-height:110px;padding:6px;border-right:1px solid var(--b);border-bottom:1px solid var(--b);transition:background .1s;cursor:pointer;position:relative}
+    .cal-cell:nth-child(7n){border-right:none}
+    .cal-cell:hover{background:var(--pl)}
+    .cal-cell.other-month{opacity:.4}
+    .cal-cell.today{background:var(--pl)}
+    .cal-cell.today .cal-date{background:var(--p);color:#fff;border-radius:var(--r)}
+    .cal-date{font-size:13px;font-weight:600;color:var(--t1);padding:2px 6px;display:inline-block;margin-bottom:4px}
+    .cal-event{display:block;padding:2px 6px;margin-bottom:2px;border-radius:2px;font-size:10px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
+    .ev-meeting{background:var(--inb);color:var(--in);border-left:2px solid var(--in)}
+    .ev-program{background:var(--okb);color:var(--ok);border-left:2px solid var(--ok)}
+    .ev-deadline{background:var(--erb);color:var(--er);border-left:2px solid var(--er)}
+    .ev-personal{background:var(--pub);color:var(--pu);border-left:2px solid var(--pu)}
+    .ev-session{background:var(--orb);color:var(--or);border-left:2px solid var(--or)}
+    .ev-holiday{background:var(--wrb);color:var(--wr);border-left:2px solid var(--wr)}
+    .cal-more{font-size:10px;color:var(--p);font-weight:500;padding:1px 6px;cursor:pointer}
+
+    .tt{position:fixed;top:10px;right:16px;z-index:400;display:flex;gap:4px}
+    .tt button{background:var(--c);border:1px solid var(--b);border-radius:var(--r);padding:5px 10px;cursor:pointer;font-size:11px;font-family:inherit;color:var(--t3)}
+    .tt button.active{background:#1B3A5C;color:#fff;border-color:#1B3A5C}
+    [data-theme="dark"] .tt button.active{background:#5A9BD5;color:#0F1419}
+    .wfb{position:fixed;bottom:16px;right:16px;z-index:400;background:#1B3A5C;color:#fff;padding:5px 10px;font-size:10px;font-weight:600;border-radius:var(--r);text-transform:uppercase;letter-spacing:1px;opacity:.8}
+    @media(max-width:768px){.sidebar{transform:translateX(-100%)}.topbar{left:0}.main{margin-left:0;padding:12px}.cal-cell{min-height:60px}.cal-event{display:none}.cal-more{display:none}}
+  </style>
+</head>
+<body>
+  <div class="tt"><button class="active" onclick="setTheme('light')">☀ Light</button><button onclick="setTheme('dark')">🌙 Dark</button></div>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="sidebar-logo"><div class="icon">🏛️</div><div class="name">MLA E-Office</div></div>
+      <nav class="sidebar-nav">
+        <div class="ns">Office</div><a class="ni"><span class="ic">📊</span>Dashboard</a><a class="ni"><span class="ic">📨</span>Inward</a><a class="ni"><span class="ic">👤</span>Visitors</a>
+        <div class="ns">Public</div><a class="ni"><span class="ic">📝</span>Nivedans</a><a class="ni"><span class="ic">🏗️</span>Dev Works</a>
+        <div class="ns">Network</div><a class="ni"><span class="ic">👥</span>Karyakarta</a><a class="ni"><span class="ic">📍</span>Gram/Ward</a><a class="ni"><span class="ic">🗳️</span>Booths</a>
+        <div class="ns">Tools</div><a class="ni active"><span class="ic">📅</span>Calendar</a><a class="ni"><span class="ic">💬</span>WhatsApp</a><a class="ni"><span class="ic">📑</span>Reports</a>
+      </nav>
+    </aside>
+    <header class="topbar">
+      <button class="tb-toggle">☰</button>
+      <div class="tb-actions"><button class="tb-btn">🌐</button><button class="tb-btn">🔔</button><div class="tb-avatar">RP</div></div>
+    </header>
+    <main class="main">
+      <div class="ph">
+        <div><h1 style="font-size:22px;font-weight:700">Calendar · <span class="mr">दिनदर्शिका</span></h1></div>
+        <button class="btn btn-p">+ New Event · नवीन कार्यक्रम</button>
+      </div>
+
+      <div class="cal-nav">
+        <button class="cal-nav-btn">‹</button>
+        <span class="cal-month">August 2026</span>
+        <button class="cal-nav-btn">›</button>
+        <button class="cal-today">Today</button>
+        <div class="cal-view-toggle">
+          <button class="cvt active">Month</button>
+          <button class="cvt">Week</button>
+          <button class="cvt">Day</button>
+        </div>
+      </div>
+
+      <div class="cal-grid">
+        <div class="cal-header">
+          <div class="cal-day-name">Sun</div><div class="cal-day-name">Mon</div><div class="cal-day-name">Tue</div><div class="cal-day-name">Wed</div><div class="cal-day-name">Thu</div><div class="cal-day-name">Fri</div><div class="cal-day-name">Sat</div>
+        </div>
+        <div class="cal-body">
+          <div class="cal-cell other-month"><span class="cal-date">27</span></div>
+          <div class="cal-cell other-month"><span class="cal-date">28</span></div>
+          <div class="cal-cell other-month"><span class="cal-date">29</span></div>
+          <div class="cal-cell other-month"><span class="cal-date">30</span></div>
+          <div class="cal-cell other-month"><span class="cal-date">31</span></div>
+          <div class="cal-cell"><span class="cal-date">1</span></div>
+          <div class="cal-cell today"><span class="cal-date">2</span><span class="cal-event ev-meeting">Review — Pending Nivedans</span></div>
+          <div class="cal-cell"><span class="cal-date">3</span><span class="cal-event ev-program">Gram Sabha — Wadgaon</span></div>
+          <div class="cal-cell"><span class="cal-date">4</span></div>
+          <div class="cal-cell"><span class="cal-date">5</span><span class="cal-event ev-meeting">Staff Review Meeting</span></div>
+          <div class="cal-cell"><span class="cal-date">6</span></div>
+          <div class="cal-cell"><span class="cal-date">7</span></div>
+          <div class="cal-cell"><span class="cal-date">8</span><span class="cal-event ev-program">Road Inauguration</span><span class="cal-event ev-personal">Birthday — Ramesh P.</span></div>
+          <div class="cal-cell"><span class="cal-date">9</span></div>
+          <div class="cal-cell"><span class="cal-date">10</span></div>
+          <div class="cal-cell"><span class="cal-date">11</span></div>
+          <div class="cal-cell"><span class="cal-date">12</span><span class="cal-event ev-meeting">Budget Planning</span></div>
+          <div class="cal-cell"><span class="cal-date">13</span></div>
+          <div class="cal-cell"><span class="cal-date">14</span></div>
+          <div class="cal-cell"><span class="cal-date">15</span><span class="cal-event ev-deadline">🇮🇳 Independence Day</span><span class="cal-event ev-program">Flag Hoisting — 8 AM</span><span class="cal-more">+1 more</span></div>
+          <div class="cal-cell"><span class="cal-date">16</span></div>
+          <div class="cal-cell"><span class="cal-date">17</span></div>
+          <div class="cal-cell"><span class="cal-date">18</span></div>
+          <div class="cal-cell"><span class="cal-date">19</span><span class="cal-event ev-session">Assembly Session Start</span></div>
+          <div class="cal-cell"><span class="cal-date">20</span><span class="cal-event ev-session">Assembly Session</span></div>
+          <div class="cal-cell"><span class="cal-date">21</span><span class="cal-event ev-session">Assembly Session</span></div>
+          <div class="cal-cell"><span class="cal-date">22</span><span class="cal-event ev-session">Assembly Session</span></div>
+          <div class="cal-cell"><span class="cal-date">23</span></div>
+          <div class="cal-cell"><span class="cal-date">24</span></div>
+          <div class="cal-cell"><span class="cal-date">25</span></div>
+          <div class="cal-cell"><span class="cal-date">26</span><span class="cal-event ev-meeting">Dev Works Review</span></div>
+          <div class="cal-cell"><span class="cal-date">27</span><span class="cal-event ev-holiday">Janmashtami · जन्माष्टमी</span></div>
+          <div class="cal-cell"><span class="cal-date">28</span></div>
+          <div class="cal-cell"><span class="cal-date">29</span></div>
+          <div class="cal-cell"><span class="cal-date">30</span></div>
+          <div class="cal-cell"><span class="cal-date">31</span><span class="cal-event ev-deadline">Monthly Report Due</span></div>
+          <div class="cal-cell other-month"><span class="cal-date">1</span></div>
+          <div class="cal-cell other-month"><span class="cal-date">2</span></div>
+          <div class="cal-cell other-month"><span class="cal-date">3</span></div>
+          <div class="cal-cell other-month"><span class="cal-date">4</span></div>
+          <div class="cal-cell other-month"><span class="cal-date">5</span></div>
+          <div class="cal-cell other-month"><span class="cal-date">6</span></div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <div class="wfb">Wireframe · Calendar</div>
+  <script>function setTheme(t){document.documentElement.setAttribute('data-theme',t);document.querySelectorAll('.tt button').forEach(b=>b.classList.remove('active'));event.target.classList.add('active');}</script>
+</body>
+</html>

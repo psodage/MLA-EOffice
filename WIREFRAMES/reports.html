@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>MLA E-Office — Reports</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--sb:#1B3A5C;--sw:240px;--th:56px;--p:#1B3A5C;--pl:#EFF4F9;--bg:#F5F7FA;--c:#FFF;--t1:#0F172A;--t2:#475569;--t3:#64748B;--t4:#94A3B8;--b:#DDE3EB;--ok:#16A34A;--okb:#F0FDF4;--wr:#D97706;--wrb:#FFFBEB;--er:#DC2626;--in:#2563EB;--inb:#EFF6FF;--pu:#7C3AED;--pub:#F5F3FF;--or:#EA580C;--orb:#FFF7ED;--r:3px;--ss:0 1px 3px rgba(15,23,42,.08)}
+    [data-theme="dark"]{--sb:#0D1B2A;--p:#5A9BD5;--pl:#1A3355;--bg:#0F1419;--c:#1A2332;--t1:#E2ECF4;--t2:#8EA3B8;--t3:#6B8299;--t4:#4F6479;--b:#2A3A4E;--ok:#22C55E;--wr:#F59E0B;--er:#EF4444;--in:#3B82F6;--pu:#A78BFA;--or:#F97316;--ss:0 1px 3px rgba(0,0,0,.4)}
+    body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--t1);transition:background .2s,color .2s}
+    .mr{font-family:'Noto Sans Devanagari',sans-serif}
+    .app{display:flex;min-height:100vh}
+    .sidebar{width:var(--sw);background:var(--sb);color:#fff;position:fixed;top:0;left:0;bottom:0;z-index:200;display:flex;flex-direction:column;overflow:hidden}
+    .sidebar-logo{height:var(--th);display:flex;align-items:center;padding:0 16px;gap:10px;border-bottom:1px solid rgba(255,255,255,.1)}
+    .sidebar-logo .icon{width:32px;height:32px;background:rgba(255,255,255,.12);border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:16px}
+    .sidebar-logo .name{font-size:15px;font-weight:700}
+    .sidebar-nav{flex:1;padding:8px 0;overflow-y:auto}
+    .ns{padding:16px 16px 4px;font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:rgba(255,255,255,.35);font-weight:600}
+    .ni{display:flex;align-items:center;gap:12px;padding:9px 16px;margin:1px 8px;border-radius:var(--r);cursor:pointer;font-size:13px;font-weight:500;color:rgba(255,255,255,.7);text-decoration:none;transition:background .12s}
+    .ni:hover{background:rgba(255,255,255,.08);color:#fff}.ni.active{background:rgba(255,255,255,.12);color:#fff}
+    .ni .ic{width:20px;text-align:center;font-size:15px;opacity:.7}.ni.active .ic{opacity:1}
+    .topbar{position:fixed;top:0;left:var(--sw);right:0;height:var(--th);background:var(--c);border-bottom:1px solid var(--b);display:flex;align-items:center;padding:0 24px;z-index:300;gap:16px}
+    .tb-toggle{width:36px;height:36px;border:none;background:none;cursor:pointer;border-radius:var(--r);font-size:18px;color:var(--t3);display:flex;align-items:center;justify-content:center}
+    .tb-actions{display:flex;align-items:center;gap:8px;margin-left:auto}
+    .tb-btn{width:36px;height:36px;border:1px solid var(--b);background:var(--c);border-radius:var(--r);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--t3)}
+    .tb-avatar{width:32px;height:32px;border-radius:var(--r);background:var(--p);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;cursor:pointer}
+    [data-theme="dark"] .tb-avatar{background:#1A3355;color:#5A9BD5}
+    .main{margin-left:var(--sw);margin-top:var(--th);padding:24px}
+    .ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+    .btn{height:36px;padding:0 16px;border-radius:var(--r);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;border:none;transition:all .12s}
+    .btn-p{background:var(--p);color:#fff}.btn-o{background:transparent;color:var(--t2);border:1px solid var(--b)}
+
+    /* Report Cards Grid */
+    .report-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
+    .report-card{background:var(--c);border:1px solid var(--b);border-radius:var(--r);box-shadow:var(--ss);overflow:hidden;transition:border .15s,box-shadow .15s;cursor:pointer}
+    .report-card:hover{border-color:var(--p);box-shadow:0 4px 12px rgba(27,58,92,.1)}
+    .rc-header{padding:20px;display:flex;gap:14px;align-items:flex-start}
+    .rc-icon{width:48px;height:48px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+    .rc-info{flex:1}
+    .rc-title{font-size:15px;font-weight:600;color:var(--t1);margin-bottom:4px}
+    .rc-desc{font-size:12px;color:var(--t3);line-height:1.4}
+    .rc-footer{padding:12px 20px;border-top:1px solid var(--b);background:var(--bg);display:flex;align-items:center;justify-content:space-between}
+    .rc-formats{display:flex;gap:4px}
+    .rc-fmt{font-size:10px;padding:2px 6px;border-radius:2px;background:var(--c);border:1px solid var(--b);color:var(--t3);font-weight:500}
+    .rc-gen{font-size:12px;color:var(--p);font-weight:500;display:flex;align-items:center;gap:4px}
+
+    /* Quick Generate Section */
+    .section-title{font-size:16px;font-weight:600;margin-bottom:16px;margin-top:32px;display:flex;align-items:center;gap:8px}
+    .quick-form{background:var(--c);border:1px solid var(--b);border-radius:var(--r);box-shadow:var(--ss);padding:20px;display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end}
+    .fg{display:flex;flex-direction:column;gap:4px}
+    .fl{font-size:11px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.5px}
+    .fi{height:36px;padding:0 10px;border:1px solid var(--b);border-radius:var(--r);font-size:13px;color:var(--t1);font-family:inherit;background:var(--c);outline:none;min-width:160px}
+    select.fi{appearance:auto;cursor:pointer}
+
+    .tt{position:fixed;top:10px;right:16px;z-index:400;display:flex;gap:4px}
+    .tt button{background:var(--c);border:1px solid var(--b);border-radius:var(--r);padding:5px 10px;cursor:pointer;font-size:11px;font-family:inherit;color:var(--t3)}
+    .tt button.active{background:#1B3A5C;color:#fff;border-color:#1B3A5C}
+    [data-theme="dark"] .tt button.active{background:#5A9BD5;color:#0F1419}
+    .wfb{position:fixed;bottom:16px;right:16px;z-index:400;background:#1B3A5C;color:#fff;padding:5px 10px;font-size:10px;font-weight:600;border-radius:var(--r);text-transform:uppercase;letter-spacing:1px;opacity:.8}
+    @media(max-width:768px){.sidebar{transform:translateX(-100%)}.topbar{left:0}.main{margin-left:0}.report-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="tt"><button class="active" onclick="setTheme('light')">☀ Light</button><button onclick="setTheme('dark')">🌙 Dark</button></div>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="sidebar-logo"><div class="icon">🏛️</div><div class="name">MLA E-Office</div></div>
+      <nav class="sidebar-nav">
+        <div class="ns">Office</div><a class="ni"><span class="ic">📊</span>Dashboard</a><a class="ni"><span class="ic">📨</span>Inward</a><a class="ni"><span class="ic">👤</span>Visitors</a>
+        <div class="ns">Public</div><a class="ni"><span class="ic">📝</span>Nivedans</a><a class="ni"><span class="ic">🏗️</span>Dev Works</a>
+        <div class="ns">Network</div><a class="ni"><span class="ic">👥</span>Karyakarta</a><a class="ni"><span class="ic">📍</span>Gram/Ward</a><a class="ni"><span class="ic">🗳️</span>Booths</a>
+        <div class="ns">Tools</div><a class="ni"><span class="ic">📅</span>Calendar</a><a class="ni"><span class="ic">💬</span>WhatsApp</a><a class="ni active"><span class="ic">📑</span>Reports</a>
+      </nav>
+    </aside>
+    <header class="topbar">
+      <button class="tb-toggle">☰</button>
+      <div class="tb-actions"><button class="tb-btn">🌐</button><button class="tb-btn">🔔</button><div class="tb-avatar">RP</div></div>
+    </header>
+    <main class="main">
+      <div class="ph">
+        <div><h1 style="font-size:22px;font-weight:700">Reports · <span class="mr">अहवाल</span></h1><p style="font-size:13px;color:var(--t3);margin-top:2px">Generate, export, and print office reports</p></div>
+      </div>
+
+      <div class="report-grid">
+        <div class="report-card">
+          <div class="rc-header">
+            <div class="rc-icon" style="background:var(--inb);color:var(--in)">📝</div>
+            <div class="rc-info"><div class="rc-title">Nivedan Summary Report · <span class="mr">निवेदन सारांश</span></div><div class="rc-desc">Total, pending, resolved, rejected nivedans with category-wise breakdown. Filter by date range, ward, status.</div></div>
+          </div>
+          <div class="rc-footer"><div class="rc-formats"><span class="rc-fmt">PDF</span><span class="rc-fmt">Excel</span><span class="rc-fmt">Print</span></div><span class="rc-gen">Generate →</span></div>
+        </div>
+        <div class="report-card">
+          <div class="rc-header">
+            <div class="rc-icon" style="background:var(--okb);color:var(--ok)">📨</div>
+            <div class="rc-info"><div class="rc-title">Inward/Outward Register · <span class="mr">आवक/जावक रजिस्टर</span></div><div class="rc-desc">Complete correspondence log with sender, department, dates, and status. Traditional register format for office records.</div></div>
+          </div>
+          <div class="rc-footer"><div class="rc-formats"><span class="rc-fmt">PDF</span><span class="rc-fmt">Excel</span><span class="rc-fmt">Print</span></div><span class="rc-gen">Generate →</span></div>
+        </div>
+        <div class="report-card">
+          <div class="rc-header">
+            <div class="rc-icon" style="background:var(--pub);color:var(--pu)">👤</div>
+            <div class="rc-info"><div class="rc-title">Visitor Daily Report · <span class="mr">अभ्यागत दैनिक अहवाल</span></div><div class="rc-desc">Day-wise visitor count, purpose breakdown, average wait time, repeat visitor statistics, and peak hours.</div></div>
+          </div>
+          <div class="rc-footer"><div class="rc-formats"><span class="rc-fmt">PDF</span><span class="rc-fmt">Print</span></div><span class="rc-gen">Generate →</span></div>
+        </div>
+        <div class="report-card">
+          <div class="rc-header">
+            <div class="rc-icon" style="background:var(--wrb);color:var(--wr)">🏗️</div>
+            <div class="rc-info"><div class="rc-title">Development Works Progress · <span class="mr">विकासकामे प्रगती</span></div><div class="rc-desc">Project-wise status, budget vs spent, progress percentage, delayed projects, and contractor performance.</div></div>
+          </div>
+          <div class="rc-footer"><div class="rc-formats"><span class="rc-fmt">PDF</span><span class="rc-fmt">Excel</span><span class="rc-fmt">Print</span></div><span class="rc-gen">Generate →</span></div>
+        </div>
+        <div class="report-card">
+          <div class="rc-header">
+            <div class="rc-icon" style="background:var(--orb);color:var(--or)">🗳️</div>
+            <div class="rc-info"><div class="rc-title">Booth-wise Worker Report · <span class="mr">बूथनिहाय कार्यकर्ता</span></div><div class="rc-desc">Taluka → Village → Booth hierarchy with pramukh names, worker counts, voter coverage, and vacancy status.</div></div>
+          </div>
+          <div class="rc-footer"><div class="rc-formats"><span class="rc-fmt">PDF</span><span class="rc-fmt">Excel</span></div><span class="rc-gen">Generate →</span></div>
+        </div>
+        <div class="report-card">
+          <div class="rc-header">
+            <div class="rc-icon" style="background:var(--erb);color:var(--er)">💬</div>
+            <div class="rc-info"><div class="rc-title">WhatsApp Message Log · <span class="mr">व्हॉट्सअॅप लॉग</span></div><div class="rc-desc">All sent messages, delivery status, template usage, and communication history per citizen/nivedan.</div></div>
+          </div>
+          <div class="rc-footer"><div class="rc-formats"><span class="rc-fmt">PDF</span><span class="rc-fmt">CSV</span></div><span class="rc-gen">Generate →</span></div>
+        </div>
+      </div>
+
+      <div class="section-title">⚡ Quick Generate · <span class="mr">जलद अहवाल</span></div>
+      <div class="quick-form">
+        <div class="fg"><span class="fl">Report Type</span><select class="fi"><option>Nivedan Summary</option><option>Inward/Outward Register</option><option>Visitor Daily</option><option>Dev Works Progress</option><option>Booth Worker Report</option><option>WhatsApp Log</option></select></div>
+        <div class="fg"><span class="fl">Date From</span><input class="fi" type="date" value="2026-07-01"></div>
+        <div class="fg"><span class="fl">Date To</span><input class="fi" type="date" value="2026-08-02"></div>
+        <div class="fg"><span class="fl">Format</span><select class="fi"><option>PDF</option><option>Excel (.xlsx)</option><option>CSV</option></select></div>
+        <button class="btn btn-p">📊 Generate Report</button>
+        <button class="btn btn-o">🖨️ Print Preview</button>
+      </div>
+    </main>
+  </div>
+  <div class="wfb">Wireframe · Reports</div>
+  <script>function setTheme(t){document.documentElement.setAttribute('data-theme',t);document.querySelectorAll('.tt button').forEach(b=>b.classList.remove('active'));event.target.classList.add('active');}</script>
+</body>
+</html>

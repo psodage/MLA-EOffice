@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>MLA E-Office — Development Works</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--sb:#1B3A5C;--sw:240px;--th:56px;--p:#1B3A5C;--pl:#EFF4F9;--bg:#F5F7FA;--c:#FFF;--t1:#0F172A;--t2:#475569;--t3:#64748B;--t4:#94A3B8;--b:#DDE3EB;--ok:#16A34A;--okb:#F0FDF4;--okr:#BBF7D0;--wr:#D97706;--wrb:#FFFBEB;--wrr:#FDE68A;--er:#DC2626;--erb:#FEF2F2;--err:#FECACA;--in:#2563EB;--inb:#EFF6FF;--inr:#BFDBFE;--pu:#7C3AED;--pub:#F5F3FF;--r:3px;--ss:0 1px 3px rgba(15,23,42,.08)}
+    [data-theme="dark"]{--sb:#0D1B2A;--p:#5A9BD5;--pl:#1A3355;--bg:#0F1419;--c:#1A2332;--t1:#E2ECF4;--t2:#8EA3B8;--t3:#6B8299;--t4:#4F6479;--b:#2A3A4E;--ok:#22C55E;--okb:#052E16;--okr:#166534;--wr:#F59E0B;--wrb:#2E1D05;--wrr:#78350F;--er:#EF4444;--erb:#2E0505;--err:#7F1D1D;--in:#3B82F6;--inb:#0C1929;--inr:#1E3A5F;--pu:#A78BFA;--pub:#1E0A3E;--ss:0 1px 3px rgba(0,0,0,.4)}
+    body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--t1);transition:background .2s,color .2s}
+    .mr{font-family:'Noto Sans Devanagari',sans-serif}
+    .app{display:flex;min-height:100vh}
+    .sidebar{width:var(--sw);background:var(--sb);color:#fff;position:fixed;top:0;left:0;bottom:0;z-index:200;display:flex;flex-direction:column;overflow:hidden}
+    .sidebar-logo{height:var(--th);display:flex;align-items:center;padding:0 16px;gap:10px;border-bottom:1px solid rgba(255,255,255,.1)}
+    .sidebar-logo .icon{width:32px;height:32px;background:rgba(255,255,255,.12);border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:16px}
+    .sidebar-logo .name{font-size:15px;font-weight:700}
+    .sidebar-nav{flex:1;padding:8px 0;overflow-y:auto}
+    .ns{padding:16px 16px 4px;font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:rgba(255,255,255,.35);font-weight:600}
+    .ni{display:flex;align-items:center;gap:12px;padding:9px 16px;margin:1px 8px;border-radius:var(--r);cursor:pointer;font-size:13px;font-weight:500;color:rgba(255,255,255,.7);text-decoration:none;transition:background .12s}
+    .ni:hover{background:rgba(255,255,255,.08);color:#fff}.ni.active{background:rgba(255,255,255,.12);color:#fff}
+    .ni .ic{width:20px;text-align:center;font-size:15px;opacity:.7}.ni.active .ic{opacity:1}
+    .nd{height:1px;background:rgba(255,255,255,.1);margin:8px 16px}
+    .topbar{position:fixed;top:0;left:var(--sw);right:0;height:var(--th);background:var(--c);border-bottom:1px solid var(--b);display:flex;align-items:center;padding:0 24px;z-index:300;gap:16px}
+    .tb-toggle{width:36px;height:36px;border:none;background:none;cursor:pointer;border-radius:var(--r);font-size:18px;color:var(--t3);display:flex;align-items:center;justify-content:center}
+    .tb-actions{display:flex;align-items:center;gap:8px;margin-left:auto}
+    .tb-btn{width:36px;height:36px;border:1px solid var(--b);background:var(--c);border-radius:var(--r);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--t3);position:relative}
+    .tb-avatar{width:32px;height:32px;border-radius:var(--r);background:var(--p);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;cursor:pointer}
+    [data-theme="dark"] .tb-avatar{background:#1A3355;color:#5A9BD5}
+    .main{margin-left:var(--sw);margin-top:var(--th);padding:24px}
+    .ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px}
+    .ph .title{font-size:22px;font-weight:700}
+    .ph .sub{font-size:13px;color:var(--t3);margin-top:2px}
+    .btn{height:36px;padding:0 16px;border-radius:var(--r);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;border:none;transition:all .12s}
+    .btn-p{background:var(--p);color:#fff}.btn-o{background:transparent;color:var(--t2);border:1px solid var(--b)}
+
+    /* View Toggle */
+    .view-toggle{display:flex;gap:0;margin-bottom:16px}
+    .vt-btn{padding:8px 16px;font-size:13px;font-weight:500;color:var(--t3);cursor:pointer;border:1px solid var(--b);background:var(--c);font-family:inherit;transition:all .12s}
+    .vt-btn:first-child{border-radius:var(--r) 0 0 var(--r)}.vt-btn:last-child{border-radius:0 var(--r) var(--r) 0}
+    .vt-btn.active{background:var(--p);color:#fff;border-color:var(--p)}
+
+    /* Stats */
+    .stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-bottom:20px}
+    .stat{background:var(--c);border:1px solid var(--b);border-radius:var(--r);padding:16px;box-shadow:var(--ss)}
+    .stat-val{font-size:24px;font-weight:700;margin-bottom:2px}
+    .stat-label{font-size:12px;color:var(--t3)}
+    .stat-sub{font-size:11px;color:var(--t4);margin-top:4px}
+
+    /* Card Grid View */
+    .card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px}
+    .project-card{background:var(--c);border:1px solid var(--b);border-radius:var(--r);box-shadow:var(--ss);overflow:hidden;transition:border .15s,box-shadow .15s;cursor:pointer}
+    .project-card:hover{border-color:var(--p);box-shadow:0 4px 12px rgba(27,58,92,.1)}
+    .pc-header{padding:16px;border-bottom:1px solid var(--b)}
+    .pc-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
+    .pc-cat{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;padding:2px 6px;border-radius:2px}
+    .badge{display:inline-flex;align-items:center;padding:3px 8px;border-radius:2px;font-size:11px;font-weight:500;letter-spacing:.3px}
+    .b-sanc{background:var(--inb);color:var(--in);border:1px solid var(--inr)}
+    .b-prog{background:var(--wrb);color:var(--wr);border:1px solid var(--wrr)}
+    .b-comp{background:var(--okb);color:var(--ok);border:1px solid var(--okr)}
+    .b-delay{background:var(--erb);color:var(--er);border:1px solid var(--err)}
+    .pc-title{font-size:15px;font-weight:600;color:var(--t1);margin-bottom:4px}
+    .pc-loc{font-size:12px;color:var(--t3);display:flex;align-items:center;gap:4px}
+    .pc-body{padding:16px}
+    .pc-progress{margin-bottom:12px}
+    .pg-bar{height:8px;background:var(--bg);border-radius:4px;overflow:hidden;margin-bottom:4px}
+    .pg-fill{height:100%;border-radius:4px;transition:width .5s ease}
+    .pg-info{display:flex;justify-content:space-between;font-size:11px;color:var(--t3)}
+    .pc-meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px}
+    .pc-meta-item{display:flex;flex-direction:column;gap:1px}
+    .pc-meta-label{color:var(--t4);font-size:10px;text-transform:uppercase;letter-spacing:.3px}
+    .pc-meta-val{color:var(--t1);font-weight:500}
+    .pc-footer{padding:12px 16px;border-top:1px solid var(--b);display:flex;justify-content:space-between;align-items:center;background:var(--bg)}
+    .pc-budget{font-size:14px;font-weight:700;color:var(--p);font-family:'JetBrains Mono',monospace}
+    .pc-photos{display:flex;gap:-4px}
+    .pc-photo{width:28px;height:28px;border-radius:var(--r);background:var(--b);border:2px solid var(--c);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--t3);margin-left:-6px}
+    .pc-photo:first-child{margin-left:0}
+
+    .tt{position:fixed;top:10px;right:16px;z-index:400;display:flex;gap:4px}
+    .tt button{background:var(--c);border:1px solid var(--b);border-radius:var(--r);padding:5px 10px;cursor:pointer;font-size:11px;font-family:inherit;color:var(--t3)}
+    .tt button.active{background:#1B3A5C;color:#fff;border-color:#1B3A5C}
+    [data-theme="dark"] .tt button.active{background:#5A9BD5;color:#0F1419}
+    .wfb{position:fixed;bottom:16px;right:16px;z-index:400;background:#1B3A5C;color:#fff;padding:5px 10px;font-size:10px;font-weight:600;border-radius:var(--r);text-transform:uppercase;letter-spacing:1px;opacity:.8}
+    @media(max-width:768px){.sidebar{transform:translateX(-100%)}.topbar{left:0}.main{margin-left:0}.card-grid{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}}
+  </style>
+</head>
+<body>
+  <div class="tt"><button class="active" onclick="setTheme('light')">☀ Light</button><button onclick="setTheme('dark')">🌙 Dark</button></div>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="sidebar-logo"><div class="icon">🏛️</div><div class="name">MLA E-Office</div></div>
+      <nav class="sidebar-nav">
+        <div class="ns">Office</div><a class="ni"><span class="ic">📊</span>Dashboard</a><a class="ni"><span class="ic">📨</span>Inward & Outward</a><a class="ni"><span class="ic">👤</span>Visitor Book</a>
+        <div class="ns">Public</div><a class="ni"><span class="ic">📝</span>Nivedans</a><a class="ni active"><span class="ic">🏗️</span>Dev Works</a>
+        <div class="ns">Network</div><a class="ni"><span class="ic">👥</span>Karyakarta</a><a class="ni"><span class="ic">📍</span>Gram/Ward</a><a class="ni"><span class="ic">🗳️</span>Booths</a>
+        <div class="ns">Tools</div><a class="ni"><span class="ic">📅</span>Calendar</a><a class="ni"><span class="ic">💬</span>WhatsApp</a><a class="ni"><span class="ic">📑</span>Reports</a>
+        <div class="nd"></div><a class="ni"><span class="ic">⚙️</span>Settings</a>
+      </nav>
+    </aside>
+    <header class="topbar">
+      <button class="tb-toggle">☰</button>
+      <div class="tb-actions"><button class="tb-btn">🌐</button><button class="tb-btn">🔔</button><div class="tb-avatar">RP</div></div>
+    </header>
+    <main class="main">
+      <div class="ph">
+        <div><h1 class="title">Development Works · <span class="mr">विकासकामे</span></h1><p class="sub">Infrastructure projects & budget tracking · पायाभूत सुविधा प्रकल्प</p></div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-o">📥 Export</button>
+          <button class="btn btn-p">+ New Project · नवीन प्रकल्प</button>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats">
+        <div class="stat"><div class="stat-val" style="color:var(--t1)">54</div><div class="stat-label">Total Projects · एकूण प्रकल्प</div><div class="stat-sub">FY 2026–27</div></div>
+        <div class="stat"><div class="stat-val" style="color:var(--in)">8</div><div class="stat-label">Sanctioned · मंजूर</div><div class="stat-sub">Not yet started</div></div>
+        <div class="stat"><div class="stat-val" style="color:var(--wr)">23</div><div class="stat-label">In Progress · सुरू</div><div class="stat-sub">Avg 62% complete</div></div>
+        <div class="stat"><div class="stat-val" style="color:var(--ok)">18</div><div class="stat-label">Completed · पूर्ण</div><div class="stat-sub">This year</div></div>
+        <div class="stat"><div class="stat-val" style="color:var(--er)">5</div><div class="stat-label">Delayed · विलंब</div><div class="stat-sub">Overdue > 30 days</div></div>
+      </div>
+
+      <!-- View Toggle -->
+      <div class="view-toggle">
+        <button class="vt-btn active">🃏 Cards</button>
+        <button class="vt-btn">📋 Table</button>
+        <button class="vt-btn">📍 Map</button>
+      </div>
+
+      <!-- Card Grid -->
+      <div class="card-grid">
+        <div class="project-card">
+          <div class="pc-header">
+            <div class="pc-top">
+              <span class="pc-cat" style="background:var(--inb);color:var(--in)">🛣️ Road</span>
+              <span class="badge b-prog">In Progress</span>
+            </div>
+            <div class="pc-title">NH-4 Junction Road Widening</div>
+            <div class="pc-loc">📍 Pimpri-Chinchwad · Ward 5</div>
+          </div>
+          <div class="pc-body">
+            <div class="pc-progress">
+              <div class="pg-bar"><div class="pg-fill" style="width:72%;background:var(--wr)"></div></div>
+              <div class="pg-info"><span>72% Complete</span><span>Due: 15 Oct 2026</span></div>
+            </div>
+            <div class="pc-meta">
+              <div class="pc-meta-item"><span class="pc-meta-label">Contractor</span><span class="pc-meta-val">Patel Infra Pvt Ltd</span></div>
+              <div class="pc-meta-item"><span class="pc-meta-label">Funding</span><span class="pc-meta-val">State PWD</span></div>
+              <div class="pc-meta-item"><span class="pc-meta-label">Started</span><span class="pc-meta-val">01 Mar 2026</span></div>
+              <div class="pc-meta-item"><span class="pc-meta-label">Last Update</span><span class="pc-meta-val">30 Jul 2026</span></div>
+            </div>
+          </div>
+          <div class="pc-footer">
+            <span class="pc-budget">₹ 2.45 Cr</span>
+            <div class="pc-photos"><div class="pc-photo">📷</div><div class="pc-photo">📷</div><div class="pc-photo">📷</div><div class="pc-photo" style="font-size:9px">+5</div></div>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <div class="pc-header">
+            <div class="pc-top">
+              <span class="pc-cat" style="background:var(--okb);color:var(--ok)">💧 Water</span>
+              <span class="badge b-comp">Completed</span>
+            </div>
+            <div class="pc-title">Wadgaon Village Water Tank</div>
+            <div class="pc-loc">📍 Wadgaon · Haveli Taluka</div>
+          </div>
+          <div class="pc-body">
+            <div class="pc-progress">
+              <div class="pg-bar"><div class="pg-fill" style="width:100%;background:var(--ok)"></div></div>
+              <div class="pg-info"><span>100% Complete</span><span>Completed: 20 Jul 2026</span></div>
+            </div>
+            <div class="pc-meta">
+              <div class="pc-meta-item"><span class="pc-meta-label">Contractor</span><span class="pc-meta-val">Jal Nirman Corp</span></div>
+              <div class="pc-meta-item"><span class="pc-meta-label">Funding</span><span class="pc-meta-val">ZP · जि.प.</span></div>
+              <div class="pc-meta-item"><span class="pc-meta-label">Started</span><span class="pc-meta-val">15 Jan 2026</span></div>
+              <div class="pc-meta-item"><span class="pc-meta-label">Completed</span><span class="pc-meta-val">20 Jul 2026</span></div>
+            </div>
+          </div>
+          <div class="pc-footer">
+            <span class="pc-budget">₹ 85 L</span>
+            <div class="pc-photos"><div class="pc-photo">📷</div><div class="pc-photo">📷</div><div class="pc-photo" style="font-size:9px">+3</div></div>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <div class="pc-header">
+            <div class="pc-top">
+              <span class="pc-cat" style="background:var(--erb);color:var(--er)">🏫 School</span>
+              <span class="badge b-delay">Delayed</span>
+            </div>
+            <div class="pc-title">Ambegaon ZP School Building Repair</div>
+            <div class="pc-loc">📍 Ambegaon · Maval Taluka</div>
+          </div>
+          <div class="pc-body">
+            <div class="pc-progress">
+              <div class="pg-bar"><div class="pg-fill" style="width:35%;background:var(--er)"></div></div>
+              <div class="pg-info"><span>35% Complete</span><span style="color:var(--er)">⚠ Overdue by 45 days</span></div>
+            </div>
+            <div class="pc-meta">
+              <div class="pc-meta-item"><span class="pc-meta-label">Contractor</span><span class="pc-meta-val">Deshmukh Builders</span></div>
+              <div class="pc-meta-item"><span class="pc-meta-label">Funding</span><span class="pc-meta-val">Education Dept</span></div>
+              <div class="pc-meta-item"><span class="pc-meta-label">Started</span><span class="pc-meta-val">01 Dec 2025</span></div>
+              <div class="pc-meta-item"><span class="pc-meta-label">Due</span><span class="pc-meta-val" style="color:var(--er)">15 Jun 2026</span></div>
+            </div>
+          </div>
+          <div class="pc-footer">
+            <span class="pc-budget">₹ 42 L</span>
+            <div class="pc-photos"><div class="pc-photo">📷</div><div class="pc-photo" style="font-size:9px">+1</div></div>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <div class="pc-header">
+            <div class="pc-top">
+              <span class="pc-cat" style="background:var(--pub);color:var(--pu)">⚡ Electrification</span>
+              <span class="badge b-sanc">Sanctioned</span>
+            </div>
+            <div class="pc-title">Street Light Installation — Booth 145-150</div>
+            <div class="pc-loc">📍 Shivaji Nagar · Ward 1</div>
+          </div>
+          <div class="pc-body">
+            <div class="pc-progress">
+              <div class="pg-bar"><div class="pg-fill" style="width:0%;background:var(--in)"></div></div>
+              <div class="pg-info"><span>0% — Not Started</span><span>Start: 15 Aug 2026</span></div>
+            </div>
+            <div class="pc-meta">
+              <div class="pc-meta-item"><span class="pc-meta-label">Contractor</span><span class="pc-meta-val">TBD</span></div>
+              <div class="pc-meta-item"><span class="pc-meta-label">Funding</span><span class="pc-meta-val">MSEDCL</span></div>
+              <div class="pc-meta-item"><span class="pc-meta-label">Expected Start</span><span class="pc-meta-val">15 Aug 2026</span></div>
+              <div class="pc-meta-item"><span class="pc-meta-label">Expected End</span><span class="pc-meta-val">30 Sep 2026</span></div>
+            </div>
+          </div>
+          <div class="pc-footer">
+            <span class="pc-budget">₹ 12 L</span>
+            <div class="pc-photos"><div class="pc-photo" style="font-size:9px;color:var(--t4)">—</div></div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <div class="wfb">Wireframe · Dev Works List</div>
+  <script>function setTheme(t){document.documentElement.setAttribute('data-theme',t);document.querySelectorAll('.tt button').forEach(b=>b.classList.remove('active'));event.target.classList.add('active');}</script>
+</body>
+</html>

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>MLA E-Office — New Inward Entry</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--sb:#1B3A5C;--sw:240px;--th:56px;--p:#1B3A5C;--pl:#EFF4F9;--bg:#F5F7FA;--c:#FFF;--t1:#0F172A;--t2:#475569;--t3:#64748B;--t4:#94A3B8;--b:#DDE3EB;--ok:#16A34A;--er:#DC2626;--in:#2563EB;--a:#FFC107;--r:3px;--ss:0 1px 3px rgba(15,23,42,.08)}
+    [data-theme="dark"]{--sb:#0D1B2A;--p:#5A9BD5;--pl:#1A3355;--bg:#0F1419;--c:#1A2332;--t1:#E2ECF4;--t2:#8EA3B8;--t3:#6B8299;--t4:#4F6479;--b:#2A3A4E;--ok:#22C55E;--er:#EF4444;--in:#3B82F6;--ss:0 1px 3px rgba(0,0,0,.4)}
+    body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--t1);transition:background .2s,color .2s}
+    .mr{font-family:'Noto Sans Devanagari',sans-serif}
+    .app{display:flex;min-height:100vh}
+    .sidebar{width:var(--sw);background:var(--sb);color:#fff;position:fixed;top:0;left:0;bottom:0;z-index:200;display:flex;flex-direction:column;overflow:hidden}
+    .sidebar-logo{height:var(--th);display:flex;align-items:center;padding:0 16px;gap:10px;border-bottom:1px solid rgba(255,255,255,.1)}
+    .sidebar-logo .icon{width:32px;height:32px;background:rgba(255,255,255,.12);border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:16px}
+    .sidebar-logo .name{font-size:15px;font-weight:700}
+    .sidebar-nav{flex:1;padding:8px 0;overflow-y:auto}
+    .ns{padding:16px 16px 4px;font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:rgba(255,255,255,.35);font-weight:600}
+    .ni{display:flex;align-items:center;gap:12px;padding:9px 16px;margin:1px 8px;border-radius:var(--r);cursor:pointer;font-size:13px;font-weight:500;color:rgba(255,255,255,.7);text-decoration:none;transition:background .12s}
+    .ni:hover{background:rgba(255,255,255,.08);color:#fff}.ni.active{background:rgba(255,255,255,.12);color:#fff}
+    .ni .ic{width:20px;text-align:center;font-size:15px;opacity:.7}.ni.active .ic{opacity:1}
+    .nd{height:1px;background:rgba(255,255,255,.1);margin:8px 16px}
+    .topbar{position:fixed;top:0;left:var(--sw);right:0;height:var(--th);background:var(--c);border-bottom:1px solid var(--b);display:flex;align-items:center;padding:0 24px;z-index:300;gap:16px}
+    .tb-toggle{width:36px;height:36px;border:none;background:none;cursor:pointer;border-radius:var(--r);font-size:18px;color:var(--t3);display:flex;align-items:center;justify-content:center}
+    .tb-actions{display:flex;align-items:center;gap:8px;margin-left:auto}
+    .tb-btn{width:36px;height:36px;border:1px solid var(--b);background:var(--c);border-radius:var(--r);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--t3);position:relative}
+    .tb-btn .bdg{position:absolute;top:-4px;right:-4px;width:18px;height:18px;border-radius:9px;background:var(--er);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center}
+    .tb-avatar{width:32px;height:32px;border-radius:var(--r);background:var(--p);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;cursor:pointer}
+    [data-theme="dark"] .tb-avatar{background:#1A3355;color:#5A9BD5}
+    .main{margin-left:var(--sw);margin-top:var(--th);padding:24px;max-width:920px}
+    .breadcrumb{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--t3);margin-bottom:16px}
+    .breadcrumb a{color:var(--p);text-decoration:none}
+    .ph{margin-bottom:24px}
+    .ph .title{font-size:22px;font-weight:700}
+    .ph .sub{font-size:13px;color:var(--t3);margin-top:2px}
+
+    .form-card{background:var(--c);border:1px solid var(--b);border-radius:var(--r);box-shadow:var(--ss);margin-bottom:20px}
+    .form-section{padding:20px 24px;border-bottom:1px solid var(--b)}
+    .form-section:last-child{border-bottom:none}
+    .section-title{font-size:14px;font-weight:600;color:var(--t1);margin-bottom:4px;display:flex;align-items:center;gap:8px}
+    .section-desc{font-size:12px;color:var(--t3);margin-bottom:16px}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .form-grid.cols-3{grid-template-columns:1fr 1fr 1fr}
+    .form-full{grid-column:1/-1}
+    .form-group{display:flex;flex-direction:column;gap:5px}
+    .form-label{font-size:13px;font-weight:500;color:var(--t1)}
+    .form-label .req{color:var(--er);margin-left:2px}
+    .form-label .mr-sub{font-family:'Noto Sans Devanagari',sans-serif;color:var(--t4);font-weight:400;font-size:11px;margin-left:4px}
+    .form-input{height:38px;padding:0 12px;border:1px solid var(--b);border-radius:var(--r);font-size:14px;color:var(--t1);font-family:inherit;background:var(--c);outline:none;transition:border .2s}
+    .form-input:focus{border-color:var(--p);box-shadow:0 0 0 3px rgba(27,58,92,.1)}
+    .form-input::placeholder{color:var(--t4)}
+    textarea.form-input{height:auto;padding:10px 12px;resize:vertical;min-height:80px;line-height:1.5}
+    select.form-input{appearance:auto;cursor:pointer}
+    .form-hint{font-size:11px;color:var(--t4)}
+    .tag-list{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+    .tag{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;background:var(--pl);border:1px solid var(--b);border-radius:2px;font-size:11px;color:var(--p);font-weight:500}
+    .tag .x{cursor:pointer;opacity:.6}
+
+    .file-drop{border:2px dashed var(--b);border-radius:var(--r);padding:24px;text-align:center;cursor:pointer;transition:all .2s;background:var(--bg)}
+    .file-drop:hover{border-color:var(--p);background:var(--pl)}
+    .file-drop .ico{font-size:28px;margin-bottom:8px;display:block;color:var(--t4)}
+    .file-drop .text{font-size:13px;color:var(--t3)}
+    .file-drop .hint{font-size:11px;color:var(--t4);margin-top:4px}
+    .file-list{display:flex;flex-direction:column;gap:6px;margin-top:12px}
+    .file-item{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--bg);border:1px solid var(--b);border-radius:var(--r);font-size:12px}
+    .file-item .fname{flex:1;color:var(--t1);font-weight:500}
+    .file-item .fsize{color:var(--t3)}
+    .file-item .fremove{color:var(--er);cursor:pointer}
+
+    .form-footer{display:flex;justify-content:space-between;align-items:center;padding:16px 24px;background:var(--bg);border-top:1px solid var(--b)}
+    .btn{height:38px;padding:0 20px;border-radius:var(--r);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;border:none;transition:all .12s}
+    .btn-p{background:var(--p);color:#fff}.btn-o{background:transparent;color:var(--t2);border:1px solid var(--b)}
+    .btn-ok{background:var(--ok);color:#fff}
+
+    .tt{position:fixed;top:10px;right:16px;z-index:400;display:flex;gap:4px}
+    .tt button{background:var(--c);border:1px solid var(--b);border-radius:var(--r);padding:5px 10px;cursor:pointer;font-size:11px;font-family:inherit;color:var(--t3)}
+    .tt button.active{background:#1B3A5C;color:#fff;border-color:#1B3A5C}
+    [data-theme="dark"] .tt button.active{background:#5A9BD5;color:#0F1419}
+    .wfb{position:fixed;bottom:16px;right:16px;z-index:400;background:#1B3A5C;color:#fff;padding:5px 10px;font-size:10px;font-weight:600;border-radius:var(--r);text-transform:uppercase;letter-spacing:1px;opacity:.8}
+    @media(max-width:768px){.sidebar{transform:translateX(-100%)}.topbar{left:0}.main{margin-left:0;padding:16px}.form-grid,.form-grid.cols-3{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="tt"><button class="active" onclick="setTheme('light')">☀ Light</button><button onclick="setTheme('dark')">🌙 Dark</button></div>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="sidebar-logo"><div class="icon">🏛️</div><div class="name">MLA E-Office</div></div>
+      <nav class="sidebar-nav">
+        <div class="ns">Office</div><a class="ni"><span class="ic">📊</span>Dashboard</a><a class="ni active"><span class="ic">📨</span>Inward & Outward</a><a class="ni"><span class="ic">👤</span>Visitor Book</a>
+        <div class="ns">Public</div><a class="ni"><span class="ic">📝</span>Nivedans</a><a class="ni"><span class="ic">🏗️</span>Dev Works</a>
+        <div class="ns">Network</div><a class="ni"><span class="ic">👥</span>Karyakarta</a><a class="ni"><span class="ic">📍</span>Gram/Ward</a><a class="ni"><span class="ic">🗳️</span>Booths</a>
+        <div class="ns">Tools</div><a class="ni"><span class="ic">📅</span>Calendar</a><a class="ni"><span class="ic">💬</span>WhatsApp</a><a class="ni"><span class="ic">📑</span>Reports</a>
+        <div class="nd"></div><a class="ni"><span class="ic">⚙️</span>Settings</a>
+      </nav>
+    </aside>
+    <header class="topbar">
+      <button class="tb-toggle">☰</button>
+      <div class="tb-actions"><button class="tb-btn">🌐</button><button class="tb-btn">🔔<span class="bdg">3</span></button><div class="tb-avatar">RP</div></div>
+    </header>
+    <main class="main">
+      <div class="breadcrumb"><a href="#">Dashboard</a><span style="color:var(--t4)">/</span><a href="#">Inward & Outward</a><span style="color:var(--t4)">/</span><span>New Inward Entry</span></div>
+      <div class="ph"><h1 class="title">New Inward Entry · <span class="mr">नवीन आवक नोंद</span></h1><p class="sub">Register a received letter, document, or correspondence</p></div>
+
+      <div class="form-card">
+        <!-- Section 1: Basic Info -->
+        <div class="form-section">
+          <div class="section-title">📨 Inward Details · <span class="mr">आवक तपशील</span></div>
+          <div class="section-desc">Letter/document received at MLA office</div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Inward Number<span class="mr-sub">आवक क्रमांक</span></label>
+              <input class="form-input" value="INW/2026/0390" readonly style="background:var(--bg);color:var(--t3);font-family:'JetBrains Mono',monospace;font-size:13px">
+              <span class="form-hint">Auto-generated · स्वयं-निर्मित</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Date Received<span class="req">*</span><span class="mr-sub">प्राप्त तारीख</span></label>
+              <input class="form-input" type="date" value="2026-08-02">
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 2: Sender Info -->
+        <div class="form-section">
+          <div class="section-title">👤 Sender Information · <span class="mr">पाठवणाऱ्याची माहिती</span></div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Sender Name<span class="req">*</span><span class="mr-sub">पाठवणाऱ्याचे नाव</span></label>
+              <input class="form-input" placeholder="e.g., Shri. D.K. Patil" value="Shri. A.B. Kulkarni">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Sender Designation<span class="mr-sub">पद</span></label>
+              <input class="form-input" placeholder="e.g., Executive Engineer" value="Executive Engineer">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Department / Office<span class="req">*</span><span class="mr-sub">विभाग / कार्यालय</span></label>
+              <select class="form-input">
+                <option>Select department...</option>
+                <option>Collector Office · जिल्हाधिकारी कार्यालय</option>
+                <option>Tahsildar · तहसीलदार कार्यालय</option>
+                <option>Zilla Parishad · जिल्हा परिषद</option>
+                <option selected>PWD · सार्वजनिक बांधकाम विभाग</option>
+                <option>MSEDCL · महावितरण</option>
+                <option>Education Dept · शिक्षण विभाग</option>
+                <option>Health Dept · आरोग्य विभाग</option>
+                <option>Water Supply · पाणीपुरवठा</option>
+                <option>Other · इतर</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Reference Number<span class="mr-sub">संदर्भ क्रमांक</span></label>
+              <input class="form-input" placeholder="Sender's letter/file number" value="PWD/CE/HQ/2026/1234">
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 3: Subject & Content -->
+        <div class="form-section">
+          <div class="section-title">📄 Content · <span class="mr">सामग्री</span></div>
+          <div class="form-grid">
+            <div class="form-group form-full">
+              <label class="form-label">Subject<span class="req">*</span><span class="mr-sub">विषय</span></label>
+              <input class="form-input" placeholder="Subject line of the received document" value="Regarding road widening proposal for NH-4 junction — revised cost estimate">
+            </div>
+            <div class="form-group form-full">
+              <label class="form-label">Description / Notes<span class="mr-sub">वर्णन / टिपा</span></label>
+              <textarea class="form-input" rows="3" placeholder="Brief summary of the content...">Revised cost estimate for road widening project at NH-4 junction submitted by PWD. Total revised cost: ₹2.45 Cr (increased from ₹1.8 Cr due to land acquisition costs). Request for MLA recommendation letter to expedite NHAI approval.</textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Tags<span class="mr-sub">टॅग्ज</span></label>
+              <input class="form-input" placeholder="Add tags...">
+              <div class="tag-list">
+                <span class="tag">Road <span class="x">✕</span></span>
+                <span class="tag">PWD <span class="x">✕</span></span>
+                <span class="tag">NH-4 <span class="x">✕</span></span>
+                <span class="tag">Budget <span class="x">✕</span></span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Priority<span class="req">*</span><span class="mr-sub">प्राधान्य</span></label>
+              <select class="form-input">
+                <option>🟢 Low · कमी</option>
+                <option selected>🟡 Medium · मध्यम</option>
+                <option>🔴 High · उच्च</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Assigned To<span class="mr-sub">नियुक्त करा</span></label>
+              <select class="form-input">
+                <option>— Assign later —</option>
+                <option>Ramesh Patil (Staff)</option>
+                <option selected>Sunil More (Staff)</option>
+                <option>Priya Deshmukh (Staff)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Requires Outward Reply?<span class="mr-sub">जवाबी पत्र आवश्यक?</span></label>
+              <select class="form-input">
+                <option>No</option>
+                <option selected>Yes — draft outward later</option>
+                <option>Yes — AI draft immediately</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 4: Attachments -->
+        <div class="form-section">
+          <div class="section-title">📎 Scan / Upload Document · <span class="mr">दस्तऐवज अपलोड</span></div>
+          <div class="section-desc">Upload the scanned PDF or photo of the received letter</div>
+          <div class="file-drop">
+            <span class="ico">📤</span>
+            <div class="text">Drag & drop scanned document, or <strong style="color:var(--p)">click to browse</strong></div>
+            <div class="hint">PDF, JPG, PNG — Max 10MB per file</div>
+          </div>
+          <div class="file-list">
+            <div class="file-item"><span>📄</span><span class="fname">PWD_Road_Widening_Proposal_NH4.pdf</span><span class="fsize">4.2 MB</span><span class="fremove">✕</span></div>
+            <div class="file-item"><span>📄</span><span class="fname">Revised_Cost_Estimate_Annexure.pdf</span><span class="fsize">1.8 MB</span><span class="fremove">✕</span></div>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="form-footer">
+          <div style="font-size:12px;color:var(--t3)">Inward No: <strong style="font-family:'JetBrains Mono',monospace;color:var(--p)">INW/2026/0390</strong></div>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-o">Cancel · रद्द करा</button>
+            <button class="btn btn-p">💾 Save · जतन करा</button>
+            <button class="btn btn-ok">✓ Save & Create Outward · जतन आणि जावक तयार करा</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <div class="wfb">Wireframe · Inward Form</div>
+  <script>function setTheme(t){document.documentElement.setAttribute('data-theme',t);document.querySelectorAll('.tt button').forEach(b=>b.classList.remove('active'));event.target.classList.add('active');}</script>
+</body>
+</html>

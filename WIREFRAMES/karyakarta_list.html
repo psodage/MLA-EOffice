@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>MLA E-Office — Karyakarta Directory</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--sb:#1B3A5C;--sw:240px;--th:56px;--p:#1B3A5C;--pl:#EFF4F9;--bg:#F5F7FA;--c:#FFF;--t1:#0F172A;--t2:#475569;--t3:#64748B;--t4:#94A3B8;--b:#DDE3EB;--ok:#16A34A;--okb:#F0FDF4;--wr:#D97706;--wrb:#FFFBEB;--er:#DC2626;--in:#2563EB;--inb:#EFF6FF;--pu:#7C3AED;--pub:#F5F3FF;--r:3px;--ss:0 1px 3px rgba(15,23,42,.08)}
+    [data-theme="dark"]{--sb:#0D1B2A;--p:#5A9BD5;--pl:#1A3355;--bg:#0F1419;--c:#1A2332;--t1:#E2ECF4;--t2:#8EA3B8;--t3:#6B8299;--t4:#4F6479;--b:#2A3A4E;--ok:#22C55E;--wr:#F59E0B;--er:#EF4444;--in:#3B82F6;--pu:#A78BFA;--ss:0 1px 3px rgba(0,0,0,.4)}
+    body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--t1);transition:background .2s,color .2s}
+    .mr{font-family:'Noto Sans Devanagari',sans-serif}
+    .app{display:flex;min-height:100vh}
+    .sidebar{width:var(--sw);background:var(--sb);color:#fff;position:fixed;top:0;left:0;bottom:0;z-index:200;display:flex;flex-direction:column;overflow:hidden}
+    .sidebar-logo{height:var(--th);display:flex;align-items:center;padding:0 16px;gap:10px;border-bottom:1px solid rgba(255,255,255,.1)}
+    .sidebar-logo .icon{width:32px;height:32px;background:rgba(255,255,255,.12);border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:16px}
+    .sidebar-logo .name{font-size:15px;font-weight:700}
+    .sidebar-nav{flex:1;padding:8px 0;overflow-y:auto}
+    .ns{padding:16px 16px 4px;font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:rgba(255,255,255,.35);font-weight:600}
+    .ni{display:flex;align-items:center;gap:12px;padding:9px 16px;margin:1px 8px;border-radius:var(--r);cursor:pointer;font-size:13px;font-weight:500;color:rgba(255,255,255,.7);text-decoration:none;transition:background .12s}
+    .ni:hover{background:rgba(255,255,255,.08);color:#fff}.ni.active{background:rgba(255,255,255,.12);color:#fff}
+    .ni .ic{width:20px;text-align:center;font-size:15px;opacity:.7}.ni.active .ic{opacity:1}
+    .topbar{position:fixed;top:0;left:var(--sw);right:0;height:var(--th);background:var(--c);border-bottom:1px solid var(--b);display:flex;align-items:center;padding:0 24px;z-index:300;gap:16px}
+    .tb-toggle{width:36px;height:36px;border:none;background:none;cursor:pointer;border-radius:var(--r);font-size:18px;color:var(--t3);display:flex;align-items:center;justify-content:center}
+    .tb-actions{display:flex;align-items:center;gap:8px;margin-left:auto}
+    .tb-btn{width:36px;height:36px;border:1px solid var(--b);background:var(--c);border-radius:var(--r);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--t3)}
+    .tb-avatar{width:32px;height:32px;border-radius:var(--r);background:var(--p);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;cursor:pointer}
+    [data-theme="dark"] .tb-avatar{background:#1A3355;color:#5A9BD5}
+    .main{margin-left:var(--sw);margin-top:var(--th);padding:24px}
+    .ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px}
+    .ph .title{font-size:22px;font-weight:700}
+    .ph .sub{font-size:13px;color:var(--t3);margin-top:2px}
+    .btn{height:36px;padding:0 16px;border-radius:var(--r);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;border:none;transition:all .12s}
+    .btn-p{background:var(--p);color:#fff}.btn-o{background:transparent;color:var(--t2);border:1px solid var(--b)}
+
+    .stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:20px}
+    .stat{background:var(--c);border:1px solid var(--b);border-radius:var(--r);padding:14px;box-shadow:var(--ss);text-align:center}
+    .stat-val{font-size:24px;font-weight:700;margin-bottom:2px}
+    .stat-label{font-size:11px;color:var(--t3)}
+
+    .filter-bar{background:var(--c);border:1px solid var(--b);border-radius:var(--r);padding:12px;margin-bottom:16px;display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;box-shadow:var(--ss)}
+    .fg{display:flex;flex-direction:column;gap:3px}
+    .fl{font-size:10px;font-weight:600;color:var(--t4);text-transform:uppercase;letter-spacing:.5px}
+    .fi{height:30px;padding:0 8px;border:1px solid var(--b);border-radius:var(--r);font-size:12px;color:var(--t1);font-family:inherit;background:var(--bg);outline:none;min-width:130px}
+    select.fi{appearance:auto;cursor:pointer}
+
+    /* Card Grid */
+    .worker-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+    .worker-card{background:var(--c);border:1px solid var(--b);border-radius:var(--r);box-shadow:var(--ss);padding:16px;display:flex;gap:14px;transition:border .12s;cursor:pointer}
+    .worker-card:hover{border-color:var(--p)}
+    .wc-avatar{width:48px;height:48px;border-radius:var(--r);background:var(--pl);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:var(--p);flex-shrink:0}
+    .wc-info{flex:1;min-width:0}
+    .wc-name{font-size:14px;font-weight:600;color:var(--t1);margin-bottom:2px}
+    .wc-role{font-size:11px;font-weight:500;padding:2px 6px;border-radius:2px;display:inline-block;margin-bottom:6px}
+    .role-bp{background:var(--pub);color:var(--pu)}
+    .role-wh{background:var(--inb);color:var(--in)}
+    .role-kw{background:var(--okb);color:var(--ok)}
+    .role-vl{background:var(--wrb);color:var(--wr)}
+    .wc-detail{font-size:12px;color:var(--t3);line-height:1.6}
+    .wc-detail strong{color:var(--t2)}
+    .wc-actions{display:flex;gap:4px;margin-top:8px}
+    .wc-btn{width:28px;height:28px;border:1px solid var(--b);background:var(--c);border-radius:var(--r);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-size:12px;color:var(--t3);transition:all .12s}
+    .wc-btn:hover{border-color:var(--p);color:var(--p)}
+
+    .tt{position:fixed;top:10px;right:16px;z-index:400;display:flex;gap:4px}
+    .tt button{background:var(--c);border:1px solid var(--b);border-radius:var(--r);padding:5px 10px;cursor:pointer;font-size:11px;font-family:inherit;color:var(--t3)}
+    .tt button.active{background:#1B3A5C;color:#fff;border-color:#1B3A5C}
+    [data-theme="dark"] .tt button.active{background:#5A9BD5;color:#0F1419}
+    .wfb{position:fixed;bottom:16px;right:16px;z-index:400;background:#1B3A5C;color:#fff;padding:5px 10px;font-size:10px;font-weight:600;border-radius:var(--r);text-transform:uppercase;letter-spacing:1px;opacity:.8}
+    @media(max-width:768px){.sidebar{transform:translateX(-100%)}.topbar{left:0}.main{margin-left:0}.worker-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="tt"><button class="active" onclick="setTheme('light')">☀ Light</button><button onclick="setTheme('dark')">🌙 Dark</button></div>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="sidebar-logo"><div class="icon">🏛️</div><div class="name">MLA E-Office</div></div>
+      <nav class="sidebar-nav">
+        <div class="ns">Office</div><a class="ni"><span class="ic">📊</span>Dashboard</a><a class="ni"><span class="ic">📨</span>Inward</a><a class="ni"><span class="ic">👤</span>Visitors</a>
+        <div class="ns">Public</div><a class="ni"><span class="ic">📝</span>Nivedans</a><a class="ni"><span class="ic">🏗️</span>Dev Works</a>
+        <div class="ns">Network</div><a class="ni active"><span class="ic">👥</span>Karyakarta</a><a class="ni"><span class="ic">📍</span>Gram/Ward</a><a class="ni"><span class="ic">🗳️</span>Booths</a>
+        <div class="ns">Tools</div><a class="ni"><span class="ic">📅</span>Calendar</a><a class="ni"><span class="ic">💬</span>WhatsApp</a><a class="ni"><span class="ic">📑</span>Reports</a>
+      </nav>
+    </aside>
+    <header class="topbar">
+      <button class="tb-toggle">☰</button>
+      <div class="tb-actions"><button class="tb-btn">🌐</button><button class="tb-btn">🔔</button><div class="tb-avatar">RP</div></div>
+    </header>
+    <main class="main">
+      <div class="ph">
+        <div><h1 class="title">Karyakarta Master · <span class="mr">कार्यकर्ता यादी</span></h1><p class="sub">Party worker directory · पक्ष कार्यकर्ता संचालनालय</p></div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-o">📥 Export</button>
+          <button class="btn btn-o">📤 Import CSV</button>
+          <button class="btn btn-p">+ Add Worker · कार्यकर्ता जोडा</button>
+        </div>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><div class="stat-val" style="color:var(--t1)">1,247</div><div class="stat-label">Total Workers · एकूण</div></div>
+        <div class="stat"><div class="stat-val" style="color:var(--pu)">156</div><div class="stat-label">Booth Pramukh · बूथ प्रमुख</div></div>
+        <div class="stat"><div class="stat-val" style="color:var(--in)">42</div><div class="stat-label">Ward Heads · वॉर्ड प्रमुख</div></div>
+        <div class="stat"><div class="stat-val" style="color:var(--ok)">834</div><div class="stat-label">Karyakarta · कार्यकर्ता</div></div>
+        <div class="stat"><div class="stat-val" style="color:var(--wr)">215</div><div class="stat-label">Volunteers · स्वयंसेवक</div></div>
+      </div>
+
+      <div class="filter-bar">
+        <div class="fg"><span class="fl">Search</span><input class="fi" placeholder="Name, mobile..." style="min-width:180px"></div>
+        <div class="fg"><span class="fl">Designation</span><select class="fi"><option>All</option><option>Booth Pramukh</option><option>Ward Head</option><option>Karyakarta</option><option>Volunteer</option></select></div>
+        <div class="fg"><span class="fl">Taluka</span><select class="fi"><option>All Talukas</option><option>Haveli</option><option>Maval</option><option>Shirur</option></select></div>
+        <div class="fg"><span class="fl">Village/Ward</span><select class="fi"><option>All Areas</option><option>Ward 1</option><option>Ward 5</option><option>Wadgaon</option></select></div>
+        <div class="fg"><span class="fl">Booth No.</span><select class="fi"><option>All Booths</option><option>Booth 1-10</option><option>Booth 11-20</option><option>Booth 145-150</option></select></div>
+      </div>
+
+      <div class="worker-grid">
+        <div class="worker-card">
+          <div class="wc-avatar">RP</div>
+          <div class="wc-info">
+            <div class="wc-name">Ramesh Patil · रमेश पाटील</div>
+            <span class="wc-role role-bp">🗳️ Booth Pramukh</span>
+            <div class="wc-detail">📱 <strong style="font-family:'JetBrains Mono';font-size:11px">98765 43210</strong><br>📍 Booth 145 · Ward 5, Pimpri<br>🏘️ Haveli Taluka</div>
+            <div class="wc-actions"><button class="wc-btn" title="Call">📞</button><button class="wc-btn" title="WhatsApp">💬</button><button class="wc-btn" title="Edit">✏️</button><button class="wc-btn" title="View">👁</button></div>
+          </div>
+        </div>
+        <div class="worker-card">
+          <div class="wc-avatar">SM</div>
+          <div class="wc-info">
+            <div class="wc-name">Sunil More · सुनील मोरे</div>
+            <span class="wc-role role-wh">📍 Ward Head</span>
+            <div class="wc-detail">📱 <strong style="font-family:'JetBrains Mono';font-size:11px">87654 32109</strong><br>📍 Ward 1, Shivaji Nagar<br>🏘️ Haveli Taluka</div>
+            <div class="wc-actions"><button class="wc-btn">📞</button><button class="wc-btn">💬</button><button class="wc-btn">✏️</button><button class="wc-btn">👁</button></div>
+          </div>
+        </div>
+        <div class="worker-card">
+          <div class="wc-avatar">PD</div>
+          <div class="wc-info">
+            <div class="wc-name">Priya Deshmukh · प्रिया देशमुख</div>
+            <span class="wc-role role-kw">👥 Karyakarta</span>
+            <div class="wc-detail">📱 <strong style="font-family:'JetBrains Mono';font-size:11px">76543 21098</strong><br>📍 Booth 148 · Ward 5, Pimpri<br>🏘️ Haveli Taluka</div>
+            <div class="wc-actions"><button class="wc-btn">📞</button><button class="wc-btn">💬</button><button class="wc-btn">✏️</button><button class="wc-btn">👁</button></div>
+          </div>
+        </div>
+        <div class="worker-card">
+          <div class="wc-avatar">VG</div>
+          <div class="wc-info">
+            <div class="wc-name">Vishnu Gaikwad · विष्णू गायकवाड</div>
+            <span class="wc-role role-bp">🗳️ Booth Pramukh</span>
+            <div class="wc-detail">📱 <strong style="font-family:'JetBrains Mono';font-size:11px">65432 10987</strong><br>📍 Booth 12 · Wadgaon Village<br>🏘️ Haveli Taluka</div>
+            <div class="wc-actions"><button class="wc-btn">📞</button><button class="wc-btn">💬</button><button class="wc-btn">✏️</button><button class="wc-btn">👁</button></div>
+          </div>
+        </div>
+        <div class="worker-card">
+          <div class="wc-avatar">AK</div>
+          <div class="wc-info">
+            <div class="wc-name">Anand Kamble · आनंद कांबळे</div>
+            <span class="wc-role role-vl">🤝 Volunteer</span>
+            <div class="wc-detail">📱 <strong style="font-family:'JetBrains Mono';font-size:11px">54321 09876</strong><br>📍 Booth 3 · Ambegaon Village<br>🏘️ Maval Taluka</div>
+            <div class="wc-actions"><button class="wc-btn">📞</button><button class="wc-btn">💬</button><button class="wc-btn">✏️</button><button class="wc-btn">👁</button></div>
+          </div>
+        </div>
+        <div class="worker-card">
+          <div class="wc-avatar">MJ</div>
+          <div class="wc-info">
+            <div class="wc-name">Mangesh Jadhav · मंगेश जाधव</div>
+            <span class="wc-role role-kw">👥 Karyakarta</span>
+            <div class="wc-detail">📱 <strong style="font-family:'JetBrains Mono';font-size:11px">43210 98765</strong><br>📍 Booth 146 · Ward 5, Pimpri<br>🏘️ Haveli Taluka</div>
+            <div class="wc-actions"><button class="wc-btn">📞</button><button class="wc-btn">💬</button><button class="wc-btn">✏️</button><button class="wc-btn">👁</button></div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <div class="wfb">Wireframe · Karyakarta List</div>
+  <script>function setTheme(t){document.documentElement.setAttribute('data-theme',t);document.querySelectorAll('.tt button').forEach(b=>b.classList.remove('active'));event.target.classList.add('active');}</script>
+</body>
+</html>

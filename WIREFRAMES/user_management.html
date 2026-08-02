@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>MLA E-Office — User Management</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--sb:#1B3A5C;--sw:240px;--th:56px;--p:#1B3A5C;--pl:#EFF4F9;--bg:#F5F7FA;--c:#FFF;--t1:#0F172A;--t2:#475569;--t3:#64748B;--t4:#94A3B8;--b:#DDE3EB;--ok:#16A34A;--okb:#F0FDF4;--okr:#BBF7D0;--wr:#D97706;--wrb:#FFFBEB;--er:#DC2626;--erb:#FEF2F2;--err:#FECACA;--in:#2563EB;--inb:#EFF6FF;--pu:#7C3AED;--pub:#F5F3FF;--r:3px;--ss:0 1px 3px rgba(15,23,42,.08)}
+    [data-theme="dark"]{--sb:#0D1B2A;--p:#5A9BD5;--pl:#1A3355;--bg:#0F1419;--c:#1A2332;--t1:#E2ECF4;--t2:#8EA3B8;--t3:#6B8299;--t4:#4F6479;--b:#2A3A4E;--ok:#22C55E;--okb:#052E16;--okr:#166534;--wr:#F59E0B;--er:#EF4444;--erb:#2E0505;--err:#7F1D1D;--in:#3B82F6;--pu:#A78BFA;--ss:0 1px 3px rgba(0,0,0,.4)}
+    body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--t1);transition:background .2s,color .2s}
+    .mr{font-family:'Noto Sans Devanagari',sans-serif}
+    .app{display:flex;min-height:100vh}
+    .sidebar{width:var(--sw);background:var(--sb);color:#fff;position:fixed;top:0;left:0;bottom:0;z-index:200;display:flex;flex-direction:column;overflow:hidden}
+    .sidebar-logo{height:var(--th);display:flex;align-items:center;padding:0 16px;gap:10px;border-bottom:1px solid rgba(255,255,255,.1)}
+    .sidebar-logo .icon{width:32px;height:32px;background:rgba(255,255,255,.12);border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:16px}
+    .sidebar-logo .name{font-size:15px;font-weight:700}
+    .sidebar-nav{flex:1;padding:8px 0;overflow-y:auto}
+    .ns{padding:16px 16px 4px;font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:rgba(255,255,255,.35);font-weight:600}
+    .ni{display:flex;align-items:center;gap:12px;padding:9px 16px;margin:1px 8px;border-radius:var(--r);cursor:pointer;font-size:13px;font-weight:500;color:rgba(255,255,255,.7);text-decoration:none;transition:background .12s}
+    .ni:hover{background:rgba(255,255,255,.08);color:#fff}.ni.active{background:rgba(255,255,255,.12);color:#fff}
+    .ni .ic{width:20px;text-align:center;font-size:15px;opacity:.7}.ni.active .ic{opacity:1}
+    .nd{height:1px;background:rgba(255,255,255,.1);margin:8px 16px}
+    .topbar{position:fixed;top:0;left:var(--sw);right:0;height:var(--th);background:var(--c);border-bottom:1px solid var(--b);display:flex;align-items:center;padding:0 24px;z-index:300;gap:16px}
+    .tb-toggle{width:36px;height:36px;border:none;background:none;cursor:pointer;border-radius:var(--r);font-size:18px;color:var(--t3);display:flex;align-items:center;justify-content:center}
+    .tb-actions{display:flex;align-items:center;gap:8px;margin-left:auto}
+    .tb-btn{width:36px;height:36px;border:1px solid var(--b);background:var(--c);border-radius:var(--r);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--t3)}
+    .tb-avatar{width:32px;height:32px;border-radius:var(--r);background:var(--p);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;cursor:pointer}
+    [data-theme="dark"] .tb-avatar{background:#1A3355;color:#5A9BD5}
+    .main{margin-left:var(--sw);margin-top:var(--th);padding:24px}
+    .ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+    .btn{height:36px;padding:0 16px;border-radius:var(--r);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;border:none;transition:all .12s}
+    .btn-p{background:var(--p);color:#fff}.btn-o{background:transparent;color:var(--t2);border:1px solid var(--b)}
+
+    .table-wrap{background:var(--c);border:1px solid var(--b);border-radius:var(--r);box-shadow:var(--ss);overflow:hidden}
+    table{width:100%;border-collapse:collapse}
+    thead th{background:var(--bg);padding:10px 14px;font-size:11px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;text-align:left;border-bottom:2px solid var(--b);white-space:nowrap}
+    tbody tr{border-bottom:1px solid var(--b);transition:background .12s}
+    tbody tr:last-child{border-bottom:none}
+    tbody tr:hover{background:var(--pl)}
+    tbody td{padding:10px 14px;font-size:13px;color:var(--t1);vertical-align:middle}
+    .user-cell{display:flex;align-items:center;gap:10px}
+    .user-av{width:36px;height:36px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
+    .user-name{font-weight:600;font-size:13px}
+    .user-email{font-size:11px;color:var(--t3)}
+    .role-badge{display:inline-flex;align-items:center;padding:3px 8px;border-radius:2px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.3px}
+    .r-mla{background:var(--wrb);color:var(--wr)}
+    .r-pa{background:var(--inb);color:var(--in)}
+    .r-rec{background:var(--okb);color:var(--ok)}
+    .r-staff{background:var(--pub);color:var(--pu)}
+    .r-admin{background:var(--erb);color:var(--er)}
+    .r-aud{background:#F3F4F6;color:#6B7280}
+    .status-dot{width:8px;height:8px;border-radius:4px;display:inline-block;margin-right:6px}
+    .s-active{background:var(--ok)}
+    .s-inactive{background:var(--t4)}
+    .module-tags{display:flex;gap:3px;flex-wrap:wrap}
+    .mod-tag{font-size:9px;padding:1px 5px;border-radius:2px;background:var(--bg);color:var(--t3);border:1px solid var(--b)}
+    .act-btn{width:28px;height:28px;border:1px solid var(--b);background:var(--c);border-radius:var(--r);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-size:12px;color:var(--t3);transition:all .12s}
+    .act-btn:hover{border-color:var(--p);color:var(--p)}
+
+    .tt{position:fixed;top:10px;right:16px;z-index:400;display:flex;gap:4px}
+    .tt button{background:var(--c);border:1px solid var(--b);border-radius:var(--r);padding:5px 10px;cursor:pointer;font-size:11px;font-family:inherit;color:var(--t3)}
+    .tt button.active{background:#1B3A5C;color:#fff;border-color:#1B3A5C}
+    [data-theme="dark"] .tt button.active{background:#5A9BD5;color:#0F1419}
+    .wfb{position:fixed;bottom:16px;right:16px;z-index:400;background:#1B3A5C;color:#fff;padding:5px 10px;font-size:10px;font-weight:600;border-radius:var(--r);text-transform:uppercase;letter-spacing:1px;opacity:.8}
+    @media(max-width:768px){.sidebar{transform:translateX(-100%)}.topbar{left:0}.main{margin-left:0}.table-wrap{overflow-x:auto}table{min-width:800px}}
+  </style>
+</head>
+<body>
+  <div class="tt"><button class="active" onclick="setTheme('light')">☀ Light</button><button onclick="setTheme('dark')">🌙 Dark</button></div>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="sidebar-logo"><div class="icon">🏛️</div><div class="name">MLA E-Office</div></div>
+      <nav class="sidebar-nav">
+        <div class="ns">Office</div><a class="ni"><span class="ic">📊</span>Dashboard</a><a class="ni"><span class="ic">📨</span>Inward</a><a class="ni"><span class="ic">👤</span>Visitors</a>
+        <div class="ns">Public</div><a class="ni"><span class="ic">📝</span>Nivedans</a><a class="ni"><span class="ic">🏗️</span>Dev Works</a>
+        <div class="ns">Network</div><a class="ni"><span class="ic">👥</span>Karyakarta</a><a class="ni"><span class="ic">📍</span>Gram/Ward</a><a class="ni"><span class="ic">🗳️</span>Booths</a>
+        <div class="ns">Tools</div><a class="ni"><span class="ic">📅</span>Calendar</a><a class="ni"><span class="ic">💬</span>WhatsApp</a><a class="ni"><span class="ic">📑</span>Reports</a>
+        <div class="nd"></div><a class="ni"><span class="ic">⚙️</span>Settings</a><a class="ni active"><span class="ic">🛡️</span>User Mgmt</a>
+      </nav>
+    </aside>
+    <header class="topbar">
+      <button class="tb-toggle">☰</button>
+      <div class="tb-actions"><button class="tb-btn">🌐</button><button class="tb-btn">🔔</button><div class="tb-avatar">AD</div></div>
+    </header>
+    <main class="main">
+      <div class="ph">
+        <div><h1 style="font-size:22px;font-weight:700">User Management · <span class="mr">वापरकर्ता व्यवस्थापन</span></h1><p style="font-size:13px;color:var(--t3);margin-top:2px">Manage user accounts, roles, and module access</p></div>
+        <button class="btn btn-p">+ Add User · वापरकर्ता जोडा</button>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>User</th><th>Username</th><th>Role</th><th>Status</th><th>Modules</th><th>Last Login</th><th>Actions</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><div class="user-cell"><div class="user-av" style="background:var(--wrb);color:var(--wr)">MLA</div><div><div class="user-name">Hon. Saheb (MLA)</div><div class="user-email">mla@eoffice.gov</div></div></div></td>
+              <td style="font-family:'JetBrains Mono';font-size:12px">mla.saheb</td>
+              <td><span class="role-badge r-mla">MLA</span></td>
+              <td><span class="status-dot s-active"></span>Active</td>
+              <td><div class="module-tags"><span class="mod-tag">All Modules</span></div></td>
+              <td style="font-size:12px;color:var(--t3)">02 Aug, 9:15 AM</td>
+              <td><button class="act-btn">👁</button> <button class="act-btn">✏️</button></td>
+            </tr>
+            <tr>
+              <td><div class="user-cell"><div class="user-av" style="background:var(--inb);color:var(--in)">RP</div><div><div class="user-name">Rajesh Patil</div><div class="user-email">rajesh.pa@eoffice.gov</div></div></div></td>
+              <td style="font-family:'JetBrains Mono';font-size:12px">rajesh.pa</td>
+              <td><span class="role-badge r-pa">PA</span></td>
+              <td><span class="status-dot s-active"></span>Active</td>
+              <td><div class="module-tags"><span class="mod-tag">Dashboard</span><span class="mod-tag">Inward</span><span class="mod-tag">Nivedan</span><span class="mod-tag">Visitor</span><span class="mod-tag">+4</span></div></td>
+              <td style="font-size:12px;color:var(--t3)">02 Aug, 10:30 AM</td>
+              <td><button class="act-btn">👁</button> <button class="act-btn">✏️</button> <button class="act-btn">🔑</button></td>
+            </tr>
+            <tr>
+              <td><div class="user-cell"><div class="user-av" style="background:var(--okb);color:var(--ok)">SM</div><div><div class="user-name">Sunita Madam</div><div class="user-email">sunita.rec@eoffice.gov</div></div></div></td>
+              <td style="font-family:'JetBrains Mono';font-size:12px">sunita.rec</td>
+              <td><span class="role-badge r-rec">Receptionist</span></td>
+              <td><span class="status-dot s-active"></span>Active</td>
+              <td><div class="module-tags"><span class="mod-tag">Visitor</span><span class="mod-tag">Nivedan</span></div></td>
+              <td style="font-size:12px;color:var(--t3)">02 Aug, 8:45 AM</td>
+              <td><button class="act-btn">👁</button> <button class="act-btn">✏️</button> <button class="act-btn">🔑</button></td>
+            </tr>
+            <tr>
+              <td><div class="user-cell"><div class="user-av" style="background:var(--pub);color:var(--pu)">RS</div><div><div class="user-name">Ramesh Staff</div><div class="user-email">ramesh.s@eoffice.gov</div></div></div></td>
+              <td style="font-family:'JetBrains Mono';font-size:12px">ramesh.staff</td>
+              <td><span class="role-badge r-staff">Staff</span></td>
+              <td><span class="status-dot s-active"></span>Active</td>
+              <td><div class="module-tags"><span class="mod-tag">Inward</span><span class="mod-tag">Nivedan</span><span class="mod-tag">DevWorks</span></div></td>
+              <td style="font-size:12px;color:var(--t3)">01 Aug, 5:30 PM</td>
+              <td><button class="act-btn">👁</button> <button class="act-btn">✏️</button> <button class="act-btn">🔑</button></td>
+            </tr>
+            <tr>
+              <td><div class="user-cell"><div class="user-av" style="background:#F3F4F6;color:#6B7280">AK</div><div><div class="user-name">Auditor Kumar</div><div class="user-email">auditor@eoffice.gov</div></div></div></td>
+              <td style="font-family:'JetBrains Mono';font-size:12px">auditor.k</td>
+              <td><span class="role-badge r-aud">Auditor</span></td>
+              <td><span class="status-dot s-active"></span>Active</td>
+              <td><div class="module-tags"><span class="mod-tag">Reports</span><span class="mod-tag">Audit Log</span></div></td>
+              <td style="font-size:12px;color:var(--t3)">28 Jul, 3:00 PM</td>
+              <td><button class="act-btn">👁</button> <button class="act-btn">✏️</button> <button class="act-btn">🔑</button></td>
+            </tr>
+            <tr>
+              <td><div class="user-cell"><div class="user-av" style="background:var(--erb);color:var(--er)">AD</div><div><div class="user-name">Admin Dev</div><div class="user-email">admin@eoffice.gov</div></div></div></td>
+              <td style="font-family:'JetBrains Mono';font-size:12px">admin</td>
+              <td><span class="role-badge r-admin">Admin</span></td>
+              <td><span class="status-dot s-active"></span>Active</td>
+              <td><div class="module-tags"><span class="mod-tag">All Modules</span></div></td>
+              <td style="font-size:12px;color:var(--t3)">02 Aug, 4:00 PM</td>
+              <td><button class="act-btn">👁</button> <button class="act-btn">✏️</button> <button class="act-btn">🔑</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+  <div class="wfb">Wireframe · User Management</div>
+  <script>function setTheme(t){document.documentElement.setAttribute('data-theme',t);document.querySelectorAll('.tt button').forEach(b=>b.classList.remove('active'));event.target.classList.add('active');}</script>
+</body>
+</html>

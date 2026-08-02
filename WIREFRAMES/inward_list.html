@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>MLA E-Office — Inward Register</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--sb:#1B3A5C;--sw:240px;--th:56px;--p:#1B3A5C;--pl:#EFF4F9;--bg:#F5F7FA;--c:#FFF;--t1:#0F172A;--t2:#475569;--t3:#64748B;--t4:#94A3B8;--b:#DDE3EB;--ok:#16A34A;--okb:#F0FDF4;--okr:#BBF7D0;--wr:#D97706;--wrb:#FFFBEB;--wrr:#FDE68A;--er:#DC2626;--in:#2563EB;--inb:#EFF6FF;--inr:#BFDBFE;--pu:#7C3AED;--pub:#F5F3FF;--pur:#DDD6FE;--ne:#6B7280;--neb:#F3F4F6;--ner:#D1D5DB;--r:3px;--ss:0 1px 3px rgba(15,23,42,.08),0 1px 2px rgba(15,23,42,.04)}
+    [data-theme="dark"]{--sb:#0D1B2A;--p:#5A9BD5;--pl:#1A3355;--bg:#0F1419;--c:#1A2332;--t1:#E2ECF4;--t2:#8EA3B8;--t3:#6B8299;--t4:#4F6479;--b:#2A3A4E;--ok:#22C55E;--okb:#052E16;--okr:#166534;--wr:#F59E0B;--wrb:#2E1D05;--wrr:#78350F;--er:#EF4444;--in:#3B82F6;--inb:#0C1929;--inr:#1E3A5F;--pu:#A78BFA;--pub:#1E0A3E;--pur:#4C1D95;--ne:#9CA3AF;--neb:#1F2937;--ner:#374151;--ss:0 1px 3px rgba(0,0,0,.4)}
+    body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--t1);transition:background .2s,color .2s}
+    .mr{font-family:'Noto Sans Devanagari',sans-serif}.mono{font-family:'JetBrains Mono',monospace}
+    .app{display:flex;min-height:100vh}
+    .sidebar{width:var(--sw);background:var(--sb);color:#fff;position:fixed;top:0;left:0;bottom:0;z-index:200;display:flex;flex-direction:column;overflow:hidden}
+    .sidebar-logo{height:var(--th);display:flex;align-items:center;padding:0 16px;gap:10px;border-bottom:1px solid rgba(255,255,255,.1)}
+    .sidebar-logo .icon{width:32px;height:32px;background:rgba(255,255,255,.12);border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:16px}
+    .sidebar-logo .name{font-size:15px;font-weight:700}
+    .sidebar-nav{flex:1;padding:8px 0;overflow-y:auto}
+    .ns{padding:16px 16px 4px;font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:rgba(255,255,255,.35);font-weight:600}
+    .ni{display:flex;align-items:center;gap:12px;padding:9px 16px;margin:1px 8px;border-radius:var(--r);cursor:pointer;font-size:13px;font-weight:500;color:rgba(255,255,255,.7);text-decoration:none;transition:background .12s}
+    .ni:hover{background:rgba(255,255,255,.08);color:#fff}.ni.active{background:rgba(255,255,255,.12);color:#fff}
+    .ni .ic{width:20px;text-align:center;font-size:15px;opacity:.7}.ni.active .ic{opacity:1}
+    .nd{height:1px;background:rgba(255,255,255,.1);margin:8px 16px}
+    .topbar{position:fixed;top:0;left:var(--sw);right:0;height:var(--th);background:var(--c);border-bottom:1px solid var(--b);display:flex;align-items:center;padding:0 24px;z-index:300;gap:16px}
+    .tb-toggle{width:36px;height:36px;border:none;background:none;cursor:pointer;border-radius:var(--r);font-size:18px;color:var(--t3);display:flex;align-items:center;justify-content:center}
+    .tb-search{flex:1;max-width:520px;position:relative;margin:0 auto}
+    .tb-search input{width:100%;height:36px;padding:0 12px 0 36px;border:1px solid var(--b);border-radius:var(--r);background:var(--bg);font-size:13px;color:var(--t1);font-family:inherit;outline:none}
+    .tb-search .si{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:14px;color:var(--t4)}
+    .tb-actions{display:flex;align-items:center;gap:8px}
+    .tb-btn{width:36px;height:36px;border:1px solid var(--b);background:var(--c);border-radius:var(--r);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--t3);position:relative}
+    .tb-btn .bdg{position:absolute;top:-4px;right:-4px;width:18px;height:18px;border-radius:9px;background:var(--er);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center}
+    .tb-avatar{width:32px;height:32px;border-radius:var(--r);background:var(--p);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;cursor:pointer}
+    [data-theme="dark"] .tb-avatar{background:#1A3355;color:#5A9BD5}
+    .main{margin-left:var(--sw);margin-top:var(--th);padding:24px}
+
+    /* Tabs */
+    .tabs{display:flex;gap:0;margin-bottom:20px;border-bottom:2px solid var(--b)}
+    .tab{padding:10px 20px;font-size:14px;font-weight:500;color:var(--t3);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .12s}
+    .tab:hover{color:var(--t1)}
+    .tab.active{color:var(--p);border-bottom-color:var(--p);font-weight:600}
+
+    .ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:12px}
+    .ph .title{font-size:22px;font-weight:700}
+    .ph .sub{font-size:13px;color:var(--t3);margin-top:2px}
+    .btn{height:36px;padding:0 16px;border-radius:var(--r);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;border:none;transition:all .12s}
+    .btn-p{background:var(--p);color:#fff}.btn-o{background:transparent;color:var(--t2);border:1px solid var(--b)}
+
+    .filter-bar{background:var(--c);border:1px solid var(--b);border-radius:var(--r);padding:14px;margin-bottom:16px;display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;box-shadow:var(--ss)}
+    .fg{display:flex;flex-direction:column;gap:3px}
+    .fl{font-size:10px;font-weight:600;color:var(--t4);text-transform:uppercase;letter-spacing:.5px}
+    .fi{height:30px;padding:0 8px;border:1px solid var(--b);border-radius:var(--r);font-size:12px;color:var(--t1);font-family:inherit;background:var(--bg);outline:none;min-width:130px}
+    select.fi{appearance:auto;cursor:pointer}
+
+    .table-wrap{background:var(--c);border:1px solid var(--b);border-radius:var(--r);box-shadow:var(--ss);overflow:hidden}
+    table{width:100%;border-collapse:collapse}
+    thead th{background:var(--bg);padding:10px 14px;font-size:11px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;text-align:left;border-bottom:2px solid var(--b);white-space:nowrap;position:sticky;top:0}
+    tbody tr{border-bottom:1px solid var(--b);transition:background .12s}
+    tbody tr:last-child{border-bottom:none}
+    tbody tr:hover{background:var(--pl)}
+    tbody td{padding:10px 14px;font-size:13px;color:var(--t1);vertical-align:middle}
+    .badge{display:inline-flex;align-items:center;padding:3px 8px;border-radius:2px;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.3px;white-space:nowrap}
+    .b-pend{background:var(--wrb);color:var(--wr);border:1px solid var(--wrr)}
+    .b-assgn{background:var(--inb);color:var(--in);border:1px solid var(--inr)}
+    .b-prog{background:var(--pub);color:var(--pu);border:1px solid var(--pur)}
+    .b-comp{background:var(--okb);color:var(--ok);border:1px solid var(--okr)}
+    .b-canc{background:var(--neb);color:var(--ne);border:1px solid var(--ner)}
+    .pri{width:8px;height:8px;border-radius:2px;display:inline-block}
+    .pri-h{background:var(--er)}.pri-m{background:var(--wr)}.pri-l{background:var(--ok)}
+    .act-btn{width:28px;height:28px;border:1px solid var(--b);background:var(--c);border-radius:var(--r);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-size:13px;color:var(--t3);transition:all .12s}
+    .act-btn:hover{border-color:var(--p);color:var(--p)}
+
+    .table-footer{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-top:1px solid var(--b);background:var(--bg)}
+    .table-info{font-size:12px;color:var(--t3)}
+    .pagination{display:flex;gap:4px}
+    .pg{width:32px;height:32px;border:1px solid var(--b);background:var(--c);border-radius:var(--r);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--t2);font-weight:500;font-family:inherit}
+    .pg.active{background:var(--p);color:#fff;border-color:var(--p)}
+    [data-theme="dark"] .pg.active{background:#5A9BD5;color:#0F1419}
+
+    .tt{position:fixed;top:10px;right:16px;z-index:400;display:flex;gap:4px}
+    .tt button{background:var(--c);border:1px solid var(--b);border-radius:var(--r);padding:5px 10px;cursor:pointer;font-size:11px;font-family:inherit;color:var(--t3)}
+    .tt button.active{background:#1B3A5C;color:#fff;border-color:#1B3A5C}
+    [data-theme="dark"] .tt button.active{background:#5A9BD5;color:#0F1419}
+    .wfb{position:fixed;bottom:16px;right:16px;z-index:400;background:#1B3A5C;color:#fff;padding:5px 10px;font-size:10px;font-weight:600;border-radius:var(--r);text-transform:uppercase;letter-spacing:1px;opacity:.8}
+    @media(max-width:768px){.sidebar{transform:translateX(-100%)}.topbar{left:0}.main{margin-left:0}.table-wrap{overflow-x:auto}table{min-width:900px}}
+  </style>
+</head>
+<body>
+  <div class="tt"><button class="active" onclick="setTheme('light')">☀ Light</button><button onclick="setTheme('dark')">🌙 Dark</button></div>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="sidebar-logo"><div class="icon">🏛️</div><div class="name">MLA E-Office</div></div>
+      <nav class="sidebar-nav">
+        <div class="ns">Office</div><a class="ni"><span class="ic">📊</span>Dashboard</a><a class="ni active"><span class="ic">📨</span>Inward & Outward</a><a class="ni"><span class="ic">👤</span>Visitor Book</a>
+        <div class="ns">Public</div><a class="ni"><span class="ic">📝</span>Nivedans</a><a class="ni"><span class="ic">🏗️</span>Dev Works</a>
+        <div class="ns">Network</div><a class="ni"><span class="ic">👥</span>Karyakarta</a><a class="ni"><span class="ic">📍</span>Gram/Ward</a><a class="ni"><span class="ic">🗳️</span>Booths</a>
+        <div class="ns">Tools</div><a class="ni"><span class="ic">📅</span>Calendar</a><a class="ni"><span class="ic">💬</span>WhatsApp</a><a class="ni"><span class="ic">📑</span>Reports</a>
+        <div class="nd"></div><a class="ni"><span class="ic">⚙️</span>Settings</a>
+      </nav>
+    </aside>
+    <header class="topbar">
+      <button class="tb-toggle">☰</button>
+      <div class="tb-search"><span class="si">🔍</span><input placeholder="Search..."></div>
+      <div class="tb-actions"><button class="tb-btn">🌐</button><button class="tb-btn">🔔<span class="bdg">3</span></button><div class="tb-avatar">RP</div></div>
+    </header>
+    <main class="main">
+      <div class="ph">
+        <div><h1 class="title">Inward & Outward · <span class="mr">आवक-जावक</span></h1><p class="sub">Office correspondence register · कार्यालयीन पत्रव्यवहार</p></div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-o">📥 Export</button>
+          <button class="btn btn-p">+ New Inward · नवीन आवक</button>
+        </div>
+      </div>
+
+      <!-- Tabs: Inward / Outward -->
+      <div class="tabs">
+        <div class="tab active">📨 Inward · आवक (389)</div>
+        <div class="tab">📤 Outward · जावक (156)</div>
+      </div>
+
+      <!-- Filter -->
+      <div class="filter-bar">
+        <div class="fg"><span class="fl">Search</span><input class="fi" placeholder="Inward No, Sender..." style="min-width:180px"></div>
+        <div class="fg"><span class="fl">Date From</span><input class="fi" type="date" value="2026-07-01"></div>
+        <div class="fg"><span class="fl">Date To</span><input class="fi" type="date" value="2026-08-02"></div>
+        <div class="fg"><span class="fl">Department</span><select class="fi"><option>All Departments</option><option>Collector Office</option><option>Tahsildar</option><option>ZP</option><option>PWD</option><option>MSEDCL</option></select></div>
+        <div class="fg"><span class="fl">Status</span><select class="fi"><option>All Statuses</option><option>Pending</option><option>Assigned</option><option>In Progress</option><option>Completed</option></select></div>
+        <div class="fg"><span class="fl">Priority</span><select class="fi"><option>All</option><option>High</option><option>Medium</option><option>Low</option></select></div>
+      </div>
+
+      <!-- Table -->
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>Inward No.</th><th>Date</th><th>Sender</th><th>Department</th><th>Subject</th><th>Pri</th><th>Status</th><th>Assigned</th><th>📎</th><th>Actions</th>
+          </tr></thead>
+          <tbody>
+            <tr>
+              <td style="font-family:'JetBrains Mono';font-size:12px;font-weight:500;color:var(--p)">INW/2026/0389</td>
+              <td style="font-size:12px;color:var(--t3)">02 Aug 2026</td>
+              <td style="font-weight:600">Shri. D.K. Patil</td>
+              <td style="font-size:12px">Collector Office</td>
+              <td>Regarding water supply scheme sanction for Taluka area</td>
+              <td><span class="pri pri-h"></span></td>
+              <td><span class="badge b-pend">Pending</span></td>
+              <td style="font-size:12px;color:var(--t4)">—</td>
+              <td>📄</td>
+              <td><button class="act-btn">👁</button> <button class="act-btn">✏️</button></td>
+            </tr>
+            <tr>
+              <td style="font-family:'JetBrains Mono';font-size:12px;font-weight:500;color:var(--p)">INW/2026/0388</td>
+              <td style="font-size:12px;color:var(--t3)">01 Aug 2026</td>
+              <td style="font-weight:600">ZP CEO Office</td>
+              <td style="font-size:12px">Zilla Parishad</td>
+              <td>Budget allocation report for FY 2026-27 dev works</td>
+              <td><span class="pri pri-m"></span></td>
+              <td><span class="badge b-assgn">Assigned</span></td>
+              <td style="font-size:12px">Sunil More</td>
+              <td>📄</td>
+              <td><button class="act-btn">👁</button> <button class="act-btn">✏️</button></td>
+            </tr>
+            <tr>
+              <td style="font-family:'JetBrains Mono';font-size:12px;font-weight:500;color:var(--p)">INW/2026/0387</td>
+              <td style="font-size:12px;color:var(--t3)">01 Aug 2026</td>
+              <td style="font-weight:600">Tahsildar, Haveli</td>
+              <td style="font-size:12px">Tahsildar Office</td>
+              <td>Response to land mutation inquiry — Wadgaon village</td>
+              <td><span class="pri pri-m"></span></td>
+              <td><span class="badge b-prog">In Progress</span></td>
+              <td style="font-size:12px">Ramesh Patil</td>
+              <td>📄📄</td>
+              <td><button class="act-btn">👁</button> <button class="act-btn">✏️</button></td>
+            </tr>
+            <tr>
+              <td style="font-family:'JetBrains Mono';font-size:12px;font-weight:500;color:var(--p)">INW/2026/0386</td>
+              <td style="font-size:12px;color:var(--t3)">31 Jul 2026</td>
+              <td style="font-weight:600">MSEDCL Office</td>
+              <td style="font-size:12px">MSEDCL</td>
+              <td>Status update on street light installation — Booth 145-150</td>
+              <td><span class="pri pri-l"></span></td>
+              <td><span class="badge b-comp">Completed</span></td>
+              <td style="font-size:12px">Priya D.</td>
+              <td>📄</td>
+              <td><button class="act-btn">👁</button> <button class="act-btn">✏️</button></td>
+            </tr>
+            <tr>
+              <td style="font-family:'JetBrains Mono';font-size:12px;font-weight:500;color:var(--p)">INW/2026/0385</td>
+              <td style="font-size:12px;color:var(--t3)">30 Jul 2026</td>
+              <td style="font-weight:600">PWD Exe. Engineer</td>
+              <td style="font-size:12px">PWD</td>
+              <td>Road widening proposal for NH-4 junction — cost estimate</td>
+              <td><span class="pri pri-h"></span></td>
+              <td><span class="badge b-assgn">Assigned</span></td>
+              <td style="font-size:12px">Sunil More</td>
+              <td>📄📄📄</td>
+              <td><button class="act-btn">👁</button> <button class="act-btn">✏️</button></td>
+            </tr>
+            <tr>
+              <td style="font-family:'JetBrains Mono';font-size:12px;font-weight:500;color:var(--p)">INW/2026/0384</td>
+              <td style="font-size:12px;color:var(--t3)">29 Jul 2026</td>
+              <td style="font-weight:600">Education Officer</td>
+              <td style="font-size:12px">Education Dept</td>
+              <td>School building repair grant — Ambegaon ZP School</td>
+              <td><span class="pri pri-m"></span></td>
+              <td><span class="badge b-comp">Completed</span></td>
+              <td style="font-size:12px">Ramesh Patil</td>
+              <td>📄</td>
+              <td><button class="act-btn">👁</button> <button class="act-btn">✏️</button></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="table-footer">
+          <div class="table-info">Showing <strong>1–25</strong> of <strong>389</strong> inward entries</div>
+          <div class="pagination">
+            <button class="pg">‹</button><button class="pg active">1</button><button class="pg">2</button><button class="pg">3</button><button class="pg">...</button><button class="pg">16</button><button class="pg">›</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <div class="wfb">Wireframe · Inward List</div>
+  <script>function setTheme(t){document.documentElement.setAttribute('data-theme',t);document.querySelectorAll('.tt button').forEach(b=>b.classList.remove('active'));event.target.classList.add('active');}</script>
+</body>
+</html>

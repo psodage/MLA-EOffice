@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>MLA E-Office — Project Detail</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--sb:#1B3A5C;--sw:240px;--th:56px;--p:#1B3A5C;--pl:#EFF4F9;--bg:#F5F7FA;--c:#FFF;--t1:#0F172A;--t2:#475569;--t3:#64748B;--t4:#94A3B8;--b:#DDE3EB;--ok:#16A34A;--okb:#F0FDF4;--wr:#D97706;--wrb:#FFFBEB;--er:#DC2626;--in:#2563EB;--inb:#EFF6FF;--pu:#7C3AED;--pub:#F5F3FF;--r:3px;--ss:0 1px 3px rgba(15,23,42,.08)}
+    [data-theme="dark"]{--sb:#0D1B2A;--p:#5A9BD5;--pl:#1A3355;--bg:#0F1419;--c:#1A2332;--t1:#E2ECF4;--t2:#8EA3B8;--t3:#6B8299;--t4:#4F6479;--b:#2A3A4E;--ok:#22C55E;--okb:#052E16;--wr:#F59E0B;--wrb:#2E1D05;--er:#EF4444;--in:#3B82F6;--inb:#0C1929;--pu:#A78BFA;--pub:#1E0A3E;--ss:0 1px 3px rgba(0,0,0,.4)}
+    body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--t1);transition:background .2s,color .2s}
+    .mr{font-family:'Noto Sans Devanagari',sans-serif}
+    .app{display:flex;min-height:100vh}
+    .sidebar{width:var(--sw);background:var(--sb);color:#fff;position:fixed;top:0;left:0;bottom:0;z-index:200;display:flex;flex-direction:column;overflow:hidden}
+    .sidebar-logo{height:var(--th);display:flex;align-items:center;padding:0 16px;gap:10px;border-bottom:1px solid rgba(255,255,255,.1)}
+    .sidebar-logo .icon{width:32px;height:32px;background:rgba(255,255,255,.12);border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:16px}
+    .sidebar-logo .name{font-size:15px;font-weight:700}
+    .sidebar-nav{flex:1;padding:8px 0;overflow-y:auto}
+    .ns{padding:16px 16px 4px;font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:rgba(255,255,255,.35);font-weight:600}
+    .ni{display:flex;align-items:center;gap:12px;padding:9px 16px;margin:1px 8px;border-radius:var(--r);cursor:pointer;font-size:13px;font-weight:500;color:rgba(255,255,255,.7);text-decoration:none;transition:background .12s}
+    .ni:hover{background:rgba(255,255,255,.08);color:#fff}.ni.active{background:rgba(255,255,255,.12);color:#fff}
+    .ni .ic{width:20px;text-align:center;font-size:15px;opacity:.7}.ni.active .ic{opacity:1}
+    .topbar{position:fixed;top:0;left:var(--sw);right:0;height:var(--th);background:var(--c);border-bottom:1px solid var(--b);display:flex;align-items:center;padding:0 24px;z-index:300;gap:16px}
+    .tb-toggle{width:36px;height:36px;border:none;background:none;cursor:pointer;border-radius:var(--r);font-size:18px;color:var(--t3);display:flex;align-items:center;justify-content:center}
+    .tb-actions{display:flex;align-items:center;gap:8px;margin-left:auto}
+    .tb-btn{width:36px;height:36px;border:1px solid var(--b);background:var(--c);border-radius:var(--r);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--t3)}
+    .tb-avatar{width:32px;height:32px;border-radius:var(--r);background:var(--p);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;cursor:pointer}
+    [data-theme="dark"] .tb-avatar{background:#1A3355;color:#5A9BD5}
+    .main{margin-left:var(--sw);margin-top:var(--th);padding:24px}
+    .breadcrumb{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--t3);margin-bottom:16px}
+    .breadcrumb a{color:var(--p);text-decoration:none}
+    .btn{height:36px;padding:0 16px;border-radius:var(--r);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;border:none;transition:all .12s}
+    .btn-p{background:var(--p);color:#fff}.btn-o{background:transparent;color:var(--t2);border:1px solid var(--b)}
+
+    /* Detail Header */
+    .detail-header{background:var(--c);border:1px solid var(--b);border-radius:var(--r);padding:24px;margin-bottom:16px;box-shadow:var(--ss)}
+    .dh-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;flex-wrap:wrap;gap:12px}
+    .dh-cat{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;padding:3px 8px;border-radius:2px;background:var(--inb);color:var(--in);margin-bottom:6px;display:inline-block}
+    .dh-title{font-size:22px;font-weight:700;margin-bottom:4px}
+    .dh-loc{font-size:13px;color:var(--t3)}
+    .badge{display:inline-flex;align-items:center;padding:4px 10px;border-radius:2px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.3px}
+    .b-prog{background:var(--wrb);color:var(--wr)}
+
+    /* Progress */
+    .progress-section{margin-top:20px}
+    .pg-bar-lg{height:16px;background:var(--bg);border-radius:var(--r);overflow:hidden;margin-bottom:8px}
+    .pg-fill{height:100%;border-radius:var(--r);background:var(--wr);position:relative;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:11px;font-weight:700;color:#fff}
+    .pg-labels{display:flex;justify-content:space-between;font-size:12px;color:var(--t3)}
+
+    /* Meta Grid */
+    .meta-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;margin-top:20px;padding-top:20px;border-top:1px solid var(--b)}
+    .meta-item{display:flex;flex-direction:column;gap:2px}
+    .meta-label{font-size:11px;font-weight:600;color:var(--t4);text-transform:uppercase;letter-spacing:.5px}
+    .meta-value{font-size:14px;font-weight:500;color:var(--t1)}
+
+    /* Content Grid */
+    .content-grid{display:grid;grid-template-columns:1fr 360px;gap:16px}
+    .card{background:var(--c);border:1px solid var(--b);border-radius:var(--r);box-shadow:var(--ss);overflow:hidden}
+    .card-header{padding:16px 20px;border-bottom:1px solid var(--b);font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px}
+    .card-body{padding:20px}
+
+    /* Photo Gallery */
+    .photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+    .photo{aspect-ratio:4/3;border-radius:var(--r);background:var(--bg);border:1px solid var(--b);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:24px;cursor:pointer;transition:border .12s;position:relative;overflow:hidden}
+    .photo:hover{border-color:var(--p)}
+    .photo .date{position:absolute;bottom:4px;right:4px;font-size:9px;background:rgba(0,0,0,.6);color:#fff;padding:1px 4px;border-radius:2px}
+    .photo-add{border:2px dashed var(--b);background:transparent;font-size:28px;color:var(--t4)}
+    .photo-add:hover{border-color:var(--p);color:var(--p)}
+
+    /* Milestones */
+    .milestone{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--b);position:relative}
+    .milestone:last-child{border-bottom:none}
+    .ml-dot{width:28px;height:28px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+    .ml-content{flex:1}
+    .ml-title{font-size:13px;font-weight:600;color:var(--t1)}
+    .ml-desc{font-size:12px;color:var(--t3);margin-top:2px}
+    .ml-date{font-size:11px;color:var(--t4);margin-top:2px}
+
+    .tt{position:fixed;top:10px;right:16px;z-index:400;display:flex;gap:4px}
+    .tt button{background:var(--c);border:1px solid var(--b);border-radius:var(--r);padding:5px 10px;cursor:pointer;font-size:11px;font-family:inherit;color:var(--t3)}
+    .tt button.active{background:#1B3A5C;color:#fff;border-color:#1B3A5C}
+    [data-theme="dark"] .tt button.active{background:#5A9BD5;color:#0F1419}
+    .wfb{position:fixed;bottom:16px;right:16px;z-index:400;background:#1B3A5C;color:#fff;padding:5px 10px;font-size:10px;font-weight:600;border-radius:var(--r);text-transform:uppercase;letter-spacing:1px;opacity:.8}
+    @media(max-width:1024px){.content-grid{grid-template-columns:1fr}}
+    @media(max-width:768px){.sidebar{transform:translateX(-100%)}.topbar{left:0}.main{margin-left:0;padding:16px}.meta-grid{grid-template-columns:1fr 1fr}.photo-grid{grid-template-columns:1fr 1fr}}
+  </style>
+</head>
+<body>
+  <div class="tt"><button class="active" onclick="setTheme('light')">☀ Light</button><button onclick="setTheme('dark')">🌙 Dark</button></div>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="sidebar-logo"><div class="icon">🏛️</div><div class="name">MLA E-Office</div></div>
+      <nav class="sidebar-nav">
+        <div class="ns">Office</div><a class="ni"><span class="ic">📊</span>Dashboard</a><a class="ni"><span class="ic">📨</span>Inward</a><a class="ni"><span class="ic">👤</span>Visitors</a>
+        <div class="ns">Public</div><a class="ni"><span class="ic">📝</span>Nivedans</a><a class="ni active"><span class="ic">🏗️</span>Dev Works</a>
+        <div class="ns">Network</div><a class="ni"><span class="ic">👥</span>Karyakarta</a><a class="ni"><span class="ic">📍</span>Gram/Ward</a><a class="ni"><span class="ic">🗳️</span>Booths</a>
+        <div class="ns">Tools</div><a class="ni"><span class="ic">📅</span>Calendar</a><a class="ni"><span class="ic">💬</span>WhatsApp</a><a class="ni"><span class="ic">📑</span>Reports</a>
+      </nav>
+    </aside>
+    <header class="topbar">
+      <button class="tb-toggle">☰</button>
+      <div class="tb-actions"><button class="tb-btn">🌐</button><button class="tb-btn">🔔</button><div class="tb-avatar">RP</div></div>
+    </header>
+    <main class="main">
+      <div class="breadcrumb"><a href="#">Dashboard</a><span style="color:var(--t4)">/</span><a href="#">Development Works</a><span style="color:var(--t4)">/</span><span>NH-4 Road Widening</span></div>
+
+      <div class="detail-header">
+        <div class="dh-top">
+          <div>
+            <span class="dh-cat">🛣️ Road</span>
+            <div class="dh-title">NH-4 Junction Road Widening</div>
+            <div class="dh-loc">📍 Pimpri-Chinchwad, Ward 5 · Haveli Taluka</div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <span class="badge b-prog">🟡 In Progress</span>
+            <button class="btn btn-o">✏️ Edit</button>
+            <button class="btn btn-p">📷 Add Photo</button>
+          </div>
+        </div>
+        <div class="progress-section">
+          <div class="pg-bar-lg"><div class="pg-fill" style="width:72%">72%</div></div>
+          <div class="pg-labels"><span>Started: 01 Mar 2026</span><span>Due: 15 Oct 2026 (74 days left)</span></div>
+        </div>
+        <div class="meta-grid">
+          <div class="meta-item"><span class="meta-label">Budget · अंदाजपत्रक</span><span class="meta-value" style="font-family:'JetBrains Mono';color:var(--p);font-size:18px;font-weight:700">₹ 2.45 Cr</span></div>
+          <div class="meta-item"><span class="meta-label">Spent · खर्च</span><span class="meta-value" style="font-family:'JetBrains Mono'">₹ 1.76 Cr (72%)</span></div>
+          <div class="meta-item"><span class="meta-label">Funding Source · निधी</span><span class="meta-value">State PWD</span></div>
+          <div class="meta-item"><span class="meta-label">Contractor · ठेकेदार</span><span class="meta-value">Patel Infra Pvt Ltd</span></div>
+          <div class="meta-item"><span class="meta-label">Contact</span><span class="meta-value" style="font-family:'JetBrains Mono';font-size:13px">98765 00123</span></div>
+          <div class="meta-item"><span class="meta-label">GPS Coordinates</span><span class="meta-value" style="font-family:'JetBrains Mono';font-size:12px">18.6298°N, 73.7997°E</span></div>
+        </div>
+      </div>
+
+      <div class="content-grid">
+        <!-- Photo Gallery -->
+        <div class="card">
+          <div class="card-header">📷 Progress Photos · <span class="mr">प्रगती फोटो</span> <span style="color:var(--t4);font-weight:400;margin-left:auto;font-size:12px">8 photos</span></div>
+          <div class="card-body">
+            <div class="photo-grid">
+              <div class="photo">🏗️<span class="date">30 Jul</span></div>
+              <div class="photo">🏗️<span class="date">25 Jul</span></div>
+              <div class="photo">🚧<span class="date">15 Jul</span></div>
+              <div class="photo">🏗️<span class="date">01 Jul</span></div>
+              <div class="photo">🚧<span class="date">15 Jun</span></div>
+              <div class="photo">🏗️<span class="date">01 Jun</span></div>
+              <div class="photo">🏗️<span class="date">15 May</span></div>
+              <div class="photo">📷<span class="date">01 Mar</span></div>
+              <div class="photo photo-add">+</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Milestones -->
+        <div class="card">
+          <div class="card-header">📋 Milestones · <span class="mr">टप्पे</span></div>
+          <div class="card-body">
+            <div class="milestone">
+              <div class="ml-dot" style="background:var(--okb);color:var(--ok)">✓</div>
+              <div class="ml-content"><div class="ml-title">Land Acquisition Completed</div><div class="ml-desc">All required land parcels acquired. NHAI approvals received.</div><div class="ml-date">15 Feb 2026</div></div>
+            </div>
+            <div class="milestone">
+              <div class="ml-dot" style="background:var(--okb);color:var(--ok)">✓</div>
+              <div class="ml-content"><div class="ml-title">Foundation & Drainage Work</div><div class="ml-desc">Underground drainage and foundation work for 2.5km stretch completed.</div><div class="ml-date">30 Apr 2026</div></div>
+            </div>
+            <div class="milestone">
+              <div class="ml-dot" style="background:var(--okb);color:var(--ok)">✓</div>
+              <div class="ml-content"><div class="ml-title">Base Layer Asphalting — Phase 1</div><div class="ml-desc">First layer of asphalt on 1.8km stretch done.</div><div class="ml-date">20 Jun 2026</div></div>
+            </div>
+            <div class="milestone">
+              <div class="ml-dot" style="background:var(--wrb);color:var(--wr)">→</div>
+              <div class="ml-content"><div class="ml-title">Base Layer — Phase 2 (In Progress)</div><div class="ml-desc">Remaining 0.7km in progress. Expected completion by 15 Aug.</div><div class="ml-date">ETA: 15 Aug 2026</div></div>
+            </div>
+            <div class="milestone">
+              <div class="ml-dot" style="background:var(--bg);color:var(--t4)">○</div>
+              <div class="ml-content"><div class="ml-title">Top Layer & Line Marking</div><div class="ml-desc">Final asphalt layer, road marking, and signage installation.</div><div class="ml-date">ETA: 30 Sep 2026</div></div>
+            </div>
+            <div class="milestone">
+              <div class="ml-dot" style="background:var(--bg);color:var(--t4)">○</div>
+              <div class="ml-content"><div class="ml-title">Inauguration & Handover</div><div class="ml-desc">Official inauguration ceremony and handover to PWD.</div><div class="ml-date">ETA: 15 Oct 2026</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <div class="wfb">Wireframe · Dev Works Detail</div>
+  <script>function setTheme(t){document.documentElement.setAttribute('data-theme',t);document.querySelectorAll('.tt button').forEach(b=>b.classList.remove('active'));event.target.classList.add('active');}</script>
+</body>
+</html>

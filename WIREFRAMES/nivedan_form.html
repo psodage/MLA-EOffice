@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MLA E-Office — New Nivedan Form</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--sb:#1B3A5C;--sw:240px;--th:56px;--p:#1B3A5C;--pl:#EFF4F9;--a:#FFC107;--bg:#F5F7FA;--c:#FFF;--t1:#0F172A;--t2:#475569;--t3:#64748B;--t4:#94A3B8;--b:#DDE3EB;--bs:#C5CED8;--ok:#16A34A;--okb:#F0FDF4;--wr:#D97706;--wrb:#FFFBEB;--er:#DC2626;--erb:#FEF2F2;--r:3px;--ss:0 1px 3px rgba(15,23,42,.08),0 1px 2px rgba(15,23,42,.04)}
+    [data-theme="dark"]{--sb:#0D1B2A;--p:#5A9BD5;--pl:#1A3355;--bg:#0F1419;--c:#1A2332;--t1:#E2ECF4;--t2:#8EA3B8;--t3:#6B8299;--t4:#4F6479;--b:#2A3A4E;--bs:#3A4D63;--ok:#22C55E;--okb:#052E16;--wr:#F59E0B;--wrb:#2E1D05;--er:#EF4444;--erb:#2E0505;--ss:0 1px 3px rgba(0,0,0,.4)}
+    body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--t1);transition:background .2s,color .2s}
+    .mr{font-family:'Noto Sans Devanagari',sans-serif}
+    .app{display:flex;min-height:100vh}
+
+    /* Sidebar (compact) */
+    .sidebar{width:var(--sw);background:var(--sb);color:#fff;position:fixed;top:0;left:0;bottom:0;z-index:200;display:flex;flex-direction:column;overflow:hidden}
+    .sidebar-logo{height:var(--th);display:flex;align-items:center;padding:0 16px;gap:10px;border-bottom:1px solid rgba(255,255,255,.1)}
+    .sidebar-logo .icon{width:32px;height:32px;background:rgba(255,255,255,.12);border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:16px}
+    .sidebar-logo .name{font-size:15px;font-weight:700}
+    .sidebar-nav{flex:1;padding:8px 0;overflow-y:auto}
+    .ns{padding:16px 16px 4px;font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:rgba(255,255,255,.35);font-weight:600}
+    .ni{display:flex;align-items:center;gap:12px;padding:9px 16px;margin:1px 8px;border-radius:var(--r);cursor:pointer;font-size:13px;font-weight:500;color:rgba(255,255,255,.7);text-decoration:none;transition:background .12s}
+    .ni:hover{background:rgba(255,255,255,.08);color:#fff}.ni.active{background:rgba(255,255,255,.12);color:#fff}
+    .ni .ic{width:20px;text-align:center;font-size:15px;opacity:.7}.ni.active .ic{opacity:1}
+    .nd{height:1px;background:rgba(255,255,255,.1);margin:8px 16px}
+
+    /* Topbar */
+    .topbar{position:fixed;top:0;left:var(--sw);right:0;height:var(--th);background:var(--c);border-bottom:1px solid var(--b);display:flex;align-items:center;padding:0 24px;z-index:300;gap:16px}
+    .tb-toggle{width:36px;height:36px;border:none;background:none;cursor:pointer;border-radius:var(--r);font-size:18px;color:var(--t3);display:flex;align-items:center;justify-content:center}
+    .tb-search{flex:1;max-width:520px;position:relative;margin:0 auto}
+    .tb-search input{width:100%;height:36px;padding:0 12px 0 36px;border:1px solid var(--b);border-radius:var(--r);background:var(--bg);font-size:13px;color:var(--t1);font-family:inherit;outline:none}
+    .tb-search .si{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:14px;color:var(--t4)}
+    .tb-actions{display:flex;align-items:center;gap:8px}
+    .tb-btn{width:36px;height:36px;border:1px solid var(--b);background:var(--c);border-radius:var(--r);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--t3);position:relative}
+    .tb-btn .bdg{position:absolute;top:-4px;right:-4px;width:18px;height:18px;border-radius:9px;background:var(--er);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center}
+    .tb-avatar{width:32px;height:32px;border-radius:var(--r);background:var(--p);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;cursor:pointer}
+    [data-theme="dark"] .tb-avatar{background:#1A3355;color:#5A9BD5}
+
+    /* Main */
+    .main{margin-left:var(--sw);margin-top:var(--th);padding:24px;max-width:960px}
+
+    /* Breadcrumb */
+    .breadcrumb{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--t3);margin-bottom:16px}
+    .breadcrumb a{color:var(--p);text-decoration:none}.breadcrumb a:hover{text-decoration:underline}
+    .breadcrumb .sep{color:var(--t4)}
+
+    /* Page Header */
+    .ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+    .ph .title{font-size:22px;font-weight:700}
+    .ph .sub{font-size:13px;color:var(--t3);margin-top:2px}
+
+    /* Form Card */
+    .form-card{background:var(--c);border:1px solid var(--b);border-radius:var(--r);box-shadow:var(--ss);margin-bottom:20px}
+    .form-section{padding:20px 24px;border-bottom:1px solid var(--b)}
+    .form-section:last-child{border-bottom:none}
+    .section-title{font-size:14px;font-weight:600;color:var(--t1);margin-bottom:4px;display:flex;align-items:center;gap:8px}
+    .section-title .ico{font-size:16px}
+    .section-desc{font-size:12px;color:var(--t3);margin-bottom:16px}
+
+    /* Form Grid */
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .form-grid.cols-3{grid-template-columns:1fr 1fr 1fr}
+    .form-full{grid-column:1/-1}
+    .form-group{display:flex;flex-direction:column;gap:5px}
+    .form-label{font-size:13px;font-weight:500;color:var(--t1)}
+    .form-label .req{color:var(--er);margin-left:2px}
+    .form-label .mr-sub{font-family:'Noto Sans Devanagari',sans-serif;color:var(--t4);font-weight:400;font-size:11px;margin-left:4px}
+    .form-input{height:38px;padding:0 12px;border:1px solid var(--b);border-radius:var(--r);font-size:14px;color:var(--t1);font-family:inherit;background:var(--c);outline:none;transition:border .2s,box-shadow .2s}
+    .form-input:focus{border-color:var(--p);box-shadow:0 0 0 3px rgba(27,58,92,.1)}
+    [data-theme="dark"] .form-input:focus{border-color:#5A9BD5;box-shadow:0 0 0 3px rgba(90,155,213,.15)}
+    .form-input::placeholder{color:var(--t4)}
+    textarea.form-input{height:auto;padding:10px 12px;resize:vertical;min-height:80px;line-height:1.5}
+    select.form-input{appearance:auto;cursor:pointer}
+    .form-hint{font-size:11px;color:var(--t4)}
+    .form-error{font-size:11px;color:var(--er)}
+
+    /* File Upload */
+    .file-drop{border:2px dashed var(--b);border-radius:var(--r);padding:24px;text-align:center;cursor:pointer;transition:all .2s;background:var(--bg)}
+    .file-drop:hover{border-color:var(--p);background:var(--pl)}
+    .file-drop .ico{font-size:28px;margin-bottom:8px;display:block;color:var(--t4)}
+    .file-drop .text{font-size:13px;color:var(--t3)}
+    .file-drop .hint{font-size:11px;color:var(--t4);margin-top:4px}
+    .file-list{display:flex;flex-direction:column;gap:6px;margin-top:12px}
+    .file-item{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--bg);border:1px solid var(--b);border-radius:var(--r);font-size:12px}
+    .file-item .fname{flex:1;color:var(--t1);font-weight:500}
+    .file-item .fsize{color:var(--t3)}
+    .file-item .fremove{color:var(--er);cursor:pointer;font-size:14px}
+
+    /* Form Footer */
+    .form-footer{display:flex;justify-content:space-between;align-items:center;padding:16px 24px;background:var(--bg);border-top:1px solid var(--b)}
+    .btn{height:38px;padding:0 20px;border-radius:var(--r);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;border:none;transition:all .12s}
+    .btn-p{background:var(--p);color:#fff}.btn-p:hover{filter:brightness(.92)}
+    .btn-o{background:transparent;color:var(--t2);border:1px solid var(--b)}
+    .btn-o:hover{border-color:var(--p);color:var(--p)}
+    .btn-ok{background:var(--ok);color:#fff}
+
+    /* Theme */
+    .tt{position:fixed;top:10px;right:16px;z-index:400;display:flex;gap:4px}
+    .tt button{background:var(--c);border:1px solid var(--b);border-radius:var(--r);padding:5px 10px;cursor:pointer;font-size:11px;font-family:inherit;color:var(--t3)}
+    .tt button.active{background:#1B3A5C;color:#fff;border-color:#1B3A5C}
+    [data-theme="dark"] .tt button.active{background:#5A9BD5;color:#0F1419}
+    .wfb{position:fixed;bottom:16px;right:16px;z-index:400;background:#1B3A5C;color:#fff;padding:5px 10px;font-size:10px;font-weight:600;border-radius:var(--r);text-transform:uppercase;letter-spacing:1px;opacity:.8}
+
+    @media(max-width:768px){.sidebar{transform:translateX(-100%)}.topbar{left:0}.main{margin-left:0;padding:16px}.form-grid{grid-template-columns:1fr}.form-grid.cols-3{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="tt"><button class="active" onclick="setTheme('light')">☀ Light</button><button onclick="setTheme('dark')">🌙 Dark</button></div>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="sidebar-logo"><div class="icon">🏛️</div><div class="name">MLA E-Office</div></div>
+      <nav class="sidebar-nav">
+        <div class="ns">Office</div><a class="ni"><span class="ic">📊</span>Dashboard</a><a class="ni"><span class="ic">📨</span>Inward & Outward</a><a class="ni"><span class="ic">👤</span>Visitor Book</a>
+        <div class="ns">Public</div><a class="ni active"><span class="ic">📝</span>Nivedans</a><a class="ni"><span class="ic">🏗️</span>Dev Works</a>
+        <div class="ns">Network</div><a class="ni"><span class="ic">👥</span>Karyakarta</a><a class="ni"><span class="ic">📍</span>Gram/Ward</a><a class="ni"><span class="ic">🗳️</span>Booths</a>
+        <div class="ns">Tools</div><a class="ni"><span class="ic">📅</span>Calendar</a><a class="ni"><span class="ic">💬</span>WhatsApp</a><a class="ni"><span class="ic">📑</span>Reports</a>
+        <div class="nd"></div><a class="ni"><span class="ic">⚙️</span>Settings</a>
+      </nav>
+    </aside>
+    <header class="topbar">
+      <button class="tb-toggle">☰</button>
+      <div class="tb-search"><span class="si">🔍</span><input placeholder="Search..."></div>
+      <div class="tb-actions"><button class="tb-btn">🌐</button><button class="tb-btn">🔔<span class="bdg">5</span></button><div class="tb-avatar">RP</div></div>
+    </header>
+    <main class="main">
+      <div class="breadcrumb">
+        <a href="#">Dashboard</a><span class="sep">/</span>
+        <a href="#">Nivedans</a><span class="sep">/</span>
+        <span>New Nivedan</span>
+      </div>
+      <div class="ph">
+        <div><h1 class="title">New Nivedan · <span class="mr">नवीन निवेदन</span></h1><p class="sub">Register a citizen complaint or petition · नागरिक तक्रार नोंदवा</p></div>
+      </div>
+
+      <div class="form-card">
+        <!-- Section 1: Citizen Info -->
+        <div class="form-section">
+          <div class="section-title"><span class="ico">👤</span> Citizen Information · <span class="mr">नागरिक माहिती</span></div>
+          <div class="section-desc">Personal details of the complainant</div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Citizen Name<span class="req">*</span><span class="mr-sub">नागरिकाचे नाव</span></label>
+              <input class="form-input" placeholder="Enter full name" value="Suresh Jadhav">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Mobile Number<span class="req">*</span><span class="mr-sub">मोबाईल क्रमांक</span></label>
+              <input class="form-input" placeholder="10-digit mobile" value="9876543210">
+              <span class="form-hint">WhatsApp updates will be sent to this number</span>
+            </div>
+            <div class="form-group form-full">
+              <label class="form-label">Address<span class="mr-sub">पत्ता</span></label>
+              <input class="form-input" placeholder="House/Street, Landmark" value="House No. 45, Shivaji Nagar, Near Bus Stand">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Village / Ward<span class="req">*</span><span class="mr-sub">गाव / वॉर्ड</span></label>
+              <select class="form-input">
+                <option>Select area...</option>
+                <option selected>Ward 5 - Pimpri</option>
+                <option>Ward 1 - Shivaji Nagar</option>
+                <option>Wadgaon Village</option>
+                <option>Ambegaon Village</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Taluka<span class="mr-sub">तालुका</span></label>
+              <select class="form-input">
+                <option>Select taluka...</option>
+                <option selected>Haveli</option>
+                <option>Maval</option>
+                <option>Shirur</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 2: Complaint Details -->
+        <div class="form-section">
+          <div class="section-title"><span class="ico">📝</span> Complaint Details · <span class="mr">तक्रार तपशील</span></div>
+          <div class="section-desc">What is the citizen's issue or request?</div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Category<span class="req">*</span><span class="mr-sub">वर्गवारी</span></label>
+              <select class="form-input">
+                <option>Select category...</option>
+                <option selected>💧 Water Supply · पाणीपुरवठा</option>
+                <option>🛣️ Road / Drainage · रस्ते / गटार</option>
+                <option>⚡ Electricity · वीजपुरवठा</option>
+                <option>📋 Land / Revenue · जमीन / महसूल</option>
+                <option>📚 Education · शिक्षण</option>
+                <option>🏥 Health · आरोग्य</option>
+                <option>👴 Pension / Welfare · पेन्शन</option>
+                <option>🏠 Housing · घरकुल</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Sub-Category<span class="mr-sub">उप-वर्गवारी</span></label>
+              <select class="form-input">
+                <option>Select sub-category...</option>
+                <option selected>No water supply · पाणी येत नाही</option>
+                <option>Low pressure · दाब कमी</option>
+                <option>Contaminated water · दूषित पाणी</option>
+                <option>Pipeline leak · पाइपलाइन गळती</option>
+                <option>New connection · नवीन जोडणी</option>
+              </select>
+              <span class="form-hint">Auto-routes to: Water Supply Dept (ZP)</span>
+            </div>
+            <div class="form-group form-full">
+              <label class="form-label">Subject<span class="req">*</span><span class="mr-sub">विषय</span></label>
+              <input class="form-input" placeholder="Brief subject line" value="No water supply since 3 days in Ward 5, Pimpri area">
+            </div>
+            <div class="form-group form-full">
+              <label class="form-label">Description<span class="mr-sub">तपशीलवार वर्णन</span></label>
+              <textarea class="form-input" rows="4" placeholder="Detailed description of the issue...">Residents of Ward 5, Pimpri area have not received water supply for the past 3 days. The main pipeline near the bus stand appears to have a major leak. Approximately 200 families are affected. Temporary tanker supply has been requested but not yet received. Citizens are purchasing water from private suppliers at ₹500 per tanker.</textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Priority<span class="req">*</span><span class="mr-sub">प्राधान्य</span></label>
+              <select class="form-input">
+                <option>🟡 Medium (default)</option>
+                <option selected>🔴 High · उच्च</option>
+                <option>🟢 Low · कमी</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Assigned To<span class="mr-sub">नियुक्त करा</span></label>
+              <select class="form-input">
+                <option>— PA will assign later —</option>
+                <option>Ramesh Patil (Staff)</option>
+                <option>Sunil More (Staff)</option>
+                <option>Priya Deshmukh (Staff)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 3: Attachments -->
+        <div class="form-section">
+          <div class="section-title"><span class="ico">📎</span> Attachments · <span class="mr">संलग्नके</span></div>
+          <div class="section-desc">Upload supporting documents, photos, or application copies</div>
+          <div class="file-drop">
+            <span class="ico">📤</span>
+            <div class="text">Drag & drop files here, or <strong style="color:var(--p)">click to browse</strong></div>
+            <div class="hint">PDF, JPG, PNG — Max 10MB per file · पीडीएफ, जेपीजी, पीएनजी — प्रत्येक फाईल जास्तीत जास्त 10MB</div>
+          </div>
+          <div class="file-list">
+            <div class="file-item">
+              <span>📄</span>
+              <span class="fname">water_complaint_application.pdf</span>
+              <span class="fsize">1.2 MB</span>
+              <span class="fremove">✕</span>
+            </div>
+            <div class="file-item">
+              <span>🖼️</span>
+              <span class="fname">pipeline_leak_photo.jpg</span>
+              <span class="fsize">3.4 MB</span>
+              <span class="fremove">✕</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="form-footer">
+          <div style="font-size:12px;color:var(--t3)">
+            Tracking ID will be auto-generated: <strong style="font-family:'JetBrains Mono',monospace;color:var(--p)">NIV-2026-01248</strong>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-o">Cancel · रद्द करा</button>
+            <button class="btn btn-p">📝 Save as Draft</button>
+            <button class="btn btn-ok">✓ Submit & Print Receipt · नोंदवा</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <div class="wfb">Wireframe · Nivedan Form</div>
+  <script>function setTheme(t){document.documentElement.setAttribute('data-theme',t);document.querySelectorAll('.tt button').forEach(b=>b.classList.remove('active'));event.target.classList.add('active');}</script>
+</body>
+</html>

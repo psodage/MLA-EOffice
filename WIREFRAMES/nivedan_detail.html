@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MLA E-Office — Nivedan Detail</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--sb:#1B3A5C;--sw:240px;--th:56px;--p:#1B3A5C;--pl:#EFF4F9;--a:#FFC107;--bg:#F5F7FA;--c:#FFF;--t1:#0F172A;--t2:#475569;--t3:#64748B;--t4:#94A3B8;--b:#DDE3EB;--bs:#C5CED8;--ok:#16A34A;--okb:#F0FDF4;--okr:#BBF7D0;--wr:#D97706;--wrb:#FFFBEB;--wrr:#FDE68A;--er:#DC2626;--erb:#FEF2F2;--in:#2563EB;--inb:#EFF6FF;--inr:#BFDBFE;--pu:#7C3AED;--pub:#F5F3FF;--or:#EA580C;--orb:#FFF7ED;--ne:#6B7280;--neb:#F3F4F6;--r:3px;--ss:0 1px 3px rgba(15,23,42,.08),0 1px 2px rgba(15,23,42,.04)}
+    [data-theme="dark"]{--sb:#0D1B2A;--p:#5A9BD5;--pl:#1A3355;--bg:#0F1419;--c:#1A2332;--t1:#E2ECF4;--t2:#8EA3B8;--t3:#6B8299;--t4:#4F6479;--b:#2A3A4E;--bs:#3A4D63;--ok:#22C55E;--okb:#052E16;--okr:#166534;--wr:#F59E0B;--wrb:#2E1D05;--wrr:#78350F;--er:#EF4444;--erb:#2E0505;--in:#3B82F6;--inb:#0C1929;--inr:#1E3A5F;--pu:#A78BFA;--pub:#1E0A3E;--or:#F97316;--orb:#2E1505;--ne:#9CA3AF;--neb:#1F2937;--ss:0 1px 3px rgba(0,0,0,.4)}
+    body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--t1);transition:background .2s,color .2s}
+    .mr{font-family:'Noto Sans Devanagari',sans-serif}.mono{font-family:'JetBrains Mono',monospace}
+    .app{display:flex;min-height:100vh}
+
+    .sidebar{width:var(--sw);background:var(--sb);color:#fff;position:fixed;top:0;left:0;bottom:0;z-index:200;display:flex;flex-direction:column;overflow:hidden}
+    .sidebar-logo{height:var(--th);display:flex;align-items:center;padding:0 16px;gap:10px;border-bottom:1px solid rgba(255,255,255,.1)}
+    .sidebar-logo .icon{width:32px;height:32px;background:rgba(255,255,255,.12);border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:16px}
+    .sidebar-logo .name{font-size:15px;font-weight:700}
+    .sidebar-nav{flex:1;padding:8px 0;overflow-y:auto}
+    .ns{padding:16px 16px 4px;font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:rgba(255,255,255,.35);font-weight:600}
+    .ni{display:flex;align-items:center;gap:12px;padding:9px 16px;margin:1px 8px;border-radius:var(--r);cursor:pointer;font-size:13px;font-weight:500;color:rgba(255,255,255,.7);text-decoration:none;transition:background .12s}
+    .ni:hover{background:rgba(255,255,255,.08);color:#fff}.ni.active{background:rgba(255,255,255,.12);color:#fff}
+    .ni .ic{width:20px;text-align:center;font-size:15px;opacity:.7}.ni.active .ic{opacity:1}
+    .nd{height:1px;background:rgba(255,255,255,.1);margin:8px 16px}
+
+    .topbar{position:fixed;top:0;left:var(--sw);right:0;height:var(--th);background:var(--c);border-bottom:1px solid var(--b);display:flex;align-items:center;padding:0 24px;z-index:300;gap:16px}
+    .tb-toggle{width:36px;height:36px;border:none;background:none;cursor:pointer;border-radius:var(--r);font-size:18px;color:var(--t3);display:flex;align-items:center;justify-content:center}
+    .tb-search{flex:1;max-width:520px;position:relative;margin:0 auto}
+    .tb-search input{width:100%;height:36px;padding:0 12px 0 36px;border:1px solid var(--b);border-radius:var(--r);background:var(--bg);font-size:13px;color:var(--t1);font-family:inherit;outline:none}
+    .tb-search .si{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:14px;color:var(--t4)}
+    .tb-actions{display:flex;align-items:center;gap:8px}
+    .tb-btn{width:36px;height:36px;border:1px solid var(--b);background:var(--c);border-radius:var(--r);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--t3);position:relative}
+    .tb-btn .bdg{position:absolute;top:-4px;right:-4px;width:18px;height:18px;border-radius:9px;background:var(--er);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center}
+    .tb-avatar{width:32px;height:32px;border-radius:var(--r);background:var(--p);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;cursor:pointer}
+    [data-theme="dark"] .tb-avatar{background:#1A3355;color:#5A9BD5}
+
+    .main{margin-left:var(--sw);margin-top:var(--th);padding:24px}
+    .breadcrumb{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--t3);margin-bottom:16px}
+    .breadcrumb a{color:var(--p);text-decoration:none}.breadcrumb a:hover{text-decoration:underline}
+
+    /* Detail Header */
+    .detail-header{background:var(--c);border:1px solid var(--b);border-radius:var(--r);padding:24px;margin-bottom:16px;box-shadow:var(--ss)}
+    .dh-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:12px}
+    .dh-id{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;color:var(--p)}
+    .dh-actions{display:flex;gap:8px;flex-wrap:wrap}
+    .btn{height:36px;padding:0 16px;border-radius:var(--r);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;border:none;transition:all .12s}
+    .btn-p{background:var(--p);color:#fff}.btn-p:hover{filter:brightness(.92)}
+    .btn-o{background:transparent;color:var(--t2);border:1px solid var(--b)}.btn-o:hover{border-color:var(--p);color:var(--p)}
+    .btn-ok{background:var(--ok);color:#fff}
+    .btn-er{background:var(--er);color:#fff}
+    .btn-a{background:var(--a);color:#1E293B;font-weight:600}
+    .badge{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:2px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.3px}
+    .badge-pending{background:var(--wrb);color:var(--wr);border:1px solid var(--wrr)}
+
+    .dh-meta{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
+    .meta-item{display:flex;flex-direction:column;gap:2px}
+    .meta-label{font-size:11px;font-weight:600;color:var(--t4);text-transform:uppercase;letter-spacing:.5px}
+    .meta-value{font-size:14px;color:var(--t1);font-weight:500}
+    .meta-value.mono{font-family:'JetBrains Mono',monospace;font-size:13px}
+
+    /* Content Grid */
+    .content-grid{display:grid;grid-template-columns:1fr 340px;gap:16px}
+    .card{background:var(--c);border:1px solid var(--b);border-radius:var(--r);box-shadow:var(--ss);overflow:hidden}
+    .card-header{padding:16px 20px;border-bottom:1px solid var(--b);font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px}
+    .card-body{padding:20px}
+
+    /* Description */
+    .description{font-size:14px;line-height:1.7;color:var(--t2)}
+
+    /* Attachments */
+    .attach-list{display:flex;flex-direction:column;gap:8px;margin-top:16px}
+    .attach-item{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--bg);border:1px solid var(--b);border-radius:var(--r);cursor:pointer;transition:border .12s}
+    .attach-item:hover{border-color:var(--p)}
+    .attach-item .name{flex:1;font-size:13px;font-weight:500;color:var(--p)}
+    .attach-item .size{font-size:11px;color:var(--t4)}
+
+    /* Timeline */
+    .timeline{display:flex;flex-direction:column;gap:0}
+    .tl-item{display:flex;gap:12px;padding:14px 0;position:relative}
+    .tl-item:not(:last-child)::after{content:'';position:absolute;left:15px;top:40px;bottom:-2px;width:2px;background:var(--b)}
+    .tl-dot{width:32px;height:32px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;z-index:1}
+    .tl-content{flex:1}
+    .tl-title{font-size:13px;font-weight:600;color:var(--t1);margin-bottom:2px}
+    .tl-desc{font-size:12px;color:var(--t3);line-height:1.4}
+    .tl-time{font-size:11px;color:var(--t4);margin-top:3px}
+
+    /* Add Note */
+    .add-note{margin-top:16px;padding-top:16px;border-top:1px solid var(--b)}
+    .add-note textarea{width:100%;height:60px;padding:8px 12px;border:1px solid var(--b);border-radius:var(--r);font-size:13px;color:var(--t1);font-family:inherit;background:var(--c);outline:none;resize:vertical}
+    .add-note textarea:focus{border-color:var(--p)}
+    .add-note-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:8px}
+    .btn-sm{height:30px;padding:0 12px;font-size:12px;border-radius:var(--r);font-weight:500;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:4px;border:none}
+
+    /* WhatsApp Log */
+    .wa-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--b);font-size:12px}
+    .wa-item:last-child{border-bottom:none}
+    .wa-status{padding:2px 6px;border-radius:2px;font-size:10px;font-weight:600;text-transform:uppercase}
+
+    .tt{position:fixed;top:10px;right:16px;z-index:400;display:flex;gap:4px}
+    .tt button{background:var(--c);border:1px solid var(--b);border-radius:var(--r);padding:5px 10px;cursor:pointer;font-size:11px;font-family:inherit;color:var(--t3)}
+    .tt button.active{background:#1B3A5C;color:#fff;border-color:#1B3A5C}
+    [data-theme="dark"] .tt button.active{background:#5A9BD5;color:#0F1419}
+    .wfb{position:fixed;bottom:16px;right:16px;z-index:400;background:#1B3A5C;color:#fff;padding:5px 10px;font-size:10px;font-weight:600;border-radius:var(--r);text-transform:uppercase;letter-spacing:1px;opacity:.8}
+
+    @media(max-width:1024px){.content-grid{grid-template-columns:1fr}}
+    @media(max-width:768px){.sidebar{transform:translateX(-100%)}.topbar{left:0}.main{margin-left:0;padding:16px}.dh-meta{grid-template-columns:1fr 1fr}}
+  </style>
+</head>
+<body>
+  <div class="tt"><button class="active" onclick="setTheme('light')">☀ Light</button><button onclick="setTheme('dark')">🌙 Dark</button></div>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="sidebar-logo"><div class="icon">🏛️</div><div class="name">MLA E-Office</div></div>
+      <nav class="sidebar-nav">
+        <div class="ns">Office</div><a class="ni"><span class="ic">📊</span>Dashboard</a><a class="ni"><span class="ic">📨</span>Inward & Outward</a><a class="ni"><span class="ic">👤</span>Visitor Book</a>
+        <div class="ns">Public</div><a class="ni active"><span class="ic">📝</span>Nivedans</a><a class="ni"><span class="ic">🏗️</span>Dev Works</a>
+        <div class="ns">Network</div><a class="ni"><span class="ic">👥</span>Karyakarta</a><a class="ni"><span class="ic">📍</span>Gram/Ward</a><a class="ni"><span class="ic">🗳️</span>Booths</a>
+        <div class="ns">Tools</div><a class="ni"><span class="ic">📅</span>Calendar</a><a class="ni"><span class="ic">💬</span>WhatsApp</a><a class="ni"><span class="ic">📑</span>Reports</a>
+        <div class="nd"></div><a class="ni"><span class="ic">⚙️</span>Settings</a>
+      </nav>
+    </aside>
+    <header class="topbar">
+      <button class="tb-toggle">☰</button>
+      <div class="tb-search"><span class="si">🔍</span><input placeholder="Search..."></div>
+      <div class="tb-actions"><button class="tb-btn">🌐</button><button class="tb-btn">🔔<span class="bdg">5</span></button><div class="tb-avatar">RP</div></div>
+    </header>
+    <main class="main">
+      <div class="breadcrumb">
+        <a href="#">Dashboard</a><span style="color:var(--t4)">/</span>
+        <a href="#">Nivedans</a><span style="color:var(--t4)">/</span>
+        <span>NIV-2026-01247</span>
+      </div>
+
+      <!-- Detail Header Card -->
+      <div class="detail-header">
+        <div class="dh-top">
+          <div>
+            <div class="dh-id">NIV-2026-01247</div>
+            <div style="font-size:13px;color:var(--t3);margin-top:4px">No water supply since 3 days in Ward 5, Pimpri area</div>
+          </div>
+          <div class="dh-actions">
+            <span class="badge badge-pending">🟡 Pending · प्रलंबित</span>
+            <button class="btn btn-o">✏️ Edit</button>
+            <button class="btn btn-o">🖨️ Print Receipt</button>
+            <button class="btn btn-p">👤+ Assign</button>
+            <button class="btn btn-ok">✓ Mark Resolved</button>
+            <button class="btn btn-er" style="font-size:12px">✕ Reject</button>
+          </div>
+        </div>
+        <div class="dh-meta">
+          <div class="meta-item"><span class="meta-label">Citizen Name · नागरिक</span><span class="meta-value">Suresh Jadhav</span></div>
+          <div class="meta-item"><span class="meta-label">Mobile</span><span class="meta-value mono">98765 43210</span></div>
+          <div class="meta-item"><span class="meta-label">Category · वर्गवारी</span><span class="meta-value">💧 Water Supply</span></div>
+          <div class="meta-item"><span class="meta-label">Priority · प्राधान्य</span><span class="meta-value" style="color:var(--er)">🔴 High</span></div>
+          <div class="meta-item"><span class="meta-label">Ward / Village</span><span class="meta-value">Ward 5 — Pimpri</span></div>
+          <div class="meta-item"><span class="meta-label">Created</span><span class="meta-value">02 Aug 2026, 10:30 AM</span></div>
+          <div class="meta-item"><span class="meta-label">Assigned To</span><span class="meta-value" style="color:var(--t4)">— Unassigned —</span></div>
+          <div class="meta-item"><span class="meta-label">Created By</span><span class="meta-value">Rajesh Patil (PA)</span></div>
+        </div>
+      </div>
+
+      <!-- Content Grid -->
+      <div class="content-grid">
+        <!-- Left: Details -->
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <!-- Description -->
+          <div class="card">
+            <div class="card-header">📄 Description · <span class="mr">वर्णन</span></div>
+            <div class="card-body">
+              <div class="description">Residents of Ward 5, Pimpri area have not received water supply for the past 3 days. The main pipeline near the bus stand appears to have a major leak. Approximately 200 families are affected. Temporary tanker supply has been requested but not yet received. Citizens are purchasing water from private suppliers at ₹500 per tanker.</div>
+              <div class="attach-list">
+                <div class="attach-item"><span>📄</span><span class="name">water_complaint_application.pdf</span><span class="size">1.2 MB</span><span style="color:var(--p);font-size:12px">↓</span></div>
+                <div class="attach-item"><span>🖼️</span><span class="name">pipeline_leak_photo.jpg</span><span class="size">3.4 MB</span><span style="color:var(--p);font-size:12px">↓</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- WhatsApp Log -->
+          <div class="card">
+            <div class="card-header">💬 WhatsApp Notifications · <span class="mr">व्हॉट्सअॅप सूचना</span></div>
+            <div class="card-body">
+              <div class="wa-item">
+                <span>📤</span>
+                <div style="flex:1"><strong style="color:var(--t1)">Acknowledgment</strong><br><span style="color:var(--t3)">Sent to 98765 43210</span></div>
+                <span class="wa-status" style="background:var(--okb);color:var(--ok)">Delivered</span>
+                <span style="color:var(--t4);font-size:11px">02 Aug, 10:31 AM</span>
+              </div>
+              <div class="wa-item">
+                <span>📤</span>
+                <div style="flex:1"><strong style="color:var(--t1)">Status Update</strong><br><span style="color:var(--t3)">Not yet sent (status unchanged)</span></div>
+                <span class="wa-status" style="background:var(--neb);color:var(--ne)">Pending</span>
+                <span style="color:var(--t4);font-size:11px">—</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Timeline -->
+        <div class="card">
+          <div class="card-header">📋 Activity Timeline · <span class="mr">क्रिया टाइमलाइन</span></div>
+          <div class="card-body">
+            <div class="timeline">
+              <div class="tl-item">
+                <div class="tl-dot" style="background:var(--wrb);color:var(--wr)">📝</div>
+                <div class="tl-content">
+                  <div class="tl-title">Nivedan Created</div>
+                  <div class="tl-desc">Registered by <strong>Rajesh Patil</strong> (PA) at front desk. Category: Water Supply. Priority set to High.</div>
+                  <div class="tl-time">02 Aug 2026, 10:30 AM</div>
+                </div>
+              </div>
+              <div class="tl-item">
+                <div class="tl-dot" style="background:var(--okb);color:var(--ok)">💬</div>
+                <div class="tl-content">
+                  <div class="tl-title">WhatsApp Sent</div>
+                  <div class="tl-desc">Acknowledgment message sent to citizen at 98765 43210. Tracking ID: NIV-2026-01247.</div>
+                  <div class="tl-time">02 Aug 2026, 10:31 AM</div>
+                </div>
+              </div>
+              <div class="tl-item">
+                <div class="tl-dot" style="background:var(--inb);color:var(--in)">🔄</div>
+                <div class="tl-content">
+                  <div class="tl-title">Auto-Route Suggested</div>
+                  <div class="tl-desc">System suggested routing to <strong>Water Supply Dept (ZP)</strong> based on category. Awaiting PA confirmation.</div>
+                  <div class="tl-time">02 Aug 2026, 10:31 AM</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Add Note -->
+            <div class="add-note">
+              <textarea placeholder="Add a note or update... / टीप किंवा अपडेट जोडा..."></textarea>
+              <div class="add-note-actions">
+                <select style="height:30px;border:1px solid var(--b);border-radius:var(--r);padding:0 8px;font-size:12px;background:var(--c);color:var(--t1);font-family:inherit">
+                  <option>Change Status To...</option>
+                  <option>In Progress</option>
+                  <option>Forwarded</option>
+                  <option>Awaiting Response</option>
+                  <option>Resolved</option>
+                  <option>Rejected</option>
+                </select>
+                <button class="btn-sm btn-p" style="background:var(--p);color:#fff">+ Add Note</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <div class="wfb">Wireframe · Nivedan Detail</div>
+  <script>function setTheme(t){document.documentElement.setAttribute('data-theme',t);document.querySelectorAll('.tt button').forEach(b=>b.classList.remove('active'));event.target.classList.add('active');}</script>
+</body>
+</html>

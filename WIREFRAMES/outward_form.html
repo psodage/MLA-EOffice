@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>MLA E-Office — Outward Letter Form</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--sb:#1B3A5C;--sw:240px;--th:56px;--p:#1B3A5C;--pl:#EFF4F9;--bg:#F5F7FA;--c:#FFF;--t1:#0F172A;--t2:#475569;--t3:#64748B;--t4:#94A3B8;--b:#DDE3EB;--ok:#16A34A;--er:#DC2626;--in:#2563EB;--a:#FFC107;--pu:#7C3AED;--pub:#F5F3FF;--r:3px;--ss:0 1px 3px rgba(15,23,42,.08)}
+    [data-theme="dark"]{--sb:#0D1B2A;--p:#5A9BD5;--pl:#1A3355;--bg:#0F1419;--c:#1A2332;--t1:#E2ECF4;--t2:#8EA3B8;--t3:#6B8299;--t4:#4F6479;--b:#2A3A4E;--ok:#22C55E;--er:#EF4444;--in:#3B82F6;--pu:#A78BFA;--pub:#1E0A3E;--ss:0 1px 3px rgba(0,0,0,.4)}
+    body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--t1);transition:background .2s,color .2s}
+    .mr{font-family:'Noto Sans Devanagari',sans-serif}
+    .app{display:flex;min-height:100vh}
+    .sidebar{width:var(--sw);background:var(--sb);color:#fff;position:fixed;top:0;left:0;bottom:0;z-index:200;display:flex;flex-direction:column;overflow:hidden}
+    .sidebar-logo{height:var(--th);display:flex;align-items:center;padding:0 16px;gap:10px;border-bottom:1px solid rgba(255,255,255,.1)}
+    .sidebar-logo .icon{width:32px;height:32px;background:rgba(255,255,255,.12);border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:16px}
+    .sidebar-logo .name{font-size:15px;font-weight:700}
+    .sidebar-nav{flex:1;padding:8px 0;overflow-y:auto}
+    .ns{padding:16px 16px 4px;font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:rgba(255,255,255,.35);font-weight:600}
+    .ni{display:flex;align-items:center;gap:12px;padding:9px 16px;margin:1px 8px;border-radius:var(--r);cursor:pointer;font-size:13px;font-weight:500;color:rgba(255,255,255,.7);text-decoration:none;transition:background .12s}
+    .ni:hover{background:rgba(255,255,255,.08);color:#fff}.ni.active{background:rgba(255,255,255,.12);color:#fff}
+    .ni .ic{width:20px;text-align:center;font-size:15px;opacity:.7}.ni.active .ic{opacity:1}
+    .nd{height:1px;background:rgba(255,255,255,.1);margin:8px 16px}
+    .topbar{position:fixed;top:0;left:var(--sw);right:0;height:var(--th);background:var(--c);border-bottom:1px solid var(--b);display:flex;align-items:center;padding:0 24px;z-index:300;gap:16px}
+    .tb-toggle{width:36px;height:36px;border:none;background:none;cursor:pointer;border-radius:var(--r);font-size:18px;color:var(--t3);display:flex;align-items:center;justify-content:center}
+    .tb-actions{display:flex;align-items:center;gap:8px;margin-left:auto}
+    .tb-btn{width:36px;height:36px;border:1px solid var(--b);background:var(--c);border-radius:var(--r);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--t3);position:relative}
+    .tb-btn .bdg{position:absolute;top:-4px;right:-4px;width:18px;height:18px;border-radius:9px;background:var(--er);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center}
+    .tb-avatar{width:32px;height:32px;border-radius:var(--r);background:var(--p);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;cursor:pointer}
+    [data-theme="dark"] .tb-avatar{background:#1A3355;color:#5A9BD5}
+    .main{margin-left:var(--sw);margin-top:var(--th);padding:24px}
+    .breadcrumb{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--t3);margin-bottom:16px}
+    .breadcrumb a{color:var(--p);text-decoration:none}
+    .ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+    .ph .title{font-size:22px;font-weight:700}
+    .ph .sub{font-size:13px;color:var(--t3);margin-top:2px}
+
+    /* Two Column Layout */
+    .layout{display:grid;grid-template-columns:1fr 380px;gap:20px}
+    .form-card{background:var(--c);border:1px solid var(--b);border-radius:var(--r);box-shadow:var(--ss)}
+    .form-section{padding:20px 24px;border-bottom:1px solid var(--b)}
+    .form-section:last-child{border-bottom:none}
+    .section-title{font-size:14px;font-weight:600;color:var(--t1);margin-bottom:4px;display:flex;align-items:center;gap:8px}
+    .section-desc{font-size:12px;color:var(--t3);margin-bottom:16px}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .form-full{grid-column:1/-1}
+    .form-group{display:flex;flex-direction:column;gap:5px}
+    .form-label{font-size:13px;font-weight:500;color:var(--t1)}
+    .form-label .req{color:var(--er);margin-left:2px}
+    .form-label .mr-sub{font-family:'Noto Sans Devanagari',sans-serif;color:var(--t4);font-weight:400;font-size:11px;margin-left:4px}
+    .form-input{height:38px;padding:0 12px;border:1px solid var(--b);border-radius:var(--r);font-size:14px;color:var(--t1);font-family:inherit;background:var(--c);outline:none;transition:border .2s}
+    .form-input:focus{border-color:var(--p);box-shadow:0 0 0 3px rgba(27,58,92,.1)}
+    .form-input::placeholder{color:var(--t4)}
+    textarea.form-input{height:auto;padding:10px 12px;resize:vertical;line-height:1.6}
+    select.form-input{appearance:auto;cursor:pointer}
+    .form-hint{font-size:11px;color:var(--t4)}
+
+    /* AI Draft Button */
+    .ai-btn{display:flex;align-items:center;gap:8px;padding:12px 16px;background:linear-gradient(135deg,#7C3AED,#5A2DA0);color:#fff;border:none;border-radius:var(--r);cursor:pointer;font-family:inherit;font-size:14px;font-weight:600;width:100%;justify-content:center;transition:all .15s;margin-bottom:16px}
+    .ai-btn:hover{filter:brightness(1.1);transform:translateY(-1px);box-shadow:0 4px 12px rgba(124,58,237,.3)}
+    .ai-btn .sparkle{font-size:18px}
+
+    /* Preview Panel */
+    .preview-panel{background:var(--c);border:1px solid var(--b);border-radius:var(--r);box-shadow:var(--ss);position:sticky;top:calc(var(--th) + 24px)}
+    .preview-header{padding:16px 20px;border-bottom:1px solid var(--b);display:flex;align-items:center;justify-content:space-between}
+    .preview-title{font-size:14px;font-weight:600;display:flex;align-items:center;gap:6px}
+    .preview-body{padding:20px;font-size:13px;line-height:1.7;color:var(--t2);max-height:calc(100vh - 200px);overflow-y:auto}
+    .letter-header{text-align:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--p)}
+    .letter-header .office{font-size:15px;font-weight:700;color:var(--p)}
+    .letter-header .mla{font-size:12px;color:var(--t3)}
+    .letter-ref{display:flex;justify-content:space-between;font-size:12px;color:var(--t3);margin-bottom:16px}
+    .letter-to{margin-bottom:12px}
+    .letter-to strong{color:var(--t1)}
+    .letter-subject{font-weight:600;color:var(--t1);margin-bottom:12px;padding:8px 0;border-bottom:1px solid var(--b)}
+    .letter-body{margin-bottom:16px}
+    .letter-sign{margin-top:24px;text-align:right}
+    .letter-sign .name{font-weight:600;color:var(--t1)}
+    .letter-sign .desg{font-size:12px;color:var(--t3)}
+
+    .form-footer{display:flex;justify-content:flex-end;gap:8px;padding:16px 24px;background:var(--bg);border-top:1px solid var(--b)}
+    .btn{height:38px;padding:0 20px;border-radius:var(--r);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;border:none;transition:all .12s}
+    .btn-p{background:var(--p);color:#fff}.btn-o{background:transparent;color:var(--t2);border:1px solid var(--b)}
+    .btn-ok{background:var(--ok);color:#fff}
+
+    .tt{position:fixed;top:10px;right:16px;z-index:400;display:flex;gap:4px}
+    .tt button{background:var(--c);border:1px solid var(--b);border-radius:var(--r);padding:5px 10px;cursor:pointer;font-size:11px;font-family:inherit;color:var(--t3)}
+    .tt button.active{background:#1B3A5C;color:#fff;border-color:#1B3A5C}
+    [data-theme="dark"] .tt button.active{background:#5A9BD5;color:#0F1419}
+    .wfb{position:fixed;bottom:16px;right:16px;z-index:400;background:#1B3A5C;color:#fff;padding:5px 10px;font-size:10px;font-weight:600;border-radius:var(--r);text-transform:uppercase;letter-spacing:1px;opacity:.8}
+    @media(max-width:1024px){.layout{grid-template-columns:1fr}.preview-panel{position:static}}
+    @media(max-width:768px){.sidebar{transform:translateX(-100%)}.topbar{left:0}.main{margin-left:0;padding:16px}.form-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="tt"><button class="active" onclick="setTheme('light')">☀ Light</button><button onclick="setTheme('dark')">🌙 Dark</button></div>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="sidebar-logo"><div class="icon">🏛️</div><div class="name">MLA E-Office</div></div>
+      <nav class="sidebar-nav">
+        <div class="ns">Office</div><a class="ni"><span class="ic">📊</span>Dashboard</a><a class="ni active"><span class="ic">📨</span>Inward & Outward</a><a class="ni"><span class="ic">👤</span>Visitor Book</a>
+        <div class="ns">Public</div><a class="ni"><span class="ic">📝</span>Nivedans</a><a class="ni"><span class="ic">🏗️</span>Dev Works</a>
+        <div class="ns">Network</div><a class="ni"><span class="ic">👥</span>Karyakarta</a><a class="ni"><span class="ic">📍</span>Gram/Ward</a><a class="ni"><span class="ic">🗳️</span>Booths</a>
+        <div class="ns">Tools</div><a class="ni"><span class="ic">📅</span>Calendar</a><a class="ni"><span class="ic">💬</span>WhatsApp</a><a class="ni"><span class="ic">📑</span>Reports</a>
+        <div class="nd"></div><a class="ni"><span class="ic">⚙️</span>Settings</a>
+      </nav>
+    </aside>
+    <header class="topbar">
+      <button class="tb-toggle">☰</button>
+      <div class="tb-actions"><button class="tb-btn">🌐</button><button class="tb-btn">🔔<span class="bdg">3</span></button><div class="tb-avatar">RP</div></div>
+    </header>
+    <main class="main">
+      <div class="breadcrumb"><a href="#">Dashboard</a><span style="color:var(--t4)">/</span><a href="#">Inward & Outward</a><span style="color:var(--t4)">/</span><span>New Outward Letter</span></div>
+      <div class="ph"><div><h1 class="title">New Outward Letter · <span class="mr">नवीन जावक पत्र</span></h1><p class="sub">Draft and send an official letter from MLA office</p></div></div>
+
+      <div class="layout">
+        <!-- Left: Form -->
+        <div class="form-card">
+          <div class="form-section">
+            <div class="section-title">📤 Letter Details · <span class="mr">पत्र तपशील</span></div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Outward Number<span class="mr-sub">जावक क्रमांक</span></label>
+                <input class="form-input" value="OUT/2026/0157" readonly style="background:var(--bg);color:var(--t3);font-family:'JetBrains Mono',monospace;font-size:13px">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Date<span class="req">*</span></label>
+                <input class="form-input" type="date" value="2026-08-02">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Reference Inward<span class="mr-sub">संदर्भ आवक</span></label>
+                <select class="form-input">
+                  <option>— None (independent letter) —</option>
+                  <option selected>INW/2026/0385 — PWD Road Widening</option>
+                  <option>INW/2026/0389 — Collector Water Scheme</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Letter Template<span class="mr-sub">पत्र नमुना</span></label>
+                <select class="form-input">
+                  <option>No template</option>
+                  <option selected>Recommendation to Dept Head</option>
+                  <option>Follow-up / Reminder</option>
+                  <option>Inquiry Letter</option>
+                  <option>Appreciation Letter</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <div class="section-title">👤 Recipient · <span class="mr">प्राप्तकर्ता</span></div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Recipient Name<span class="req">*</span><span class="mr-sub">प्राप्तकर्ता नाव</span></label>
+                <input class="form-input" value="Shri. R.S. Deshmukh">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Designation<span class="mr-sub">पद</span></label>
+                <input class="form-input" value="Executive Engineer">
+              </div>
+              <div class="form-group form-full">
+                <label class="form-label">Department<span class="req">*</span><span class="mr-sub">विभाग</span></label>
+                <select class="form-input"><option selected>PWD · सार्वजनिक बांधकाम विभाग</option></select>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <div class="section-title">📝 Letter Content · <span class="mr">पत्र सामग्री</span></div>
+            <button class="ai-btn"><span class="sparkle">✨</span> Generate AI Draft · AI मसुदा तयार करा</button>
+            <div class="form-grid">
+              <div class="form-group form-full">
+                <label class="form-label">Subject<span class="req">*</span><span class="mr-sub">विषय</span></label>
+                <input class="form-input" value="Regarding expediting road widening project at NH-4 junction — request for priority action">
+              </div>
+              <div class="form-group form-full">
+                <label class="form-label">Body<span class="req">*</span><span class="mr-sub">मुख्य भाग</span></label>
+                <textarea class="form-input" rows="10" style="min-height:200px">महोदय,
+
+विषय: एनएच-4 जंक्शन येथील रस्ता रुंदीकरण प्रकल्प — प्राधान्य कार्यवाहीची विनंती
+
+संदर्भ: आपले पत्र क्र. PWD/CE/HQ/2026/1234, दि. 01/08/2026
+
+उपरोक्त संदर्भाच्या अनुषंगाने, एनएच-4 जंक्शन येथील रस्ता रुंदीकरण प्रकल्पाचा सुधारित खर्चाचा अंदाज (₹2.45 कोटी) प्राप्त झाला आहे. या प्रकल्पामुळे दररोज अंदाजे 15,000 वाहने आणि हजारो नागरिकांना फायदा होणार आहे.
+
+NHAI मंजुरी प्रक्रिया लवकरात लवकर पूर्ण करण्याची विनंती करण्यात येते. या प्रकल्पास प्राधान्य देऊन पुढील कार्यवाही करावी.
+
+आपल्या सहकार्याची अपेक्षा.
+
+आपला विश्वासू,</textarea>
+                <span class="form-hint" style="color:var(--pu)">✨ AI-drafted in Marathi · AI ने मराठीत मसुदा तयार केला</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-footer">
+            <button class="btn btn-o">Cancel</button>
+            <button class="btn btn-p">💾 Save Draft</button>
+            <button class="btn btn-ok">✓ Submit for Approval</button>
+          </div>
+        </div>
+
+        <!-- Right: Live Preview -->
+        <div class="preview-panel">
+          <div class="preview-header">
+            <span class="preview-title">📋 Letter Preview</span>
+            <div style="display:flex;gap:4px">
+              <button style="padding:4px 8px;border:1px solid var(--b);border-radius:var(--r);background:var(--c);font-size:11px;cursor:pointer;color:var(--t3)">🖨️ Print</button>
+              <button style="padding:4px 8px;border:1px solid var(--b);border-radius:var(--r);background:var(--c);font-size:11px;cursor:pointer;color:var(--t3)">📄 PDF</button>
+            </div>
+          </div>
+          <div class="preview-body">
+            <div class="letter-header">
+              <div class="office">🏛️ कार्यालय — आमदार, हवेली मतदारसंघ</div>
+              <div class="mla">Office of MLA, Haveli Constituency</div>
+              <div style="font-size:10px;color:var(--t4);margin-top:4px">Address Line, District, Maharashtra — 411001</div>
+            </div>
+            <div class="letter-ref">
+              <span>Ref: OUT/2026/0157</span>
+              <span>Date: 02/08/2026</span>
+            </div>
+            <div class="letter-to">
+              <strong>To,</strong><br>
+              Shri. R.S. Deshmukh<br>
+              Executive Engineer<br>
+              PWD · सार्वजनिक बांधकाम विभाग
+            </div>
+            <div class="letter-subject">
+              Subject: Regarding expediting road widening project at NH-4 junction — request for priority action
+            </div>
+            <div class="letter-body">
+              महोदय,<br><br>
+              विषय: एनएच-4 जंक्शन येथील रस्ता रुंदीकरण प्रकल्प — प्राधान्य कार्यवाहीची विनंती<br><br>
+              संदर्भ: आपले पत्र क्र. PWD/CE/HQ/2026/1234, दि. 01/08/2026<br><br>
+              उपरोक्त संदर्भाच्या अनुषंगाने, एनएच-4 जंक्शन येथील रस्ता रुंदीकरण प्रकल्पाचा सुधारित खर्चाचा अंदाज (₹2.45 कोटी) प्राप्त झाला आहे...
+            </div>
+            <div class="letter-sign">
+              <div class="name">आमदार, हवेली मतदारसंघ</div>
+              <div class="desg">MLA, Haveli Constituency</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <div class="wfb">Wireframe · Outward Form</div>
+  <script>function setTheme(t){document.documentElement.setAttribute('data-theme',t);document.querySelectorAll('.tt button').forEach(b=>b.classList.remove('active'));event.target.classList.add('active');}</script>
+</body>
+</html>
