@@ -9,6 +9,8 @@ import LoginPage from '../pages/LoginPage.jsx';
 import DashboardPage from '../pages/DashboardPage.jsx';
 import InwardListPage from '../pages/inward/InwardListPage.jsx';
 import OutwardListPage from '../pages/outward/OutwardListPage.jsx';
+import NivedanListPage from '../pages/nivedan/NivedanListPage.jsx';
+import PublicTrackingPage from '../pages/nivedan/PublicTrackingPage.jsx';
 import MainLayout from '../components/layout/MainLayout.jsx';
 import ProtectedRoute from './ProtectedRoute.jsx';
 
@@ -59,6 +61,8 @@ const AppRouter = () => {
       <Routes>
         {/* ── Public routes ── */}
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/track" element={<PublicTrackingPage />} />
+        <Route path="/track/:mobile" element={<PublicTrackingPage />} />
 
         {/* ── Protected routes ── */}
         <Route
@@ -97,12 +101,13 @@ const AppRouter = () => {
           }
         />
 
+        {/* Nivedan / Petitions Module */}
         <Route
           path="/nivedan/*"
           element={
             <ProtectedRoute module="nivedan">
               <MainLayout>
-                <ModulePlaceholder titleMr="📋 निवेदने" titleEn="Petitions (Nivedan) Module" icon="📋" />
+                <NivedanListPage />
               </MainLayout>
             </ProtectedRoute>
           }

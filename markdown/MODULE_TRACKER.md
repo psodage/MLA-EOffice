@@ -60,18 +60,18 @@
 
 | Status | Feature | Notes |
 |:------:|---------|-------|
-| ☐ | Create nivedan API (auto NIV-YYYY-NNNNN, auto-routing) | |
-| ☐ | Nivedan list API (filters: status, category, priority, village, date) | |
-| ☐ | Nivedan detail API (with full timeline) | |
-| ☐ | Status transition API (state machine validation) | |
-| ☐ | Add timeline note API | |
-| ☐ | Public tracking API (by mobile number — no auth) | |
-| ☐ | Escalation cron job | |
-| ☐ | Nivedan list page (tabbed: All/Pending/Escalated/Resolved) | |
-| ☐ | Register nivedan form (cascading location, category auto-dept) | |
-| ☐ | Nivedan detail page (status + timeline) | |
-| ☐ | Status update modal | |
-| ☐ | Public tracking page | |
+| ✅ | Create nivedan API (auto NIV-YYYY-NNNNN, auto-routing) | Auto tracking ID & category department auto-routing |
+| ✅ | Nivedan list API (filters: status, category, priority, village, date) | Multi-field search, filter & pagination |
+| ✅ | Nivedan detail API (with full timeline) | Complete timeline log history |
+| ✅ | Status transition API (state machine validation) | 8-state machine & timeline logger |
+| ✅ | Add timeline note API | Staff internal note logger |
+| ✅ | Public tracking API (by mobile number — no auth) | Unauthenticated citizen complaint lookup |
+| ✅ | Escalation cron job | Escalation indicators & alerts |
+| ✅ | Nivedan list page (tabbed: All/Pending/Escalated/Resolved) | Interactive tabbed status page |
+| ✅ | Register nivedan form (cascading location, category auto-dept) | Interactive form with auto-routing banner |
+| ✅ | Nivedan detail page (status + timeline) | Detail modal with status buttons |
+| ✅ | Status update modal | Quick status transitions |
+| ✅ | Public tracking page | Public citizen portal at /track |
 
 ---
 
@@ -191,9 +191,9 @@
 | Phase | Done | Total | Progress |
 |-------|:----:|:-----:|----------|
 | Phase 1 — Foundation | 0 | 5 | ░░░░░░░░░░ 0% |
-| Phase 2 — Core | 15 | 31 | █████░░░░░ 48% |
+| Phase 2 — Core | 27 | 31 | █████████░ 87% |
 | Phase 3 — Supporting | 0 | 21 | ░░░░░░░░░░ 0% |
 | Phase 4 — Deploy | 0 | 10 | ░░░░░░░░░░ 0% |
-| **Total** | **15** | **67** | ██░░░░░░░░ **22%** |
+| **Total** | **27** | **67** | ████░░░░░░ **40%** |
 
 ---

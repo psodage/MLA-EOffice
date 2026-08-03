@@ -1,0 +1,228 @@
+/* src/pages/nivedan/PublicTrackingPage.css */
+/* ============================================================
+   MLA E-Office — Public Citizen Portal Styling
+   ============================================================ */
+
+.public-tracking-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0a1020 0%, #0f172a 100%);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 3rem 1.5rem;
+  font-family: 'Noto Sans Devanagari', 'Inter', sans-serif;
+  color: #f8fafc;
+}
+
+.public-tracking-card {
+  width: 100%;
+  max-width: 800px;
+  background: rgba(30, 41, 59, 0.85);
+  border: 1px solid rgba(255, 153, 51, 0.3);
+  border-radius: 16px;
+  padding: 2.5rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(12px);
+}
+
+.portal-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.header-emblem {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+}
+
+.portal-header h2 {
+  font-size: 1.5rem;
+  color: #ff9933;
+  font-weight: 800;
+  margin-bottom: 0.35rem;
+}
+
+.portal-header p {
+  color: #94a3b8;
+  font-size: 0.9rem;
+}
+
+.mobile-search-form {
+  margin-bottom: 2.5rem;
+}
+
+.search-input-wrapper {
+  display: flex;
+  background: #0f172a;
+  border: 2px solid #334155;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.search-input-wrapper:focus-within {
+  border-color: #ff9933;
+  box-shadow: 0 0 12px rgba(255, 153, 51, 0.3);
+}
+
+.input-prefix {
+  padding: 0.85rem 1rem;
+  background: #1e293b;
+  color: #94a3b8;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  border-right: 1px solid #334155;
+}
+
+.search-input-wrapper input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  padding: 0.85rem 1rem;
+  font-size: 1.1rem;
+  font-family: inherit;
+  outline: none;
+}
+
+.btn-track-submit {
+  padding: 0.85rem 1.5rem;
+  background: linear-gradient(135deg, #ff9933, #e67e22);
+  color: #0f172a;
+  border: none;
+  font-weight: 800;
+  font-size: 0.95rem;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-track-submit:hover {
+  background: linear-gradient(135deg, #ffaa44, #f39c12);
+}
+
+.tracking-error {
+  margin-top: 0.75rem;
+  color: #f87171;
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.tracking-results-area h3 {
+  font-size: 1.1rem;
+  color: #38bdf8;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+}
+
+.petitions-cards-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.citizen-petition-card {
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(255, 153, 51, 0.2);
+  border-radius: 12px;
+  padding: 1.25rem;
+}
+
+.card-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.citizen-tracking-id {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #ff9933;
+  font-family: monospace;
+}
+
+.citizen-subject {
+  font-size: 1.05rem;
+  color: #f8fafc;
+  margin-bottom: 0.35rem;
+}
+
+.citizen-desc {
+  font-size: 0.88rem;
+  color: #cbd5e1;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.citizen-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: #94a3b8;
+  background: rgba(30, 41, 59, 0.5);
+  padding: 0.65rem 0.85rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.citizen-timeline-box {
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  padding: 0.85rem;
+  border-radius: 8px;
+}
+
+.citizen-timeline-box h5 {
+  color: #38bdf8;
+  font-size: 0.82rem;
+  margin-bottom: 0.5rem;
+}
+
+.citizen-timeline-box ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.citizen-timeline-box li {
+  font-size: 0.82rem;
+  display: flex;
+  gap: 0.75rem;
+}
+
+.t-date {
+  color: #94a3b8;
+  white-space: nowrap;
+}
+
+.t-note {
+  color: #e2e8f0;
+}
+
+.no-records-box {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #94a3b8;
+}
+
+.no-records-icon {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+}
+
+.portal-footer {
+  margin-top: 3rem;
+  text-align: center;
+  font-size: 0.78rem;
+  color: #64748b;
+  border-top: 1px solid #334155;
+  padding-top: 1rem;
+}
