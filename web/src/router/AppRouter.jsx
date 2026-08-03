@@ -12,6 +12,7 @@ import OutwardListPage from '../pages/outward/OutwardListPage.jsx';
 import NivedanListPage from '../pages/nivedan/NivedanListPage.jsx';
 import PublicTrackingPage from '../pages/nivedan/PublicTrackingPage.jsx';
 import VisitorListPage from '../pages/visitors/VisitorListPage.jsx';
+import DevWorksListPage from '../pages/devworks/DevWorksListPage.jsx';
 import MainLayout from '../components/layout/MainLayout.jsx';
 import ProtectedRoute from './ProtectedRoute.jsx';
 
@@ -126,12 +127,13 @@ const AppRouter = () => {
           }
         />
 
+        {/* Development Works Module */}
         <Route
           path="/devworks/*"
           element={
             <ProtectedRoute module="devworks">
               <MainLayout>
-                <ModulePlaceholder titleMr="🏗️ विकासकामे" titleEn="Development Works Module" icon="🏗️" />
+                <DevWorksListPage />
               </MainLayout>
             </ProtectedRoute>
           }

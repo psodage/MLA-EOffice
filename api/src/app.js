@@ -21,6 +21,7 @@ import departmentRoutes from './modules/department/department.routes.js';
 import outwardRoutes from './modules/outward/outward.routes.js';
 import nivedanRoutes from './modules/nivedan/nivedan.routes.js';
 import visitorRoutes from './modules/visitor/visitor.routes.js';
+import devworksRoutes from './modules/devworks/devworks.routes.js';
 
 const app = express();
 
@@ -68,6 +69,7 @@ app.use('/api/v1/departments', departmentRoutes);
 app.use('/api/v1/outward', outwardRoutes);
 app.use('/api/v1/nivedans', nivedanRoutes);
 app.use('/api/v1/visitors', visitorRoutes);
+app.use('/api/v1/devworks', devworksRoutes);
 
 // ── 404 Handler ──────────────────────────────────────────────
 app.use((req, res) => {

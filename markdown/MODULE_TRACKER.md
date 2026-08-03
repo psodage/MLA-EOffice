@@ -92,12 +92,12 @@
 
 | Status | Feature | Notes |
 |:------:|---------|-------|
-| ☐ | DevWorks CRUD APIs | |
-| ☐ | Photo upload API (Cloudinary) | |
-| ☐ | Project list page (category + status filter) | |
-| ☐ | Add/Edit project form | |
-| ☐ | Project detail page (progress bar + photo gallery) | |
-| ☐ | Budget progress bar | |
+| ✅ | DevWorks CRUD APIs | Infrastructure project management & filtering |
+| ✅ | Photo upload API (Cloudinary) | Geotagged photo upload with BEFORE/DURING/AFTER stages |
+| ✅ | Project list page (category + status filter) | Category, status & funding source filters |
+| ✅ | Add/Edit project form | GPS coordinates lat/lng, budget & contractor form |
+| ✅ | Project detail page (progress bar + photo gallery) | Interactive progress slider & stage-wise gallery |
+| ✅ | Budget progress bar | Financial progress bar comparing spent vs allocated budget |
 
 ---
 
@@ -192,8 +192,8 @@
 |-------|:----:|:-----:|----------|
 | Phase 1 — Foundation | 0 | 5 | ░░░░░░░░░░ 0% |
 | Phase 2 — Core | 31 | 31 | ██████████ 100% |
-| Phase 3 — Supporting | 0 | 21 | ░░░░░░░░░░ 0% |
+| Phase 3 — Supporting | 6 | 21 | ███░░░░░░░ 29% |
 | Phase 4 — Deploy | 0 | 10 | ░░░░░░░░░░ 0% |
-| **Total** | **31** | **67** | █████░░░░░ **46%** |
+| **Total** | **37** | **67** | ██████░░░░ **55%** |
 
 ---
