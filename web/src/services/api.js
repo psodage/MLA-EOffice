@@ -49,9 +49,10 @@ api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
+    const isAuthEndpoint = originalRequest?.url?.includes('/auth/login') || originalRequest?.url?.includes('/auth/refresh');
 
-    // Only attempt refresh on 401 and not already retried
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    // Only attempt refresh on 401 for non-auth endpoints and not already retried
+    if (error.response?.status === 401 && !originalRequest._retry && !isAuthEndpoint) {
       if (_isRefreshing) {
         // Queue request while refresh is in progress
         return new Promise((resolve, reject) => {
@@ -85,8 +86,10 @@ api.interceptors.response.use(
         processQueue(refreshError, null);
         _accessToken = null;
 
-        // Redirect to login — clear auth state
-        window.location.href = '/login';
+        // Redirect to login only if not already on /login
+        if (window.location.pathname !== '/login') {
+          window.location.href = '/login';
+        }
         return Promise.reject(refreshError);
       } finally {
         _isRefreshing = false;
