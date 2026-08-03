@@ -223,6 +223,11 @@
   stroke-dasharray: 6 3;
 }
 
+.dashboard-page-container .line-chart .data-area {
+  fill: url(#areaGrad);
+  opacity: 0.15;
+}
+
 [data-theme="dark"] .dashboard-page-container .line-chart .data-line-1 {
   stroke: #5A9BD5;
 }

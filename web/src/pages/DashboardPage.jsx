@@ -156,7 +156,7 @@ const DashboardPage = () => {
             <svg className="line-chart" viewBox="0 0 500 200" preserveAspectRatio="none">
               <defs>
                 <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#1B3A5C" stopOpacity="0.3" />
+                  <stop offset="0%" stopColor="#1B3A5C" stopOpacity="0.15" />
                   <stop offset="100%" stopColor="#1B3A5C" stopOpacity="0" />
                 </linearGradient>
               </defs>
