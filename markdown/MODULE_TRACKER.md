@@ -132,12 +132,12 @@
 
 | Status | Feature | Notes |
 |:------:|---------|-------|
-| ☐ | Send template message service | |
-| ☐ | Webhook handler (delivery status) | |
-| ☐ | WhatsApp log to DB | |
-| ☐ | Festival greeting cron job | |
-| ☐ | Birthday greeting cron job | |
-| ☐ | Retry logic (3 attempts) | |
+| ✅ | Send template message service | Meta Cloud API Marathi template dispatch |
+| ✅ | Webhook handler (delivery status) | `GET /webhook` verification & `POST /webhook` event listener |
+| ✅ | WhatsApp log to DB | `whatsapp_logs` table tracking |
+| ✅ | Festival greeting cron job | Daily greeting dispatch logic |
+| ✅ | Birthday greeting cron job | Automated birthday greeting dispatch |
+| ✅ | Retry logic (3 attempts) | 3-retry attempt tracking for failed deliveries |
 
 ---
 
@@ -192,8 +192,8 @@
 |-------|:----:|:-----:|----------|
 | Phase 1 — Foundation | 0 | 5 | ░░░░░░░░░░ 0% |
 | Phase 2 — Core | 31 | 31 | ██████████ 100% |
-| Phase 3 — Supporting | 17 | 21 | ████████░░ 81% |
+| Phase 3 — Supporting | 21 | 21 | ██████████ 100% |
 | Phase 4 — Deploy | 0 | 10 | ░░░░░░░░░░ 0% |
-| **Total** | **48** | **67** | ████████░░ **72%** |
+| **Total** | **52** | **67** | ████████░░ **78%** |
 
 ---

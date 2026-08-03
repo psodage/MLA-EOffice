@@ -15,6 +15,7 @@ import VisitorListPage from '../pages/visitors/VisitorListPage.jsx';
 import DevWorksListPage from '../pages/devworks/DevWorksListPage.jsx';
 import KaryakartaListPage from '../pages/karyakarta/KaryakartaListPage.jsx';
 import CalendarPage from '../pages/calendar/CalendarPage.jsx';
+import WhatsAppLogsPage from '../pages/whatsapp/WhatsAppLogsPage.jsx';
 import MainLayout from '../components/layout/MainLayout.jsx';
 import ProtectedRoute from './ProtectedRoute.jsx';
 
@@ -160,6 +161,18 @@ const AppRouter = () => {
             <ProtectedRoute module="calendar">
               <MainLayout>
                 <CalendarPage />
+              </MainLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        {/* WhatsApp Integration Module */}
+        <Route
+          path="/whatsapp/*"
+          element={
+            <ProtectedRoute>
+              <MainLayout>
+                <WhatsAppLogsPage />
               </MainLayout>
             </ProtectedRoute>
           }

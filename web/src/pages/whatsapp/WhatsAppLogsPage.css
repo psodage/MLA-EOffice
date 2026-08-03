@@ -1,0 +1,46 @@
+/* src/pages/whatsapp/WhatsAppLogsPage.css */
+/* ============================================================
+   MLA E-Office — WhatsApp Integration Module Styling
+   ============================================================ */
+
+.wa-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.wa-stat-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: rgba(30, 41, 59, 0.7);
+  border: 1px solid rgba(255, 153, 51, 0.2);
+  border-radius: 12px;
+  padding: 1.1rem 1.25rem;
+  backdrop-filter: blur(10px);
+}
+
+.wa-filter-bar {
+  grid-template-columns: 2fr 1fr 1fr auto !important;
+}
+
+.wa-type-pill {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.15rem 0.55rem;
+  border-radius: 6px;
+  background: rgba(168, 85, 247, 0.18);
+  border: 1px solid rgba(168, 85, 247, 0.35);
+  color: #c084fc;
+}
+
+.wa-status-pill {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.2rem 0.65rem;
+  border-radius: 6px;
+  font-family: 'Noto Sans Devanagari', sans-serif;
+}
