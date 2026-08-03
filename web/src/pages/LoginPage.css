@@ -1,6 +1,7 @@
 /* src/pages/LoginPage.css */
 /* ============================================================
    MLA E-Office — Split-Screen Enterprise Login Page
+   With Segmented Pill Controls (Variant 1)
    ============================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap');
@@ -65,50 +66,59 @@
   transition: background 200ms ease, color 200ms ease;
 }
 
-/* ---- Theme Toggle ---- */
-.login-page-wrapper .theme-toggle {
-  position: fixed;
-  top: 16px;
-  right: 16px;
-  z-index: 100;
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-.login-page-wrapper .theme-toggle button {
-  background: var(--login-bg-card);
-  border: 1px solid var(--login-border-default);
-  border-radius: 3px;
-  padding: 6px 12px;
-  cursor: pointer;
-  font-size: 12px;
-  font-family: inherit;
-  color: var(--login-text-secondary);
-  transition: all 120ms ease;
+/* ── Segmented Pill Controls (Top Right Header) ──────────── */
+.login-page-wrapper .toggle-container--v1 {
+  position: absolute;
+  top: 24px;
+  right: 32px;
   display: flex;
   align-items: center;
-  gap: 4px;
-}
-.login-page-wrapper .theme-toggle button:hover {
-  border-color: #1B3A5C;
-  color: #1B3A5C;
-}
-.login-page-wrapper .theme-toggle button.active {
-  background: #1B3A5C;
-  color: #fff;
-  border-color: #1B3A5C;
-}
-[data-theme="dark"] .login-page-wrapper .theme-toggle button:hover {
-  border-color: #5A9BD5;
-  color: #5A9BD5;
-}
-[data-theme="dark"] .login-page-wrapper .theme-toggle button.active {
-  background: #5A9BD5;
-  color: #0F1419;
-  border-color: #5A9BD5;
+  gap: 12px;
+  z-index: 10;
 }
 
-/* ---- Login Layout ---- */
+.login-page-wrapper .segmented-switch {
+  display: flex;
+  background: var(--login-bg-card);
+  border: 1px solid var(--login-border-default);
+  border-radius: 20px;
+  padding: 3px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.login-page-wrapper .segmented-switch button {
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 16px;
+  border: none;
+  background: transparent;
+  color: var(--login-text-secondary);
+  cursor: pointer;
+  transition: all 180ms cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.login-page-wrapper .segmented-switch button.active {
+  background: #1B3A5C;
+  color: #FFFFFF;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(27, 58, 92, 0.25);
+}
+
+[data-theme="dark"] .login-page-wrapper .segmented-switch button.active {
+  background: #5A9BD5;
+  color: #0F1419;
+  box-shadow: 0 2px 6px rgba(90, 155, 213, 0.3);
+}
+
+
+/* ============================================================
+   MAIN LOGIN PAGE LAYOUT
+   ============================================================ */
+
 .login-page-wrapper .login-container {
   display: flex;
   width: 100%;
@@ -217,33 +227,7 @@
   width: 100%;
   max-width: 420px;
 }
-.login-page-wrapper .lang-toggle {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 32px;
-  gap: 4px;
-}
-.login-page-wrapper .lang-toggle button {
-  background: none;
-  border: 1px solid var(--login-border-default);
-  border-radius: 3px;
-  padding: 4px 10px;
-  font-size: 12px;
-  cursor: pointer;
-  font-family: inherit;
-  color: var(--login-text-secondary);
-  transition: all 120ms ease;
-}
-.login-page-wrapper .lang-toggle button.active {
-  background: var(--login-gray-100);
-  border-color: #1B3A5C;
-  color: #1B3A5C;
-}
-[data-theme="dark"] .login-page-wrapper .lang-toggle button.active {
-  background: #1A3355;
-  border-color: #5A9BD5;
-  color: #5A9BD5;
-}
+
 .login-page-wrapper .login-heading {
   font-size: 24px;
   font-weight: 700;
@@ -450,26 +434,4 @@
   .login-page-wrapper .login-branding { display: none; }
   .login-page-wrapper .login-form-panel { padding: 40px 24px; }
   .login-page-wrapper .login-card { max-width: 100%; }
-}
-
-/* Watermark */
-.login-page-wrapper .wireframe-badge {
-  position: fixed;
-  bottom: 16px;
-  left: 16px;
-  z-index: 100;
-  background: #1B3A5C;
-  color: #fff;
-  padding: 6px 12px;
-  font-size: 10px;
-  font-weight: 600;
-  border-radius: 3px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  opacity: 0.8;
-}
-[data-theme="dark"] .login-page-wrapper .wireframe-badge {
-  background: #1A3355;
-  color: #5A9BD5;
-  border: 1px solid #2A3A4E;
 }
