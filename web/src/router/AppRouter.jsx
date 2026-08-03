@@ -11,6 +11,7 @@ import InwardListPage from '../pages/inward/InwardListPage.jsx';
 import OutwardListPage from '../pages/outward/OutwardListPage.jsx';
 import NivedanListPage from '../pages/nivedan/NivedanListPage.jsx';
 import PublicTrackingPage from '../pages/nivedan/PublicTrackingPage.jsx';
+import VisitorListPage from '../pages/visitors/VisitorListPage.jsx';
 import MainLayout from '../components/layout/MainLayout.jsx';
 import ProtectedRoute from './ProtectedRoute.jsx';
 
@@ -113,12 +114,13 @@ const AppRouter = () => {
           }
         />
 
+        {/* Visitor Book Module */}
         <Route
           path="/visitors/*"
           element={
             <ProtectedRoute module="visitor">
               <MainLayout>
-                <ModulePlaceholder titleMr="👥 नागरिक भेट नोंद" titleEn="Visitor Book Module" icon="👥" />
+                <VisitorListPage />
               </MainLayout>
             </ProtectedRoute>
           }

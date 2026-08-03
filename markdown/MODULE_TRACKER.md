@@ -79,12 +79,12 @@
 
 | Status | Feature | Notes |
 |:------:|---------|-------|
-| ☐ | Check-in API (mobile → auto-detect repeat visitor) | |
-| ☐ | Check-out API | |
-| ☐ | Visitor list API (date filter, default today) | |
-| ☐ | Quick check-in form (2-step) | |
-| ☐ | Repeat visitor badge | |
-| ☐ | "Convert to Nivedan" button | |
+| ✅ | Check-in API (mobile → auto-detect repeat visitor) | Auto mobile lookup & repeat count |
+| ✅ | Check-out API | Instant departure timestamp recording |
+| ✅ | Visitor list API (date filter, default today) | Daily summary metrics & date range filter |
+| ✅ | Quick check-in form (2-step) | Step 1 mobile lookup, Step 2 purpose & autofill |
+| ✅ | Repeat visitor badge | Color-coded `🔁 Nरी वेळ` repeat badge |
+| ✅ | "Convert to Nivedan" button | 1-click grievance conversion to petition |
 
 ---
 
@@ -191,9 +191,9 @@
 | Phase | Done | Total | Progress |
 |-------|:----:|:-----:|----------|
 | Phase 1 — Foundation | 0 | 5 | ░░░░░░░░░░ 0% |
-| Phase 2 — Core | 27 | 31 | █████████░ 87% |
+| Phase 2 — Core | 31 | 31 | ██████████ 100% |
 | Phase 3 — Supporting | 0 | 21 | ░░░░░░░░░░ 0% |
 | Phase 4 — Deploy | 0 | 10 | ░░░░░░░░░░ 0% |
-| **Total** | **27** | **67** | ████░░░░░░ **40%** |
+| **Total** | **31** | **67** | █████░░░░░ **46%** |
 
 ---
