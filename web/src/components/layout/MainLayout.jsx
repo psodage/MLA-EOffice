@@ -1,7 +1,7 @@
 // src/components/layout/MainLayout.jsx
 // ============================================================
 // Main Application Layout Component — Enterprise Shell
-// Includes top navbar, search, theme/language controls,
+// Includes top navbar, search, segmented theme/language controls,
 // and grouped left navigation sidebar matching dashboard.html
 // ============================================================
 
@@ -44,8 +44,8 @@ const MainLayout = ({ children }) => {
       sectionTitle: lang === 'MR' ? 'Office · कार्यालय' : 'OFFICE',
       items: [
         { path: '/dashboard', labelMr: 'डॅशबोर्ड', labelEn: 'Dashboard', module: 'dashboard', icon: '📊' },
-        { path: '/inward', labelMr: 'आवक व जावक', labelEn: 'Inward & Outward', module: 'inward', icon: '📨' },
-        { path: '/visitors', labelMr: 'नागरिक भेट', labelEn: 'Visitor Book', module: 'visitor', icon: '👤' },
+        { path: '/inward', labelMr: 'आवक व जावक नोंदवही', labelEn: 'Inward & Outward', module: 'inward', icon: '📨' },
+        { path: '/visitors', labelMr: 'नागरिक भेट नोंदवही', labelEn: 'Visitor Book', module: 'visitor', icon: '👤' },
       ],
     },
     {
@@ -58,16 +58,16 @@ const MainLayout = ({ children }) => {
     {
       sectionTitle: lang === 'MR' ? 'Network · संघटन' : 'NETWORK',
       items: [
-        { path: '/karyakarta', labelMr: 'कार्यकर्ता नोंद', labelEn: 'Karyakarta Master', module: 'karyakarta', icon: '👥' },
-        { path: '/gram-ward', labelMr: 'ग्राम / वॉर्ड', labelEn: 'Gram / Ward', module: 'karyakarta', icon: '📍' },
-        { path: '/booth', labelMr: 'बूथ रचना', labelEn: 'Booth Structure', module: 'karyakarta', icon: '🗳️' },
+        { path: '/karyakarta', labelMr: 'कार्यकर्ता नोंदवही', labelEn: 'Karyakarta Master', module: 'karyakarta', icon: '👥' },
+        { path: '/gram-ward', labelMr: 'ग्राम / वॉर्ड रचना', labelEn: 'Gram / Ward', module: 'karyakarta', icon: '📍' },
+        { path: '/booth', labelMr: 'बूथ संरचना', labelEn: 'Booth Structure', module: 'karyakarta', icon: '🗳️' },
       ],
     },
     {
       sectionTitle: lang === 'MR' ? 'Tools · साधने' : 'TOOLS',
       items: [
         { path: '/calendar', labelMr: 'दिनदर्शिका', labelEn: 'Calendar', module: 'calendar', icon: '📅' },
-        { path: '/whatsapp', labelMr: 'व्हॉट्सॲप', labelEn: 'WhatsApp', module: 'whatsapp', icon: '💬' },
+        { path: '/whatsapp', labelMr: 'व्हॉट्सॲप ऑटोमेशन', labelEn: 'WhatsApp', module: 'whatsapp', icon: '💬' },
         { path: '/reports', labelMr: 'अहवाल', labelEn: 'Reports', module: 'reports', icon: '📑' },
       ],
     },
@@ -106,7 +106,7 @@ const MainLayout = ({ children }) => {
                       >
                         <span className="nav-icon">{item.icon}</span>
                         {!collapsed && (
-                          <span>{lang === 'MR' ? `${item.labelEn} · ${item.labelMr}` : item.labelEn}</span>
+                          <span>{lang === 'MR' ? item.labelMr : item.labelEn}</span>
                         )}
                       </Link>
                     );
@@ -134,11 +134,7 @@ const MainLayout = ({ children }) => {
                     >
                       <span className="nav-icon">{item.icon}</span>
                       {!collapsed && (
-                        <span>
-                          {lang === 'MR'
-                            ? `${item.labelEn} · ${item.labelMr}`
-                            : item.labelEn}
-                        </span>
+                        <span>{lang === 'MR' ? item.labelMr : item.labelEn}</span>
                       )}
                     </Link>
                   );
@@ -178,7 +174,7 @@ const MainLayout = ({ children }) => {
             className="topbar-search-input"
             placeholder={
               lang === 'MR'
-                ? 'सर्व मॉड्यूल्समध्ये शोधा... / Search across all modules...'
+                ? 'सर्व मॉड्यूल्समध्ये शोधा...'
                 : 'Search across all modules...'
             }
             value={searchQuery}
@@ -186,29 +182,20 @@ const MainLayout = ({ children }) => {
           />
         </div>
 
-        {/* Actions, Theme, Language & User Profile */}
+        {/* Segmented Controls, Profile & Actions */}
         <div className="navbar-right">
-          {/* Language Toggle */}
-          <button
-            type="button"
-            className="topbar-icon-btn"
-            title="Switch Language"
-            onClick={() => setLang(l => l === 'EN' ? 'MR' : 'EN')}
-          >
-            🌐
-          </button>
-
           {/* Notifications */}
           <button type="button" className="topbar-icon-btn" title="Notifications">
             🔔<span className="badge">5</span>
           </button>
 
-          {/* Theme Toggle */}
-          <div className="layout-theme-toggle">
+          {/* Theme Segmented Switch (Reused from LoginPage design) */}
+          <div className="segmented-switch">
             <button
               type="button"
               className={theme === 'light' ? 'active' : ''}
               onClick={() => setTheme('light')}
+              aria-label="Light Theme"
             >
               ☀ Light
             </button>
@@ -216,8 +203,28 @@ const MainLayout = ({ children }) => {
               type="button"
               className={theme === 'dark' ? 'active' : ''}
               onClick={() => setTheme('dark')}
+              aria-label="Dark Theme"
             >
               🌙 Dark
+            </button>
+          </div>
+
+          {/* Language Segmented Switch (Reused from LoginPage design) */}
+          <div className="segmented-switch">
+            <button
+              type="button"
+              className={lang === 'EN' ? 'active' : ''}
+              onClick={() => setLang('EN')}
+            >
+              EN
+            </button>
+            <button
+              type="button"
+              className={lang === 'MR' ? 'active' : ''}
+              onClick={() => setLang('MR')}
+              style={{ fontFamily: "'Noto Sans Devanagari', sans-serif" }}
+            >
+              मराठी
             </button>
           </div>
 

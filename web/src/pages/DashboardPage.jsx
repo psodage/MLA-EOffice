@@ -1,8 +1,7 @@
 // src/pages/DashboardPage.jsx
 // ============================================================
 // MLA E-Office — Enterprise Dashboard Page
-// Pixel-perfect redesign matching wireframes/dashboard.html
-// Preserves all API integrations, state, and business logic.
+// Multi-language (EN / Marathi) + Dark Mode ready
 // ============================================================
 
 import { useState, useEffect } from 'react';
@@ -11,13 +10,114 @@ import api from '../services/api.js';
 import useAuthStore from '../store/authStore.js';
 import './DashboardPage.css';
 
+// Translation Dictionary for English and Marathi
+const t = {
+  EN: {
+    title: 'Dashboard',
+    titleMr: 'डॅशबोर्ड',
+    welcomeBack: 'Welcome back',
+    lastUpdated: 'Last updated',
+    exportBtn: '📥 Export',
+    newNivedanBtn: '+ New Nivedan',
+    kpis: {
+      nivedans: 'Total Nivedans',
+      nivedansMr: 'एकूण निवेदने',
+      nivedansTrend: '↑ 12% from last month',
+      pending: 'Pending',
+      pendingMr: 'प्रलंबित',
+      pendingTrend: '↑ 8% from last month',
+      visitors: "Today's Visitors",
+      visitorsMr: 'आजचे अभ्यागत',
+      visitorsTrend: '↑ 5 more than yesterday',
+      devWorks: 'Active Dev Works',
+      devWorksMr: 'सुरू विकासकामे',
+      devWorksTrend: '3 completed this week',
+    },
+    monthlyTrendTitle: 'Monthly Nivedan Trend',
+    monthlyTrendTitleMr: 'मासिक निवेदन ट्रेंड',
+    monthlyTrendSub: 'Last 6 months — Received vs Resolved',
+    donutTitle: 'Nivedans by Status',
+    donutTitleMr: 'स्थितीनुसार निवेदने',
+    donutSub: 'Current distribution',
+    donutLegend: {
+      pending: 'Pending · प्रलंबित',
+      inProgress: 'In Progress · सुरू',
+      resolved: 'Resolved · निकाली',
+      rejected: 'Rejected · नाकारले',
+    },
+    recentActivityTitle: 'Recent Activity',
+    recentActivityTitleMr: 'अलीकडील क्रिया',
+    viewAll: 'View All →',
+    upcomingEventsTitle: 'Upcoming Events',
+    upcomingEventsTitleMr: 'आगामी कार्यक्रम',
+    calendarLink: 'Calendar →',
+  },
+  MR: {
+    title: 'डॅशबोर्ड',
+    titleMr: 'Dashboard',
+    welcomeBack: 'पुन्हा स्वागत आहे',
+    lastUpdated: 'सर्व्हेक्षण वेळ',
+    exportBtn: '📥 निर्यात (Export)',
+    newNivedanBtn: '+ नवीन निवेदन',
+    kpis: {
+      nivedans: 'एकूण निवेदने',
+      nivedansMr: 'Total Nivedans',
+      nivedansTrend: '↑ १२% मागील महिन्यापेक्षा',
+      pending: 'प्रलंबित',
+      pendingMr: 'Pending',
+      pendingTrend: '↑ ८% मागील महिन्यापेक्षा',
+      visitors: 'आजचे अभ्यागत',
+      visitorsMr: "Today's Visitors",
+      visitorsTrend: '↑ ५ कालपेक्षा जास्त',
+      devWorks: 'सुरू विकासकामे',
+      devWorksMr: 'Active Dev Works',
+      devWorksTrend: '३ या आठवड्यात पूर्ण',
+    },
+    monthlyTrendTitle: 'मासिक निवेदन ट्रेंड',
+    monthlyTrendTitleMr: 'Monthly Nivedan Trend',
+    monthlyTrendSub: 'मागील ६ महिने — प्राप्त विरुद्ध निकाली',
+    donutTitle: 'स्थितीनुसार निवेदने',
+    donutTitleMr: 'Nivedans by Status',
+    donutSub: 'सध्याचे वितरण',
+    donutLegend: {
+      pending: 'प्रलंबित (Pending)',
+      inProgress: 'सुरू (In Progress)',
+      resolved: 'निकाली (Resolved)',
+      rejected: 'नाकारले (Rejected)',
+    },
+    recentActivityTitle: 'अलीकडील क्रिया',
+    recentActivityTitleMr: 'Recent Activity',
+    viewAll: 'सर्व पहा →',
+    upcomingEventsTitle: 'आगामी कार्यक्रम',
+    upcomingEventsTitleMr: 'Upcoming Events',
+    calendarLink: 'दिनदर्शिका →',
+  },
+};
+
 const DashboardPage = () => {
   const [summaryData, setSummaryData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [lang, setLang] = useState(() => localStorage.getItem('mla_lang') || 'EN');
 
   const navigate = useNavigate();
   const { user } = useAuthStore();
+
+  // Listen for language changes in localStorage
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const currentLang = localStorage.getItem('mla_lang') || 'EN';
+      setLang(currentLang);
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    const interval = setInterval(handleStorageChange, 500);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      clearInterval(interval);
+    };
+  }, []);
 
   useEffect(() => {
     const fetchSummary = async () => {
@@ -37,6 +137,8 @@ const DashboardPage = () => {
     fetchSummary();
   }, []);
 
+  const text = t[lang] || t.EN;
+
   const getFormattedDate = () => {
     const dateStr = new Date().toLocaleDateString('en-IN', {
       day: 'numeric',
@@ -48,7 +150,7 @@ const DashboardPage = () => {
     return dateStr;
   };
 
-  const username = user?.full_name || user?.username || 'Rajesh';
+  const username = user?.full_name || user?.username || 'Rajesh Deshmukh';
 
   return (
     <div className="dashboard-page-container">
@@ -56,10 +158,10 @@ const DashboardPage = () => {
       <div className="page-header">
         <div>
           <h1 className="page-title">
-            Dashboard · <span className="mr">डॅशबोर्ड</span>
+            {text.title} · <span className="mr">{text.titleMr}</span>
           </h1>
           <p className="page-subtitle">
-            Welcome back, {username} · Last updated: {getFormattedDate()}
+            {text.welcomeBack}, {username} · {text.lastUpdated}: {getFormattedDate()}
           </p>
         </div>
 
@@ -69,14 +171,14 @@ const DashboardPage = () => {
             className="btn btn-outline"
             onClick={() => navigate('/reports')}
           >
-            📥 Export
+            {text.exportBtn}
           </button>
           <button
             type="button"
             className="btn btn-primary"
             onClick={() => navigate('/nivedan/new')}
           >
-            + New Nivedan
+            {text.newNivedanBtn}
           </button>
         </div>
       </div>
@@ -86,61 +188,61 @@ const DashboardPage = () => {
         <div className="kpi-card">
           <div className="kpi-header">
             <span className="kpi-label">
-              Total Nivedans · <span className="mr">एकूण निवेदने</span>
+              {text.kpis.nivedans} · <span className="mr">{text.kpis.nivedansMr}</span>
             </span>
-            <div className="kpi-icon" style={{ background: '#EFF6FF', color: '#2563EB' }}>
+            <div className="kpi-icon" style={{ background: 'rgba(37, 99, 235, 0.12)', color: '#2563EB' }}>
               📝
             </div>
           </div>
           <div className="kpi-value">
             {summaryData?.stats?.find((s) => s.key === 'nivedans')?.count || '1,247'}
           </div>
-          <div className="kpi-trend up">↑ 12% from last month</div>
+          <div className="kpi-trend up">{text.kpis.nivedansTrend}</div>
         </div>
 
         <div className="kpi-card">
           <div className="kpi-header">
             <span className="kpi-label">
-              Pending · <span className="mr">प्रलंबित</span>
+              {text.kpis.pending} · <span className="mr">{text.kpis.pendingMr}</span>
             </span>
-            <div className="kpi-icon" style={{ background: '#FFFBEB', color: '#D97706' }}>
+            <div className="kpi-icon" style={{ background: 'rgba(217, 119, 6, 0.12)', color: '#D97706' }}>
               ⏳
             </div>
           </div>
           <div className="kpi-value">
             {summaryData?.stats?.find((s) => s.key === 'pending')?.count || '342'}
           </div>
-          <div className="kpi-trend down">↑ 8% from last month</div>
+          <div className="kpi-trend down">{text.kpis.pendingTrend}</div>
         </div>
 
         <div className="kpi-card">
           <div className="kpi-header">
             <span className="kpi-label">
-              Today's Visitors · <span className="mr">आजचे अभ्यागत</span>
+              {text.kpis.visitors} · <span className="mr">{text.kpis.visitorsMr}</span>
             </span>
-            <div className="kpi-icon" style={{ background: '#F0FDF4', color: '#16A34A' }}>
+            <div className="kpi-icon" style={{ background: 'rgba(22, 163, 74, 0.12)', color: '#16A34A' }}>
               👤
             </div>
           </div>
           <div className="kpi-value">
             {summaryData?.stats?.find((s) => s.key === 'visitors')?.count || '47'}
           </div>
-          <div className="kpi-trend up">↑ 5 more than yesterday</div>
+          <div className="kpi-trend up">{text.kpis.visitorsTrend}</div>
         </div>
 
         <div className="kpi-card">
           <div className="kpi-header">
             <span className="kpi-label">
-              Active Dev Works · <span className="mr">सुरू विकासकामे</span>
+              {text.kpis.devWorks} · <span className="mr">{text.kpis.devWorksMr}</span>
             </span>
-            <div className="kpi-icon" style={{ background: '#F5F3FF', color: '#7C3AED' }}>
+            <div className="kpi-icon" style={{ background: 'rgba(124, 58, 237, 0.12)', color: '#7C3AED' }}>
               🏗️
             </div>
           </div>
           <div className="kpi-value">
             {summaryData?.stats?.find((s) => s.key === 'devWorks')?.count || '23'}
           </div>
-          <div className="kpi-trend up">3 completed this week</div>
+          <div className="kpi-trend up">{text.kpis.devWorksTrend}</div>
         </div>
       </div>
 
@@ -149,9 +251,9 @@ const DashboardPage = () => {
         {/* Line Chart */}
         <div className="chart-card">
           <div className="chart-title">
-            Monthly Nivedan Trend · <span className="mr">मासिक निवेदन ट्रेंड</span>
+            {text.monthlyTrendTitle} · <span className="mr">{text.monthlyTrendTitleMr}</span>
           </div>
-          <div className="chart-subtitle">Last 6 months — Received vs Resolved</div>
+          <div className="chart-subtitle">{text.monthlyTrendSub}</div>
           <div className="chart-placeholder">
             <svg className="line-chart" viewBox="0 0 500 200" preserveAspectRatio="none">
               <defs>
@@ -160,18 +262,18 @@ const DashboardPage = () => {
                   <stop offset="100%" stopColor="#1B3A5C" stopOpacity="0" />
                 </linearGradient>
               </defs>
-              <line class="grid-line" x1="0" y1="50" x2="500" y2="50" />
-              <line class="grid-line" x1="0" y1="100" x2="500" y2="100" />
-              <line class="grid-line" x1="0" y1="150" x2="500" y2="150" />
-              <text class="axis-label" x="40" y="195">Mar</text>
-              <text class="axis-label" x="130" y="195">Apr</text>
-              <text class="axis-label" x="220" y="195">May</text>
-              <text class="axis-label" x="310" y="195">Jun</text>
-              <text class="axis-label" x="395" y="195">Jul</text>
-              <text class="axis-label" x="465" y="195">Aug</text>
-              <path class="data-area" d="M40,130 L130,110 L220,90 L310,70 L395,80 L465,55 L465,180 L40,180 Z" />
-              <polyline class="data-line-1" points="40,130 130,110 220,90 310,70 395,80 465,55" />
-              <polyline class="data-line-2" points="40,150 130,130 220,120 310,100 395,90 465,75" />
+              <line className="grid-line" x1="0" y1="50" x2="500" y2="50" />
+              <line className="grid-line" x1="0" y1="100" x2="500" y2="100" />
+              <line className="grid-line" x1="0" y1="150" x2="500" y2="150" />
+              <text className="axis-label" x="40" y="195">Mar</text>
+              <text className="axis-label" x="130" y="195">Apr</text>
+              <text className="axis-label" x="220" y="195">May</text>
+              <text className="axis-label" x="310" y="195">Jun</text>
+              <text className="axis-label" x="395" y="195">Jul</text>
+              <text className="axis-label" x="465" y="195">Aug</text>
+              <path className="data-area" d="M40,130 L130,110 L220,90 L310,70 L395,80 L465,55 L465,180 L40,180 Z" />
+              <polyline className="data-line-1" points="40,130 130,110 220,90 310,70 395,80 465,55" />
+              <polyline className="data-line-2" points="40,150 130,130 220,120 310,100 395,90 465,75" />
               <circle cx="465" cy="55" r="4" fill="#1B3A5C" />
               <circle cx="465" cy="75" r="3" fill="#2563EB" />
             </svg>
@@ -181,9 +283,9 @@ const DashboardPage = () => {
         {/* Donut Chart */}
         <div className="chart-card">
           <div className="chart-title">
-            Nivedans by Status · <span className="mr">स्थितीनुसार निवेदने</span>
+            {text.donutTitle} · <span className="mr">{text.donutTitleMr}</span>
           </div>
-          <div className="chart-subtitle">Current distribution</div>
+          <div className="chart-subtitle">{text.donutSub}</div>
           <div className="chart-placeholder">
             <div className="donut-container">
               <svg className="donut-svg" viewBox="0 0 160 160">
@@ -215,19 +317,19 @@ const DashboardPage = () => {
               <div className="donut-legend">
                 <div className="legend-item">
                   <span className="legend-dot" style={{ background: '#D97706' }} />
-                  Pending · प्रलंबित <span className="legend-val">342</span>
+                  {text.donutLegend.pending} <span className="legend-val">342</span>
                 </div>
                 <div className="legend-item">
                   <span className="legend-dot" style={{ background: '#2563EB' }} />
-                  In Progress · सुरू <span className="legend-val">274</span>
+                  {text.donutLegend.inProgress} <span className="legend-val">274</span>
                 </div>
                 <div className="legend-item">
                   <span className="legend-dot" style={{ background: '#16A34A' }} />
-                  Resolved · निकाली <span className="legend-val">498</span>
+                  {text.donutLegend.resolved} <span className="legend-val">498</span>
                 </div>
                 <div className="legend-item">
                   <span className="legend-dot" style={{ background: '#DC2626' }} />
-                  Rejected · नाकारले <span className="legend-val">133</span>
+                  {text.donutLegend.rejected} <span className="legend-val">133</span>
                 </div>
               </div>
             </div>
@@ -241,7 +343,7 @@ const DashboardPage = () => {
         <div className="panel">
           <div className="panel-header">
             <span className="panel-title">
-              Recent Activity · <span className="mr">अलीकडील क्रिया</span>
+              {text.recentActivityTitle} · <span className="mr">{text.recentActivityTitleMr}</span>
             </span>
             <button
               type="button"
@@ -249,7 +351,7 @@ const DashboardPage = () => {
               onClick={() => navigate('/nivedan')}
               style={{ background: 'none', border: 'none', padding: 0 }}
             >
-              View All →
+              {text.viewAll}
             </button>
           </div>
           <div className="panel-body">
@@ -309,7 +411,7 @@ const DashboardPage = () => {
         <div className="panel">
           <div className="panel-header">
             <span className="panel-title">
-              Upcoming Events · <span className="mr">आगामी कार्यक्रम</span>
+              {text.upcomingEventsTitle} · <span className="mr">{text.upcomingEventsTitleMr}</span>
             </span>
             <button
               type="button"
@@ -317,7 +419,7 @@ const DashboardPage = () => {
               onClick={() => navigate('/calendar')}
               style={{ background: 'none', border: 'none', padding: 0 }}
             >
-              Calendar →
+              {text.calendarLink}
             </button>
           </div>
           <div className="panel-body">
