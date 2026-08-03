@@ -116,6 +116,18 @@ const NivedanDetailModal = ({ isOpen, onClose, entry, onUpdateSuccess }) => {
           <div className="detail-section status-actions-box">
             <h4 className="section-title">⚡ कार्यस्थिती अपडेट (Status Transition)</h4>
 
+            <div className="whatsapp-toggle-bar" style={{ marginBottom: '0.85rem', display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(34, 197, 94, 0.1)', padding: '0.5rem 0.85rem', borderRadius: '8px', border: '1px solid rgba(34, 197, 94, 0.3)', color: '#4ade80', fontSize: '0.82rem' }}>
+              <input
+                type="checkbox"
+                id="whatsapp-check"
+                defaultChecked={true}
+                style={{ accentColor: '#22c55e', cursor: 'pointer' }}
+              />
+              <label htmlFor="whatsapp-check" style={{ cursor: 'pointer', fontWeight: 600 }}>
+                💬 नागरिकाला व्हॉट्सॲप अलर्ट संदेश पाठवा (Send WhatsApp SMS Alert to Citizen)
+              </label>
+            </div>
+
             {showResolveInput && (
               <div className="resolve-notes-input-box">
                 <label>पूर्ण झाल्याची नोंद व टिप्पणी (Resolution Note):</label>
@@ -189,21 +201,34 @@ const NivedanDetailModal = ({ isOpen, onClose, entry, onUpdateSuccess }) => {
             {/* Vertical Timeline */}
             <div className="vertical-timeline">
               {Array.isArray(entry.timeline) && entry.timeline.length > 0 ? (
-                entry.timeline.map((t) => (
-                  <div key={t.id} className="timeline-item">
-                    <div className="timeline-dot"></div>
-                    <div className="timeline-content">
-                      <div className="timeline-top">
-                        <span className="timeline-action">{t.action_type}</span>
-                        <span className="timeline-date">{new Date(t.created_at).toLocaleString('mr-IN')}</span>
+                entry.timeline.map((t) => {
+                  let actionIcon = '🔄';
+                  if (t.action_type === 'CREATED') actionIcon = '📌';
+                  else if (t.action_type === 'RESOLVED') actionIcon = '✅';
+                  else if (t.action_type === 'FORWARDED') actionIcon = '📤';
+                  else if (t.action_type === 'NOTE_ADDED') actionIcon = '💬';
+
+                  return (
+                    <div key={t.id} className="timeline-item">
+                      <div className="timeline-dot"></div>
+                      <div className="timeline-content">
+                        <div className="timeline-top">
+                          <span className="timeline-action">{actionIcon} {t.action_type}</span>
+                          <span className="timeline-date">{new Date(t.created_at).toLocaleString('mr-IN')}</span>
+                        </div>
+                        <p className="timeline-note">{t.note}</p>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <span className="timeline-performer">
+                            👤 {t.performer?.full_name || 'कार्यालय प्रतिनिधी'}
+                          </span>
+                          <span style={{ fontSize: '0.68rem', padding: '0.1rem 0.4rem', borderRadius: '4px', background: t.is_internal ? 'rgba(234, 88, 12, 0.2)' : 'rgba(56, 189, 248, 0.2)', color: t.is_internal ? '#fb923c' : '#38bdf8' }}>
+                            {t.is_internal ? '🔒 अंतर्गत नोंद' : '🌐 सार्वजनिक'}
+                          </span>
+                        </div>
                       </div>
-                      <p className="timeline-note">{t.note}</p>
-                      <span className="timeline-performer">
-                        👤 {t.performer?.full_name || 'कार्यालय प्रतिनिधी'}
-                      </span>
                     </div>
-                  </div>
-                ))
+                  );
+                })
               ) : (
                 <p className="no-attachments">कोणतीही टाइमलाईन नोंद उपलब्ध नाही.</p>
               )}

@@ -179,16 +179,37 @@ const NivedanFormModal = ({ isOpen, onClose, onSuccess }) => {
               />
             </div>
 
-            {/* Address */}
+            {/* Address & Cascading Location */}
             <div className="form-group col-span-2">
-              <label>पूर्ण पत्ता व गाव / वार्ड (Address / Village)</label>
+              <label>पत्ता (Address Line)</label>
               <input
                 type="text"
                 name="citizen_address_line"
                 value={form.citizen_address_line}
                 onChange={handleChange}
-                placeholder="उदा. मु.पो. सावळीविहीर बुद्रुक, वार्ड क्र. ३, तालुका राहाता"
+                placeholder="उदा. घर क्र. १२४, मुख्य रस्ता"
               />
+            </div>
+
+            {/* Cascading Location: Taluka -> Gram Panchayat -> Village */}
+            <div className="form-group">
+              <label>तालुका (Taluka)</label>
+              <select name="taluka" defaultValue="राहाता">
+                <option value="राहाता">राहाता (Rahata)</option>
+                <option value="कोपरगाव">कोपरगाव (Kopargaon)</option>
+                <option value="संगमनेर">संगमनेर (Sangamner)</option>
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label>ग्रामपंचायत / शहर (Gram Panchayat)</label>
+              <select name="gram_panchayat" defaultValue="सावळीविहीर बुद्रुक">
+                <option value="सावळीविहीर बुद्रुक">सावळीविहीर बुद्रुक</option>
+                <option value="शिर्डी">शिर्डी (नगर पंचायत)</option>
+                <option value="अस्तगाव">अस्तगाव</option>
+                <option value="कोल्हार">कोल्हार भगवतीपूर</option>
+                <option value="राहाता">राहाता (नगरपालिका)</option>
+              </select>
             </div>
 
             {/* Category Select (Auto-Routing) */}
