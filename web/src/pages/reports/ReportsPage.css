@@ -1,0 +1,89 @@
+/* src/pages/reports/ReportsPage.css */
+/* ============================================================
+   MLA E-Office — Reports & Analytics Module Styling
+   ============================================================ */
+
+.reports-filter-bar {
+  grid-template-columns: 1fr 1fr auto !important;
+}
+
+.report-section-title {
+  font-size: 1.15rem;
+  color: #ff9933;
+  margin-top: 0;
+  margin-bottom: 1.25rem;
+  font-family: 'Noto Sans Devanagari', sans-serif;
+  border-bottom: 1px solid #334155;
+  padding-bottom: 0.65rem;
+}
+
+.reports-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.report-metric-card {
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(255, 153, 51, 0.25);
+  border-radius: 12px;
+  padding: 1.1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.metric-val {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #ff9933;
+  line-height: 1.2;
+}
+
+.metric-lbl {
+  font-size: 0.78rem;
+  color: #94a3b8;
+  margin-top: 0.25rem;
+  font-family: 'Noto Sans Devanagari', sans-serif;
+}
+
+.chart-row-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.85rem;
+}
+
+.chart-label-col {
+  width: 220px;
+  font-size: 0.82rem;
+  color: #e2e8f0;
+  font-weight: 600;
+  font-family: 'Noto Sans Devanagari', sans-serif;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chart-bar-bg {
+  flex: 1;
+  height: 12px;
+  background: #0f172a;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid #334155;
+}
+
+.chart-bar-fill {
+  height: 100%;
+  border-radius: 6px;
+  transition: width 0.4s ease;
+}
+
+.chart-value-col {
+  width: 180px;
+  text-align: right;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #ff9933;
+}

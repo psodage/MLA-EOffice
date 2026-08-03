@@ -16,6 +16,8 @@ import DevWorksListPage from '../pages/devworks/DevWorksListPage.jsx';
 import KaryakartaListPage from '../pages/karyakarta/KaryakartaListPage.jsx';
 import CalendarPage from '../pages/calendar/CalendarPage.jsx';
 import WhatsAppLogsPage from '../pages/whatsapp/WhatsAppLogsPage.jsx';
+import ReportsPage from '../pages/reports/ReportsPage.jsx';
+import UserManagementPage from '../pages/settings/UserManagementPage.jsx';
 import MainLayout from '../components/layout/MainLayout.jsx';
 import ProtectedRoute from './ProtectedRoute.jsx';
 
@@ -178,12 +180,25 @@ const AppRouter = () => {
           }
         />
 
+        {/* Reports & Analytics Module */}
         <Route
           path="/reports/*"
           element={
             <ProtectedRoute module="reports">
               <MainLayout>
-                <ModulePlaceholder titleMr="📊 अहवाल व विश्लेषण" titleEn="Reports & Analytics Module" icon="📊" />
+                <ReportsPage />
+              </MainLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        {/* User Management & Settings Module */}
+        <Route
+          path="/settings/*"
+          element={
+            <ProtectedRoute>
+              <MainLayout>
+                <UserManagementPage />
               </MainLayout>
             </ProtectedRoute>
           }

@@ -25,6 +25,8 @@ import devworksRoutes from './modules/devworks/devworks.routes.js';
 import karyakartaRoutes from './modules/karyakarta/karyakarta.routes.js';
 import calendarRoutes from './modules/calendar/calendar.routes.js';
 import whatsappRoutes from './modules/whatsapp/whatsapp.routes.js';
+import reportsRoutes from './modules/reports/reports.routes.js';
+import userRoutes from './modules/user/user.routes.js';
 
 const app = express();
 
@@ -76,6 +78,8 @@ app.use('/api/v1/devworks', devworksRoutes);
 app.use('/api/v1/karyakartas', karyakartaRoutes);
 app.use('/api/v1/calendar', calendarRoutes);
 app.use('/api/v1/whatsapp', whatsappRoutes);
+app.use('/api/v1/reports', reportsRoutes);
+app.use('/api/v1', userRoutes);
 
 // ── 404 Handler ──────────────────────────────────────────────
 app.use((req, res) => {

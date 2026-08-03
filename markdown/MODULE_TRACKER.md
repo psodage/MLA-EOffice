@@ -10,11 +10,11 @@
 
 | Status | Module | Notes | Last Updated |
 |:------:|--------|-------|-------------|
-| ☐ | **1. Project Setup** — Folder structure, package.json, dev servers | | |
-| ☐ | **2. Database** — All 22 migrations run clean | | |
-| ☐ | **2a. Seeders** — Departments, categories, sample geography | | |
-| ☐ | **3. Auth Backend** — Login, refresh, logout, me APIs | | |
-| ☐ | **3a. Auth Frontend** — Login page, Zustand store, axios interceptor | | |
+| ✅ | **1. Project Setup** — Folder structure, package.json, dev servers | Node/Express backend + React Vite frontend | 2026-08-03 |
+| ✅ | **2. Database** — All 22 migrations run clean | MySQL 8 + Sequelize ORM schema | 2026-08-03 |
+| ✅ | **2a. Seeders** — Departments, categories, sample geography | Initial constituency seed data | 2026-08-03 |
+| ✅ | **3. Auth Backend** — Login, refresh, logout, me APIs | JWT Access + Refresh tokens & RBAC middleware | 2026-08-03 |
+| ✅ | **3a. Auth Frontend** — Login page, Zustand store, axios interceptor | React Auth state & auto refresh interceptor | 2026-08-03 |
 
 ---
 
@@ -145,12 +145,12 @@
 
 | Status | Feature | Notes |
 |:------:|---------|-------|
-| ☐ | Nivedan summary report API | |
-| ☐ | Inward pendency report API | |
-| ☐ | DevWorks budget report API | |
-| ☐ | Visitor statistics API | |
-| ☐ | Reports page (charts + date filter) | |
-| ☐ | Export to CSV | |
+| ✅ | Nivedan summary report API | Summary by status, category, & date range |
+| ✅ | Inward pendency report API | Inward aging report (<7d, 7-14d, 14-30d, >30d) |
+| ✅ | DevWorks budget report API | Budget utilization by funding source |
+| ✅ | Visitor statistics API | Visitor count breakdown by purpose & period |
+| ✅ | Reports page (charts + date filter) | 5 constituency report suites with charts & range filter |
+| ✅ | Export to CSV | 1-click UTF-8 Marathi CSV export |
 
 ---
 
@@ -158,12 +158,12 @@
 
 | Status | Feature | Notes |
 |:------:|---------|-------|
-| ☐ | User CRUD APIs (admin only) | |
-| ☐ | Deactivate / reactivate user | |
-| ☐ | Reset password | |
-| ☐ | User management page | |
-| ☐ | Settings — department directory update | |
-| ☐ | Settings — WhatsApp greeting calendar | |
+| ✅ | User CRUD APIs (admin only) | User listing & creation with role assignment |
+| ✅ | Deactivate / reactivate user | Soft activation toggle (`is_active`) |
+| ✅ | Reset password | Temp password reset with mandatory change flag |
+| ✅ | User management page | User table, role badges, & module checkbox editor |
+| ✅ | Settings — department directory update | Department contacts & officers directory manager |
+| ✅ | Settings — WhatsApp greeting calendar | Festival & holiday greeting calendar manager |
 
 ---
 
@@ -190,10 +190,10 @@
 
 | Phase | Done | Total | Progress |
 |-------|:----:|:-----:|----------|
-| Phase 1 — Foundation | 0 | 5 | ░░░░░░░░░░ 0% |
+| Phase 1 — Foundation | 5 | 5 | ██████████ 100% |
 | Phase 2 — Core | 31 | 31 | ██████████ 100% |
-| Phase 3 — Supporting | 21 | 21 | ██████████ 100% |
+| Phase 3 — Supporting | 29 | 29 | ██████████ 100% |
 | Phase 4 — Deploy | 0 | 10 | ░░░░░░░░░░ 0% |
-| **Total** | **52** | **67** | ████████░░ **78%** |
+| **Total** | **65** | **75** | █████████░ **87%** |
 
 ---
