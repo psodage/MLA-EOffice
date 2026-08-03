@@ -14,6 +14,7 @@ import PublicTrackingPage from '../pages/nivedan/PublicTrackingPage.jsx';
 import VisitorListPage from '../pages/visitors/VisitorListPage.jsx';
 import DevWorksListPage from '../pages/devworks/DevWorksListPage.jsx';
 import KaryakartaListPage from '../pages/karyakarta/KaryakartaListPage.jsx';
+import CalendarPage from '../pages/calendar/CalendarPage.jsx';
 import MainLayout from '../components/layout/MainLayout.jsx';
 import ProtectedRoute from './ProtectedRoute.jsx';
 
@@ -152,12 +153,13 @@ const AppRouter = () => {
           }
         />
 
+        {/* Calendar & Schedule Module */}
         <Route
           path="/calendar/*"
           element={
             <ProtectedRoute module="calendar">
               <MainLayout>
-                <ModulePlaceholder titleMr="🗓️ दिनदर्शिका" titleEn="Calendar Module" icon="🗓️" />
+                <CalendarPage />
               </MainLayout>
             </ProtectedRoute>
           }

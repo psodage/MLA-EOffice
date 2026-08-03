@@ -120,11 +120,11 @@
 
 | Status | Feature | Notes |
 |:------:|---------|-------|
-| ☐ | Calendar CRUD APIs | |
-| ☐ | Month view calendar page | |
-| ☐ | Add event modal | |
-| ☐ | Today's events on dashboard | |
-| ☐ | Upcoming 7-days widget | |
+| ✅ | Calendar CRUD APIs | `calendar_events` table CRUD & type filters |
+| ✅ | Month view calendar page | Interactive month grid with color-coded event chips |
+| ✅ | Add event modal | Event type selector & time pickers |
+| ✅ | Today's events on dashboard | Today's schedule side widget panel |
+| ✅ | Upcoming 7-days widget | Next 7 days upcoming events widget |
 
 ---
 
@@ -192,8 +192,8 @@
 |-------|:----:|:-----:|----------|
 | Phase 1 — Foundation | 0 | 5 | ░░░░░░░░░░ 0% |
 | Phase 2 — Core | 31 | 31 | ██████████ 100% |
-| Phase 3 — Supporting | 12 | 21 | ██████░░░░ 57% |
+| Phase 3 — Supporting | 17 | 21 | ████████░░ 81% |
 | Phase 4 — Deploy | 0 | 10 | ░░░░░░░░░░ 0% |
-| **Total** | **43** | **67** | ███████░░░ **64%** |
+| **Total** | **48** | **67** | ████████░░ **72%** |
 
 ---
