@@ -8,9 +8,13 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
+import cookieParser from 'cookie-parser';
 import config from './config/env.config.js';
 import errorHandler from './middlewares/errorHandler.js';
 import { sendSuccess } from './utils/responseHelper.js';
+
+// ── Route Imports ────────────────────────────────────────────
+import authRoutes from './modules/auth/auth.routes.js';
 
 const app = express();
 
@@ -28,6 +32,9 @@ app.use(cors({
 // ── Body Parsers ─────────────────────────────────────────────
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+// ── Cookie Parser (for httpOnly refresh token) ───────────────
+app.use(cookieParser());
 
 // ── HTTP Request Logging ─────────────────────────────────────
 if (!config.app.isProduction) {
@@ -47,9 +54,8 @@ app.get('/api/v1/health', (req, res) => {
   });
 });
 
-// ── API Routes (will be added per module) ────────────────────
-// import authRoutes from './modules/auth/auth.routes.js';
-// app.use('/api/v1/auth', authRoutes);
+// ── API Routes ───────────────────────────────────────────────
+app.use('/api/v1/auth', authRoutes);
 
 // ── 404 Handler ──────────────────────────────────────────────
 app.use((req, res) => {

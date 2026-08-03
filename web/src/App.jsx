@@ -1,13 +1,25 @@
 // src/App.jsx
 // ============================================================
-// Root application component
-// Renders the router which handles all page navigation
+// Root application component.
+// Calls checkAuth() on mount to restore session from
+// httpOnly refresh token cookie (silent refresh on page load).
 // ============================================================
 
+import { useEffect } from 'react';
 import AppRouter from './router/AppRouter';
+import useAuthStore from './store/authStore.js';
 
 function App() {
+  const checkAuth = useAuthStore((s) => s.checkAuth);
+
+  // On every page load / refresh, attempt silent token refresh.
+  // This restores auth state from the httpOnly cookie.
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
+
   return <AppRouter />;
 }
 
 export default App;
+
