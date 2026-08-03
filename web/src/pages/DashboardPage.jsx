@@ -1,6 +1,7 @@
 // src/pages/DashboardPage.jsx
 // ============================================================
 // MLA E-Office — Enterprise Dashboard Page
+// Dynamic Backend API integration (/api/v1/dashboard/summary)
 // Multi-language (EN / Marathi) + Dark Mode ready
 // ============================================================
 
@@ -152,6 +153,18 @@ const DashboardPage = () => {
 
   const username = user?.full_name || user?.username || 'Rajesh Deshmukh';
 
+  // Destructure backend data with safe defaults
+  const dist = summaryData?.statusDistribution || {
+    total: 1247,
+    pending: 342,
+    inProgress: 274,
+    resolved: 498,
+    rejected: 133,
+  };
+
+  const activities = summaryData?.activities || [];
+  const events = summaryData?.upcomingEvents || [];
+
   return (
     <div className="dashboard-page-container">
       {/* ── Page Header & Quick Actions ─────────────────────── */}
@@ -195,7 +208,7 @@ const DashboardPage = () => {
             </div>
           </div>
           <div className="kpi-value">
-            {summaryData?.stats?.find((s) => s.key === 'nivedans')?.count || '1,247'}
+            {summaryData?.stats?.find((s) => s.key === 'nivedans')?.count?.toLocaleString() || dist.total?.toLocaleString() || '1,247'}
           </div>
           <div className="kpi-trend up">{text.kpis.nivedansTrend}</div>
         </div>
@@ -210,7 +223,7 @@ const DashboardPage = () => {
             </div>
           </div>
           <div className="kpi-value">
-            {summaryData?.stats?.find((s) => s.key === 'pending')?.count || '342'}
+            {summaryData?.stats?.find((s) => s.key === 'pending')?.count?.toLocaleString() || dist.pending?.toLocaleString() || '342'}
           </div>
           <div className="kpi-trend down">{text.kpis.pendingTrend}</div>
         </div>
@@ -225,7 +238,7 @@ const DashboardPage = () => {
             </div>
           </div>
           <div className="kpi-value">
-            {summaryData?.stats?.find((s) => s.key === 'visitors')?.count || '47'}
+            {summaryData?.stats?.find((s) => s.key === 'visitors')?.count?.toLocaleString() || '47'}
           </div>
           <div className="kpi-trend up">{text.kpis.visitorsTrend}</div>
         </div>
@@ -240,7 +253,7 @@ const DashboardPage = () => {
             </div>
           </div>
           <div className="kpi-value">
-            {summaryData?.stats?.find((s) => s.key === 'devWorks')?.count || '23'}
+            {summaryData?.stats?.find((s) => s.key === 'devWorks')?.count?.toLocaleString() || '23'}
           </div>
           <div className="kpi-trend up">{text.kpis.devWorksTrend}</div>
         </div>
@@ -307,7 +320,7 @@ const DashboardPage = () => {
                   strokeDasharray="39.88 337.41" strokeDashoffset="-337.41" transform="rotate(-90 80 80)"
                 />
                 <text x="80" y="76" textAnchor="middle" fill="var(--text-1, #0F172A)" fontSize="20" fontWeight="700" fontFamily="Inter">
-                  1,247
+                  {dist.total?.toLocaleString() || '1,247'}
                 </text>
                 <text x="80" y="93" textAnchor="middle" fill="var(--text-3, #64748B)" fontSize="10" fontFamily="Inter">
                   Total
@@ -317,19 +330,19 @@ const DashboardPage = () => {
               <div className="donut-legend">
                 <div className="legend-item">
                   <span className="legend-dot" style={{ background: '#D97706' }} />
-                  {text.donutLegend.pending} <span className="legend-val">342</span>
+                  {text.donutLegend.pending} <span className="legend-val">{dist.pending}</span>
                 </div>
                 <div className="legend-item">
                   <span className="legend-dot" style={{ background: '#2563EB' }} />
-                  {text.donutLegend.inProgress} <span className="legend-val">274</span>
+                  {text.donutLegend.inProgress} <span className="legend-val">{dist.inProgress}</span>
                 </div>
                 <div className="legend-item">
                   <span className="legend-dot" style={{ background: '#16A34A' }} />
-                  {text.donutLegend.resolved} <span className="legend-val">498</span>
+                  {text.donutLegend.resolved} <span className="legend-val">{dist.resolved}</span>
                 </div>
                 <div className="legend-item">
                   <span className="legend-dot" style={{ background: '#DC2626' }} />
-                  {text.donutLegend.rejected} <span className="legend-val">133</span>
+                  {text.donutLegend.rejected} <span className="legend-val">{dist.rejected}</span>
                 </div>
               </div>
             </div>
@@ -355,55 +368,33 @@ const DashboardPage = () => {
             </button>
           </div>
           <div className="panel-body">
-            <div className="activity-item">
-              <span className="activity-dot" style={{ background: '#16A34A' }} />
-              <div>
-                <div className="activity-text">
-                  <strong>NIV-2026-01247</strong> marked as <strong>Resolved</strong> by Ramesh Patil
+            {activities.length > 0 ? (
+              activities.map((act) => (
+                <div key={act.id} className="activity-item">
+                  <span
+                    className="activity-dot"
+                    style={{
+                      background:
+                        act.statusColor === 'success'
+                          ? '#16A34A'
+                          : act.statusColor === 'warning'
+                          ? '#D97706'
+                          : act.statusColor === 'purple'
+                          ? '#7C3AED'
+                          : '#2563EB',
+                    }}
+                  />
+                  <div>
+                    <div className="activity-text">
+                      <strong>{act.referenceId || act.title}</strong> — {act.title}
+                    </div>
+                    <div className="activity-time">{act.timeAgo || act.time}</div>
+                  </div>
                 </div>
-                <div className="activity-time">10 min ago</div>
-              </div>
-            </div>
-
-            <div className="activity-item">
-              <span className="activity-dot" style={{ background: '#2563EB' }} />
-              <div>
-                <div className="activity-text">
-                  New inward <strong>INW/2026/0389</strong> from District Collector Office
-                </div>
-                <div className="activity-time">25 min ago</div>
-              </div>
-            </div>
-
-            <div className="activity-item">
-              <span className="activity-dot" style={{ background: '#D97706' }} />
-              <div>
-                <div className="activity-text">
-                  <strong>NIV-2026-01244</strong> — Water supply complaint by Suresh Jadhav
-                </div>
-                <div className="activity-time">1 hour ago</div>
-              </div>
-            </div>
-
-            <div className="activity-item">
-              <span className="activity-dot" style={{ background: '#EA580C' }} />
-              <div>
-                <div className="activity-text">
-                  <strong>NIV-2026-01198</strong> forwarded to PWD Department
-                </div>
-                <div className="activity-time">2 hours ago</div>
-              </div>
-            </div>
-
-            <div className="activity-item">
-              <span className="activity-dot" style={{ background: '#7C3AED' }} />
-              <div>
-                <div className="activity-text">
-                  AI drafted outward letter <strong>OUT/2026/0156</strong> — pending review
-                </div>
-                <div className="activity-time">3 hours ago</div>
-              </div>
-            </div>
+              ))
+            ) : (
+              <div style={{ padding: '20px', color: 'var(--text-3)' }}>No recent activities found</div>
+            )}
           </div>
         </div>
 
@@ -423,61 +414,31 @@ const DashboardPage = () => {
             </button>
           </div>
           <div className="panel-body">
-            <div className="event-item">
-              <div className="event-date">
-                <span className="day">03</span>
-                <span className="month">Aug</span>
-              </div>
-              <div className="event-info">
-                <div className="event-title">Gram Sabha — Wadgaon Village</div>
-                <div className="event-meta">10:00 AM · Wadgaon Gram Panchayat Hall</div>
-              </div>
-              <span className="event-badge" style={{ background: '#F0FDF4', color: '#16A34A' }}>
-                Program
-              </span>
-            </div>
-
-            <div className="event-item">
-              <div className="event-date">
-                <span className="day">05</span>
-                <span className="month">Aug</span>
-              </div>
-              <div className="event-info">
-                <div className="event-title">Review Meeting — Pending Nivedans</div>
-                <div className="event-meta">2:00 PM · MLA Office, Conference Room</div>
-              </div>
-              <span className="event-badge" style={{ background: '#EFF6FF', color: '#2563EB' }}>
-                Meeting
-              </span>
-            </div>
-
-            <div className="event-item">
-              <div className="event-date">
-                <span className="day">08</span>
-                <span className="month">Aug</span>
-              </div>
-              <div className="event-info">
-                <div className="event-title">Road Inauguration — Pimpri-Chinchwad</div>
-                <div className="event-meta">11:00 AM · Pimpri NH Junction</div>
-              </div>
-              <span className="event-badge" style={{ background: '#F5F3FF', color: '#7C3AED' }}>
-                Visit
-              </span>
-            </div>
-
-            <div className="event-item">
-              <div className="event-date">
-                <span className="day">15</span>
-                <span className="month">Aug</span>
-              </div>
-              <div className="event-info">
-                <div className="event-title">Independence Day Flag Hoisting</div>
-                <div className="event-meta">8:00 AM · Constituency Main Office</div>
-              </div>
-              <span className="event-badge" style={{ background: '#FEF2F2', color: '#DC2626' }}>
-                Deadline
-              </span>
-            </div>
+            {events.length > 0 ? (
+              events.map((evt) => (
+                <div key={evt.id} className="event-item">
+                  <div className="event-date">
+                    <span className="day">{evt.day}</span>
+                    <span className="month">{evt.month}</span>
+                  </div>
+                  <div className="event-info">
+                    <div className="event-title">{evt.title}</div>
+                    <div className="event-meta">{evt.meta}</div>
+                  </div>
+                  <span
+                    className="event-badge"
+                    style={{
+                      background: evt.badgeBg || '#EFF6FF',
+                      color: evt.badgeColor || '#2563EB',
+                    }}
+                  >
+                    {evt.badge}
+                  </span>
+                </div>
+              ))
+            ) : (
+              <div style={{ padding: '20px', color: 'var(--text-3)' }}>No upcoming events found</div>
+            )}
           </div>
         </div>
       </div>

@@ -1,7 +1,7 @@
 /* src/components/layout/MainLayout.css */
 /* ============================================================
    MLA E-Office — Main Layout & Enterprise Shell Styling
-   Light & Dark Theme support with Segmented Controls
+   Light & Dark Theme support with Collapsible Sidebar & Segmented Controls
    ============================================================ */
 
 .layout-root {
@@ -350,6 +350,25 @@
   flex-direction: column;
   transition: width 250ms ease, background 200ms ease;
   overflow: hidden;
+}
+
+.sidebar-collapsed .left-sidebar {
+  width: 72px;
+}
+
+.sidebar-collapsed .left-sidebar .sidebar-logo-container {
+  justify-content: center;
+  padding: 0;
+}
+
+.sidebar-collapsed .left-sidebar .nav-link {
+  justify-content: center;
+  padding: 9px 0;
+  margin: 2px 8px;
+}
+
+.sidebar-collapsed .left-sidebar .nav-divider {
+  margin: 8px 12px;
 }
 
 [data-theme="dark"] .left-sidebar {
