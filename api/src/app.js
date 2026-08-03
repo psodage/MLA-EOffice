@@ -16,6 +16,8 @@ import { sendSuccess } from './utils/responseHelper.js';
 // ── Route Imports ────────────────────────────────────────────
 import authRoutes from './modules/auth/auth.routes.js';
 import dashboardRoutes from './modules/dashboard/dashboard.routes.js';
+import inwardRoutes from './modules/inward/inward.routes.js';
+import departmentRoutes from './modules/department/department.routes.js';
 
 const app = express();
 
@@ -58,6 +60,8 @@ app.get('/api/v1/health', (req, res) => {
 // ── API Routes ───────────────────────────────────────────────
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/dashboard', dashboardRoutes);
+app.use('/api/v1/inward', inwardRoutes);
+app.use('/api/v1/departments', departmentRoutes);
 
 // ── 404 Handler ──────────────────────────────────────────────
 app.use((req, res) => {

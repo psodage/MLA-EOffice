@@ -7,6 +7,7 @@
 import { BrowserRouter, Routes, Route, Navigate, Link } from 'react-router-dom';
 import LoginPage from '../pages/LoginPage.jsx';
 import DashboardPage from '../pages/DashboardPage.jsx';
+import InwardListPage from '../pages/inward/InwardListPage.jsx';
 import MainLayout from '../components/layout/MainLayout.jsx';
 import ProtectedRoute from './ProtectedRoute.jsx';
 
@@ -71,12 +72,13 @@ const AppRouter = () => {
         />
 
         {/* Module routes (placeholders replaced as each module is built) */}
+        {/* Inward Register Module */}
         <Route
           path="/inward/*"
           element={
             <ProtectedRoute module="inward">
               <MainLayout>
-                <ModulePlaceholder titleMr="📥 आवक नोंदवही" titleEn="Inward Register Module" icon="📥" />
+                <InwardListPage />
               </MainLayout>
             </ProtectedRoute>
           }

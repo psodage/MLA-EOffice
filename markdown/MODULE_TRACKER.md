@@ -34,12 +34,12 @@
 
 | Status | Feature | Notes |
 |:------:|---------|-------|
-| ☐ | Inward list API (filters + pagination) | |
-| ☐ | Create inward API (auto INW/YYYY/NNNN number) | |
-| ☐ | Update status / assign API | |
-| ☐ | Inward list page (table + filter bar) | |
-| ☐ | Create form (department dropdown, file upload) | |
-| ☐ | Status badge + action buttons | |
+| ✅ | Inward list API (filters + pagination) | Multi-field search, filters & 20/page pagination |
+| ✅ | Create inward API (auto INW/YYYY/NNNN number) | Auto sequential number generator |
+| ✅ | Update status / assign API | Transition state & PA assignment |
+| ✅ | Inward list page (table + filter bar) | Data table, date range, priority & status filters |
+| ✅ | Create form (department dropdown, file upload) | Department select, tags & Cloudinary attachments |
+| ✅ | Status badge + action buttons | Color-coded status & priority badges |
 
 ---
 
@@ -191,9 +191,9 @@
 | Phase | Done | Total | Progress |
 |-------|:----:|:-----:|----------|
 | Phase 1 — Foundation | 0 | 5 | ░░░░░░░░░░ 0% |
-| Phase 2 — Core | 3 | 31 | █░░░░░░░░░ 10% |
+| Phase 2 — Core | 9 | 31 | ███░░░░░░░ 29% |
 | Phase 3 — Supporting | 0 | 21 | ░░░░░░░░░░ 0% |
 | Phase 4 — Deploy | 0 | 10 | ░░░░░░░░░░ 0% |
-| **Total** | **3** | **67** | ░░░░░░░░░░ **4%** |
+| **Total** | **9** | **67** | █░░░░░░░░░ **13%** |
 
 ---
