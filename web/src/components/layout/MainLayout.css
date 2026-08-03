@@ -1,0 +1,342 @@
+/* src/components/layout/MainLayout.css */
+/* ============================================================
+   MLA E-Office — Main Layout & Navigation Styling
+   Bilingual layout, collapsible sidebar, dark theme aesthetics
+   ============================================================ */
+
+.layout-root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--color-bg-primary, #0f172a);
+  color: var(--color-text-primary, #e2e8f0);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* ── Top Navbar ────────────────────────────────────────────── */
+.top-navbar {
+  height: 64px;
+  background-color: rgba(30, 41, 59, 0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 153, 51, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.mobile-menu-btn {
+  display: none;
+  background: transparent;
+  color: var(--color-text-primary, #e2e8f0);
+  padding: 0.4rem;
+  border-radius: 6px;
+}
+
+.brand-logo-container {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.brand-emblem {
+  font-size: 1.75rem;
+  line-height: 1;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-title-mr {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #FF9933; /* Maharashtra Orange/Saffron Accent */
+  font-family: 'Noto Sans Devanagari', sans-serif;
+  letter-spacing: 0.01em;
+}
+
+.brand-title-en {
+  font-size: 0.72rem;
+  color: var(--color-text-muted, #64748b);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.user-profile-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.35rem 0.85rem;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 9999px;
+}
+
+.user-avatar-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FF9933, #d97706);
+  color: #0f172a;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+}
+
+.user-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #f8fafc;
+}
+
+.user-role-tag {
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 0.05rem 0.5rem;
+  border-radius: 4px;
+  display: inline-block;
+  margin-top: 0.1rem;
+  font-family: 'Noto Sans Devanagari', sans-serif;
+}
+
+.logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.85rem;
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #f87171;
+  border-radius: 8px;
+  font-size: 0.825rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.logout-btn:hover {
+  background: rgba(239, 68, 68, 0.25);
+  border-color: #ef4444;
+  color: #ffffff;
+}
+
+.logout-label {
+  font-family: 'Noto Sans Devanagari', sans-serif;
+}
+
+/* ── Layout Body ───────────────────────────────────────────── */
+.layout-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* ── Left Sidebar Navigation ───────────────────────────────── */
+.left-sidebar {
+  width: 250px;
+  background: rgba(30, 41, 59, 0.8);
+  border-right: 1px solid rgba(51, 65, 85, 0.6);
+  display: flex;
+  flex-direction: column;
+  transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+  z-index: 40;
+}
+
+.sidebar-collapsed .left-sidebar {
+  width: 72px;
+}
+
+.sidebar-header {
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+}
+
+.sidebar-section-title {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--color-text-muted, #64748b);
+  letter-spacing: 0.08em;
+  font-family: 'Noto Sans Devanagari', sans-serif;
+}
+
+.collapse-toggle-btn {
+  background: rgba(51, 65, 85, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+  padding: 0.3rem;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.collapse-toggle-btn:hover {
+  color: #f8fafc;
+  background: rgba(51, 65, 85, 0.8);
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 0.75rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  overflow-y: auto;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.65rem 0.85rem;
+  border-radius: 8px;
+  color: #94a3b8;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.nav-link:hover {
+  background: rgba(51, 65, 85, 0.5);
+  color: #f1f5f9;
+}
+
+.nav-link.active {
+  background: linear-gradient(135deg, rgba(255, 153, 51, 0.18), rgba(217, 119, 6, 0.08));
+  border-color: rgba(255, 153, 51, 0.35);
+  color: #FF9933;
+}
+
+.nav-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.nav-label-block {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+
+.nav-label-mr {
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: 'Noto Sans Devanagari', sans-serif;
+}
+
+.nav-label-en {
+  font-size: 0.7rem;
+  opacity: 0.7;
+}
+
+.sidebar-footer {
+  padding: 1rem;
+  border-top: 1px solid rgba(51, 65, 85, 0.5);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(15, 23, 42, 0.4);
+}
+
+.footer-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 8px #22c55e;
+}
+
+.footer-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.footer-line1 {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  font-family: 'Noto Sans Devanagari', sans-serif;
+}
+
+.footer-line2 {
+  font-size: 0.65rem;
+  color: #64748b;
+}
+
+/* ── Main Content Area ─────────────────────────────────────── */
+.main-content-wrapper {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.75rem 2rem;
+  background-color: var(--color-bg-primary, #0f172a);
+}
+
+/* ── Responsive Styling ────────────────────────────────────── */
+@media (max-width: 768px) {
+  .mobile-menu-btn {
+    display: block;
+  }
+
+  .left-sidebar {
+    position: fixed;
+    top: 64px;
+    bottom: 0;
+    left: -260px;
+    width: 250px !important;
+    transition: left 0.3s ease;
+  }
+
+  .left-sidebar.mobile-show {
+    left: 0;
+  }
+
+  .mobile-overlay {
+    position: fixed;
+    inset: 0;
+    top: 64px;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 35;
+  }
+
+  .user-details {
+    display: none;
+  }
+
+  .main-content-wrapper {
+    padding: 1rem;
+  }
+}

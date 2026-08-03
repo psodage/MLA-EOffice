@@ -1,0 +1,624 @@
+/* src/pages/DashboardPage.css */
+/* ============================================================
+   MLA E-Office — Dashboard Page Styles
+   Role-aware stat cards, activity feed, quick actions
+   ============================================================ */
+
+.dashboard-page-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* ── Loading Screen ────────────────────────────────────────── */
+.dashboard-loading-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: 1rem;
+}
+
+.loading-spinner {
+  width: 44px;
+  height: 44px;
+  border: 4px solid rgba(255, 153, 51, 0.2);
+  border-top-color: #FF9933;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading-text-mr {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #FF9933;
+  font-family: 'Noto Sans Devanagari', sans-serif;
+}
+
+.loading-text-en {
+  font-size: 0.85rem;
+  color: #94a3b8;
+}
+
+/* ── Welcome Banner ────────────────────────────────────────── */
+.welcome-banner {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95));
+  border: 1px solid rgba(255, 153, 51, 0.2);
+  border-radius: 16px;
+  padding: 1.75rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.welcome-banner::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -10%;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(255, 153, 51, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.greeting-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.75rem;
+  background: rgba(255, 153, 51, 0.12);
+  border: 1px solid rgba(255, 153, 51, 0.3);
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #FF9933;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.role-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #FF9933;
+  box-shadow: 0 0 6px #FF9933;
+}
+
+.welcome-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #f8fafc;
+  font-family: 'Noto Sans Devanagari', sans-serif;
+}
+
+.welcome-subtitle {
+  font-size: 0.9rem;
+  color: #94a3b8;
+  margin-top: 0.25rem;
+  font-family: 'Noto Sans Devanagari', sans-serif;
+}
+
+.date-display-box {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+}
+
+.calendar-icon {
+  font-size: 1.25rem;
+}
+
+.date-text {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  font-family: 'Noto Sans Devanagari', sans-serif;
+}
+
+/* ── Quick Actions Section ─────────────────────────────────── */
+.quick-actions-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.section-header-mini h3 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #94a3b8;
+  font-family: 'Noto Sans Devanagari', sans-serif;
+}
+
+.quick-actions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.quick-action-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background: rgba(30, 41, 59, 0.7);
+  border: 1px solid rgba(51, 65, 85, 0.7);
+  border-radius: 12px;
+  color: #e2e8f0;
+  text-align: left;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.quick-action-card:hover {
+  background: rgba(51, 65, 85, 0.8);
+  border-color: rgba(255, 153, 51, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+}
+
+.quick-action-card.primary-action {
+  background: linear-gradient(135deg, rgba(255, 153, 51, 0.15), rgba(217, 119, 6, 0.05));
+  border-color: rgba(255, 153, 51, 0.4);
+}
+
+.action-icon-wrapper {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: rgba(255, 153, 51, 0.15);
+  color: #FF9933;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.action-label-block {
+  display: flex;
+  flex-direction: column;
+}
+
+.action-label-mr {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #f8fafc;
+  font-family: 'Noto Sans Devanagari', sans-serif;
+}
+
+.action-label-en {
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+/* ── Stat Cards Section ────────────────────────────────────── */
+.stat-cards-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.section-header h2 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #f8fafc;
+  font-family: 'Noto Sans Devanagari', sans-serif;
+}
+
+.last-updated-tag {
+  font-size: 0.75rem;
+  color: #22c55e;
+  background: rgba(34, 197, 94, 0.1);
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(34, 197, 94, 0.25);
+  font-family: 'Noto Sans Devanagari', sans-serif;
+}
+
+.stat-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
+}
+
+.stat-card {
+  background: rgba(30, 41, 59, 0.85);
+  border: 1px solid rgba(51, 65, 85, 0.8);
+  border-radius: 14px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.stat-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stat-icon-badge {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Card Accent Colors */
+.card-color-blue .stat-icon-badge { background: rgba(56, 189, 248, 0.15); color: #38bdf8; }
+.card-color-blue { border-top: 3px solid #38bdf8; }
+
+.card-color-emerald .stat-icon-badge { background: rgba(34, 197, 94, 0.15); color: #4ade80; }
+.card-color-emerald { border-top: 3px solid #4ade80; }
+
+.card-color-amber .stat-icon-badge { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+.card-color-amber { border-top: 3px solid #fbbf24; }
+
+.card-color-purple .stat-icon-badge { background: rgba(168, 85, 247, 0.15); color: #c084fc; }
+.card-color-purple { border-top: 3px solid #c084fc; }
+
+.card-color-rose .stat-icon-badge { background: rgba(244, 63, 94, 0.15); color: #fb7185; }
+.card-color-rose { border-top: 3px solid #fb7185; }
+
+.stat-badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  font-family: 'Noto Sans Devanagari', sans-serif;
+}
+
+.badge-warning { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+.badge-danger { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+
+.stat-card-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-value-group {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.stat-number {
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: #f8fafc;
+  line-height: 1.1;
+}
+
+.stat-unit {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  font-family: 'Noto Sans Devanagari', sans-serif;
+}
+
+.stat-title-mr {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #e2e8f0;
+  margin-top: 0.5rem;
+  font-family: 'Noto Sans Devanagari', sans-serif;
+}
+
+.stat-title-en {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.stat-trend-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.75rem;
+  padding-top: 0.5rem;
+  border-top: 1px dashed rgba(255, 255, 255, 0.1);
+  font-size: 0.78rem;
+  color: #cbd5e1;
+  font-family: 'Noto Sans Devanagari', sans-serif;
+}
+
+.trend-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #38bdf8;
+}
+
+.stat-breakdown-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-top: 0.75rem;
+  padding-top: 0.6rem;
+  border-top: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+.breakdown-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: #94a3b8;
+  font-family: 'Noto Sans Devanagari', sans-serif;
+}
+
+.breakdown-val {
+  font-weight: 700;
+  color: #f1f5f9;
+}
+
+/* ── Two Column Bottom Section ─────────────────────────────── */
+.dashboard-grid-two-col {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.5rem;
+}
+
+.activity-feed-card,
+.constituency-overview-card {
+  background: rgba(30, 41, 59, 0.85);
+  border: 1px solid rgba(51, 65, 85, 0.8);
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(51, 65, 85, 0.6);
+}
+
+.card-header h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #f8fafc;
+  font-family: 'Noto Sans Devanagari', sans-serif;
+}
+
+.activity-count-badge {
+  font-size: 0.725rem;
+  background: rgba(255, 153, 51, 0.15);
+  color: #FF9933;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 153, 51, 0.3);
+  font-family: 'Noto Sans Devanagari', sans-serif;
+}
+
+/* Activity Items */
+.activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.activity-item {
+  display: flex;
+  gap: 1rem;
+  padding: 0.85rem;
+  background: rgba(15, 23, 42, 0.5);
+  border: 1px solid rgba(51, 65, 85, 0.5);
+  border-radius: 12px;
+  transition: background 0.2s ease;
+}
+
+.activity-item:hover {
+  background: rgba(15, 23, 42, 0.8);
+}
+
+.activity-type-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+}
+
+.activity-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 0.2rem;
+}
+
+.activity-top-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.72rem;
+}
+
+.activity-ref-id {
+  font-weight: 700;
+  color: #FF9933;
+  font-family: var(--font-mono, monospace);
+}
+
+.activity-time {
+  color: #64748b;
+  font-family: 'Noto Sans Devanagari', sans-serif;
+}
+
+.activity-title-mr {
+  font-size: 0.925rem;
+  font-weight: 600;
+  color: #f1f5f9;
+  font-family: 'Noto Sans Devanagari', sans-serif;
+}
+
+.activity-title-en {
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+.activity-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.4rem;
+  padding-top: 0.4rem;
+  border-top: 1px dashed rgba(255, 255, 255, 0.08);
+}
+
+.activity-actor {
+  font-size: 0.75rem;
+  color: #cbd5e1;
+  font-family: 'Noto Sans Devanagari', sans-serif;
+}
+
+.status-pill {
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  font-family: 'Noto Sans Devanagari', sans-serif;
+}
+
+.status-warning { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+.status-info { background: rgba(56, 189, 248, 0.2); color: #38bdf8; }
+.status-purple { background: rgba(168, 85, 247, 0.2); color: #c084fc; }
+.status-success { background: rgba(34, 197, 94, 0.2); color: #4ade80; }
+
+/* Constituency Overview Widget */
+.overview-stats-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.overview-row {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.75rem;
+  background: rgba(15, 23, 42, 0.5);
+  border-radius: 10px;
+}
+
+.overview-icon {
+  font-size: 1.35rem;
+}
+
+.overview-text {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.overview-label-mr {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  font-family: 'Noto Sans Devanagari', sans-serif;
+}
+
+.overview-label-en {
+  font-size: 0.7rem;
+  color: #64748b;
+}
+
+.overview-value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #FF9933;
+}
+
+.status-online {
+  font-size: 0.72rem;
+  color: #22c55e;
+  font-family: 'Noto Sans Devanagari', sans-serif;
+}
+
+.helpline-info-box {
+  margin-top: 0.5rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, rgba(255, 153, 51, 0.1), rgba(30, 41, 59, 0.8));
+  border: 1px solid rgba(255, 153, 51, 0.25);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.helpline-info-box h4 {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #FF9933;
+  font-family: 'Noto Sans Devanagari', sans-serif;
+}
+
+.helpline-info-box p {
+  font-size: 0.8rem;
+  color: #cbd5e1;
+  font-family: 'Noto Sans Devanagari', sans-serif;
+}
+
+.office-timing {
+  font-size: 0.72rem;
+  color: #94a3b8;
+  font-family: 'Noto Sans Devanagari', sans-serif;
+}
+
+/* ── Responsive Styling ────────────────────────────────────── */
+@media (max-width: 992px) {
+  .dashboard-grid-two-col {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .welcome-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .welcome-title {
+    font-size: 1.35rem;
+  }
+
+  .date-display-box {
+    width: 100%;
+    justify-content: center;
+  }
+}

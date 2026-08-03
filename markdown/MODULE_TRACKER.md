@@ -24,9 +24,9 @@
 
 | Status | Feature | Notes |
 |:------:|---------|-------|
-| ☐ | GET /api/v1/dashboard/summary | |
-| ☐ | Dashboard page — stat cards | |
-| ☐ | Role-aware rendering (MLA / PA / Receptionist views) | |
+| ✅ | GET /api/v1/dashboard/summary | Role-based summary stats & activities |
+| ✅ | Dashboard page — stat cards | Stat cards, quick actions & activity feed |
+| ✅ | Role-aware rendering (MLA / PA / Receptionist views) | Dynamic UI & sidebar per role |
 
 ---
 
@@ -191,9 +191,9 @@
 | Phase | Done | Total | Progress |
 |-------|:----:|:-----:|----------|
 | Phase 1 — Foundation | 0 | 5 | ░░░░░░░░░░ 0% |
-| Phase 2 — Core | 0 | 31 | ░░░░░░░░░░ 0% |
+| Phase 2 — Core | 3 | 31 | █░░░░░░░░░ 10% |
 | Phase 3 — Supporting | 0 | 21 | ░░░░░░░░░░ 0% |
 | Phase 4 — Deploy | 0 | 10 | ░░░░░░░░░░ 0% |
-| **Total** | **0** | **67** | ░░░░░░░░░░ **0%** |
+| **Total** | **3** | **67** | ░░░░░░░░░░ **4%** |
 
 ---
