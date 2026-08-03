@@ -443,7 +443,8 @@
   font-family: 'Noto Sans Devanagari', sans-serif;
 }
 
-.btn-primary {
+.inward-modal-overlay .btn-primary,
+.inward-page-container .btn-primary {
   padding: 0.6rem 1.25rem;
   background: linear-gradient(135deg, #FF9933, #d97706);
   color: #0f172a;
