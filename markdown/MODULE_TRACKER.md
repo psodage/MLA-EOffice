@@ -107,12 +107,12 @@
 
 | Status | Feature | Notes |
 |:------:|---------|-------|
-| ☐ | Karyakarta CRUD APIs | |
-| ☐ | Bulk Excel import API | |
-| ☐ | Search + filter (booth / village / designation) | |
-| ☐ | Karyakarta list + add form | |
-| ☐ | Booth-level view | |
-| ☐ | Birthday upcoming widget | |
+| ✅ | Karyakarta CRUD APIs | Party worker master directory & search |
+| ✅ | Bulk Excel import API | `POST /api/v1/karyakartas/import` with validation stats & error log |
+| ✅ | Search + filter (booth / village / designation) | Search by name, mobile, booth, & designation |
+| ✅ | Karyakarta list + add form | Single registration modal form |
+| ✅ | Booth-level view | Grouped by booth with `BOOTH_PRAMUKH` highlighted at top |
+| ✅ | Birthday upcoming widget | 7-day upcoming birthdays with 1-click WhatsApp wish button |
 
 ---
 
@@ -192,8 +192,8 @@
 |-------|:----:|:-----:|----------|
 | Phase 1 — Foundation | 0 | 5 | ░░░░░░░░░░ 0% |
 | Phase 2 — Core | 31 | 31 | ██████████ 100% |
-| Phase 3 — Supporting | 6 | 21 | ███░░░░░░░ 29% |
+| Phase 3 — Supporting | 12 | 21 | ██████░░░░ 57% |
 | Phase 4 — Deploy | 0 | 10 | ░░░░░░░░░░ 0% |
-| **Total** | **37** | **67** | ██████░░░░ **55%** |
+| **Total** | **43** | **67** | ███████░░░ **64%** |
 
 ---

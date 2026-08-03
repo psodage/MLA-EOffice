@@ -13,6 +13,7 @@ import NivedanListPage from '../pages/nivedan/NivedanListPage.jsx';
 import PublicTrackingPage from '../pages/nivedan/PublicTrackingPage.jsx';
 import VisitorListPage from '../pages/visitors/VisitorListPage.jsx';
 import DevWorksListPage from '../pages/devworks/DevWorksListPage.jsx';
+import KaryakartaListPage from '../pages/karyakarta/KaryakartaListPage.jsx';
 import MainLayout from '../components/layout/MainLayout.jsx';
 import ProtectedRoute from './ProtectedRoute.jsx';
 
@@ -139,12 +140,13 @@ const AppRouter = () => {
           }
         />
 
+        {/* Karyakarta Directory Module */}
         <Route
           path="/karyakarta/*"
           element={
             <ProtectedRoute module="karyakarta">
               <MainLayout>
-                <ModulePlaceholder titleMr="🚩 कार्यकर्ता नोंदवही" titleEn="Karyakarta Directory Module" icon="🚩" />
+                <KaryakartaListPage />
               </MainLayout>
             </ProtectedRoute>
           }
