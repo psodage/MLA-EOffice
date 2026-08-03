@@ -1,0 +1,171 @@
+/* src/pages/outward/OutwardLetterPrint.css */
+/* ============================================================
+   MLA E-Office — Official Letterhead & Print Styling
+   Screen preview & print media styles
+   ============================================================ */
+
+.outward-letterhead-container {
+  background: #ffffff;
+  color: #1e293b;
+  padding: 3rem 3.5rem;
+  border-radius: 8px;
+  font-family: 'Noto Sans Devanagari', 'Inter', sans-serif;
+  line-height: 1.6;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  margin: 1rem 1.5rem;
+}
+
+.letterhead-header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding-bottom: 1rem;
+}
+
+.emblem-box {
+  font-size: 3.5rem;
+  line-height: 1;
+}
+
+.header-text-block {
+  display: flex;
+  flex-direction: column;
+}
+
+.mla-name-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #b91c1c; /* Deep Crimson Official Accent */
+  line-height: 1.2;
+}
+
+.mla-constituency {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #1e3a8a;
+  margin-top: 0.15rem;
+}
+
+.office-address-line {
+  font-size: 0.78rem;
+  color: #475569;
+  margin-top: 0.25rem;
+}
+
+.letterhead-divider {
+  height: 3px;
+  background: linear-gradient(90deg, #b91c1c, #1e3a8a);
+  margin-bottom: 1.5rem;
+}
+
+.letter-meta-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.925rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px dashed #cbd5e1;
+}
+
+.letter-reference-box {
+  font-size: 0.875rem;
+  color: #334155;
+  background: #f8fafc;
+  padding: 0.5rem 0.75rem;
+  border-left: 3px solid #1e3a8a;
+  margin-bottom: 1.5rem;
+}
+
+.letter-body-content {
+  font-size: 1rem;
+  color: #0f172a;
+  margin-bottom: 2.5rem;
+}
+
+.letter-pre-text {
+  white-space: pre-wrap;
+  font-family: inherit;
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.letter-signature-block {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 3rem;
+  padding-top: 1rem;
+}
+
+.approval-stamp {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 0.85rem;
+  border: 2px solid #16a34a;
+  border-radius: 8px;
+  color: #16a34a;
+  background: #f0fdf4;
+  font-weight: 800;
+  font-size: 0.75rem;
+  transform: rotate(-3deg);
+}
+
+.draft-watermark-tag {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #d97706;
+  border: 1px dashed #d97706;
+  padding: 0.35rem 0.65rem;
+  border-radius: 6px;
+}
+
+.sign-text-group {
+  text-align: right;
+  font-size: 0.95rem;
+  color: #0f172a;
+}
+
+.sign-space {
+  height: 50px;
+}
+
+.btn-approve {
+  padding: 0.6rem 1.25rem;
+  background: #16a34a;
+  color: #ffffff;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  border: none;
+  font-family: 'Noto Sans Devanagari', sans-serif;
+}
+
+.btn-approve:hover {
+  background: #15803d;
+}
+
+/* ── Print Media Query ──────────────────────────────────────── */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .printable-letter-area,
+  .printable-letter-area * {
+    visibility: visible;
+  }
+  .printable-letter-area {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+  }
+  .no-print {
+    display: none !important;
+  }
+}

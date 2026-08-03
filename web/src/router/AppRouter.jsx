@@ -8,6 +8,7 @@ import { BrowserRouter, Routes, Route, Navigate, Link } from 'react-router-dom';
 import LoginPage from '../pages/LoginPage.jsx';
 import DashboardPage from '../pages/DashboardPage.jsx';
 import InwardListPage from '../pages/inward/InwardListPage.jsx';
+import OutwardListPage from '../pages/outward/OutwardListPage.jsx';
 import MainLayout from '../components/layout/MainLayout.jsx';
 import ProtectedRoute from './ProtectedRoute.jsx';
 
@@ -84,12 +85,13 @@ const AppRouter = () => {
           }
         />
 
+        {/* Outward Register Module */}
         <Route
           path="/outward/*"
           element={
             <ProtectedRoute module="outward">
               <MainLayout>
-                <ModulePlaceholder titleMr="📤 जावक नोंदवही" titleEn="Outward Register Module" icon="📤" />
+                <OutwardListPage />
               </MainLayout>
             </ProtectedRoute>
           }

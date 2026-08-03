@@ -47,12 +47,12 @@
 
 | Status | Feature | Notes |
 |:------:|---------|-------|
-| ☐ | Outward CRUD APIs | |
-| ☐ | AI draft endpoint (Gemini) | |
-| ☐ | Approve flow | |
-| ☐ | Outward list page | |
-| ☐ | Create form + "AI ड्राफ्ट करा" button | |
-| ☐ | Link to inward entry | |
+| ✅ | Outward CRUD APIs | Sequential OUT/YYYY/NNNN & search/filter API |
+| ✅ | AI draft endpoint (Gemini) | Gemini AI formal Marathi letter generator |
+| ✅ | Approve flow | Official approval & timestamping |
+| ✅ | Outward list page | Table with AI and Approved status badges |
+| ✅ | Create form + "AI ड्राफ्ट करा" button | Interactive AI letter drafting modal |
+| ✅ | Link to inward entry | Auto-fill from reference inward entry |
 
 ---
 
@@ -191,9 +191,9 @@
 | Phase | Done | Total | Progress |
 |-------|:----:|:-----:|----------|
 | Phase 1 — Foundation | 0 | 5 | ░░░░░░░░░░ 0% |
-| Phase 2 — Core | 9 | 31 | ███░░░░░░░ 29% |
+| Phase 2 — Core | 15 | 31 | █████░░░░░ 48% |
 | Phase 3 — Supporting | 0 | 21 | ░░░░░░░░░░ 0% |
 | Phase 4 — Deploy | 0 | 10 | ░░░░░░░░░░ 0% |
-| **Total** | **9** | **67** | █░░░░░░░░░ **13%** |
+| **Total** | **15** | **67** | ██░░░░░░░░ **22%** |
 
 ---

@@ -18,6 +18,7 @@ import authRoutes from './modules/auth/auth.routes.js';
 import dashboardRoutes from './modules/dashboard/dashboard.routes.js';
 import inwardRoutes from './modules/inward/inward.routes.js';
 import departmentRoutes from './modules/department/department.routes.js';
+import outwardRoutes from './modules/outward/outward.routes.js';
 
 const app = express();
 
@@ -62,6 +63,7 @@ app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/dashboard', dashboardRoutes);
 app.use('/api/v1/inward', inwardRoutes);
 app.use('/api/v1/departments', departmentRoutes);
+app.use('/api/v1/outward', outwardRoutes);
 
 // ── 404 Handler ──────────────────────────────────────────────
 app.use((req, res) => {
