@@ -1,0 +1,48 @@
+# ============================================================
+# MLA E-Office — .gitignore
+# ============================================================
+
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Environment files — NEVER commit
+.env
+.env.local
+.env.staging
+.env.production
+api/.env
+web/.env
+
+# Keep .env.example files
+!api/.env.example
+!web/.env.example
+
+# Build output
+dist/
+build/
+
+# Log files
+api/logs/*.log
+*.log
+npm-debug.log*
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Coverage
+coverage/
+
+# Temp files
+*.tmp
+*.temp
