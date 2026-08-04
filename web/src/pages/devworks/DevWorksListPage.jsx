@@ -227,7 +227,7 @@ const DevWorksListPage = () => {
       <div className="devworks-header">
         <div className="devworks-title-group">
           <h1 className="title">
-            Development Works · <span className="mr" style={{ fontFamily: "'Noto Sans Devanagari', sans-serif" }}>विकासकामे</span>
+            {isMr ? 'विकासकामे' : 'Development Works'}
           </h1>
           <p className="sub">
             {isMr

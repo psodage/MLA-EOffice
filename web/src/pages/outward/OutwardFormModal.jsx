@@ -203,8 +203,10 @@ const OutwardFormModal = ({ isOpen, onClose, onSuccess, initialInwardData = null
       <div className="inward-modal-container outward-modal-large" onClick={(e) => e.stopPropagation()}>
         <div className="inward-modal-header">
           <div className="modal-title-group">
-            <h3>New Outward Letter · <span className="mr">नवीन जावक पत्र</span></h3>
-            <span className="modal-subtitle-en">Draft and send an official letter from MLA office</span>
+            <h3>{isMr ? 'नवीन जावक पत्र' : 'New Outward Letter'}</h3>
+            <span className="modal-subtitle-en">
+              {isMr ? 'आमदार कार्यालयाकडून अधिकृत शासकीय पत्र तयार करून पाठवा' : 'Draft and send an official letter from MLA office'}
+            </span>
           </div>
           <button type="button" className="modal-close-btn" onClick={onClose}><X size={18} /></button>
         </div>
@@ -217,11 +219,11 @@ const OutwardFormModal = ({ isOpen, onClose, onSuccess, initialInwardData = null
             <div className="form-card" style={{ border: 'none', boxShadow: 'none' }}>
               {/* Section 1: Letter Details */}
               <div className="form-section">
-                <div className="section-title">Letter Details · <span className="mr">पत्र तपशील</span></div>
+                <div className="section-title">{isMr ? 'पत्र तपशील' : 'Letter Details'}</div>
                 <div className="form-grid">
                   <div className="form-group">
                     <label className="form-label">
-                      Outward Number <span className="mr-sub">जावक क्रमांक</span>
+                      {isMr ? 'जावक क्रमांक' : 'Outward Number'}
                     </label>
                     <input
                       className="form-input mono"
@@ -232,7 +234,7 @@ const OutwardFormModal = ({ isOpen, onClose, onSuccess, initialInwardData = null
                   </div>
                   <div className="form-group">
                     <label className="form-label">
-                      Date<span className="req">*</span>
+                      {isMr ? 'दिनांक' : 'Date'}<span className="req">*</span>
                     </label>
                     <input
                       className="form-input"
@@ -245,7 +247,7 @@ const OutwardFormModal = ({ isOpen, onClose, onSuccess, initialInwardData = null
                   </div>
                   <div className="form-group">
                     <label className="form-label">
-                      Reference Inward <span className="mr-sub">संदर्भ आवक</span>
+                      {isMr ? 'संदर्भ आवक' : 'Reference Inward'}
                     </label>
                     <select
                       className="form-input"
@@ -253,7 +255,7 @@ const OutwardFormModal = ({ isOpen, onClose, onSuccess, initialInwardData = null
                       value={form.reference_inward_id}
                       onChange={handleInwardChange}
                     >
-                      <option value="">— None (independent letter) —</option>
+                      <option value="">{isMr ? '— कोणता नाही (स्वतंत्र पत्र) —' : '— None (independent letter) —'}</option>
                       {inwardOptions.map((inv) => (
                         <option key={inv.id} value={inv.id}>
                           {inv.inward_number} — {inv.subject || inv.sender_name}
@@ -263,7 +265,7 @@ const OutwardFormModal = ({ isOpen, onClose, onSuccess, initialInwardData = null
                   </div>
                   <div className="form-group">
                     <label className="form-label">
-                      Letter Template <span className="mr-sub">पत्र नमुना</span>
+                      {isMr ? 'पत्र नमुना' : 'Letter Template'}
                     </label>
                     <select
                       className="form-input"
@@ -271,10 +273,10 @@ const OutwardFormModal = ({ isOpen, onClose, onSuccess, initialInwardData = null
                       value={form.template}
                       onChange={handleChange}
                     >
-                      <option value="RECOMMENDATION">Recommendation to Dept Head</option>
-                      <option value="FOLLOW_UP">Follow-up / Reminder</option>
-                      <option value="INQUIRY">Inquiry Letter</option>
-                      <option value="APPRECIATION">Appreciation Letter</option>
+                      <option value="RECOMMENDATION">{isMr ? 'विभाग प्रमुखास शिफारस पत्र' : 'Recommendation to Dept Head'}</option>
+                      <option value="FOLLOW_UP">{isMr ? 'स्मरणपत्र / पाठपुरावा' : 'Follow-up / Reminder'}</option>
+                      <option value="INQUIRY">{isMr ? 'चौकशी पत्र' : 'Inquiry Letter'}</option>
+                      <option value="APPRECIATION">{isMr ? 'अभिनंदन / सत्कार पत्र' : 'Appreciation Letter'}</option>
                     </select>
                   </div>
                 </div>
@@ -282,36 +284,36 @@ const OutwardFormModal = ({ isOpen, onClose, onSuccess, initialInwardData = null
 
               {/* Section 2: Recipient Information */}
               <div className="form-section">
-                <div className="section-title">Recipient Information · <span className="mr">पत्र मिळणाऱ्याची माहिती</span></div>
+                <div className="section-title">{isMr ? 'पत्र मिळणाऱ्याची माहिती' : 'Recipient Information'}</div>
                 <div className="form-grid">
                   <div className="form-group">
                     <label className="form-label">
-                      Recipient Name<span className="req">*</span> <span className="mr-sub">मिळणाऱ्याचे नाव</span>
+                      {isMr ? 'मिळणाऱ्याचे नाव' : 'Recipient Name'}<span className="req">*</span>
                     </label>
                     <input
                       className="form-input"
                       name="recipient_name"
                       value={form.recipient_name}
                       onChange={handleChange}
-                      placeholder="e.g., Shri. R.S. Deshmukh"
+                      placeholder={isMr ? 'उदा. श्री. आर. एस. देशमुख' : 'e.g., Shri. R.S. Deshmukh'}
                       required
                     />
                   </div>
                   <div className="form-group">
                     <label className="form-label">
-                      Designation <span className="mr-sub">पद</span>
+                      {isMr ? 'पदनाम' : 'Designation'}
                     </label>
                     <input
                       className="form-input"
                       name="recipient_designation"
                       value={form.recipient_designation}
                       onChange={handleChange}
-                      placeholder="e.g., Executive Engineer"
+                      placeholder={isMr ? 'उदा. कार्यकारी अभियंता' : 'e.g., Executive Engineer'}
                     />
                   </div>
                   <div className="form-group">
                     <label className="form-label">
-                      Department / Office<span className="req">*</span> <span className="mr-sub">विभाग</span>
+                      {isMr ? 'विभाग / कार्यालय' : 'Department / Office'}<span className="req">*</span>
                     </label>
                     <select
                       className="form-input"
@@ -319,10 +321,10 @@ const OutwardFormModal = ({ isOpen, onClose, onSuccess, initialInwardData = null
                       value={form.recipient_department_id}
                       onChange={handleChange}
                     >
-                      <option value="">Select Department...</option>
+                      <option value="">{isMr ? 'विभाग निवडा...' : 'Select Department...'}</option>
                       {departments.map((dept) => (
                         <option key={dept.id} value={dept.id}>
-                          {dept.name_en || dept.name_mr} · {dept.name_mr} ({dept.short_code})
+                          {isMr ? dept.name_mr : (dept.name_en || dept.name_mr)} ({dept.short_code})
                         </option>
                       ))}
                     </select>
@@ -332,7 +334,7 @@ const OutwardFormModal = ({ isOpen, onClose, onSuccess, initialInwardData = null
 
               {/* Section 3: Letter Content */}
               <div className="form-section">
-                <div className="section-title">Letter Content · <span className="mr">पत्र सामग्री</span></div>
+                <div className="section-title">{isMr ? 'पत्र सामग्री' : 'Letter Content'}</div>
 
                 <button
                   type="button"
@@ -342,26 +344,26 @@ const OutwardFormModal = ({ isOpen, onClose, onSuccess, initialInwardData = null
                   style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
                 >
                   <Sparkles size={16} />
-                  {draftingAi ? 'AI मसुदा तयार होत आहे...' : 'Generate AI Draft · AI मसुदा तयार करा'}
+                  {draftingAi ? (isMr ? 'AI मसुदा तयार होत आहे...' : 'Generating AI Draft...') : (isMr ? 'Gemini AI मसुदा तयार करा' : 'Generate AI Draft')}
                 </button>
 
                 <div className="form-grid">
                   <div className="form-group form-full">
                     <label className="form-label">
-                      Subject<span className="req">*</span> <span className="mr-sub">विषय</span>
+                      {isMr ? 'विषय' : 'Subject'}<span className="req">*</span>
                     </label>
                     <input
                       className="form-input"
                       name="subject"
                       value={form.subject}
                       onChange={handleChange}
-                      placeholder="Subject line of the letter"
+                      placeholder={isMr ? 'पत्राचा मुख्य विषय...' : 'Subject line of the letter'}
                       required
                     />
                   </div>
                   <div className="form-group form-full">
                     <label className="form-label">
-                      Body<span className="req">*</span> <span className="mr-sub">मुख्य भाग</span>
+                      {isMr ? 'मुख्य मजकूर' : 'Body'}<span className="req">*</span>
                     </label>
                     <textarea
                       className="form-input"
@@ -370,12 +372,12 @@ const OutwardFormModal = ({ isOpen, onClose, onSuccess, initialInwardData = null
                       style={{ minHeight: '180px', lineHeight: 1.6 }}
                       value={form.body_text}
                       onChange={handleChange}
-                      placeholder="Letter content in Marathi or English..."
+                      placeholder={isMr ? 'पत्राचा सविस्तर मजकूर...' : 'Letter content in Marathi or English...'}
                       required
                     />
                     {isAiDrafted && (
                       <span className="form-hint" style={{ color: 'var(--inw-pu)', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                        <Sparkles size={12} /> AI-drafted in Marathi · AI ने मराठीत मसुदा तयार केला
+                        <Sparkles size={12} /> {isMr ? 'Gemini AI ने मसुदा तयार केला' : 'AI-drafted using Gemini'}
                       </span>
                     )}
                   </div>
@@ -385,13 +387,13 @@ const OutwardFormModal = ({ isOpen, onClose, onSuccess, initialInwardData = null
               {/* Footer */}
               <div className="form-footer">
                 <button type="button" className="btn btn-o" onClick={onClose}>
-                  Cancel
+                  {isMr ? 'रद्द करा' : 'Cancel'}
                 </button>
                 <button type="button" className="btn btn-p" onClick={handleSubmit} disabled={submitting} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-                  <Save size={16} /> Save Draft
+                  <Save size={16} /> {isMr ? 'मसुदा जतन करा' : 'Save Draft'}
                 </button>
                 <button type="submit" className="btn btn-ok" disabled={submitting} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-                  <Check size={16} /> Submit for Approval
+                  <Check size={16} /> {isMr ? 'मंजुरीसाठी पाठवा' : 'Submit for Approval'}
                 </button>
               </div>
             </div>
@@ -400,7 +402,7 @@ const OutwardFormModal = ({ isOpen, onClose, onSuccess, initialInwardData = null
             <div className="preview-panel">
               <div className="preview-header">
                 <span className="preview-title" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-                  <FileText size={16} /> Letter Preview
+                  <FileText size={16} /> {isMr ? 'पत्र पूर्वावलोकन' : 'Letter Preview'}
                 </span>
                 <div style={{ display: 'flex', gap: '4px' }}>
                   <button
@@ -408,12 +410,6 @@ const OutwardFormModal = ({ isOpen, onClose, onSuccess, initialInwardData = null
                     onClick={() => window.print()}
                     style={{
                       padding: '4px 8px',
-                      border: '1px solid var(--inw-b)',
-                      borderRadius: 'var(--inw-r)',
-                      background: 'var(--inw-c)',
-                      fontSize: '11px',
-                      cursor: 'pointer',
-                      color: 'var(--inw-t3)',
                       border: '1px solid var(--inw-b)',
                       borderRadius: 'var(--inw-r)',
                       background: 'var(--inw-c)',

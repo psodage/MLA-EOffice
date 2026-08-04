@@ -147,6 +147,47 @@
   background: #15803d;
 }
 
+/* ── Screen Mobile Responsiveness ───────────────────────────── */
+@media (max-width: 767px) {
+  .outward-letterhead-container {
+    padding: 1.25rem 0.85rem;
+    margin: 0.5rem 0.25rem;
+  }
+  .letterhead-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.5rem;
+  }
+  .emblem-box {
+    font-size: 2.2rem;
+    margin: 0 auto;
+  }
+  .mla-name-title {
+    font-size: 1.25rem;
+  }
+  .mla-constituency {
+    font-size: 0.95rem;
+  }
+  .office-address-line {
+    font-size: 0.72rem;
+  }
+  .letter-meta-row {
+    flex-direction: column;
+    gap: 0.3rem;
+    font-size: 0.85rem;
+  }
+  .letter-signature-block {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+  .sign-text-group {
+    text-align: left;
+    width: 100%;
+  }
+}
+
 /* ── Print Media Query ──────────────────────────────────────── */
 @media print {
   body * {

@@ -224,8 +224,7 @@ const BoothPage = () => {
       <div className="page-header">
         <div>
           <h1 className="page-title">
-            {isMr ? 'बूथ रचना (Booth Structure)' : 'Booth Structure · '}
-            <span className="mr">{isMr ? '' : 'बूथ रचना'}</span>
+            {isMr ? 'बूथ रचना' : 'Booth Structure'}
           </h1>
           <p className="page-subtitle">
             {isMr

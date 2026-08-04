@@ -195,8 +195,10 @@ const InwardFormModal = ({ isOpen, onClose, onSuccess, initialData = null, onSav
       <div className="inward-modal-container" onClick={(e) => e.stopPropagation()}>
         <div className="inward-modal-header">
           <div className="modal-title-group">
-            <h3>{initialData ? 'Inward Details · आवक तपशील' : 'New Inward Entry · नवीन आवक नोंद'}</h3>
-            <span className="modal-subtitle-en">Register a received letter, document, or correspondence</span>
+            <h3>{isMr ? (initialData ? 'आवक तपशील' : 'नवीन आवक नोंद') : (initialData ? 'Inward Details' : 'New Inward Entry')}</h3>
+            <span className="modal-subtitle-en">
+              {isMr ? 'कार्यालयात प्राप्त पत्र, अर्ज किंवा दस्तऐवजाची नोंद करा' : 'Register a received letter, document, or correspondence'}
+            </span>
           </div>
           <button type="button" className="modal-close-btn" onClick={onClose}><X size={18} /></button>
         </div>
@@ -207,12 +209,12 @@ const InwardFormModal = ({ isOpen, onClose, onSuccess, initialData = null, onSav
 
             {/* Section 1: Inward Details */}
             <div className="form-section">
-              <div className="section-title" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Inbox size={16} /> Inward Details · <span className="mr">आवक तपशील</span></div>
-              <div className="section-desc">Letter/document received at MLA office</div>
+              <div className="section-title" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Inbox size={16} /> {isMr ? 'आवक तपशील' : 'Inward Details'}</div>
+              <div className="section-desc">{isMr ? 'आमदार कार्यालयात प्राप्त झालेले पत्र / दस्तऐवज' : 'Letter/document received at MLA office'}</div>
               <div className="form-grid">
                 <div className="form-group">
                   <label className="form-label">
-                    Inward Number <span className="mr-sub">आवक क्रमांक</span>
+                    {isMr ? 'आवक क्रमांक' : 'Inward Number'}
                   </label>
                   <input
                     className="form-input mono"
@@ -220,12 +222,12 @@ const InwardFormModal = ({ isOpen, onClose, onSuccess, initialData = null, onSav
                     readOnly
                     style={{ background: 'var(--inw-bg)', color: 'var(--inw-t3)', fontWeight: 600 }}
                   />
-                  <span className="form-hint">Auto-generated · स्वयं-निर्मित</span>
+                  <span className="form-hint">{isMr ? 'स्वयं-निर्मित' : 'Auto-generated'}</span>
                 </div>
 
                 <div className="form-group">
                   <label className="form-label">
-                    Date Received<span className="req">*</span> <span className="mr-sub">प्राप्त तारीख</span>
+                    {isMr ? 'प्राप्त तारीख' : 'Date Received'}<span className="req">*</span>
                   </label>
                   <input
                     className="form-input"
@@ -241,38 +243,38 @@ const InwardFormModal = ({ isOpen, onClose, onSuccess, initialData = null, onSav
 
             {/* Section 2: Sender Details */}
             <div className="form-section">
-              <div className="section-title">Sender Information · <span className="mr">पाठवणाऱ्याची माहिती</span></div>
+              <div className="section-title">{isMr ? 'पाठवणाऱ्याची माहिती' : 'Sender Information'}</div>
               <div className="form-grid">
                 <div className="form-group">
                   <label className="form-label">
-                    Sender Name<span className="req">*</span> <span className="mr-sub">पाठवणाऱ्याचे नाव</span>
+                    {isMr ? 'पाठवणाऱ्याचे नाव' : 'Sender Name'}<span className="req">*</span>
                   </label>
                   <input
                     className="form-input"
                     name="sender_name"
                     value={form.sender_name}
                     onChange={handleChange}
-                    placeholder="e.g., Shri. A.B. Kulkarni"
+                    placeholder={isMr ? 'उदा. श्री. अ. ब. कुलकर्णी' : 'e.g. Shri. A.B. Kulkarni'}
                     required
                   />
                 </div>
 
                 <div className="form-group">
                   <label className="form-label">
-                    Sender Designation <span className="mr-sub">पद</span>
+                    {isMr ? 'पदनाम' : 'Sender Designation'}
                   </label>
                   <input
                     className="form-input"
                     name="sender_designation"
                     value={form.sender_designation}
                     onChange={handleChange}
-                    placeholder="e.g., Executive Engineer"
+                    placeholder={isMr ? 'उदा. कार्यकारी अभियंता' : 'e.g. Executive Engineer'}
                   />
                 </div>
 
                 <div className="form-group">
                   <label className="form-label">
-                    Department / Office<span className="req">*</span> <span className="mr-sub">विभाग / कार्यालय</span>
+                    {isMr ? 'विभाग / कार्यालय' : 'Department / Office'}<span className="req">*</span>
                   </label>
                   <select
                     className="form-input"
@@ -280,7 +282,7 @@ const InwardFormModal = ({ isOpen, onClose, onSuccess, initialData = null, onSav
                     value={form.sender_department_id}
                     onChange={handleChange}
                   >
-                    <option value="">Select Department...</option>
+                    <option value="">{isMr ? 'विभाग निवडा...' : 'Select Department...'}</option>
                     {departments.map((d) => (
                       <option key={d.id} value={d.id}>
                         {isMr ? d.name_mr : (d.name_en || d.name_mr)} ({d.short_code})
@@ -291,14 +293,14 @@ const InwardFormModal = ({ isOpen, onClose, onSuccess, initialData = null, onSav
 
                 <div className="form-group">
                   <label className="form-label">
-                    Reference / Letter Number <span className="mr-sub">संदर्भ पत्र क्र.</span>
+                    {isMr ? 'संदर्भ पत्र क्रमांक' : 'Reference / Letter Number'}
                   </label>
                   <input
                     className="form-input"
                     name="reference_number"
                     value={form.reference_number}
                     onChange={handleChange}
-                    placeholder="e.g., PWD/CE/2026/123"
+                    placeholder={isMr ? 'उदा. सार्वजनिक बांधकाम/अभियंता/२०२६/१२३' : 'e.g., PWD/CE/2026/123'}
                   />
                 </div>
               </div>
@@ -306,25 +308,25 @@ const InwardFormModal = ({ isOpen, onClose, onSuccess, initialData = null, onSav
 
             {/* Section 3: Subject & Priority */}
             <div className="form-section">
-              <div className="section-title">Subject & Category · <span className="mr">विषय व प्राधान्य</span></div>
+              <div className="section-title">{isMr ? 'विषय व प्राधान्य' : 'Subject & Category'}</div>
               <div className="form-grid">
                 <div className="form-group form-full">
                   <label className="form-label">
-                    Subject<span className="req">*</span> <span className="mr-sub">विषय</span>
+                    {isMr ? 'विषय' : 'Subject'}<span className="req">*</span>
                   </label>
                   <input
                     className="form-input"
                     name="subject"
                     value={form.subject}
                     onChange={handleChange}
-                    placeholder="Brief description of the letter subject..."
+                    placeholder={isMr ? 'पत्राचा थोडक्यात विषय...' : 'Brief description of the letter subject...'}
                     required
                   />
                 </div>
 
                 <div className="form-group form-full">
                   <label className="form-label">
-                    Description / Notes <span className="mr-sub">वर्णन / टिपा</span>
+                    {isMr ? 'वर्णन / टिपा' : 'Description / Notes'}
                   </label>
                   <textarea
                     className="form-input"
@@ -332,13 +334,13 @@ const InwardFormModal = ({ isOpen, onClose, onSuccess, initialData = null, onSav
                     rows={3}
                     value={form.description}
                     onChange={handleChange}
-                    placeholder="Brief summary of the content..."
+                    placeholder={isMr ? 'पत्रातील मुख्य मुद्द्यांचा सारांश...' : 'Brief summary of the content...'}
                   />
                 </div>
 
                 <div className="form-group">
                   <label className="form-label">
-                    Tags <span className="mr-sub">टॅग्ज (Enter दाबून जोडा)</span>
+                    {isMr ? 'टॅग्ज' : 'Tags'}
                   </label>
                   <input
                     className="form-input"
@@ -346,7 +348,7 @@ const InwardFormModal = ({ isOpen, onClose, onSuccess, initialData = null, onSav
                     value={form.tagInput}
                     onChange={handleChange}
                     onKeyDown={handleAddTag}
-                    placeholder="Add tag and press enter..."
+                    placeholder={isMr ? 'टॅग जोडा आणि एंटर दाबा...' : 'Add tag and press enter...'}
                   />
                   <div className="tag-list">
                     {form.tags.map((tag) => (
@@ -359,21 +361,21 @@ const InwardFormModal = ({ isOpen, onClose, onSuccess, initialData = null, onSav
 
                 <div className="form-group">
                   <label className="form-label">
-                    Priority<span className="req">*</span> <span className="mr-sub">प्राधान्य</span>
+                    {isMr ? 'प्राधान्य' : 'Priority'}<span className="req">*</span>
                   </label>
                   <select className="form-input" name="priority" value={form.priority} onChange={handleChange}>
-                    <option value="LOW">Low · कमी</option>
-                    <option value="MEDIUM">Medium · मध्यम</option>
-                    <option value="HIGH">High · उच्च</option>
+                    <option value="LOW">{isMr ? 'कमी' : 'Low'}</option>
+                    <option value="MEDIUM">{isMr ? 'मध्यम' : 'Medium'}</option>
+                    <option value="HIGH">{isMr ? 'उच्च' : 'High'}</option>
                   </select>
                 </div>
 
                 <div className="form-group">
                   <label className="form-label">
-                    Assigned To <span className="mr-sub">नियुक्त करा</span>
+                    {isMr ? 'नियुक्त अधिकारी' : 'Assigned To'}
                   </label>
                   <select className="form-input" name="assigned_to_user_id" value={form.assigned_to_user_id} onChange={handleChange}>
-                    <option value="">— Assign later —</option>
+                    <option value="">{isMr ? '— नंतर नियुक्त करा —' : '— Assign later —'}</option>
                     <option value="2">Suresh Patil (PA / Staff)</option>
                     <option value="4">Rahul Jadhav (Staff)</option>
                   </select>
@@ -381,12 +383,12 @@ const InwardFormModal = ({ isOpen, onClose, onSuccess, initialData = null, onSav
 
                 <div className="form-group">
                   <label className="form-label">
-                    Requires Outward Reply? <span className="mr-sub">जवाबी पत्र आवश्यक?</span>
+                    {isMr ? 'जवाबी पत्र आवश्यक?' : 'Requires Outward Reply?'}
                   </label>
                   <select className="form-input" name="requires_reply" value={form.requires_reply} onChange={handleChange}>
-                    <option value="NO">No</option>
-                    <option value="YES_LATER">Yes — draft outward later</option>
-                    <option value="YES_AI">Yes — AI draft immediately</option>
+                    <option value="NO">{isMr ? 'नाही' : 'No'}</option>
+                    <option value="YES_LATER">{isMr ? 'होय — नंतर जावक तयार करा' : 'Yes — draft outward later'}</option>
+                    <option value="YES_AI">{isMr ? 'होय — त्वरित AI जावक तयार करा' : 'Yes — AI draft immediately'}</option>
                   </select>
                 </div>
               </div>
@@ -394,14 +396,14 @@ const InwardFormModal = ({ isOpen, onClose, onSuccess, initialData = null, onSav
 
             {/* Section 4: Attachments */}
             <div className="form-section">
-              <div className="section-title" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Paperclip size={16} /> Scan / Upload Document · <span className="mr">दस्तऐवज अपलोड</span></div>
-              <div className="section-desc">Upload the scanned PDF or photo of the received letter</div>
+              <div className="section-title" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Paperclip size={16} /> {isMr ? 'दस्तऐवज अपलोड' : 'Scan / Upload Document'}</div>
+              <div className="section-desc">{isMr ? 'प्राप्त झालेल्या पत्राची स्कॅन प्रत किंवा फोटो अपलोड करा' : 'Upload the scanned PDF or photo of the received letter'}</div>
               <div className="file-drop">
                 <span className="ico"><UploadCloud size={24} /></span>
                 <div className="text">
-                  Drag & drop scanned document, or <strong style={{ color: 'var(--inw-p)' }}>click to browse</strong>
+                  {isMr ? 'फाईल येथे ड्रॅग करा किंवा ' : 'Drag & drop scanned document, or '}<strong style={{ color: 'var(--inw-p)' }}>{isMr ? 'ब्राउझ करा' : 'click to browse'}</strong>
                 </div>
-                <div className="hint">PDF, JPG, PNG — Max 10MB per file</div>
+                <div className="hint">PDF, JPG, PNG — Max 10MB</div>
               </div>
 
               {form.files.length > 0 && (
@@ -421,17 +423,17 @@ const InwardFormModal = ({ isOpen, onClose, onSuccess, initialData = null, onSav
             {/* Modal Footer */}
             <div className="form-footer">
               <div style={{ fontSize: '12px', color: 'var(--inw-t3)' }}>
-                Inward No: <strong className="mono" style={{ color: 'var(--inw-p)' }}>{form.inward_number}</strong>
+                {isMr ? 'आवक क्रमांक:' : 'Inward No:'} <strong className="mono" style={{ color: 'var(--inw-p)' }}>{form.inward_number}</strong>
               </div>
               <div style={{ display: 'flex', gap: '8px' }}>
                 <button type="button" className="btn btn-o" onClick={onClose}>
-                  Cancel · रद्द करा
+                  {isMr ? 'रद्द करा' : 'Cancel'}
                 </button>
                 <button type="submit" className="btn btn-p" disabled={submitting} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-                  <Save size={16} /> {submitting ? 'Saving...' : 'Save · जतन करा'}
+                  <Save size={16} /> {submitting ? (isMr ? 'जतन होत आहे...' : 'Saving...') : (isMr ? 'जतन करा' : 'Save')}
                 </button>
                 <button type="button" className="btn btn-ok" onClick={(e) => handleSubmit(e, true)} disabled={submitting} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-                  <Check size={16} /> Save & Create Outward · जतन आणि जावक तयार करा
+                  <Check size={16} /> {isMr ? 'जतन व जावक तयार करा' : 'Save & Create Outward'}
                 </button>
               </div>
             </div>

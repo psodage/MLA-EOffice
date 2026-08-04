@@ -229,7 +229,7 @@ const WhatsAppLogsPage = () => {
       <div className="page-header">
         <div>
           <h1 className="page-title" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <MessageSquare size={22} style={{ color: '#25D366' }} /> WhatsApp Automation · <span className="mr">व्हॉट्सअॅप ऑटोमेशन</span>
+            <MessageSquare size={22} style={{ color: '#25D366' }} /> {isMr ? 'व्हॉट्सॲप ऑटोमेशन' : 'WhatsApp Automation'}
           </h1>
           <p className="page-subtitle">
             {isMr

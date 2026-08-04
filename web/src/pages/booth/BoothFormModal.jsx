@@ -61,7 +61,7 @@ const BoothFormModal = ({ isOpen, onClose, onSuccess, initialArea }) => {
             <div className="nivedan-form-grid">
               <div className="nivedan-form-group">
                 <label className="nivedan-form-label">
-                  {isMr ? 'बूथ क्रमांक (Booth No)' : 'Booth Number'} <span style={{ color: 'red' }}>*</span>
+                  {isMr ? 'बूथ क्रमांक' : 'Booth Number'} <span style={{ color: 'red' }}>*</span>
                 </label>
                 <input
                   type="text"
@@ -70,7 +70,7 @@ const BoothFormModal = ({ isOpen, onClose, onSuccess, initialArea }) => {
                   style={{ fontFamily: 'JetBrains Mono' }}
                   value={form.booth_number}
                   onChange={handleChange}
-                  placeholder="उदा. 149"
+                  placeholder={isMr ? 'उदा. १४९' : 'e.g. 149'}
                   required
                 />
               </div>
@@ -93,7 +93,7 @@ const BoothFormModal = ({ isOpen, onClose, onSuccess, initialArea }) => {
 
               <div className="nivedan-form-group full">
                 <label className="nivedan-form-label">
-                  {isMr ? 'बूथ नाव / केंद्र नाव' : 'Booth Name / Location'} <span style={{ color: 'red' }}>*</span>
+                  {isMr ? 'बूथचे नाव / केंद्र' : 'Booth Name / Location'} <span style={{ color: 'red' }}>*</span>
                 </label>
                 <input
                   type="text"

@@ -1,8 +1,12 @@
 import { useState, useEffect } from 'react';
 import { X, FileText, AlertTriangle } from 'lucide-react';
 import api from '../../services/api.js';
+import useLangStore from '../../store/langStore.js';
 
 const ConvertToNivedanModal = ({ isOpen, onClose, visitor, onSuccess }) => {
+  const { lang } = useLangStore();
+  const isMr = lang === 'MR';
+
   const [form, setForm] = useState({
     citizen_name: '',
     citizen_mobile: '',
@@ -35,12 +39,12 @@ const ConvertToNivedanModal = ({ isOpen, onClose, visitor, onSuccess }) => {
       citizen_mobile: visitor.mobile || '',
       citizen_address_line: visitor.address_line || '',
       category_id: '',
-      subject: visitor.purpose_description || 'नागरिक भेट प्रसंगी सुपूर्द केलेली तक्रार',
-      description: visitor.purpose_description || 'नागरिक भेट प्रसंगी मांडलेली तक्रार.',
+      subject: visitor.purpose_description || (isMr ? 'नागरिक भेट प्रसंगी सुपूर्द केलेली तक्रार' : 'Petition submitted during visitor meeting'),
+      description: visitor.purpose_description || (isMr ? 'नागरिक भेट प्रसंगी मांडलेली तक्रार.' : 'Grievance submitted during visitor meeting.'),
       priority: 'MEDIUM',
     });
     setError('');
-  }, [isOpen, visitor]);
+  }, [isOpen, visitor, isMr]);
 
   if (!isOpen || !visitor) return null;
 
@@ -52,11 +56,11 @@ const ConvertToNivedanModal = ({ isOpen, onClose, visitor, onSuccess }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.category_id) {
-      setError('कृपया तक्रार वर्गवारी निवडा (Category is required)');
+      setError(isMr ? 'कृपया तक्रार वर्गवारी निवडा.' : 'Category is required.');
       return;
     }
     if (!form.subject.trim()) {
-      setError('कृपया विषय प्रविष्ट करा (Subject is required)');
+      setError(isMr ? 'कृपया विषय प्रविष्ट करा.' : 'Subject is required.');
       return;
     }
 
@@ -69,7 +73,7 @@ const ConvertToNivedanModal = ({ isOpen, onClose, visitor, onSuccess }) => {
       onClose();
     } catch (err) {
       console.error('Convert to Nivedan error:', err);
-      setError(err?.response?.data?.message || 'निवेदनात रूपांतर करताना त्रुटी आली.');
+      setError(err?.response?.data?.message || (isMr ? 'निवेदनात रूपांतर करताना त्रुटी आली.' : 'Error converting to petition.'));
     } finally {
       setSubmitting(false);
     }
@@ -81,9 +85,11 @@ const ConvertToNivedanModal = ({ isOpen, onClose, visitor, onSuccess }) => {
         <div className="inward-modal-header">
           <div className="modal-title-group">
             <h3 style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-              <FileText size={18} /> निवेदनात रूपांतर करा (Convert Visitor to Nivedan)
+              <FileText size={18} /> {isMr ? 'निवेदनात रूपांतर करा' : 'Convert Visitor to Nivedan'}
             </h3>
-            <span className="modal-subtitle-en">Create Official Petition from Visitor Grievance</span>
+            <span className="modal-subtitle-en">
+              {isMr ? 'अभ्यागत तक्रारीचे अधिकृत निवेदनात रूपांतर करा' : 'Create Official Petition from Visitor Grievance'}
+            </span>
           </div>
           <button className="modal-close-btn" onClick={onClose}><X size={18} /></button>
         </div>
@@ -93,29 +99,29 @@ const ConvertToNivedanModal = ({ isOpen, onClose, visitor, onSuccess }) => {
 
           <div className="form-grid">
             <div className="form-group">
-              <label>नागरिकाचे नाव (Citizen Name)</label>
+              <label>{isMr ? 'नागरिकाचे नाव' : 'Citizen Name'}</label>
               <input type="text" value={form.citizen_name} disabled style={{ opacity: 0.8 }} />
             </div>
 
             <div className="form-group">
-              <label>मोबाईल क्रमांक (Mobile)</label>
+              <label>{isMr ? 'मोबाईल क्रमांक' : 'Mobile Number'}</label>
               <input type="text" value={form.citizen_mobile} disabled style={{ opacity: 0.8 }} />
             </div>
 
             <div className="form-group col-span-2">
-              <label>तक्रार वर्गवारी (Category) <span className="req">*</span></label>
+              <label>{isMr ? 'तक्रार वर्गवारी' : 'Category'} <span className="req">*</span></label>
               <select name="category_id" value={form.category_id} onChange={handleChange} required>
-                <option value="">-- वर्गवारी निवडा (Select Category) --</option>
+                <option value="">{isMr ? '-- वर्गवारी निवडा --' : '-- Select Category --'}</option>
                 {categories.map((c) => (
                   <option key={c.id} value={c.id}>
-                    {c.name_mr} ({c.name_en})
+                    {isMr ? c.name_mr : (c.name_en || c.name_mr)}
                   </option>
                 ))}
               </select>
             </div>
 
             <div className="form-group col-span-2">
-              <label>निवेदनाचा विषय (Subject) <span className="req">*</span></label>
+              <label>{isMr ? 'निवेदनाचा विषय' : 'Subject'} <span className="req">*</span></label>
               <input
                 type="text"
                 name="subject"
@@ -126,7 +132,7 @@ const ConvertToNivedanModal = ({ isOpen, onClose, visitor, onSuccess }) => {
             </div>
 
             <div className="form-group col-span-2">
-              <label>तक्रारीचा सविस्तर मजकूर (Description)</label>
+              <label>{isMr ? 'तक्रारीचा सविस्तर मजकूर' : 'Description'}</label>
               <textarea
                 name="description"
                 value={form.description}
@@ -139,10 +145,10 @@ const ConvertToNivedanModal = ({ isOpen, onClose, visitor, onSuccess }) => {
 
           <div className="modal-actions">
             <button type="button" className="btn-secondary" onClick={onClose}>
-              रद्द करा (Cancel)
+              {isMr ? 'रद्द करा' : 'Cancel'}
             </button>
             <button type="submit" className="btn-primary" disabled={submitting} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-              <FileText size={16} /> {submitting ? 'रुपांतर होत आहे...' : 'अधिकृत निवेदनात रूपांतर करा'}
+              <FileText size={16} /> {submitting ? (isMr ? 'रुपांतर होत आहे...' : 'Converting...') : (isMr ? 'अधिकृत निवेदनात रूपांतर करा' : 'Convert to Petition')}
             </button>
           </div>
         </form>

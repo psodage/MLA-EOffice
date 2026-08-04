@@ -1,17 +1,21 @@
 import { useState, useEffect } from 'react';
 import { Calendar, X, AlertTriangle, Save } from 'lucide-react';
 import api from '../../services/api.js';
+import useLangStore from '../../store/langStore.js';
 
 const EVENT_TYPES = [
-  { value: 'MEETING', labelMr: 'बैठक / मीटिंग (Meeting)', color: '#38bdf8' },
-  { value: 'PUBLIC_PROGRAM', labelMr: 'सार्वजनिक कार्यक्रम (Public Program)', color: '#c084fc' },
-  { value: 'GOVT_DEADLINE', labelMr: 'शासकीय मुदत / डेडलाइन (Govt Deadline)', color: '#f87171' },
-  { value: 'ASSEMBLY_SESSION', labelMr: 'विधानसभा अधिवेशन (Assembly Session)', color: '#fb923c' },
-  { value: 'CONSTITUENCY_VISIT', labelMr: 'मतदारसंघ दौरा (Constituency Visit)', color: '#4ade80' },
-  { value: 'PERSONAL', labelMr: 'वैयक्तिक / इतर (Personal)', color: '#94a3b8' },
+  { value: 'MEETING', labelEn: 'Meeting', labelMr: 'बैठक', color: '#38bdf8' },
+  { value: 'PUBLIC_PROGRAM', labelEn: 'Public Program', labelMr: 'सार्वजनिक कार्यक्रम', color: '#c084fc' },
+  { value: 'GOVT_DEADLINE', labelEn: 'Govt Deadline', labelMr: 'शासकीय मुदत', color: '#f87171' },
+  { value: 'ASSEMBLY_SESSION', labelEn: 'Assembly Session', labelMr: 'विधानसभा अधिवेशन', color: '#fb923c' },
+  { value: 'CONSTITUENCY_VISIT', labelEn: 'Constituency Visit', labelMr: 'मतदारसंघ दौरा', color: '#4ade80' },
+  { value: 'PERSONAL', labelEn: 'Personal / Other', labelMr: 'वैयक्तिक / इतर', color: '#94a3b8' },
 ];
 
 const CalendarFormModal = ({ isOpen, onClose, onSuccess, initialDate }) => {
+  const { lang } = useLangStore();
+  const isMr = lang === 'MR';
+
   const [form, setForm] = useState({
     title: '',
     description: '',
@@ -52,11 +56,11 @@ const CalendarFormModal = ({ isOpen, onClose, onSuccess, initialDate }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.title.trim()) {
-      setError('कृपया कार्यक्रमाचे शीर्षक प्रविष्ट करा (Title is required)');
+      setError(isMr ? 'कृपया कार्यक्रमाचे शीर्षक प्रविष्ट करा.' : 'Event title is required.');
       return;
     }
     if (!form.event_date) {
-      setError('कृपया तारीख निवडा (Date is required)');
+      setError(isMr ? 'कृपया तारीख निवडा.' : 'Date is required.');
       return;
     }
 
@@ -69,7 +73,7 @@ const CalendarFormModal = ({ isOpen, onClose, onSuccess, initialDate }) => {
       onClose();
     } catch (err) {
       console.error('Save calendar event error:', err);
-      setError(err?.response?.data?.message || 'कार्यक्रम जतन करताना त्रुटी आली.');
+      setError(err?.response?.data?.message || (isMr ? 'कार्यक्रम जतन करताना त्रुटी आली.' : 'Error saving event.'));
     } finally {
       setSubmitting(false);
     }
@@ -81,9 +85,11 @@ const CalendarFormModal = ({ isOpen, onClose, onSuccess, initialDate }) => {
         <div className="inward-modal-header">
           <div className="modal-title-group">
             <h3 style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-              <Calendar size={18} /> नवीन कार्यक्रम / बैठक नोंदवा (Schedule Event)
+              <Calendar size={18} /> {isMr ? 'नवीन कार्यक्रम नोंदवा' : 'Schedule New Event'}
             </h3>
-            <span className="modal-subtitle-en">Add Meeting, Assembly Session, Public Visit or Govt Deadline</span>
+            <span className="modal-subtitle-en">
+              {isMr ? 'बैठक, अधिवेशन, दौरा किंवा शासकीय मुदत जोडा' : 'Add Meeting, Assembly Session, Public Visit or Govt Deadline'}
+            </span>
           </div>
           <button className="modal-close-btn" onClick={onClose}><X size={18} /></button>
         </div>
@@ -94,24 +100,24 @@ const CalendarFormModal = ({ isOpen, onClose, onSuccess, initialDate }) => {
           <div className="form-grid">
             {/* Event Title */}
             <div className="form-group col-span-2">
-              <label>कार्यक्रमाचे नाव / विषय (Event Title) <span className="req">*</span></label>
+              <label>{isMr ? 'कार्यक्रमाचे नाव / विषय' : 'Event Title'} <span className="req">*</span></label>
               <input
                 type="text"
                 name="title"
                 value={form.title}
                 onChange={handleChange}
-                placeholder="उदा. जिल्हा नियोजन समिती (DPDC) आढावा बैठक"
+                placeholder={isMr ? 'उदा. जिल्हा नियोजन समिती (DPDC) आढावा बैठक' : 'e.g. DPDC Review Meeting'}
                 required
               />
             </div>
 
             {/* Event Type */}
             <div className="form-group">
-              <label>कार्यक्रमाचा प्रकार (Event Type) <span className="req">*</span></label>
+              <label>{isMr ? 'कार्यक्रमाचा प्रकार' : 'Event Type'} <span className="req">*</span></label>
               <select name="event_type" value={form.event_type} onChange={handleChange} required>
                 {EVENT_TYPES.map((t) => (
                   <option key={t.value} value={t.value}>
-                    {t.labelMr}
+                    {isMr ? t.labelMr : t.labelEn}
                   </option>
                 ))}
               </select>
@@ -119,7 +125,7 @@ const CalendarFormModal = ({ isOpen, onClose, onSuccess, initialDate }) => {
 
             {/* Event Date */}
             <div className="form-group">
-              <label>तारीख (Event Date) <span className="req">*</span></label>
+              <label>{isMr ? 'तारीख' : 'Event Date'} <span className="req">*</span></label>
               <input
                 type="date"
                 name="event_date"
@@ -131,7 +137,7 @@ const CalendarFormModal = ({ isOpen, onClose, onSuccess, initialDate }) => {
 
             {/* Start Time */}
             <div className="form-group">
-              <label>सुरुवातीची वेळ (Start Time)</label>
+              <label>{isMr ? 'सुरुवातीची वेळ' : 'Start Time'}</label>
               <input
                 type="time"
                 name="start_time"
@@ -142,7 +148,7 @@ const CalendarFormModal = ({ isOpen, onClose, onSuccess, initialDate }) => {
 
             {/* End Time */}
             <div className="form-group">
-              <label>शेवटची वेळ (End Time)</label>
+              <label>{isMr ? 'शेवटची वेळ' : 'End Time'}</label>
               <input
                 type="time"
                 name="end_time"
@@ -153,35 +159,35 @@ const CalendarFormModal = ({ isOpen, onClose, onSuccess, initialDate }) => {
 
             {/* Location */}
             <div className="form-group col-span-2">
-              <label>ठिकाण व पत्ता (Location / Venue)</label>
+              <label>{isMr ? 'ठिकाण व पत्ता' : 'Location / Venue'}</label>
               <input
                 type="text"
                 name="location"
                 value={form.location}
                 onChange={handleChange}
-                placeholder="उदा. जिल्हाधिकारी कार्यालय, अहमदनगर / आमदार कार्यालय"
+                placeholder={isMr ? 'उदा. जिल्हाधिकारी कार्यालय, अहमदनगर / आमदार कार्यालय' : 'e.g. Collector Office, Ahmednagar / MLA Office'}
               />
             </div>
 
             {/* Description */}
             <div className="form-group col-span-2">
-              <label>सविस्तर मजकूर / टीप (Description)</label>
+              <label>{isMr ? 'सविस्तर मजकूर / टीप' : 'Description'}</label>
               <textarea
                 name="description"
                 value={form.description}
                 onChange={handleChange}
                 rows={3}
-                placeholder="बैठकीचे विषय, अजेंडा किंवा उपस्थित राहाणाऱ्या अधिकाऱ्यांची माहिती..."
+                placeholder={isMr ? 'बैठकीचे विषय, अजेंडा किंवा उपस्थित राहाणाऱ्या अधिकाऱ्यांची माहिती...' : 'Event details, agenda, or attendees...'}
               />
             </div>
           </div>
 
           <div className="modal-actions">
             <button type="button" className="btn-secondary" onClick={onClose}>
-              रद्द करा (Cancel)
+              {isMr ? 'रद्द करा' : 'Cancel'}
             </button>
             <button type="submit" className="btn-primary" disabled={submitting} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-              <Save size={16} /> {submitting ? 'जतन होत आहे...' : 'कार्यक्रम जतन करा (Save Event)'}
+              <Save size={16} /> {submitting ? (isMr ? 'जतन होत आहे...' : 'Saving...') : (isMr ? 'कार्यक्रम जतन करा' : 'Save Event')}
             </button>
           </div>
         </form>

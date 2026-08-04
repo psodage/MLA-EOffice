@@ -191,7 +191,7 @@ const ReportsPage = () => {
       <div className="reports-header">
         <div>
           <h1 className="title" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <BarChart2 size={24} style={{ color: 'var(--primary)' }} /> Reports · <span className="mr" style={{ fontFamily: "'Noto Sans Devanagari', sans-serif" }}>अहवाल</span>
+            <BarChart2 size={24} style={{ color: 'var(--primary)' }} /> {isMr ? 'अहवाल व विश्लेषण' : 'Reports & Analytics'}
           </h1>
           <p className="sub">
             {isMr

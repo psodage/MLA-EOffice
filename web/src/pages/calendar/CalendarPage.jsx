@@ -121,8 +121,7 @@ const CalendarPage = () => {
       <div className="page-header">
         <div>
           <h1 className="page-title">
-            {isMr ? 'दिनदर्शिका (Calendar)' : 'Calendar · '}
-            <span className="mr">{isMr ? '' : 'दिनदर्शिका'}</span>
+            {isMr ? 'दिनदर्शिका' : 'Calendar'}
           </h1>
           <p className="page-subtitle">
             {isMr

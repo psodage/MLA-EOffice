@@ -1,21 +1,25 @@
 import { useState, useEffect } from 'react';
 import { X, Users, Search, RotateCcw, LogIn, ArrowLeft, AlertTriangle } from 'lucide-react';
 import api from '../../services/api.js';
+import useLangStore from '../../store/langStore.js';
 
 const PURPOSE_OPTIONS = [
-  { value: 'GRIEVANCE', labelMr: 'तक्रार / निवेदने (Grievance / Petition)' },
-  { value: 'COURTESY_CALL', labelMr: 'शुभेच्छा भेट (Courtesy Call)' },
-  { value: 'PARTY_WORK', labelMr: 'पक्ष कार्य / संघटना (Party Work)' },
-  { value: 'INVITATION', labelMr: 'निमंत्रण पत्रिका सुपूर्द (Invitation)' },
-  { value: 'PERSONAL_MEETING', labelMr: 'वैयक्तिक भेट (Personal Meeting)' },
-  { value: 'DOCUMENT_SUBMISSION', labelMr: 'कागदपत्रे सादर करणे (Document Submission)' },
-  { value: 'FOLLOWUP', labelMr: 'काम पाठपुरावा (Followup)' },
-  { value: 'RECOMMENDATION', labelMr: 'शिफारस मागणी (Recommendation)' },
-  { value: 'GENERAL_INQUIRY', labelMr: 'सामान्य चौकशी (General Inquiry)' },
-  { value: 'OTHER', labelMr: 'इतर (Other)' },
+  { value: 'GRIEVANCE', labelEn: 'Grievance / Petition', labelMr: 'तक्रार व निवेदने' },
+  { value: 'COURTESY_CALL', labelEn: 'Courtesy Call', labelMr: 'शुभेच्छा भेट' },
+  { value: 'PARTY_WORK', labelEn: 'Party Work', labelMr: 'पक्ष कार्य व संघटना' },
+  { value: 'INVITATION', labelEn: 'Invitation Card Submission', labelMr: 'निमंत्रण पत्रिका सुपूर्द' },
+  { value: 'PERSONAL_MEETING', labelEn: 'Personal Meeting', labelMr: 'वैयक्तिक भेट' },
+  { value: 'DOCUMENT_SUBMISSION', labelEn: 'Document Submission', labelMr: 'कागदपत्रे सादर करणे' },
+  { value: 'FOLLOWUP', labelEn: 'Work Followup', labelMr: 'काम पाठपुरावा' },
+  { value: 'RECOMMENDATION', labelEn: 'Recommendation Request', labelMr: 'शिफारस मागणी' },
+  { value: 'GENERAL_INQUIRY', labelEn: 'General Inquiry', labelMr: 'सामान्य चौकशी' },
+  { value: 'OTHER', labelEn: 'Other', labelMr: 'इतर' },
 ];
 
 const VisitorCheckInModal = ({ isOpen, onClose, onSuccess }) => {
+  const { lang } = useLangStore();
+  const isMr = lang === 'MR';
+
   const [step, setStep] = useState(1);
   const [mobileInput, setMobileInput] = useState('');
   const [lookingUp, setLookingUp] = useState(false);
@@ -55,7 +59,7 @@ const VisitorCheckInModal = ({ isOpen, onClose, onSuccess }) => {
   const handleMobileLookup = async (e) => {
     e.preventDefault();
     if (!mobileInput.trim() || mobileInput.trim().length < 10) {
-      setError('कृपया १० अंकी वैध मोबाईल क्रमांक प्रविष्ट करा');
+      setError(isMr ? 'कृपया १० अंकी वैध मोबाईल क्रमांक प्रविष्ट करा.' : 'Valid 10-digit mobile number required.');
       return;
     }
 
@@ -78,7 +82,7 @@ const VisitorCheckInModal = ({ isOpen, onClose, onSuccess }) => {
       setStep(2);
     } catch (err) {
       console.error('Mobile lookup error:', err);
-      setError('मोबाईल लुकअप करताना त्रुटी आली. कृपया पुन्हा प्रयत्न करा.');
+      setError(isMr ? 'मोबाईल लुकअप करताना त्रुटी आली. कृपया पुन्हा प्रयत्न करा.' : 'Error during mobile lookup.');
     } finally {
       setLookingUp(false);
     }
@@ -93,7 +97,7 @@ const VisitorCheckInModal = ({ isOpen, onClose, onSuccess }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.visitor_name.trim()) {
-      setError('कृपया भेटणाऱ्याचे नाव प्रविष्ट करा (Visitor name is required)');
+      setError(isMr ? 'कृपया भेटणाऱ्याचे नाव प्रविष्ट करा.' : 'Visitor name is required.');
       return;
     }
 
@@ -106,7 +110,7 @@ const VisitorCheckInModal = ({ isOpen, onClose, onSuccess }) => {
       onClose();
     } catch (err) {
       console.error('Check-in error:', err);
-      setError(err?.response?.data?.message || 'भेट नोंदवताना त्रुटी आली.');
+      setError(err?.response?.data?.message || (isMr ? 'भेट नोंदवताना त्रुटी आली.' : 'Error performing check-in.'));
     } finally {
       setSubmitting(false);
     }
@@ -118,9 +122,11 @@ const VisitorCheckInModal = ({ isOpen, onClose, onSuccess }) => {
         <div className="inward-modal-header">
           <div className="modal-title-group">
             <h3 style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-              <Users size={18} /> नवीन नागरिक भेट नोंद (Visitor Check-In)
+              <Users size={18} /> {isMr ? 'नवीन नागरिक भेट नोंद' : 'Visitor Check-In'}
             </h3>
-            <span className="modal-subtitle-en">Step {step} of 2 — Quick Entry & Repeat Detection</span>
+            <span className="modal-subtitle-en">
+              {isMr ? `टप्पा ${step} पैकी २ — मोबाईल नंबर व भेट तपशील` : `Step ${step} of 2 — Quick Entry & Repeat Detection`}
+            </span>
           </div>
           <button className="modal-close-btn" onClick={onClose}><X size={18} /></button>
         </div>
@@ -131,24 +137,24 @@ const VisitorCheckInModal = ({ isOpen, onClose, onSuccess }) => {
             {error && <div className="form-error-banner" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><AlertTriangle size={16} /> {error}</div>}
 
             <div className="form-group col-span-2">
-              <label>भेटणाऱ्याचा १० अंकी मोबाईल नंबर (Mobile Number) <span className="req">*</span></label>
+              <label>{isMr ? 'भेटणाऱ्याचा १० अंकी मोबाईल नंबर' : '10-Digit Mobile Number'} <span className="req">*</span></label>
               <div style={{ display: 'flex', gap: '0.5rem' }}>
                 <input
                   type="tel"
                   value={mobileInput}
                   onChange={(e) => setMobileInput(e.target.value)}
-                  placeholder="98220XXXXX (पुनरावृत्ती तपासणीसाठी)"
+                  placeholder={isMr ? '९८२२०XXXXX' : '98220XXXXX'}
                   maxLength={10}
                   style={{ fontSize: '1.1rem', fontWeight: 700 }}
                   required
                   autoFocus
                 />
                 <button type="submit" className="btn-primary" disabled={lookingUp} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-                  <Search size={16} /> {lookingUp ? 'तपासत आहे...' : 'शोधा (Lookup)'}
+                  <Search size={16} /> {lookingUp ? (isMr ? 'तपासत आहे...' : 'Searching...') : (isMr ? 'शोधा' : 'Lookup')}
                 </button>
               </div>
               <small style={{ color: '#94a3b8', marginTop: '0.35rem', display: 'block' }}>
-                मोबाईल नंबर प्रविष्ट केल्यास पूर्वीची भेट व नाव आपोआप दिसेल.
+                {isMr ? 'मोबाईल नंबर प्रविष्ट केल्यास पूर्वीची भेट व नाव आपोआप दिसेल.' : 'Auto-fetches previous visit info if registered.'}
               </small>
             </div>
           </form>
@@ -160,68 +166,68 @@ const VisitorCheckInModal = ({ isOpen, onClose, onSuccess }) => {
             {/* Repeat Visitor Alert Banner */}
             {repeatInfo && repeatInfo.isRepeat && (
               <div className="repeat-visitor-alert-banner" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <RotateCcw size={16} /> <strong>पुनरावृत्ती भेटणारे (Repeat Visitor):</strong> हे नागरिक यापूर्वी <strong>{repeatInfo.previousCount} वेळा</strong> कार्यालयास भेट देऊन गेले आहेत.
+                <RotateCcw size={16} /> <strong>{isMr ? 'पुनरावृत्ती भेटणारे:' : 'Repeat Visitor:'}</strong> {isMr ? `हे नागरिक यापूर्वी ${repeatInfo.previousCount} वेळा कार्यालयास भेट देऊन गेले आहेत.` : `This citizen has visited ${repeatInfo.previousCount} times previously.`}
               </div>
             )}
 
             <div className="form-grid">
               <div className="form-group">
-                <label>मोबाईल क्रमांक (Mobile)</label>
+                <label>{isMr ? 'मोबाईल क्रमांक' : 'Mobile Number'}</label>
                 <input type="text" value={form.mobile} disabled style={{ opacity: 0.7 }} />
               </div>
 
               <div className="form-group">
-                <label>नागरिकाचे नाव (Visitor Name) <span className="req">*</span></label>
+                <label>{isMr ? 'नागरिकाचे नाव' : 'Visitor Name'} <span className="req">*</span></label>
                 <input
                   type="text"
                   name="visitor_name"
                   value={form.visitor_name}
                   onChange={handleChange}
-                  placeholder="उदा. बबनराव पाटील"
+                  placeholder={isMr ? 'उदा. बबनराव पाटील' : 'e.g. Babanrao Patil'}
                   required
                 />
               </div>
 
               <div className="form-group col-span-2">
-                <label>पत्ता व गाव (Address / Village)</label>
+                <label>{isMr ? 'पत्ता व गाव' : 'Address / Village'}</label>
                 <input
                   type="text"
                   name="address_line"
                   value={form.address_line}
                   onChange={handleChange}
-                  placeholder="उदा. मु.पो. राहाता, तालुका राहाता"
+                  placeholder={isMr ? 'उदा. मु.पो. राहाता, तालुका राहाता' : 'e.g. Rahata Town, Rahata'}
                 />
               </div>
 
               <div className="form-group col-span-2">
-                <label>भेटण्याचे कारण (Purpose of Visit) <span className="req">*</span></label>
+                <label>{isMr ? 'भेटण्याचे कारण' : 'Purpose of Visit'} <span className="req">*</span></label>
                 <select name="purpose" value={form.purpose} onChange={handleChange} required>
                   {PURPOSE_OPTIONS.map((p) => (
                     <option key={p.value} value={p.value}>
-                      {p.labelMr}
+                      {isMr ? p.labelMr : p.labelEn}
                     </option>
                   ))}
                 </select>
               </div>
 
               <div className="form-group col-span-2">
-                <label>कारणाचा तपशील व मुद्दे (Purpose Description)</label>
+                <label>{isMr ? 'कारणाचा तपशील व मुद्दे' : 'Purpose Description'}</label>
                 <textarea
                   name="purpose_description"
                   value={form.purpose_description}
                   onChange={handleChange}
                   rows={3}
-                  placeholder="भेटण्यामागचे सविस्तर कारण किंवा महत्त्वाचे मुद्दे प्रविष्ट करा..."
+                  placeholder={isMr ? 'भेटण्यामागचे सविस्तर कारण किंवा महत्त्वाचे मुद्दे प्रविष्ट करा...' : 'Enter details regarding the visit...'}
                 />
               </div>
             </div>
 
             <div className="modal-actions">
               <button type="button" className="btn-secondary" onClick={() => setStep(1)} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-                <ArrowLeft size={16} /> मागे जा (Back)
+                <ArrowLeft size={16} /> {isMr ? 'मागे जा' : 'Back'}
               </button>
               <button type="submit" className="btn-primary" disabled={submitting} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-                <LogIn size={16} /> {submitting ? 'नोंदणी होत आहे...' : 'चेक-इन करा (Check-In)'}
+                <LogIn size={16} /> {submitting ? (isMr ? 'नोंदणी होत आहे...' : 'Saving...') : (isMr ? 'चेक-इन करा' : 'Check-In')}
               </button>
             </div>
           </form>

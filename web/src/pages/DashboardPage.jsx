@@ -70,7 +70,6 @@ const t = {
     recentActivityTitle: 'अलीकडील क्रिया',
     viewAll: 'सर्व पहा →',
     upcomingEventsTitle: 'आगामी कार्यक्रम',
-    upcomingEventsTitleMr: 'Upcoming Events',
     calendarLink: 'दिनदर्शिका →',
     noActivities: 'डेटाबेसमध्ये कोणत्याही अलीकडील क्रिया आढळल्या नाहीत.',
     noEvents: 'कोणतेही आगामी कार्यक्रम नियोजित नाहीत.',
@@ -81,26 +80,10 @@ const DashboardPage = () => {
   const [summaryData, setSummaryData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [lang, setLang] = useState(() => localStorage.getItem('mla_lang') || 'EN');
+  const { lang } = useLangStore();
 
   const navigate = useNavigate();
   const { user } = useAuthStore();
-
-  // Listen for language changes in localStorage
-  useEffect(() => {
-    const handleStorageChange = () => {
-      const currentLang = localStorage.getItem('mla_lang') || 'EN';
-      setLang(currentLang);
-    };
-
-    window.addEventListener('storage', handleStorageChange);
-    const interval = setInterval(handleStorageChange, 500);
-
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-      clearInterval(interval);
-    };
-  }, []);
 
   useEffect(() => {
     const fetchSummary = async () => {

@@ -197,7 +197,7 @@ const KaryakartaListPage = () => {
       <div className="karyakarta-header">
         <div>
           <h1 className="title">
-            Karyakarta Master · <span className="mr" style={{ fontFamily: "'Noto Sans Devanagari', sans-serif" }}>कार्यकर्ता यादी</span>
+            {isMr ? 'कार्यकर्ता नोंदवही' : 'Karyakarta Master'}
           </h1>
           <p className="sub">
             {isMr ? 'पक्ष कार्यकर्ता संचालनालय व सुलभ नोंदवही' : 'Party worker directory & territory assignment'}

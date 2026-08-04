@@ -224,7 +224,7 @@ const GramWardPage = () => {
       <div className="ph">
         <div>
           <h1 className="title">
-            Gram / Ward Organization · <span className="mr" style={{ fontFamily: "'Noto Sans Devanagari', sans-serif" }}>ग्राम / वॉर्ड रचना</span>
+            {isMr ? 'ग्राम व वॉर्ड रचना' : 'Gram / Ward Organization'}
           </h1>
           <p className="sub">
             {isMr
