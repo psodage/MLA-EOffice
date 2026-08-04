@@ -6,7 +6,29 @@
 
 /* ── CSS Custom Properties (Design Tokens) ──────────────── */
 :root {
-  /* Colors — Dark theme (primary) */
+  /* Module Design Tokens — Light (Default) */
+  --p: #1b3a5c;
+  --pl: #eff4f9;
+  --bg: #f5f7fa;
+  --c: #ffffff;
+  --t1: #0f172a;
+  --t2: #475569;
+  --t3: #64748b;
+  --t4: #94a3b8;
+  --b: #dde3eb;
+
+  --ok: #16a34a;
+  --okb: #f0fdf4;
+  --wr: #d97706;
+  --wrb: #fffbeb;
+  --er: #dc2626;
+  --erb: #fef2f2;
+  --in: #2563eb;
+  --inb: #eff6ff;
+  --pu: #7c3aed;
+  --pub: #f5f3ff;
+
+  /* Colors — Dark theme tokens */
   --color-bg-primary: #0f172a;
   --color-bg-secondary: #1e293b;
   --color-bg-tertiary: #334155;
@@ -68,6 +90,24 @@
   --sidebar-width: 260px;
   --sidebar-collapsed: 72px;
   --page-max-width: 1400px;
+}
+
+[data-theme="dark"] {
+  --p: #5a9bd5;
+  --pl: #1a3355;
+  --bg: #0f1419;
+  --c: #1a2332;
+  --t1: #f8fafc;
+  --t2: #cbd5e1;
+  --t3: #94a3b8;
+  --t4: #64748b;
+  --b: #2a364f;
+
+  --okb: rgba(34, 197, 94, 0.15);
+  --wrb: rgba(245, 158, 11, 0.15);
+  --erb: rgba(239, 68, 68, 0.15);
+  --inb: rgba(59, 130, 246, 0.15);
+  --pub: rgba(124, 58, 237, 0.15);
 }
 
 /* ── CSS Reset ──────────────────────────────────────────── */

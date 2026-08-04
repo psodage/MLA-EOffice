@@ -952,4 +952,57 @@
   }
 }
 
+/* ── Dark Mode Overrides ────────────────────────────────────── */
+[data-theme="dark"] .devworks-stat-card,
+[data-theme="dark"] .devworks-filter-bar,
+[data-theme="dark"] .devwork-card,
+[data-theme="dark"] .devworks-table-card,
+[data-theme="dark"] .devworks-drawer,
+[data-theme="dark"] .devworks-modal-container {
+  background: var(--c, #1a2332) !important;
+  border-color: var(--b, #2a364f) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+}
+
+[data-theme="dark"] .devwork-card:hover {
+  border-color: var(--p, #5a9bd5) !important;
+}
+
+[data-theme="dark"] .filter-group input,
+[data-theme="dark"] .filter-group select,
+[data-theme="dark"] .form-group input,
+[data-theme="dark"] .form-group select,
+[data-theme="dark"] .form-group textarea {
+  background: var(--bg, #0f1419) !important;
+  border-color: var(--b, #2a364f) !important;
+  color: var(--t1, #f8fafc) !important;
+}
+
+[data-theme="dark"] .devworks-table th {
+  background: var(--bg, #0f1419) !important;
+  color: var(--t3, #94a3b8) !important;
+  border-bottom-color: var(--b, #2a364f) !important;
+}
+
+[data-theme="dark"] .devworks-table td {
+  border-bottom-color: var(--b, #2a364f) !important;
+  color: var(--t1, #f8fafc) !important;
+}
+
+[data-theme="dark"] .devworks-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.04) !important;
+}
+
+[data-theme="dark"] .dw-title,
+[data-theme="dark"] .dw-budget,
+[data-theme="dark"] .drawer-title {
+  color: var(--t1, #f8fafc) !important;
+}
+
+[data-theme="dark"] .dw-sub,
+[data-theme="dark"] .dw-contractor {
+  color: var(--t3, #94a3b8) !important;
+}
+
+
 

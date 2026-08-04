@@ -767,3 +767,43 @@ select.fi {
   }
 }
 
+/* ── Dark Mode Overrides ────────────────────────────────────── */
+[data-theme="dark"] .stat-card,
+[data-theme="dark"] .filter-bar,
+[data-theme="dark"] .area-list-card,
+[data-theme="dark"] .area-detail-card,
+[data-theme="dark"] .booth-item-card {
+  background: var(--c, #1a2332) !important;
+  border-color: var(--b, #2a364f) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+}
+
+[data-theme="dark"] .fi input,
+[data-theme="dark"] .fi select {
+  background: var(--bg, #0f1419) !important;
+  border-color: var(--b, #2a364f) !important;
+  color: var(--t1, #f8fafc) !important;
+}
+
+[data-theme="dark"] .area-item-row {
+  border-bottom-color: var(--b, #2a364f) !important;
+}
+
+[data-theme="dark"] .area-item-row:hover,
+[data-theme="dark"] .area-item-row.active {
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+
+[data-theme="dark"] .stat-num,
+[data-theme="dark"] .area-title,
+[data-theme="dark"] .detail-title {
+  color: var(--t1, #f8fafc) !important;
+}
+
+[data-theme="dark"] .stat-label,
+[data-theme="dark"] .area-sub,
+[data-theme="dark"] .detail-sub {
+  color: var(--t3, #94a3b8) !important;
+}
+
+
