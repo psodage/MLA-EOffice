@@ -1,30 +1,21 @@
-// src/pages/whatsapp/WhatsAppLogsPage.jsx
-// ============================================================
-// WhatsApp Automation & Logs Dashboard — Module 12
-// 1:1 Layout Match with WIREFRAMES/whatsapp.html
-// Features: 5 KPI Summary Cards, Tab Bar, Quick Action Cards,
-// Recent Activity Log with WhatsApp Double-Ticks, Conic Delivery Ring,
-// Active Templates Grid & Clean Language Toggle (EN / MR)
-// ============================================================
-
 import { useState, useEffect, useCallback } from 'react';
+import { MessageSquare, BarChart2, Megaphone, FileText, ClipboardList, PartyPopper, Download, Send, CheckCheck, Check, X, Clock, AlertTriangle, Bot, Cake, Building2, HardHat, RefreshCw, ChevronRight } from 'lucide-react';
 import api from '../../services/api.js';
 import useLangStore from '../../store/langStore.js';
 import LucideIcon from '../../components/common/LucideIcon.jsx';
 import './WhatsAppLogsPage.css';
 
 const TABS = [
-  { id: 'OVERVIEW', labelEn: '📊 Overview', labelMr: '📊 सारांश' },
-  { id: 'BROADCASTS', labelEn: '📢 Broadcasts', labelMr: '📢 प्रसारण', count: 4 },
-  { id: 'TEMPLATES', labelEn: '📝 Templates', labelMr: '📝 नमुने', count: 11 },
-  { id: 'DELIVERY_LOG', labelEn: '📋 Delivery Log', labelMr: '📋 वितरण लॉग' },
-  { id: 'GREETINGS', labelEn: '🎉 Greetings', labelMr: '🎉 शुभेच्छा' },
+  { id: 'OVERVIEW', labelEn: 'Overview', labelMr: 'सारांश' },
+  { id: 'BROADCASTS', labelEn: 'Broadcasts', labelMr: 'प्रसारण', count: 4 },
+  { id: 'TEMPLATES', labelEn: 'Templates', labelMr: 'नमुने', count: 11 },
+  { id: 'DELIVERY_LOG', labelEn: 'Delivery Log', labelMr: 'वितरण लॉग' },
+  { id: 'GREETINGS', labelEn: 'Greetings', labelMr: 'शुभेच्छा' },
 ];
 
 const MOCK_RECENT_LOGS = [
   {
     id: 1,
-    icon: '📋',
     iconType: 'auto',
     recipientName: 'सुरेश जाधव',
     recipientMobile: '98765 43210',
@@ -35,7 +26,6 @@ const MOCK_RECENT_LOGS = [
   },
   {
     id: 2,
-    icon: '🔄',
     iconType: 'auto',
     recipientName: 'अनिता कांबळे',
     recipientMobile: '87654 32109',
@@ -46,7 +36,6 @@ const MOCK_RECENT_LOGS = [
   },
   {
     id: 3,
-    icon: '📢',
     iconType: 'broadcast',
     recipientName: 'Broadcast: Haveli Taluka Workers',
     recipientMobile: '156 recipients',
@@ -57,7 +46,6 @@ const MOCK_RECENT_LOGS = [
   },
   {
     id: 4,
-    icon: '🤖',
     iconType: 'bot',
     recipientName: 'प्रकाश मोरे',
     recipientMobile: '76543 21098',
@@ -68,7 +56,6 @@ const MOCK_RECENT_LOGS = [
   },
   {
     id: 5,
-    icon: '❌',
     iconType: 'failed',
     recipientName: 'रमेश पवार',
     recipientMobile: '65432 10987',
@@ -79,7 +66,6 @@ const MOCK_RECENT_LOGS = [
   },
   {
     id: 6,
-    icon: '🎂',
     iconType: 'greeting',
     recipientName: 'मंगेश जाधव',
     recipientMobile: '43210 98765',
@@ -90,7 +76,6 @@ const MOCK_RECENT_LOGS = [
   },
   {
     id: 7,
-    icon: '✅',
     iconType: 'auto',
     recipientName: 'विनोद शिंदे',
     recipientMobile: '54321 09876',
@@ -101,7 +86,6 @@ const MOCK_RECENT_LOGS = [
   },
   {
     id: 8,
-    icon: '🎉',
     iconType: 'auto',
     recipientName: 'नवीन कार्यकर्ता',
     recipientMobile: '32109 87654',
@@ -112,7 +96,6 @@ const MOCK_RECENT_LOGS = [
   },
   {
     id: 9,
-    icon: '🏗️',
     iconType: 'broadcast',
     recipientName: 'Broadcast: Wadgaon Area Workers',
     recipientMobile: '24 recipients',
@@ -123,7 +106,6 @@ const MOCK_RECENT_LOGS = [
   },
   {
     id: 10,
-    icon: '⏳',
     iconType: 'pending',
     recipientName: 'दीपक थोरात',
     recipientMobile: '21098 76543',
@@ -134,8 +116,26 @@ const MOCK_RECENT_LOGS = [
   },
 ];
 
+const renderLogIcon = (type) => {
+  switch (type) {
+    case 'broadcast':
+      return <Megaphone size={14} />;
+    case 'bot':
+      return <Bot size={14} />;
+    case 'failed':
+      return <X size={14} />;
+    case 'greeting':
+      return <Cake size={14} />;
+    case 'pending':
+      return <Clock size={14} />;
+    case 'auto':
+    default:
+      return <MessageSquare size={14} />;
+  }
+};
+
 const WhatsAppLogsPage = () => {
-  const { lang, setLang } = useLangStore();
+  const { lang } = useLangStore();
   const isMr = lang === 'MR';
 
   const [activeTab, setActiveTab] = useState('OVERVIEW');
@@ -191,27 +191,35 @@ const WhatsAppLogsPage = () => {
     switch (status) {
       case 'READ':
         return (
-          <span className="msg-status status-read">
-            <span className="ticks tick-read">✓✓</span> {isMr ? 'वाचलेला' : 'Read'}
+          <span className="msg-status status-read" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+            <CheckCheck size={13} style={{ color: '#38bdf8' }} /> {isMr ? 'वाचलेला' : 'Read'}
           </span>
         );
       case 'DELIVERED':
         return (
-          <span className="msg-status status-delivered">
-            <span className="ticks tick-delivered">✓✓</span> {isMr ? 'मिळालेला' : 'Delivered'}
+          <span className="msg-status status-delivered" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+            <CheckCheck size={13} style={{ color: '#94a3b8' }} /> {isMr ? 'मिळालेला' : 'Delivered'}
           </span>
         );
       case 'SENT':
         return (
-          <span className="msg-status status-sent">
-            <span className="ticks tick-sent">✓</span> {isMr ? 'पाठवलेला' : 'Sent'}
+          <span className="msg-status status-sent" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+            <Check size={13} style={{ color: '#94a3b8' }} /> {isMr ? 'पाठवलेला' : 'Sent'}
           </span>
         );
       case 'FAILED':
-        return <span className="msg-status status-failed">✕ {isMr ? 'अयशस्वी' : 'Failed'}</span>;
+        return (
+          <span className="msg-status status-failed" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+            <X size={13} /> {isMr ? 'अयशस्वी' : 'Failed'}
+          </span>
+        );
       case 'PENDING':
       default:
-        return <span className="msg-status status-pending">⏳ {isMr ? 'प्रलंबित' : 'Pending'}</span>;
+        return (
+          <span className="msg-status status-pending" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+            <Clock size={13} /> {isMr ? 'प्रलंबित' : 'Pending'}
+          </span>
+        );
     }
   };
 
@@ -220,8 +228,8 @@ const WhatsAppLogsPage = () => {
       {/* ── Page Header ─────────────────────────────────────── */}
       <div className="page-header">
         <div>
-          <h1 className="page-title">
-            💬 WhatsApp Automation · <span className="mr">व्हॉट्सअॅप ऑटोमेशन</span>
+          <h1 className="page-title" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <MessageSquare size={22} style={{ color: '#25D366' }} /> WhatsApp Automation · <span className="mr">व्हॉट्सअॅप ऑटोमेशन</span>
           </h1>
           <p className="page-subtitle">
             {isMr
@@ -231,11 +239,11 @@ const WhatsAppLogsPage = () => {
         </div>
 
         <div className="page-actions">
-          <button className="btn-o" onClick={() => alert(isMr ? 'वितरण अहवाल एक्सपोर्ट होत आहे...' : 'Exporting delivery log...')}>
-            📥 {isMr ? 'एक्सपोर्ट' : 'Export'}
+          <button className="btn-o" onClick={() => alert(isMr ? 'वितरण अहवाल एक्सपोर्ट होत आहे...' : 'Exporting delivery log...')} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+            <Download size={14} /> {isMr ? 'एक्सपोर्ट' : 'Export'}
           </button>
-          <button className="btn-p" onClick={() => setShowBroadcastModal(true)}>
-            📢 {isMr ? 'नवीन प्रसारण' : 'New Broadcast'}
+          <button className="btn-p" onClick={() => setShowBroadcastModal(true)} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+            <Megaphone size={14} /> {isMr ? 'नवीन प्रसारण' : 'New Broadcast'}
           </button>
         </div>
       </div>
@@ -290,7 +298,7 @@ const WhatsAppLogsPage = () => {
       {/* ── Quick Action Cards ───────────────────────────────── */}
       <div className="wa-quick-actions">
         <div className="qa-card" onClick={() => setShowBroadcastModal(true)}>
-          <div className="qa-icon" style={{ background: '#E8F8ED', color: '#25D366' }}>📢</div>
+          <div className="qa-icon" style={{ background: '#E8F8ED', color: '#25D366' }}><Megaphone size={18} /></div>
           <div className="qa-info">
             <div className="qa-title">{isMr ? 'नवीन प्रसारण' : 'New Broadcast'}</div>
             <div className="qa-desc">{isMr ? 'कार्यकर्ते / गटांना पाठवा' : 'Send to workers / groups'}</div>
@@ -298,7 +306,7 @@ const WhatsAppLogsPage = () => {
         </div>
 
         <div className="qa-card" onClick={() => alert(isMr ? 'वाढदिवस शुभेच्छा यादी...' : 'Birthday Greetings...')}>
-          <div className="qa-icon" style={{ background: '#FFFBEB', color: '#D97706' }}>🎂</div>
+          <div className="qa-icon" style={{ background: '#FFFBEB', color: '#D97706' }}><PartyPopper size={18} /></div>
           <div className="qa-info">
             <div className="qa-title">{isMr ? 'वाढदिवस शुभेच्छा' : 'Birthday Greetings'}</div>
             <div className="qa-desc">{isMr ? 'आज ३ वाढदिवस आहेत' : '3 birthdays today'}</div>
@@ -306,7 +314,7 @@ const WhatsAppLogsPage = () => {
         </div>
 
         <div className="qa-card" onClick={() => alert(isMr ? 'अयशस्वी संदेश पुन्हा पाठवले जात आहेत...' : 'Retrying failed messages...')}>
-          <div className="qa-icon" style={{ background: '#FEF2F2', color: '#DC2626' }}>⚠️</div>
+          <div className="qa-icon" style={{ background: '#FEF2F2', color: '#DC2626' }}><AlertTriangle size={18} /></div>
           <div className="qa-info">
             <div className="qa-title">{isMr ? 'अयशस्वी री-ट्राय' : 'Retry Failed'}</div>
             <div className="qa-desc">{isMr ? '४७ संदेश अयशस्वी' : '47 failed messages'}</div>
@@ -314,7 +322,7 @@ const WhatsAppLogsPage = () => {
         </div>
 
         <div className="qa-card" onClick={() => alert(isMr ? 'बॉट उत्तर कार्य नोंद...' : 'Bot activity log...')}>
-          <div className="qa-icon" style={{ background: '#F5F3FF', color: '#7C3AED' }}>🤖</div>
+          <div className="qa-icon" style={{ background: '#F5F3FF', color: '#7C3AED' }}><Bot size={18} /></div>
           <div className="qa-info">
             <div className="qa-title">{isMr ? 'बॉट कार्यप्रणाली' : 'Bot Activity'}</div>
             <div className="qa-desc">{isMr ? 'आज १२ चौकशी' : '12 queries today'}</div>
@@ -327,18 +335,18 @@ const WhatsAppLogsPage = () => {
         {/* Left Column: Recent Activity Log */}
         <div className="wa-panel">
           <div className="wa-panel-header">
-            <span className="wa-panel-title">
-              📋 {isMr ? 'अलीकडील कार्य (Recent Activity)' : 'Recent Activity'}
+            <span className="wa-panel-title" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <ClipboardList size={16} /> {isMr ? 'अलीकडील कार्य (Recent Activity)' : 'Recent Activity'}
             </span>
-            <span className="wa-panel-action" onClick={() => fetchLogs()}>
-              {isMr ? 'सर्व पहा →' : 'View All →'}
+            <span className="wa-panel-action" onClick={() => fetchLogs()} style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+              {isMr ? 'सर्व पहा' : 'View All'} <ChevronRight size={14} />
             </span>
           </div>
 
           <div className="msg-list">
             {(items.length > 0 ? items : MOCK_RECENT_LOGS).map((msg) => (
               <div key={msg.id} className="msg-row">
-                <div className={`msg-icon ${msg.iconType || 'auto'}`}>{msg.icon || '💬'}</div>
+                <div className={`msg-icon ${msg.iconType || 'auto'}`}>{renderLogIcon(msg.iconType)}</div>
                 <div className="msg-info">
                   <div className="msg-recipient">
                     {msg.recipientName || msg.recipient_mobile} ·{' '}
@@ -364,8 +372,8 @@ const WhatsAppLogsPage = () => {
           {/* Delivery Breakdown Ring Chart Panel */}
           <div className="wa-panel">
             <div className="wa-panel-header">
-              <span className="wa-panel-title">
-                📊 {isMr ? 'वितरण विभाजन (Delivery Breakdown)' : 'Delivery Breakdown'}
+              <span className="wa-panel-title" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <BarChart2 size={16} /> {isMr ? 'वितरण विभाजन (Delivery Breakdown)' : 'Delivery Breakdown'}
               </span>
               <span style={{ fontSize: '11px', color: 'var(--text-4)' }}>{isMr ? 'आज' : 'Today'}</span>
             </div>
@@ -405,10 +413,12 @@ const WhatsAppLogsPage = () => {
           {/* Active Templates Panel */}
           <div className="wa-panel">
             <div className="wa-panel-header">
-              <span className="wa-panel-title">
-                📝 {isMr ? 'सक्रिय नमुने (Active Templates)' : 'Active Templates'}
+              <span className="wa-panel-title" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <FileText size={16} /> {isMr ? 'सक्रिय नमुने (Active Templates)' : 'Active Templates'}
               </span>
-              <span className="wa-panel-action">{isMr ? 'व्यवस्थापन →' : 'Manage →'}</span>
+              <span className="wa-panel-action" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                {isMr ? 'व्यवस्थापन' : 'Manage'} <ChevronRight size={14} />
+              </span>
             </div>
 
             <div className="template-grid">
@@ -424,8 +434,12 @@ const WhatsAppLogsPage = () => {
                   {isMr ? 'नमस्कार {{name}}, आपली तक्रार क्र. {{tracking_id}} नोंदवली गेली आहे...' : 'Hello {{name}}, your complaint No {{tracking_id}} has been received...'}
                 </div>
                 <div className="tpl-meta">
-                  <span>📤 {isMr ? 'वापर: ३१२ वेळा' : 'Used: 312 times'}</span>
-                  <span style={{ color: 'var(--success)' }}>✅ {isMr ? 'मंजूर' : 'Approved'}</span>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                    <Send size={12} /> {isMr ? 'वापर: ३१२ वेळा' : 'Used: 312 times'}
+                  </span>
+                  <span style={{ color: 'var(--success)', display: 'inline-flex', alignItems: 'center', gap: '2px' }}>
+                    <Check size={12} /> {isMr ? 'मंजूर' : 'Approved'}
+                  </span>
                 </div>
               </div>
 
@@ -441,8 +455,12 @@ const WhatsAppLogsPage = () => {
                   {isMr ? 'आपणास {{event_name}} कार्यक्रमास निमंत्रण. दिनांक: {{date}}...' : 'You are invited to {{event_name}}. Date: {{date}}...'}
                 </div>
                 <div className="tpl-meta">
-                  <span>📤 {isMr ? 'वापर: ८९ वेळा' : 'Used: 89 times'}</span>
-                  <span style={{ color: 'var(--success)' }}>✅ {isMr ? 'मंजूर' : 'Approved'}</span>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                    <Send size={12} /> {isMr ? 'वापर: ८९ वेळा' : 'Used: 89 times'}
+                  </span>
+                  <span style={{ color: 'var(--success)', display: 'inline-flex', alignItems: 'center', gap: '2px' }}>
+                    <Check size={12} /> {isMr ? 'मंजूर' : 'Approved'}
+                  </span>
                 </div>
               </div>
 
@@ -458,8 +476,12 @@ const WhatsAppLogsPage = () => {
                   {isMr ? '{{mla_name}} कार्यालयाकडून: {{custom_message}}' : 'From {{mla_name}} Office: {{custom_message}}'}
                 </div>
                 <div className="tpl-meta">
-                  <span>📤 {isMr ? 'वापर: ४५ वेळा' : 'Used: 45 times'}</span>
-                  <span style={{ color: 'var(--success)' }}>✅ {isMr ? 'मंजूर' : 'Approved'}</span>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                    <Send size={12} /> {isMr ? 'वापर: ४५ वेळा' : 'Used: 45 times'}
+                  </span>
+                  <span style={{ color: 'var(--success)', display: 'inline-flex', alignItems: 'center', gap: '2px' }}>
+                    <Check size={12} /> {isMr ? 'मंजूर' : 'Approved'}
+                  </span>
                 </div>
               </div>
             </div>
@@ -472,10 +494,10 @@ const WhatsAppLogsPage = () => {
         <div className="nivedan-modal-overlay" onClick={() => setShowBroadcastModal(false)}>
           <div className="nivedan-modal-card" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h3 className="modal-title">
-                📢 {isMr ? 'नवीन व्हॉट्सअॅप प्रसारण पाठवा' : 'Send WhatsApp Broadcast'}
+              <h3 className="modal-title" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                <Megaphone size={18} /> {isMr ? 'नवीन व्हॉट्सअॅप प्रसारण पाठवा' : 'Send WhatsApp Broadcast'}
               </h3>
-              <button className="modal-close-btn" onClick={() => setShowBroadcastModal(false)}>✕</button>
+              <button className="modal-close-btn" onClick={() => setShowBroadcastModal(false)}><X size={18} /></button>
             </div>
 
             <form onSubmit={handleSendBroadcast}>
@@ -535,8 +557,8 @@ const WhatsAppLogsPage = () => {
                 >
                   {isMr ? 'रद्द करा' : 'Cancel'}
                 </button>
-                <button type="submit" className="btn btn-wa" disabled={sendingBroadcast}>
-                  📢 {sendingBroadcast ? (isMr ? 'पाठवत आहे...' : 'Sending...') : (isMr ? 'प्रसारण संदेश पाठवा' : 'Send Broadcast')}
+                <button type="submit" className="btn btn-wa" disabled={sendingBroadcast} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                  <Megaphone size={16} /> {sendingBroadcast ? (isMr ? 'पाठवत आहे...' : 'Sending...') : (isMr ? 'प्रसारण संदेश पाठवा' : 'Send Broadcast')}
                 </button>
               </div>
             </form>
