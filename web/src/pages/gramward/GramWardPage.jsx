@@ -555,11 +555,11 @@ const GramWardPage = () => {
               </div>
 
               <div style={{ marginTop: '20px', display: 'flex', gap: '8px' }}>
-                <button className="btn-o" style={{ height: '32px', fontSize: '12px' }} onClick={() => alert('Exporting area report...')}>
-                  📄 {isMr ? 'अहवाल' : 'Area Report'}
+                <button className="btn-o" style={{ height: '32px', fontSize: '12px', display: 'inline-flex', alignItems: 'center', gap: '4px' }} onClick={() => alert('Exporting area report...')}>
+                  <FileText size={14} /> {isMr ? 'अहवाल' : 'Area Report'}
                 </button>
-                <button className="btn-p" style={{ height: '32px', fontSize: '12px' }} onClick={() => alert(`Opening details for ${selectedArea.nameEn}...`)}>
-                  👁 {isMr ? 'सविस्तर पहा' : 'View Full Detail'}
+                <button className="btn-p" style={{ height: '32px', fontSize: '12px', display: 'inline-flex', alignItems: 'center', gap: '4px' }} onClick={() => alert(`Opening details for ${selectedArea.nameEn}...`)}>
+                  <Eye size={14} /> {isMr ? 'सविस्तर पहा' : 'View Full Detail'}
                 </button>
               </div>
             </div>

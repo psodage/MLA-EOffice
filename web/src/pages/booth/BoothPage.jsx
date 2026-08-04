@@ -1,12 +1,5 @@
-// src/pages/booth/BoothPage.jsx
-// ============================================================
-// Booth Structure Page — Network Module
-// 1:1 Layout Match with WIREFRAMES/booth_structure.html
-// Features: Constituency Hierarchy Tree (Taluka → GP/Ward → Booth),
-// Search Filtering, Area Detail Panel, Booth Cards, Language Switch
-// ============================================================
-
 import { useState, useMemo } from 'react';
+import { Landmark, MapPin, Building2, Home, Download, Plus, Vote, ChevronDown, ChevronRight } from 'lucide-react';
 import useLangStore from '../../store/langStore.js';
 import BoothFormModal from './BoothFormModal.jsx';
 import LucideIcon from '../../components/common/LucideIcon.jsx';
@@ -17,7 +10,6 @@ const INITIAL_TREE_DATA = {
   nameEn: 'Haveli Constituency',
   nameMr: 'हवेली विधानसभा मतदारसंघ',
   type: 'constituency',
-  icon: '🏛️',
   totalBooths: 156,
   children: [
     {
@@ -25,7 +17,6 @@ const INITIAL_TREE_DATA = {
       nameEn: 'Haveli Taluka',
       nameMr: 'हवेली तालुका',
       type: 'taluka',
-      icon: '📍',
       totalBooths: 92,
       children: [
         {
@@ -33,7 +24,6 @@ const INITIAL_TREE_DATA = {
           nameEn: 'Pimpri (Ward 5)',
           nameMr: 'पिंपरी (वॉर्ड ५)',
           type: 'ward',
-          icon: '🏘️',
           totalBooths: 12,
           totalVoters: 10245,
           pramukhsCount: 12,
@@ -51,7 +41,6 @@ const INITIAL_TREE_DATA = {
           nameEn: 'Shivaji Nagar (Ward 1)',
           nameMr: 'शिवाजी नगर (वॉर्ड १)',
           type: 'ward',
-          icon: '🏘️',
           totalBooths: 8,
           totalVoters: 6850,
           pramukhsCount: 8,
@@ -65,7 +54,6 @@ const INITIAL_TREE_DATA = {
           nameEn: 'Wadgaon Village',
           nameMr: 'वडगाव गाव',
           type: 'village',
-          icon: '🏡',
           totalBooths: 6,
           totalVoters: 4812,
           pramukhsCount: 6,
@@ -80,7 +68,6 @@ const INITIAL_TREE_DATA = {
           nameEn: 'Ambegaon Village',
           nameMr: 'आंबेगाव गाव',
           type: 'village',
-          icon: '🏡',
           totalBooths: 4,
           totalVoters: 3400,
           pramukhsCount: 4,
@@ -96,7 +83,6 @@ const INITIAL_TREE_DATA = {
       nameEn: 'Maval Taluka',
       nameMr: 'मावळ तालुका',
       type: 'taluka',
-      icon: '📍',
       totalBooths: 38,
       children: [
         {
@@ -104,7 +90,6 @@ const INITIAL_TREE_DATA = {
           nameEn: 'Lonavala Rural',
           nameMr: 'लोणावळा ग्रामीण',
           type: 'village',
-          icon: '🏡',
           totalBooths: 10,
           totalVoters: 7500,
           pramukhsCount: 10,
@@ -119,11 +104,18 @@ const INITIAL_TREE_DATA = {
       nameEn: 'Shirur Taluka',
       nameMr: 'शिरूर तालुका',
       type: 'taluka',
-      icon: '📍',
       totalBooths: 26,
       children: [],
     },
   ],
+};
+
+const renderTypeIcon = (type) => {
+  if (type === 'constituency') return <Landmark size={14} />;
+  if (type === 'taluka') return <MapPin size={14} />;
+  if (type === 'ward') return <Building2 size={14} />;
+  if (type === 'village') return <Home size={14} />;
+  return <MapPin size={14} />;
 };
 
 const BoothPage = () => {
@@ -210,9 +202,9 @@ const BoothPage = () => {
               toggleNode(node.id);
             }}
           >
-            {hasChildren ? (isExpanded ? '▼' : '▶') : ''}
+            {hasChildren ? (isExpanded ? <ChevronDown size={12} /> : <ChevronRight size={12} />) : ''}
           </span>
-          <span className="tn-icon">{node.icon || '📍'}</span>
+          <span className="tn-icon">{renderTypeIcon(node.type)}</span>
           <span className="tn-label">{isMr ? node.nameMr : node.nameEn}</span>
           <span className="tn-count">{node.totalBooths || node.booths?.length || 0}</span>
         </div>
@@ -243,11 +235,11 @@ const BoothPage = () => {
         </div>
 
         <div className="page-actions">
-          <button className="btn-o" onClick={() => alert(isMr ? 'बूथ डेटा एक्सपोर्ट होत आहे...' : 'Exporting booth data...')}>
-            📥 {isMr ? 'एक्सपोर्ट' : 'Export'}
+          <button className="btn-o" onClick={() => alert(isMr ? 'बूथ डेटा एक्सपोर्ट होत आहे...' : 'Exporting booth data...')} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+            <Download size={14} /> {isMr ? 'एक्सपोर्ट' : 'Export'}
           </button>
-          <button className="btn-p" onClick={() => setIsFormOpen(true)}>
-            + {isMr ? 'नवीन बूथ जोडा' : 'Add Booth'}
+          <button className="btn-p" onClick={() => setIsFormOpen(true)} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+            <Plus size={14} /> {isMr ? 'नवीन बूथ जोडा' : 'Add Booth'}
           </button>
         </div>
       </div>
@@ -257,7 +249,9 @@ const BoothPage = () => {
         {/* Left Column: Constituency Tree Panel */}
         <div className="tree-panel">
           <div className="tree-header">
-            <span className="tree-header-title">🗳️ {isMr ? 'मतदारसंघ वृक्ष' : 'Constituency Tree'}</span>
+            <span className="tree-header-title" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+              <Vote size={16} /> {isMr ? 'मतदारसंघ वृक्ष' : 'Constituency Tree'}
+            </span>
             <span style={{ fontSize: '11px', color: 'var(--text-4)' }}>
               156 {isMr ? 'एकूण बूथ' : 'booths'}
             </span>
