@@ -8,6 +8,7 @@
 
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Upload, FileText, Plus, MapPin, Home, Building2, Building, Vote, ClipboardList, HardHat, Users, X, Eye } from 'lucide-react';
 import useLangStore from '../../store/langStore.js';
 import './GramWardPage.css';
 
@@ -98,13 +99,13 @@ const SAMPLE_TALUKAS = [
         voters: 6720,
         allPramukhsAssigned: true,
         boothsList: [
-          { id: 1, title: 'Booth 1 — Shivaji Nagar High School', pramukh: 'Sunil More', voters: 810 },
+          { id: 110, title: 'Booth 110 — Shivaji Nagar High School', pramukh: 'Sunil More', voters: 840 },
         ],
         recentNivedans: [
-          { id: 'NIV/2026/0390', title: 'Water pressure issue', date: '30 Jul 2026', status: 'pending', statusText: 'Pending' },
+          { id: 'NIV/2026/0290', title: 'Garbage collection vehicle timing', date: '16 Jul 2026', status: 'resolved', statusText: 'Resolved' },
         ],
         activeDevWorks: [
-          { title: 'Street Light Installation', fund: 'MSEDCL', budget: '₹12 Lakhs', progress: '0%' },
+          { title: 'Ward 1 Drinking water tank renovation', fund: 'Municipal Fund', budget: '₹18 Lakhs', progress: '90%' },
         ],
         keyWorkers: [
           { name: 'Sunil More', initials: 'SM' },
@@ -142,7 +143,7 @@ const SAMPLE_TALUKAS = [
   {
     nameEn: 'Maval Taluka',
     nameMr: 'मावळ तालुका',
-    countText: '14 areas · 38 booths',
+    countText: '18 areas · 44 booths',
     areas: [
       {
         id: 'talegaon',
@@ -188,7 +189,7 @@ const SAMPLE_TALUKAS = [
 ];
 
 const GramWardPage = () => {
-  const { lang, setLang } = useLangStore();
+  const { lang } = useLangStore();
   const isMr = lang === 'MR';
 
   const [activeTab, setActiveTab] = useState('ALL');
@@ -212,11 +213,11 @@ const GramWardPage = () => {
     <div className="gramward-page-container">
       {/* ── Breadcrumb ───────────────────────────────────────── */}
       <div className="breadcrumb">
-        <Link to="/dashboard">Dashboard</Link>
+        <Link to="/dashboard">{isMr ? 'डॅशबोर्ड' : 'Dashboard'}</Link>
         <span style={{ color: 'var(--t4)' }}>/</span>
-        <span>Constituency</span>
+        <span>{isMr ? 'मतदारसंघ' : 'Constituency'}</span>
         <span style={{ color: 'var(--t4)' }}>/</span>
-        <span>Gram & Ward</span>
+        <span>{isMr ? 'ग्राम व वॉर्ड' : 'Gram & Ward'}</span>
       </div>
 
       {/* ── Page Header ─────────────────────────────────────── */}
@@ -233,14 +234,14 @@ const GramWardPage = () => {
         </div>
 
         <div className="gramward-actions">
-          <button className="btn-o" onClick={() => alert(isMr ? 'Excel इन्पोर्ट करत आहे...' : 'Importing Excel...')}>
-            📥 {isMr ? 'इम्पोर्ट Excel' : 'Import Excel'}
+          <button className="btn-o" onClick={() => alert(isMr ? 'Excel इन्पोर्ट करत आहे...' : 'Importing Excel...')} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+            <Upload size={14} /> {isMr ? 'इम्पोर्ट Excel' : 'Import Excel'}
           </button>
-          <button className="btn-o" onClick={() => alert(isMr ? 'PDF एक्सपोर्ट होत आहे...' : 'Exporting PDF...')}>
-            📄 {isMr ? 'एक्सपोर्ट PDF' : 'Export PDF'}
+          <button className="btn-o" onClick={() => alert(isMr ? 'PDF एक्सपोर्ट होत आहे...' : 'Exporting PDF...')} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+            <FileText size={14} /> {isMr ? 'एक्सपोर्ट PDF' : 'Export PDF'}
           </button>
-          <button className="btn-p" onClick={() => alert(isMr ? 'नवीन क्षेत्र जोडा फॉर्म उघडत आहे...' : 'Add Area form...')}>
-            + {isMr ? 'क्षेत्र जोडा' : 'Add Area'}
+          <button className="btn-p" onClick={() => alert(isMr ? 'नवीन क्षेत्र जोडा फॉर्म उघडत आहे...' : 'Add Area form...')} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+            <Plus size={14} /> {isMr ? 'क्षेत्र जोडा' : 'Add Area'}
           </button>
         </div>
       </div>
@@ -278,26 +279,30 @@ const GramWardPage = () => {
         <div
           className={`tab ${activeTab === 'ALL' ? 'active' : ''}`}
           onClick={() => setActiveTab('ALL')}
+          style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
         >
-          📍 {isMr ? 'सर्व क्षेत्रे' : 'All Areas'} <span className="tab-count">59</span>
+          <MapPin size={14} /> {isMr ? 'सर्व क्षेत्रे' : 'All Areas'} <span className="tab-count">59</span>
         </div>
         <div
           className={`tab ${activeTab === 'VILLAGES' ? 'active' : ''}`}
           onClick={() => setActiveTab('VILLAGES')}
+          style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
         >
-          🏡 {isMr ? 'गावे' : 'Villages'} <span className="tab-count">47</span>
+          <Home size={14} /> {isMr ? 'गावे' : 'Villages'} <span className="tab-count">47</span>
         </div>
         <div
           className={`tab ${activeTab === 'WARDS' ? 'active' : ''}`}
           onClick={() => setActiveTab('WARDS')}
+          style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
         >
-          🏙️ {isMr ? 'शहर वॉर्ड' : 'City Wards'} <span className="tab-count">12</span>
+          <Building2 size={14} /> {isMr ? 'शहर वॉर्ड' : 'City Wards'} <span className="tab-count">12</span>
         </div>
         <div
           className={`tab ${activeTab === 'GPS' ? 'active' : ''}`}
           onClick={() => setActiveTab('GPS')}
+          style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
         >
-          🏘️ {isMr ? 'ग्रामपंचायती' : 'Gram Panchayats'} <span className="tab-count">18</span>
+          <Building size={14} /> {isMr ? 'ग्रामपंचायती' : 'Gram Panchayats'} <span className="tab-count">18</span>
         </div>
       </div>
 
@@ -361,7 +366,7 @@ const GramWardPage = () => {
           {SAMPLE_TALUKAS.map((talukaGroup, tIdx) => (
             <div key={tIdx} className="taluka-group">
               <div className="taluka-header">
-                <div className="taluka-icon">📍</div>
+                <div className="taluka-icon"><MapPin size={16} /></div>
                 <span className="taluka-name">{talukaGroup.nameEn}</span>
                 <span className="taluka-name-mr">{talukaGroup.nameMr}</span>
                 <span className="taluka-count">{talukaGroup.countText}</span>
@@ -384,7 +389,7 @@ const GramWardPage = () => {
 
                       <div className="area-card-header">
                         <div className={`area-icon ${area.type}`}>
-                          {area.type === 'village' ? '🏡' : '🏙️'}
+                          {area.type === 'village' ? <Home size={18} /> : <Building2 size={18} />}
                         </div>
                         <div className="area-info">
                           <div className="area-name">
@@ -425,8 +430,8 @@ const GramWardPage = () => {
                       </div>
 
                       <div className="area-footer">
-                        <span className="area-booths">
-                          🗳️ <strong>{area.booths}</strong> booths · {area.voters.toLocaleString()} voters
+                        <span className="area-booths" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                          <Vote size={14} /> <strong>{area.booths}</strong> booths · {area.voters.toLocaleString()} voters
                         </span>
                         <span className="area-pramukh">
                           <span className={`pramukh-dot ${area.allPramukhsAssigned ? 'pramukh-yes' : 'pramukh-no'}`} />
@@ -447,9 +452,9 @@ const GramWardPage = () => {
         {selectedArea && (
           <div className="detail-panel">
             <div className="dp-header">
-              <button className="dp-close" onClick={() => setSelectedArea(null)}>✕</button>
-              <div className="dp-title">
-                {selectedArea.type === 'village' ? '🏡' : '🏙️'} {selectedArea.nameEn} · <span className="mr" style={{ fontFamily: "'Noto Sans Devanagari', sans-serif" }}>{selectedArea.nameMr}</span>
+              <button className="dp-close" onClick={() => setSelectedArea(null)}><X size={16} /></button>
+              <div className="dp-title" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                {selectedArea.type === 'village' ? <Home size={18} /> : <Building2 size={18} />} {selectedArea.nameEn} · <span className="mr" style={{ fontFamily: "'Noto Sans Devanagari', sans-serif" }}>{selectedArea.nameMr}</span>
               </div>
               <div className="dp-sub">{selectedArea.parent}</div>
 
@@ -475,8 +480,8 @@ const GramWardPage = () => {
 
             <div className="dp-body">
               {/* Linked Booths */}
-              <div className="dp-section-title">
-                🗳️ Booths in {selectedArea.nameEn} ({selectedArea.booths})
+              <div className="dp-section-title" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <Vote size={16} /> Booths in {selectedArea.nameEn} ({selectedArea.booths})
               </div>
               {selectedArea.boothsList && selectedArea.boothsList.length > 0 ? (
                 selectedArea.boothsList.map((b) => (
@@ -495,13 +500,13 @@ const GramWardPage = () => {
               )}
 
               {/* Recent Nivedans */}
-              <div className="dp-section-title">
-                📝 Recent Nivedans ({selectedArea.recentNivedans?.length || 0})
+              <div className="dp-section-title" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <ClipboardList size={16} /> Recent Nivedans ({selectedArea.recentNivedans?.length || 0})
               </div>
               {selectedArea.recentNivedans && selectedArea.recentNivedans.length > 0 ? (
                 selectedArea.recentNivedans.map((n, idx) => (
                   <div key={idx} className="linked-item">
-                    <div className="li-icon" style={{ background: 'var(--inb)' }}>📝</div>
+                    <div className="li-icon" style={{ background: 'var(--inb)' }}><ClipboardList size={14} /></div>
                     <div className="li-info">
                       <div className="li-title">{n.title}</div>
                       <div className="li-meta">{n.id} · {n.date}</div>
@@ -514,13 +519,13 @@ const GramWardPage = () => {
               )}
 
               {/* Active Dev Works */}
-              <div className="dp-section-title">
-                🏗️ Active Development Works ({selectedArea.activeDevWorks?.length || 0})
+              <div className="dp-section-title" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <HardHat size={16} /> Active Development Works ({selectedArea.activeDevWorks?.length || 0})
               </div>
               {selectedArea.activeDevWorks && selectedArea.activeDevWorks.length > 0 ? (
                 selectedArea.activeDevWorks.map((dw, idx) => (
                   <div key={idx} className="linked-item">
-                    <div className="li-icon" style={{ background: 'var(--wrb)' }}>🏗️</div>
+                    <div className="li-icon" style={{ background: 'var(--wrb)' }}><HardHat size={14} /></div>
                     <div className="li-info">
                       <div className="li-title">{dw.title}</div>
                       <div className="li-meta">{dw.fund} · {dw.budget} · {dw.progress} complete</div>
@@ -533,8 +538,8 @@ const GramWardPage = () => {
               )}
 
               {/* Key Workers */}
-              <div className="dp-section-title">
-                👥 Key Workers ({selectedArea.workers} total)
+              <div className="dp-section-title" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <Users size={16} /> Key Workers ({selectedArea.workers} total)
               </div>
               <div className="worker-avatars">
                 {selectedArea.keyWorkers && selectedArea.keyWorkers.length > 0 ? (
