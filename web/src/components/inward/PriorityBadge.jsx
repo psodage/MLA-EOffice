@@ -1,13 +1,9 @@
-// src/components/inward/PriorityBadge.jsx
-// ============================================================
-// Priority Badge Component for Inward Entries
-// HIGH | MEDIUM | LOW
-// ============================================================
+import useLangStore from '../../store/langStore.js';
 
 const PRIORITY_CONFIG = {
   HIGH: {
     mr: 'उच्च प्राधान्य',
-    en: 'High',
+    en: 'High Priority',
     bg: 'rgba(239, 68, 68, 0.18)',
     border: 'rgba(239, 68, 68, 0.35)',
     color: '#f87171',
@@ -15,7 +11,7 @@ const PRIORITY_CONFIG = {
   },
   MEDIUM: {
     mr: 'मध्यम प्राधान्य',
-    en: 'Medium',
+    en: 'Medium Priority',
     bg: 'rgba(245, 158, 11, 0.18)',
     border: 'rgba(245, 158, 11, 0.35)',
     color: '#fbbf24',
@@ -23,7 +19,7 @@ const PRIORITY_CONFIG = {
   },
   LOW: {
     mr: 'सामान्य प्राधान्य',
-    en: 'Low',
+    en: 'Low Priority',
     bg: 'rgba(56, 189, 248, 0.18)',
     border: 'rgba(56, 189, 248, 0.35)',
     color: '#38bdf8',
@@ -32,6 +28,7 @@ const PRIORITY_CONFIG = {
 };
 
 const PriorityBadge = ({ priority }) => {
+  const { lang } = useLangStore();
   const config = PRIORITY_CONFIG[priority] || PRIORITY_CONFIG.MEDIUM;
 
   return (
@@ -47,11 +44,10 @@ const PriorityBadge = ({ priority }) => {
         color: config.color,
         fontSize: '0.75rem',
         fontWeight: 600,
-        fontFamily: "'Noto Sans Devanagari', sans-serif",
       }}
     >
       <span style={{ fontSize: '0.65rem' }}>{config.icon}</span>
-      <span>{config.mr}</span>
+      <span>{lang === 'MR' ? config.mr : config.en}</span>
     </span>
   );
 };

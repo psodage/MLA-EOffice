@@ -1,27 +1,31 @@
 // src/pages/nivedan/NivedanListPage.jsx
 // ============================================================
-// Nivedan List Page — Module 7 (⭐ Core Module)
-// Tabbed status navigation, multi-field filters, table view
+// Nivedan List Page — Petitions & Grievances Core Module
+// Status filter tabs, multi-field filters, dynamic language toggle,
+// page navigation to /nivedan/:id
 // ============================================================
 
 import { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import api from '../../services/api.js';
-import NivedanStatusBadge from '../../components/nivedan/NivedanStatusBadge.jsx';
-import PriorityBadge from '../../components/inward/PriorityBadge.jsx';
+import useLangStore from '../../store/langStore.js';
 import NivedanFormModal from './NivedanFormModal.jsx';
-import NivedanDetailModal from './NivedanDetailModal.jsx';
 import './NivedanListPage.css';
 
 const STATUS_TABS = [
-  { id: 'ALL', labelMr: 'सर्व निवेदने', labelEn: 'All Petitions', icon: '📁' },
-  { id: 'PENDING', labelMr: 'प्रलंबित', labelEn: 'Pending', icon: '🟡' },
-  { id: 'IN_PROGRESS', labelMr: 'प्रगतीपथावर', labelEn: 'In Progress', icon: '🔵' },
-  { id: 'FORWARDED', labelMr: 'पाठवलेले', labelEn: 'Forwarded', icon: '🟠' },
-  { id: 'ESCALATED', labelMr: 'कालावधी उलटलेले', labelEn: 'Escalated', icon: '⚠️' },
-  { id: 'RESOLVED', labelMr: 'पूर्ण / मार्गस्थ', labelEn: 'Resolved', icon: '🟢' },
+  { id: 'ALL', labelEn: 'All Petitions', labelMr: 'सर्व निवेदने', icon: '📁' },
+  { id: 'PENDING', labelEn: 'Pending', labelMr: 'प्रलंबित', icon: '🟡' },
+  { id: 'IN_PROGRESS', labelEn: 'In Progress', labelMr: 'प्रगतीपथावर', icon: '🔵' },
+  { id: 'FORWARDED', labelEn: 'Forwarded', labelMr: 'पाठवलेले', icon: '🟠' },
+  { id: 'ESCALATED', labelEn: 'Escalated', labelMr: 'कालावधी उलटलेले', icon: '⚠️' },
+  { id: 'RESOLVED', labelEn: 'Resolved', labelMr: 'मार्गी लागलेले', icon: '🟢' },
 ];
 
 const NivedanListPage = () => {
+  const navigate = useNavigate();
+  const { lang, setLang } = useLangStore();
+  const isMr = lang === 'MR';
+
   const [items, setItems] = useState([]);
   const [meta, setMeta] = useState({ page: 1, limit: 20, totalItems: 0, totalPages: 1 });
   const [categories, setCategories] = useState([]);
@@ -40,8 +44,6 @@ const NivedanListPage = () => {
 
   // Modal State
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [isDetailOpen, setIsDetailOpen] = useState(false);
-  const [selectedForDetail, setSelectedForDetail] = useState(null);
 
   // Fetch Categories
   useEffect(() => {
@@ -106,29 +108,88 @@ const NivedanListPage = () => {
     });
   };
 
-  const openDetailModal = (entry) => {
-    setSelectedForDetail(entry);
-    setIsDetailOpen(true);
+  const openDetailPage = (entry) => {
+    navigate(`/nivedan/${entry.id}`);
+  };
+
+  const getStatusBadge = (status) => {
+    switch (status) {
+      case 'PENDING':
+        return <span className="badge-pill status-pending">{isMr ? '🟡 प्रलंबित' : '🟡 Pending'}</span>;
+      case 'IN_PROGRESS':
+        return <span className="badge-pill status-progress">{isMr ? '🔵 प्रगतीपथावर' : '🔵 In Progress'}</span>;
+      case 'FORWARDED':
+        return <span className="badge-pill status-forwarded">{isMr ? '🟠 पाठवलेले' : '🟠 Forwarded'}</span>;
+      case 'ESCALATED':
+        return <span className="badge-pill status-escalated">{isMr ? '⚠️ कालावधी उलटलेले' : '⚠️ Escalated'}</span>;
+      case 'RESOLVED':
+        return <span className="badge-pill status-resolved">{isMr ? '🟢 मार्गी लागलेले' : '🟢 Resolved'}</span>;
+      default:
+        return <span className="badge-pill">{status}</span>;
+    }
+  };
+
+  const getPriorityBadge = (priority) => {
+    switch (priority) {
+      case 'URGENT':
+      case 'HIGH':
+        return <span className="priority-high">{isMr ? '🔴 अतिमहत्त्वाचे' : '🔴 High / Urgent'}</span>;
+      case 'MEDIUM':
+        return <span className="priority-medium">{isMr ? '🟡 मध्यम' : '🟡 Medium'}</span>;
+      default:
+        return <span className="priority-low">{isMr ? '🔵 सामान्य' : '🔵 Low'}</span>;
+    }
   };
 
   return (
-    <div className="inward-page-container">
+    <div className="nivedan-page-container">
       {/* ── Page Header ─────────────────────────────────────── */}
-      <div className="inward-page-header">
-        <div className="title-group">
-          <h1 className="page-title-mr">📋 निवेदने व तक्रारी (Petitions & Grievances)</h1>
+      <div className="page-header">
+        <div>
+          <h1 className="page-title">
+            {isMr ? 'निवेदने व तक्रारी' : 'Petitions & Grievances'}
+          </h1>
           <p className="page-subtitle">
-            आमदार कार्यालयातील सर्व नागरिक अर्ज, तक्रारी, पाठपुरावा व ऑटो-रूटिंग प्रणाली
+            {isMr
+              ? 'आमदार कार्यालयातील सर्व नागरिक अर्ज, तक्रारी, पाठपुरावा व ऑटो-रूटिंग प्रणाली'
+              : 'Citizen petitions, grievance tracking, and department routing system'}
           </p>
         </div>
 
-        <button className="create-inward-btn" onClick={() => setIsFormOpen(true)}>
-          <span>➕</span>
-          <span>नवीन निवेदन नोंदवा (Register Petition)</span>
-        </button>
+        <div className="page-actions">
+          {/* Segmented Language Toggle Switch */}
+          <div className="segmented-switch" style={{ marginRight: '8px' }}>
+            <button
+              type="button"
+              className={lang === 'EN' ? 'active' : ''}
+              onClick={() => setLang('EN')}
+            >
+              EN
+            </button>
+            <button
+              type="button"
+              className={lang === 'MR' ? 'active' : ''}
+              onClick={() => setLang('MR')}
+              style={{ fontFamily: "'Noto Sans Devanagari', sans-serif" }}
+            >
+              मराठी
+            </button>
+          </div>
+
+          <button className="btn btn-outline" onClick={() => alert(isMr ? 'निवेदन अहवाल एक्सपोर्ट होत आहे...' : 'Exporting petitions log...')}>
+            📥 {isMr ? 'अहवाल एक्सपोर्ट' : 'Export Log'}
+          </button>
+          <button className="btn btn-outline" onClick={() => window.print()}>
+            🖨️ {isMr ? 'प्रिंट नोंदवही' : 'Print Log'}
+          </button>
+          <button className="btn btn-primary" onClick={() => setIsFormOpen(true)}>
+            <span>➕</span>
+            <span>+ {isMr ? 'नवीन निवेदन नोंदवा' : 'New Petition'}</span>
+          </button>
+        </div>
       </div>
 
-      {/* ── Status Tabbed Navigation ────────────────────────── */}
+      {/* ── Status Filter Tabs ──────────────────────────────── */}
       <div className="status-tabs-container">
         {STATUS_TABS.map((tab) => (
           <button
@@ -136,140 +197,144 @@ const NivedanListPage = () => {
             className={`status-tab-btn ${filters.status === tab.id ? 'active' : ''}`}
             onClick={() => handleTabChange(tab.id)}
           >
-            <span className="tab-icon">{tab.icon}</span>
-            <span className="tab-label-mr">{tab.labelMr}</span>
-            <span className="tab-label-en">({tab.labelEn})</span>
+            <span>{tab.icon}</span>
+            <span>{isMr ? tab.labelMr : tab.labelEn}</span>
           </button>
         ))}
       </div>
 
       {/* ── Search & Filter Bar ─────────────────────────────── */}
-      <div className="inward-filter-bar nivedan-filter-bar">
-        <div className="filter-group search-group">
-          <label>शोध (Search)</label>
+      <div className="nivedan-filter-bar">
+        <div className="fg fg-search">
+          <span className="fl">{isMr ? 'तक्रार शोधा (Search)' : 'Search Petition'}</span>
           <input
             type="text"
+            className="fi"
             name="search"
             value={filters.search}
             onChange={handleFilterChange}
-            placeholder="ट्रॅकिंग आयडी (NIV-...), नाव, मोबाईल किंवा विषय शोधा..."
+            placeholder={isMr ? 'ट्रॅकिंग ID, नागरिकाचे नाव, विषय शोधा...' : 'Tracking ID, citizen name, subject...'}
           />
         </div>
 
-        <div className="filter-group">
-          <label>तक्रार वर्गवारी (Category)</label>
-          <select name="categoryId" value={filters.categoryId} onChange={handleFilterChange}>
-            <option value="ALL">सर्व वर्गवारी (All Categories)</option>
-            {categories.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.name_mr} ({c.name_en})
+        <div className="fg">
+          <span className="fl">{isMr ? 'वर्गवारी (Category)' : 'Category'}</span>
+          <select className="fi" name="categoryId" value={filters.categoryId} onChange={handleFilterChange}>
+            <option value="ALL">{isMr ? 'सर्व वर्गवारी' : 'All Categories'}</option>
+            {categories.map((cat) => (
+              <option key={cat.id} value={cat.id}>
+                {isMr ? cat.name_mr : cat.name_en || cat.name_mr}
               </option>
             ))}
           </select>
         </div>
 
-        <div className="filter-group">
-          <label>प्राधान्यक्रम (Priority)</label>
-          <select name="priority" value={filters.priority} onChange={handleFilterChange}>
-            <option value="ALL">सर्व (All)</option>
-            <option value="HIGH">🔴 उच्च (High)</option>
-            <option value="MEDIUM">🟡 मध्यम (Medium)</option>
-            <option value="LOW">🔵 सामान्य (Low)</option>
+        <div className="fg">
+          <span className="fl">{isMr ? 'प्राधान्य (Priority)' : 'Priority'}</span>
+          <select className="fi" name="priority" value={filters.priority} onChange={handleFilterChange}>
+            <option value="ALL">{isMr ? 'सर्व प्राधान्य' : 'All Priorities'}</option>
+            <option value="URGENT">{isMr ? 'अतिअत्यंत (Urgent)' : 'Urgent'}</option>
+            <option value="HIGH">{isMr ? 'उच्च (High)' : 'High'}</option>
+            <option value="MEDIUM">{isMr ? 'मध्यम (Medium)' : 'Medium'}</option>
+            <option value="LOW">{isMr ? 'सामान्य (Low)' : 'Low'}</option>
           </select>
         </div>
 
-        <div className="filter-actions">
-          <button className="reset-filter-btn" onClick={handleResetFilters} title="फिल्टर रिसेट करा">
-            🔄 रिसेट
-          </button>
-        </div>
+        <button className="filter-reset" onClick={handleResetFilters}>
+          {isMr ? 'फिल्टर पूर्ववत करा' : 'Reset Filters'}
+        </button>
       </div>
 
       {/* ── Data Table ─────────────────────────────────────── */}
-      <div className="inward-table-card">
+      <div className="nivedan-table-wrap">
         {loading ? (
-          <div className="table-loading-box">
-            <div className="mini-spinner"></div>
-            <p>निवेदने लोड होत आहेत...</p>
+          <div style={{ padding: '40px', textAlign: 'center', color: 'var(--text-3)' }}>
+            <p>{isMr ? 'निवेदन माहिती लोड होत आहे...' : 'Loading petitions records...'}</p>
           </div>
         ) : items.length === 0 ? (
-          <div className="table-empty-box">
-            <div className="empty-icon">📋</div>
-            <h3>कोणतेही निवेदन सापडले नाही</h3>
-            <p>कृपया शोध किंवा फिल्टर बदलून पुन्हा प्रयत्न करा.</p>
+          <div style={{ padding: '40px', textAlign: 'center', color: 'var(--text-3)' }}>
+            <div style={{ fontSize: '32px', marginBottom: '8px' }}>📋</div>
+            <h3>{isMr ? 'कोणतेही निवेदन सापडले नाही' : 'No petitions found matching filters'}</h3>
+            <p>{isMr ? 'कृपया शोध किंवा फिल्टर निकष बदलून पहा.' : 'Please change your filter settings.'}</p>
           </div>
         ) : (
-          <div className="table-responsive">
-            <table className="inward-table">
-              <thead>
-                <tr>
-                  <th>ट्रॅकिंग क्र. (Tracking ID)</th>
-                  <th>नागरिकाचे नाव व मोबाईल (Citizen)</th>
-                  <th>विषय व वर्गवारी (Subject & Category)</th>
-                  <th>प्राधान्य (Priority)</th>
-                  <th>स्थिती (Status)</th>
-                  <th>नियुक्त / विभाग (Assigned / Dept)</th>
-                  <th style={{ textAlign: 'right' }}>कृती (Action)</th>
-                </tr>
-              </thead>
-              <tbody>
-                {items.map((item) => (
-                  <tr key={item.id} onClick={() => openDetailModal(item)} className="table-row-interactive">
-                    <td className="col-inward-no">
-                      {item.tracking_id}
-                      {item.escalation_level && item.escalation_level !== 'NONE' && (
-                        <span className="escalation-alert-badge">⚠️ {item.escalation_level}</span>
-                      )}
-                    </td>
-                    <td className="col-sender">
-                      <div className="sender-name-primary">{item.citizen_name}</div>
-                      <span className="mobile-sub">📱 {item.citizen_mobile}</span>
-                    </td>
-                    <td className="col-subject">
-                      <div className="subject-line">{item.subject}</div>
-                      {item.category && (
-                        <span className="category-pill">{item.category.name_mr}</span>
-                      )}
-                    </td>
+          <table className="nivedan-table">
+            <thead>
+              <tr>
+                <th>{isMr ? 'ट्रॅकिंग ID' : 'Tracking ID'}</th>
+                <th>{isMr ? 'नागरिकाचे नाव व संपर्क' : 'Citizen Details'}</th>
+                <th>{isMr ? 'वर्गवारी' : 'Category'}</th>
+                <th>{isMr ? 'विषय' : 'Subject'}</th>
+                <th>{isMr ? 'प्राधान्य' : 'Priority'}</th>
+                <th>{isMr ? 'दाखल दिनांक' : 'Submission Date'}</th>
+                <th>{isMr ? 'स्थिती' : 'Status'}</th>
+                <th style={{ textAlign: 'right' }}>{isMr ? 'कृती' : 'Actions'}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {items.map((item) => {
+                const subDateStr = item.created_at
+                  ? new Date(item.created_at).toLocaleDateString(isMr ? 'mr-IN' : 'en-US', {
+                      day: '2-digit',
+                      month: 'short',
+                      year: 'numeric',
+                    })
+                  : '—';
+
+                return (
+                  <tr key={item.id} style={{ cursor: 'pointer' }} onClick={() => openDetailPage(item)}>
                     <td>
-                      <PriorityBadge priority={item.priority} />
+                      <span className="tracking-id">{item.tracking_id}</span>
                     </td>
+
                     <td>
-                      <NivedanStatusBadge status={item.status} />
+                      <div style={{ fontWeight: 600 }}>{item.citizen_name}</div>
+                      <div style={{ fontSize: '11.5px', color: 'var(--text-3)', fontFamily: 'JetBrains Mono' }}>
+                        📱 {item.citizen_mobile}
+                      </div>
                     </td>
-                    <td className="col-assigned">
-                      {item.forwardedDepartment ? (
-                        <span className="dept-tag">{item.forwardedDepartment.name_mr}</span>
-                      ) : item.assignedTo ? (
-                        <span className="assigned-user-pill">👤 {item.assignedTo.full_name}</span>
-                      ) : (
-                        <span className="unassigned-text">—</span>
-                      )}
+
+                    <td>
+                      <span className="badge-pill" style={{ background: 'var(--primary-light)', color: 'var(--primary)' }}>
+                        {isMr ? item.category?.name_mr : item.category?.name_en || item.category?.name_mr || '—'}
+                      </span>
                     </td>
-                    <td style={{ textAlign: 'right' }}>
+
+                    <td>
+                      <div style={{ fontWeight: 500, maxWidth: '280px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        {item.subject}
+                      </div>
+                    </td>
+
+                    <td>{getPriorityBadge(item.priority)}</td>
+
+                    <td style={{ fontSize: '12px', color: 'var(--text-3)' }}>{subDateStr}</td>
+
+                    <td>{getStatusBadge(item.status)}</td>
+
+                    <td style={{ textAlign: 'right' }} onClick={(e) => e.stopPropagation()}>
                       <button
-                        className="table-action-btn btn-view"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          openDetailModal(item);
-                        }}
-                        title="तपशील व टाइमलाईन पहा"
+                        className="btn btn-outline"
+                        style={{ height: '30px', padding: '0 10px', fontSize: '12px' }}
+                        onClick={() => openDetailPage(item)}
                       >
-                        📜 पहा (View)
+                        👁️ {isMr ? 'तपशील' : 'Details'}
                       </button>
                     </td>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                );
+              })}
+            </tbody>
+          </table>
         )}
 
         {/* Pagination Bar */}
         {!loading && meta.totalPages > 1 && (
           <div className="pagination-bar">
-            <span className="pagination-info">
-              एकूण {meta.totalItems} पैकी पान {meta.page} (Total Pages: {meta.totalPages})
+            <span>
+              {isMr
+                ? `एकूण ${meta.totalItems} पैकी पान ${meta.page} (एकूण ${meta.totalPages} पाने)`
+                : `Showing Page ${meta.page} of ${meta.totalPages} (${meta.totalItems} total items)`}
             </span>
 
             <div className="pagination-controls">
@@ -278,17 +343,15 @@ const NivedanListPage = () => {
                 disabled={meta.page <= 1}
                 onClick={() => setFilters((prev) => ({ ...prev, page: prev.page - 1 }))}
               >
-                ← मागील (Prev)
+                ← {isMr ? 'मागील' : 'Previous'}
               </button>
-
-              <span className="current-page-num">{meta.page}</span>
-
+              <span style={{ fontWeight: 600, padding: '0 6px' }}>{meta.page}</span>
               <button
                 className="page-btn"
                 disabled={meta.page >= meta.totalPages}
                 onClick={() => setFilters((prev) => ({ ...prev, page: prev.page + 1 }))}
               >
-                पुढील (Next) →
+                {isMr ? 'पुढील' : 'Next'} →
               </button>
             </div>
           </div>
@@ -300,13 +363,6 @@ const NivedanListPage = () => {
         isOpen={isFormOpen}
         onClose={() => setIsFormOpen(false)}
         onSuccess={fetchNivedans}
-      />
-
-      <NivedanDetailModal
-        isOpen={isDetailOpen}
-        onClose={() => setIsDetailOpen(false)}
-        entry={selectedForDetail}
-        onUpdateSuccess={fetchNivedans}
       />
     </div>
   );

@@ -460,17 +460,104 @@
   justify-content: center;
   font-size: 15px;
   flex-shrink: 0;
-  opacity: 0.75;
+  opacity: 0.85;
+  transition: transform 150ms ease, opacity 150ms ease;
+}
+
+.nav-link:hover .nav-icon {
+  transform: scale(1.1);
+  opacity: 1;
 }
 
 .nav-link.active .nav-icon {
   opacity: 1;
+  transform: scale(1.05);
 }
 
 .nav-divider {
   height: 1px;
   background: rgba(255, 255, 255, 0.1);
   margin: 8px 16px;
+}
+
+/* ── Icons8 Styling & Version Switcher ─────────────────────── */
+.icons8-img {
+  transition: transform 150ms ease, filter 150ms ease;
+}
+
+/* Dynamic Theme Matched Icon Styling */
+.icons8-style-theme-matched {
+  color: var(--primary, #1B3A5C);
+  transition: color 200ms ease, background-color 200ms ease;
+}
+
+.nav-link:hover .icons8-style-theme-matched,
+.nav-link.active .icons8-style-theme-matched {
+  color: var(--primary-accent, #2563EB);
+}
+
+[data-theme="dark"] .icons8-style-theme-matched {
+  color: #38BDF8;
+}
+
+[data-theme="dark"] .nav-link:hover .icons8-style-theme-matched,
+[data-theme="dark"] .nav-link.active .icons8-style-theme-matched {
+  color: #60A5FA;
+}
+
+/* Dark mode handling for monochromatic Icons8 styles */
+[data-theme="dark"] .icons8-style-ios-filled,
+[data-theme="dark"] .icons8-style-material-outlined {
+  filter: brightness(0) invert(0.9);
+}
+
+/* ── Cohesive Icon Family Styling ───────────────────────────── */
+.lucide-icon-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 180ms ease, filter 180ms ease, opacity 180ms ease;
+}
+
+/* Family 1: Sleek SaaS Line (Default - Recommended) */
+.lucide-icon-wrapper.family-saas-line {
+  opacity: 0.95;
+}
+.nav-link:hover .lucide-icon-wrapper.family-saas-line {
+  opacity: 1;
+  transform: scale(1.08);
+}
+
+/* Family 2: Apple iOS Rounded Line */
+.lucide-icon-wrapper.family-ios-line {
+  opacity: 0.95;
+}
+.nav-link:hover .lucide-icon-wrapper.family-ios-line {
+  opacity: 1;
+  transform: scale(1.08) rotate(3deg);
+}
+
+/* Family 3: Tech Monochromatic Line */
+.lucide-icon-wrapper.family-tech-line {
+  opacity: 1;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.12));
+}
+.nav-link:hover .lucide-icon-wrapper.family-tech-line {
+  transform: scale(1.1);
+}
+
+/* Family 4: Executive Government Line */
+.lucide-icon-wrapper.family-executive-line {
+  opacity: 0.88;
+}
+.nav-link:hover .lucide-icon-wrapper.family-executive-line {
+  opacity: 1;
+  transform: scale(1.06);
+}
+
+.icon-variant-switch button {
+  font-size: 11px;
+  padding: 4px 8px;
 }
 
 /* ── Main Content Area ─────────────────────────────────────── */
@@ -517,3 +604,4 @@
     max-width: 240px;
   }
 }
+

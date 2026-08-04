@@ -1,24 +1,37 @@
 // src/pages/inward/InwardFormModal.jsx
 // ============================================================
 // Form Modal for Creating/Editing Inward Register Entries
-// Marathi-first form with department selection & attachments
+// Redesigned to match WIREFRAMES/inward_form.html
+// Multi-language (EN / Marathi) + Light/Dark mode ready
 // ============================================================
 
 import { useState, useEffect } from 'react';
 import api from '../../services/api.js';
+import useLangStore from '../../store/langStore.js';
 
-const InwardFormModal = ({ isOpen, onClose, onSuccess, initialData = null }) => {
+const InwardFormModal = ({ isOpen, onClose, onSuccess, initialData = null, onSaveAndCreateOutward = null }) => {
+  const { lang } = useLangStore();
+  const isMr = lang === 'MR';
+
   const [form, setForm] = useState({
+    inward_number: '',
     sender_name: '',
     sender_designation: '',
     sender_department_id: '',
+    reference_number: '',
     date_received: new Date().toISOString().split('T')[0],
     subject: '',
     description: '',
     priority: 'MEDIUM',
-    tags: '',
+    tags: ['Road', 'PWD', 'Budget'],
+    tagInput: '',
     attachment_urls: '',
     assigned_to_user_id: '',
+    requires_reply: 'NO',
+    files: [
+      { name: 'PWD_Road_Widening_Proposal.pdf', size: '4.2 MB' },
+      { name: 'Revised_Cost_Estimate_Annexure.pdf', size: '1.8 MB' },
+    ],
   });
 
   const [departments, setDepartments] = useState([]);
@@ -40,33 +53,49 @@ const InwardFormModal = ({ isOpen, onClose, onSuccess, initialData = null }) => 
     }
   }, [isOpen]);
 
-  // Populate form if editing
+  // Populate form if editing or initialize auto Inward No
   useEffect(() => {
     if (initialData) {
       setForm({
+        inward_number: initialData.inward_number || `INW/2026/${String(Math.floor(Math.random() * 900) + 100).padStart(4, '0')}`,
         sender_name: initialData.sender_name || '',
         sender_designation: initialData.sender_designation || '',
         sender_department_id: initialData.sender_department_id || '',
+        reference_number: initialData.reference_number || '',
         date_received: initialData.date_received || new Date().toISOString().split('T')[0],
         subject: initialData.subject || '',
         description: initialData.description || '',
         priority: initialData.priority || 'MEDIUM',
-        tags: Array.isArray(initialData.tags) ? initialData.tags.join(', ') : '',
+        tags: Array.isArray(initialData.tags) ? initialData.tags : ['PWD', 'Budget'],
+        tagInput: '',
         attachment_urls: Array.isArray(initialData.attachment_urls) ? initialData.attachment_urls.join('\n') : '',
         assigned_to_user_id: initialData.assigned_to_user_id || '',
+        requires_reply: initialData.requires_reply || 'NO',
+        files: [
+          { name: 'Letter_Scan_Doc.pdf', size: '2.4 MB' },
+        ],
       });
     } else {
+      const randomNo = `INW/2026/${String(Math.floor(Math.random() * 500) + 390).padStart(4, '0')}`;
       setForm({
-        sender_name: '',
-        sender_designation: '',
+        inward_number: randomNo,
+        sender_name: 'Shri. A.B. Kulkarni',
+        sender_designation: 'Executive Engineer',
         sender_department_id: '',
+        reference_number: 'PWD/CE/HQ/2026/1234',
         date_received: new Date().toISOString().split('T')[0],
         subject: '',
         description: '',
         priority: 'MEDIUM',
-        tags: '',
+        tags: ['Road', 'PWD', 'NH-4', 'Budget'],
+        tagInput: '',
         attachment_urls: '',
         assigned_to_user_id: '',
+        requires_reply: 'NO',
+        files: [
+          { name: 'PWD_Road_Widening_Proposal_NH4.pdf', size: '4.2 MB' },
+          { name: 'Revised_Cost_Estimate_Annexure.pdf', size: '1.8 MB' },
+        ],
       });
     }
     setError('');
@@ -79,8 +108,38 @@ const InwardFormModal = ({ isOpen, onClose, onSuccess, initialData = null }) => 
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  // Add Tag
+  const handleAddTag = (e) => {
+    if (e.key === 'Enter' && form.tagInput.trim()) {
+      e.preventDefault();
+      if (!form.tags.includes(form.tagInput.trim())) {
+        setForm((prev) => ({
+          ...prev,
+          tags: [...prev.tags, prev.tagInput.trim()],
+          tagInput: '',
+        }));
+      }
+    }
+  };
+
+  // Remove Tag
+  const handleRemoveTag = (tagToRemove) => {
+    setForm((prev) => ({
+      ...prev,
+      tags: prev.tags.filter((t) => t !== tagToRemove),
+    }));
+  };
+
+  // Remove File
+  const handleRemoveFile = (index) => {
+    setForm((prev) => ({
+      ...prev,
+      files: prev.files.filter((_, i) => i !== index),
+    }));
+  };
+
+  const handleSubmit = async (e, createOutward = false) => {
+    if (e) e.preventDefault();
     if (!form.sender_name.trim()) {
       setError('कृपया पत्र पाठवणाऱ्याचे नाव प्रविष्ट करा (Sender name is required)');
       return;
@@ -95,23 +154,35 @@ const InwardFormModal = ({ isOpen, onClose, onSuccess, initialData = null }) => 
 
     try {
       const payload = {
-        ...form,
+        sender_name: form.sender_name,
+        sender_designation: form.sender_designation,
         sender_department_id: form.sender_department_id ? parseInt(form.sender_department_id, 10) : null,
+        date_received: form.date_received,
+        subject: form.subject,
+        description: form.description,
+        priority: form.priority,
         assigned_to_user_id: form.assigned_to_user_id ? parseInt(form.assigned_to_user_id, 10) : null,
-        tags: form.tags ? form.tags.split(',').map((t) => t.trim()).filter(Boolean) : [],
-        attachment_urls: form.attachment_urls ? form.attachment_urls.split('\n').map((u) => u.trim()).filter(Boolean) : [],
+        tags: form.tags,
+        attachment_urls: form.files.map((f) => f.name),
       };
 
+      let res;
       if (initialData?.id) {
-        await api.patch(`/inward/${initialData.id}`, payload);
+        res = await api.patch(`/inward/${initialData.id}`, payload);
       } else {
-        await api.post('/inward', payload);
+        res = await api.post('/inward', payload);
       }
+
+      const savedEntry = res.data?.data || initialData;
 
       onSuccess();
       onClose();
+
+      if (createOutward && onSaveAndCreateOutward) {
+        onSaveAndCreateOutward(savedEntry);
+      }
     } catch (err) {
-      console.error('Save error:', err);
+      console.error('Save inward error:', err);
       setError(err?.response?.data?.message || 'माहिती जतन करताना त्रुटी आली. पुन्हा प्रयत्न करा.');
     } finally {
       setSubmitting(false);
@@ -123,153 +194,251 @@ const InwardFormModal = ({ isOpen, onClose, onSuccess, initialData = null }) => 
       <div className="inward-modal-container" onClick={(e) => e.stopPropagation()}>
         <div className="inward-modal-header">
           <div className="modal-title-group">
-            <h3>{initialData ? '✏️ आवक पत्र संपादित करा' : '📥 नवीन आवक पत्र नोंदवा'}</h3>
-            <span className="modal-subtitle-en">{initialData ? 'Edit Inward Entry' : 'Log New Inward Letter'}</span>
+            <h3>{initialData ? '✏️ Inward Details · आवक तपशील' : '📥 New Inward Entry · नवीन आवक नोंद'}</h3>
+            <span className="modal-subtitle-en">Register a received letter, document, or correspondence</span>
           </div>
-          <button className="modal-close-btn" onClick={onClose}>✕</button>
+          <button type="button" className="modal-close-btn" onClick={onClose}>✕</button>
         </div>
 
-        <form onSubmit={handleSubmit} className="inward-form">
-          {error && <div className="form-error-banner">⚠️ {error}</div>}
+        <form onSubmit={(e) => handleSubmit(e, false)}>
+          <div className="form-card" style={{ border: 'none', boxShadow: 'none' }}>
+            {error && <div className="form-error-banner" style={{ margin: '16px 24px 0' }}>⚠️ {error}</div>}
 
-          <div className="form-grid">
-            {/* Sender Name */}
-            <div className="form-group col-span-2">
-              <label>पाठवणाऱ्याचे नाव (Sender Name) <span className="req">*</span></label>
-              <input
-                type="text"
-                name="sender_name"
-                value={form.sender_name}
-                onChange={handleChange}
-                placeholder="उदा. श्री. नामदेव पाटील / जिल्हाधिकारी office"
-                required
-              />
+            {/* Section 1: Inward Details */}
+            <div className="form-section">
+              <div className="section-title">📨 Inward Details · <span className="mr">आवक तपशील</span></div>
+              <div className="section-desc">Letter/document received at MLA office</div>
+              <div className="form-grid">
+                <div className="form-group">
+                  <label className="form-label">
+                    Inward Number <span className="mr-sub">आवक क्रमांक</span>
+                  </label>
+                  <input
+                    className="form-input mono"
+                    value={form.inward_number}
+                    readOnly
+                    style={{ background: 'var(--inw-bg)', color: 'var(--inw-t3)', fontWeight: 600 }}
+                  />
+                  <span className="form-hint">Auto-generated · स्वयं-निर्मित</span>
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">
+                    Date Received<span className="req">*</span> <span className="mr-sub">प्राप्त तारीख</span>
+                  </label>
+                  <input
+                    className="form-input"
+                    type="date"
+                    name="date_received"
+                    value={form.date_received}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+              </div>
             </div>
 
-            {/* Sender Designation */}
-            <div className="form-group">
-              <label>पदनाम (Designation)</label>
-              <input
-                type="text"
-                name="sender_designation"
-                value={form.sender_designation}
-                onChange={handleChange}
-                placeholder="उदा. कार्यकारी अभियंता / सरपंच"
-              />
+            {/* Section 2: Sender Information */}
+            <div className="form-section">
+              <div className="section-title">👤 Sender Information · <span class="mr">पाठवणाऱ्याची माहिती</span></div>
+              <div className="form-grid">
+                <div className="form-group">
+                  <label className="form-label">
+                    Sender Name<span className="req">*</span> <span className="mr-sub">पाठवणाऱ्याचे नाव</span>
+                  </label>
+                  <input
+                    className="form-input"
+                    name="sender_name"
+                    value={form.sender_name}
+                    onChange={handleChange}
+                    placeholder="e.g., Shri. D.K. Patil"
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">
+                    Sender Designation <span className="mr-sub">पद</span>
+                  </label>
+                  <input
+                    className="form-input"
+                    name="sender_designation"
+                    value={form.sender_designation}
+                    onChange={handleChange}
+                    placeholder="e.g., Executive Engineer"
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">
+                    Department / Office<span className="req">*</span> <span className="mr-sub">विभाग / कार्यालय</span>
+                  </label>
+                  <select
+                    className="form-input"
+                    name="sender_department_id"
+                    value={form.sender_department_id}
+                    onChange={handleChange}
+                  >
+                    <option value="">Select department...</option>
+                    {departments.map((dept) => (
+                      <option key={dept.id} value={dept.id}>
+                        {dept.name_en || dept.name_mr} · {dept.name_mr} ({dept.short_code})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">
+                    Reference Number <span className="mr-sub">संदर्भ क्रमांक</span>
+                  </label>
+                  <input
+                    className="form-input"
+                    name="reference_number"
+                    value={form.reference_number}
+                    onChange={handleChange}
+                    placeholder="Sender's letter/file number"
+                  />
+                </div>
+              </div>
             </div>
 
-            {/* Department Dropdown */}
-            <div className="form-group">
-              <label>संबंधित शासकीय विभाग (Department)</label>
-              <select
-                name="sender_department_id"
-                value={form.sender_department_id}
-                onChange={handleChange}
-              >
-                <option value="">-- विभाग निवडा (Select Department) --</option>
-                {departments.map((dept) => (
-                  <option key={dept.id} value={dept.id}>
-                    {dept.name_mr} ({dept.short_code})
-                  </option>
-                ))}
-              </select>
+            {/* Section 3: Subject & Content */}
+            <div className="form-section">
+              <div className="section-title">📄 Content · <span className="mr">सामग्री</span></div>
+              <div className="form-grid">
+                <div className="form-group form-full">
+                  <label className="form-label">
+                    Subject<span className="req">*</span> <span className="mr-sub">विषय</span>
+                  </label>
+                  <input
+                    className="form-input"
+                    name="subject"
+                    value={form.subject}
+                    onChange={handleChange}
+                    placeholder="Subject line of the received document"
+                    required
+                  />
+                </div>
+
+                <div className="form-group form-full">
+                  <label className="form-label">
+                    Description / Notes <span className="mr-sub">वर्णन / टिपा</span>
+                  </label>
+                  <textarea
+                    className="form-input"
+                    name="description"
+                    rows={3}
+                    value={form.description}
+                    onChange={handleChange}
+                    placeholder="Brief summary of the content..."
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">
+                    Tags <span className="mr-sub">टॅग्ज (Enter दाबून जोडा)</span>
+                  </label>
+                  <input
+                    className="form-input"
+                    name="tagInput"
+                    value={form.tagInput}
+                    onChange={handleChange}
+                    onKeyDown={handleAddTag}
+                    placeholder="Add tag and press enter..."
+                  />
+                  <div className="tag-list">
+                    {form.tags.map((tag) => (
+                      <span key={tag} className="tag">
+                        {tag} <span className="x" onClick={() => handleRemoveTag(tag)}>✕</span>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">
+                    Priority<span className="req">*</span> <span className="mr-sub">प्राधान्य</span>
+                  </label>
+                  <select className="form-input" name="priority" value={form.priority} onChange={handleChange}>
+                    <option value="LOW">🟢 Low · कमी</option>
+                    <option value="MEDIUM">🟡 Medium · मध्यम</option>
+                    <option value="HIGH">🔴 High · उच्च</option>
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">
+                    Assigned To <span className="mr-sub">नियुक्त करा</span>
+                  </label>
+                  <select className="form-input" name="assigned_to_user_id" value={form.assigned_to_user_id} onChange={handleChange}>
+                    <option value="">— Assign later —</option>
+                    <option value="2">Suresh Patil (PA / Staff)</option>
+                    <option value="4">Rahul Jadhav (Staff)</option>
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">
+                    Requires Outward Reply? <span className="mr-sub">जवाबी पत्र आवश्यक?</span>
+                  </label>
+                  <select className="form-input" name="requires_reply" value={form.requires_reply} onChange={handleChange}>
+                    <option value="NO">No</option>
+                    <option value="YES_LATER">Yes — draft outward later</option>
+                    <option value="YES_AI">Yes — AI draft immediately</option>
+                  </select>
+                </div>
+              </div>
             </div>
 
-            {/* Date Received */}
-            <div className="form-group">
-              <label>प्राप्त दिनांक (Date Received)</label>
-              <input
-                type="date"
-                name="date_received"
-                value={form.date_received}
-                onChange={handleChange}
-              />
+            {/* Section 4: Attachments */}
+            <div className="form-section">
+              <div className="section-title">📎 Scan / Upload Document · <span className="mr">दस्तऐवज अपलोड</span></div>
+              <div className="section-desc">Upload the scanned PDF or photo of the received letter</div>
+              <div className="file-drop">
+                <span className="ico">📤</span>
+                <div className="text">
+                  Drag & drop scanned document, or <strong style={{ color: 'var(--inw-p)' }}>click to browse</strong>
+                </div>
+                <div className="hint">PDF, JPG, PNG — Max 10MB per file</div>
+              </div>
+
+              {form.files.length > 0 && (
+                <div className="file-list">
+                  {form.files.map((file, idx) => (
+                    <div key={idx} className="file-item">
+                      <span>📄</span>
+                      <span className="fname">{file.name}</span>
+                      <span className="fsize">{file.size}</span>
+                      <span className="fremove" onClick={() => handleRemoveFile(idx)}>✕</span>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
-            {/* Priority Selector */}
-            <div className="form-group">
-              <label>प्राधान्यक्रम (Priority)</label>
-              <select name="priority" value={form.priority} onChange={handleChange}>
-                <option value="HIGH">🔴 उच्च (High Priority)</option>
-                <option value="MEDIUM">🟡 मध्यम (Medium Priority)</option>
-                <option value="LOW">🔵 सामान्य (Low Priority)</option>
-              </select>
+            {/* Modal Footer */}
+            <div className="form-footer">
+              <div style={{ fontSize: '12px', color: 'var(--inw-t3)' }}>
+                Inward No: <strong className="mono" style={{ color: 'var(--inw-p)' }}>{form.inward_number}</strong>
+              </div>
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <button type="button" className="btn btn-o" onClick={onClose}>
+                  Cancel · रद्द करा
+                </button>
+                <button type="submit" className="btn btn-p" disabled={submitting}>
+                  {submitting ? 'Saving...' : '💾 Save · जतन करा'}
+                </button>
+                <button type="button" className="btn btn-ok" onClick={(e) => handleSubmit(e, true)} disabled={submitting}>
+                  ✓ Save & Create Outward · जतन आणि जावक तयार करा
+                </button>
+              </div>
             </div>
-
-            {/* Subject */}
-            <div className="form-group col-span-2">
-              <label>पत्राचा विषय (Subject) <span className="req">*</span></label>
-              <input
-                type="text"
-                name="subject"
-                value={form.subject}
-                onChange={handleChange}
-                placeholder="उदा. ग्रामपंचायत रस्ता मंजुरीबाबतचे मागणी पत्र"
-                required
-              />
-            </div>
-
-            {/* Description */}
-            <div className="form-group col-span-2">
-              <label>तपशील / टीप (Description / Details)</label>
-              <textarea
-                name="description"
-                value={form.description}
-                onChange={handleChange}
-                rows={3}
-                placeholder="पत्रातील महत्वाचे मुद्दे किंवा तपशील प्रविष्ट करा..."
-              />
-            </div>
-
-            {/* Assign to User */}
-            <div className="form-group col-span-2">
-              <label>कोणाकडे नियुक्त करायचे? (Assign to Staff/PA)</label>
-              <select
-                name="assigned_to_user_id"
-                value={form.assigned_to_user_id}
-                onChange={handleChange}
-              >
-                <option value="">-- अनियुक्त (Unassigned) --</option>
-                <option value="2">👨‍💼 सुरेश पाटील (PA / Senior Manager)</option>
-                <option value="4">🕵️‍♂️ राहुल जाधव (Field Auditor)</option>
-              </select>
-            </div>
-
-            {/* Tags */}
-            <div className="form-group col-span-2">
-              <label>टॅग्स (Tags — कॉमाने विभक्त करा)</label>
-              <input
-                type="text"
-                name="tags"
-                value={form.tags}
-                onChange={handleChange}
-                placeholder="PWD, Road, Urgent, Rahata"
-              />
-            </div>
-
-            {/* Attachment URLs */}
-            <div className="form-group col-span-2">
-              <label>स्कॅन जोडपत्रे / Cloudinary PDF लिंक्स (Attachment URLs)</label>
-              <textarea
-                name="attachment_urls"
-                value={form.attachment_urls}
-                onChange={handleChange}
-                rows={2}
-                placeholder="प्रत्येक ओळीवर एक लिंक प्रविष्ट करा (e.g. https://res.cloudinary.com/...)"
-              />
-            </div>
-          </div>
-
-          <div className="modal-actions">
-            <button type="button" className="btn-secondary" onClick={onClose}>
-              रद्द करा (Cancel)
-            </button>
-            <button type="submit" className="btn-primary" disabled={submitting}>
-              {submitting ? 'जतन होत आहे...' : initialData ? 'अपडेट करा (Update)' : 'नोंदणी करा (Save Entry)'}
-            </button>
           </div>
         </form>
       </div>
+
+      <div className="wfb">WIREFRAME · INWARD FORM</div>
     </div>
   );
 };

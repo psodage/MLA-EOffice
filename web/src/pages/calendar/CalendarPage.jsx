@@ -1,31 +1,46 @@
 // src/pages/calendar/CalendarPage.jsx
 // ============================================================
 // Calendar & Schedule Page — Module 11
-// Month grid, color-coded event chips, Today's events & Upcoming 7-day schedule
+// Month grid matrix matching WIREFRAMES/calendar.html,
+// color-coded event chips, Today's events & Upcoming 7-day schedule.
+// Clean Language Toggle (EN / MR) Support
 // ============================================================
 
 import { useState, useEffect, useCallback } from 'react';
 import api from '../../services/api.js';
+import useLangStore from '../../store/langStore.js';
 import CalendarFormModal from './CalendarFormModal.jsx';
 import './CalendarPage.css';
 
-const EVENT_TYPE_CONFIG = {
-  MEETING: { mr: '🔵 बैठक', color: '#38bdf8', bg: 'rgba(56, 189, 248, 0.25)', border: '#38bdf8' },
-  PUBLIC_PROGRAM: { mr: '🟣 कार्यक्रम', color: '#c084fc', bg: 'rgba(192, 132, 252, 0.25)', border: '#c084fc' },
-  GOVT_DEADLINE: { mr: '🔴 डेडलाइन', color: '#f87171', bg: 'rgba(248, 113, 113, 0.25)', border: '#f87171' },
-  ASSEMBLY_SESSION: { mr: '🟠 अधिवेशन', color: '#fb923c', bg: 'rgba(251, 146, 60, 0.25)', border: '#fb923c' },
-  CONSTITUENCY_VISIT: { mr: '🟢 दौरा', color: '#4ade80', bg: 'rgba(74, 222, 128, 0.25)', border: '#4ade80' },
-  PERSONAL: { mr: '⚪ वैयक्तिक', color: '#94a3b8', bg: 'rgba(148, 163, 184, 0.25)', border: '#94a3b8' },
+const EVENT_TYPE_CLASS = {
+  MEETING: { en: 'Meeting', mr: 'बैठक', class: 'ev-meeting' },
+  PUBLIC_PROGRAM: { en: 'Program', mr: 'कार्यक्रम', class: 'ev-program' },
+  GOVT_DEADLINE: { en: 'Deadline', mr: 'डेडलाइन', class: 'ev-deadline' },
+  ASSEMBLY_SESSION: { en: 'Assembly Session', mr: 'अधिवेशन', class: 'ev-session' },
+  CONSTITUENCY_VISIT: { en: 'Visit', mr: 'दौरा', class: 'ev-program' },
+  PERSONAL: { en: 'Personal', mr: 'वैयक्तिक', class: 'ev-personal' },
+  HOLIDAY: { en: 'Holiday', mr: 'सुट्टी', class: 'ev-holiday' },
 };
 
+const WEEKDAYS_EN = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const WEEKDAYS_MR = ['रवी', 'सोम', 'मंगळ', 'बुध', 'गुरु', 'शुक्र', 'शनि'];
+
+const MONTHS_EN = [
+  'January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December'
+];
+
 const MONTHS_MR = [
   'जानेवारी', 'फेब्रुवारी', 'मार्च', 'एप्रिल', 'मे', 'जून',
   'जुलै', 'ऑगस्ट', 'सप्टेंबर', 'ऑक्टोबर', 'नोव्हेंबर', 'डिसेंबर'
 ];
 
 const CalendarPage = () => {
+  const { lang, setLang } = useLangStore();
+  const isMr = lang === 'MR';
+
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [activeView, setActiveView] = useState('Month');
   const [events, setEvents] = useState([]);
   const [todayEvents, setTodayEvents] = useState([]);
   const [upcomingEvents, setUpcomingEvents] = useState([]);
@@ -43,7 +58,6 @@ const CalendarPage = () => {
   const fetchCalendarData = useCallback(async () => {
     setLoading(true);
     try {
-      // Fetch month events, today's events, and upcoming events in parallel
       const [resMonth, resToday, resUpcoming] = await Promise.all([
         api.get('/calendar', { params: { month: monthStr, event_type: selectedEventType } }),
         api.get('/calendar/today'),
@@ -75,18 +89,25 @@ const CalendarPage = () => {
     setCurrentDate(new Date());
   };
 
-  // Build Month Calendar Days Grid Matrix
+  // Build Month Calendar Days Matrix
   const firstDayOfMonth = new Date(year, month, 1).getDay(); // 0 (Sun) to 6 (Sat)
   const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const prevMonthDays = new Date(year, month, 0).getDate();
 
   const calendarCells = [];
-  // Leading empty cells
-  for (let i = 0; i < firstDayOfMonth; i++) {
-    calendarCells.push(null);
+  // Leading cells from previous month
+  for (let i = firstDayOfMonth - 1; i >= 0; i--) {
+    calendarCells.push({ day: prevMonthDays - i, isOtherMonth: true });
   }
-  // Days of the month
+  // Days of current month
   for (let d = 1; d <= daysInMonth; d++) {
-    calendarCells.push(d);
+    calendarCells.push({ day: d, isOtherMonth: false });
+  }
+  // Trailing cells for next month
+  const totalCells = Math.ceil(calendarCells.length / 7) * 7;
+  const trailingCount = totalCells - calendarCells.length;
+  for (let i = 1; i <= trailingCount; i++) {
+    calendarCells.push({ day: i, isOtherMonth: true });
   }
 
   const todayDateObj = new Date();
@@ -101,70 +122,114 @@ const CalendarPage = () => {
   };
 
   return (
-    <div className="inward-page-container">
+    <div className="calendar-page-container">
       {/* ── Page Header ─────────────────────────────────────── */}
-      <div className="inward-page-header">
-        <div className="title-group">
-          <h1 className="page-title-mr">📅 दिनदर्शिका व कार्यक्रम सूची (Calendar & Schedule)</h1>
+      <div className="page-header">
+        <div>
+          <h1 className="page-title">
+            {isMr ? 'दिनदर्शिका (Calendar)' : 'Calendar · '}
+            <span className="mr">{isMr ? '' : 'दिनदर्शिका'}</span>
+          </h1>
           <p className="page-subtitle">
-            कार्यालयीन बैठका, शासकीय मुदती, सार्वजनिक कार्यक्रम व मतदारसंघातील दौरे नियोजन
+            {isMr
+              ? 'कार्यालयीन बैठका, शासकीय मुदती, सार्वजनिक कार्यक्रम व मतदारसंघातील दौरे नियोजन'
+              : 'Schedule, meetings, government deadlines, public programs and visits'}
           </p>
         </div>
 
-        <button className="create-inward-btn" onClick={() => openFormForDate(todayDayNum)}>
-          <span>➕</span>
-          <span>नवीन कार्यक्रम नोंदवा (Add Event)</span>
+        <div className="page-actions">
+          {/* Segmented Language Toggle Switch */}
+          <div className="segmented-switch" style={{ marginRight: '8px' }}>
+            <button
+              type="button"
+              className={lang === 'EN' ? 'active' : ''}
+              onClick={() => setLang('EN')}
+            >
+              EN
+            </button>
+            <button
+              type="button"
+              className={lang === 'MR' ? 'active' : ''}
+              onClick={() => setLang('MR')}
+              style={{ fontFamily: "'Noto Sans Devanagari', sans-serif" }}
+            >
+              मराठी
+            </button>
+          </div>
+
+          <button className="btn btn-primary" onClick={() => openFormForDate(todayDayNum)}>
+            <span>➕</span>
+            <span>+ {isMr ? 'नवीन कार्यक्रम' : 'New Event'}</span>
+          </button>
+        </div>
+      </div>
+
+      {/* ── Calendar Navigation Toolbar ────────────────────── */}
+      <div className="cal-nav">
+        <button className="cal-nav-btn" onClick={handlePrevMonth} title="Previous Month">
+          ‹
         </button>
+        <span className="cal-month">
+          {isMr ? MONTHS_MR[month] : MONTHS_EN[month]} {year}
+        </span>
+        <button className="cal-nav-btn" onClick={handleNextMonth} title="Next Month">
+          ›
+        </button>
+        <button className="cal-today" onClick={handleTodayClick}>
+          {isMr ? 'आज' : 'Today'}
+        </button>
+
+        {/* View Toggle */}
+        <div className="cal-view-toggle">
+          <button
+            className={`cvt ${activeView === 'Month' ? 'active' : ''}`}
+            onClick={() => setActiveView('Month')}
+          >
+            {isMr ? 'महिना' : 'Month'}
+          </button>
+          <button
+            className={`cvt ${activeView === 'Week' ? 'active' : ''}`}
+            onClick={() => setActiveView('Week')}
+          >
+            {isMr ? 'आठवडा' : 'Week'}
+          </button>
+          <button
+            className={`cvt ${activeView === 'Day' ? 'active' : ''}`}
+            onClick={() => setActiveView('Day')}
+          >
+            {isMr ? 'दिवस' : 'Day'}
+          </button>
+        </div>
       </div>
 
-      {/* ── Calendar Controls & Filters ────────────────────── */}
-      <div className="calendar-controls-bar">
-        <div className="month-nav-group">
-          <button className="nav-arrow-btn" onClick={handlePrevMonth}>← मागील</button>
-          <h2 className="current-month-title">
-            {MONTHS_MR[month]} {year}
-          </h2>
-          <button className="nav-arrow-btn" onClick={handleNextMonth}>पुढील →</button>
-          <button className="btn-today-shortcut" onClick={handleTodayClick}>आज (Today)</button>
-        </div>
-
-        <div className="event-type-filter-group">
-          <label>प्रकार फिल्टर:</label>
-          <select value={selectedEventType} onChange={(e) => setSelectedEventType(e.target.value)}>
-            <option value="ALL">सर्व कार्यक्रम (All Events)</option>
-            {Object.keys(EVENT_TYPE_CONFIG).map((k) => (
-              <option key={k} value={k}>
-                {EVENT_TYPE_CONFIG[k].mr}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
-
-      {/* ── Main Workspace Grid (Calendar Grid + Side Panels) ── */}
-      <div className="calendar-main-layout">
+      {/* ── Main Layout (Calendar Grid + Side Panel Widgets) ── */}
+      <div className="cal-main-layout">
         {/* Month Grid View */}
-        <div className="calendar-month-card">
-          <div className="weekdays-grid">
-            {WEEKDAYS_MR.map((day) => (
-              <div key={day} className="weekday-header-cell">
+        <div className="cal-grid">
+          <div className="cal-header">
+            {(isMr ? WEEKDAYS_MR : WEEKDAYS_EN).map((day) => (
+              <div key={day} className="cal-day-name">
                 {day}
               </div>
             ))}
           </div>
 
           {loading ? (
-            <div className="table-loading-box">
-              <div className="mini-spinner"></div>
-              <p>दिनदर्शिका लोड होत आहे...</p>
+            <div style={{ padding: '60px', textAlign: 'center', color: 'var(--text-3)' }}>
+              <p>{isMr ? 'दिनदर्शिका लोड होत आहे...' : 'Loading calendar schedule...'}</p>
             </div>
           ) : (
-            <div className="days-grid">
-              {calendarCells.map((dayNum, idx) => {
-                if (!dayNum) {
-                  return <div key={`empty-${idx}`} className="day-cell empty-cell" />;
+            <div className="cal-body">
+              {calendarCells.map((cell, idx) => {
+                if (cell.isOtherMonth) {
+                  return (
+                    <div key={`other-${idx}`} className="cal-cell other-month">
+                      <span className="cal-date">{cell.day}</span>
+                    </div>
+                  );
                 }
 
+                const dayNum = cell.day;
                 const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(dayNum).padStart(2, '0')}`;
                 const dayEvents = events.filter((e) => e.event_date === dateStr);
                 const isTodayCell = isCurrentMonth && dayNum === todayDayNum;
@@ -172,31 +237,26 @@ const CalendarPage = () => {
                 return (
                   <div
                     key={dateStr}
-                    className={`day-cell ${isTodayCell ? 'today-cell' : ''}`}
+                    className={`cal-cell ${isTodayCell ? 'today' : ''}`}
                     onClick={() => openFormForDate(dayNum)}
                   >
-                    <div className="day-number-header">
-                      <span className={`day-number ${isTodayCell ? 'today-badge' : ''}`}>{dayNum}</span>
-                      {dayEvents.length > 0 && <span className="event-count-dot">{dayEvents.length}</span>}
-                    </div>
+                    <span className="cal-date">{dayNum}</span>
 
-                    <div className="day-events-list">
+                    <div>
                       {dayEvents.slice(0, 3).map((e) => {
-                        const cfg = EVENT_TYPE_CONFIG[e.event_type] || EVENT_TYPE_CONFIG.MEETING;
+                        const cfg = EVENT_TYPE_CLASS[e.event_type] || EVENT_TYPE_CLASS.MEETING;
                         return (
-                          <div
+                          <span
                             key={e.id}
-                            className="event-chip"
-                            style={{ backgroundColor: cfg.bg, color: cfg.color, borderLeft: `3px solid ${cfg.border}` }}
+                            className={`cal-event ${cfg.class}`}
                             title={`${e.title} (${e.start_time || ''})`}
                           >
-                            <span className="chip-time">{e.start_time ? e.start_time.slice(0, 5) : ''}</span>
-                            <span className="chip-title">{e.title}</span>
-                          </div>
+                            {e.title}
+                          </span>
                         );
                       })}
                       {dayEvents.length > 3 && (
-                        <span className="more-events-tag">+{dayEvents.length - 3} इतर...</span>
+                        <span className="cal-more">+{dayEvents.length - 3} {isMr ? 'इतर' : 'more'}</span>
                       )}
                     </div>
                   </div>
@@ -206,23 +266,24 @@ const CalendarPage = () => {
           )}
         </div>
 
-        {/* Side Panel Widgets (Today's Events & Upcoming 7 Days) */}
+        {/* Side Panel Widgets */}
         <div className="calendar-side-panel">
-          {/* Today's Schedule Widget */}
-          <div className="side-widget-card today-widget">
+          {/* Today's Schedule Card */}
+          <div className="side-widget-card">
             <div className="widget-header">
-              <h3>📅 आजचे कार्यक्रम ({todayEvents.length})</h3>
-              <span className="widget-date-sub">{todayDateObj.toLocaleDateString('mr-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+              <h3>
+                📅 {isMr ? 'आजचे कार्यक्रम' : "Today's Schedule"} ({todayEvents.length})
+              </h3>
             </div>
 
             {todayEvents.length > 0 ? (
               <div className="widget-events-list">
                 {todayEvents.map((ev) => {
-                  const cfg = EVENT_TYPE_CONFIG[ev.event_type] || EVENT_TYPE_CONFIG.MEETING;
+                  const cfg = EVENT_TYPE_CLASS[ev.event_type] || EVENT_TYPE_CLASS.MEETING;
                   return (
                     <div key={ev.id} className="widget-event-item">
-                      <span className="widget-event-badge" style={{ backgroundColor: cfg.bg, color: cfg.color }}>
-                        {cfg.mr}
+                      <span className={`widget-event-badge ${cfg.class}`}>
+                        {isMr ? cfg.mr : cfg.en}
                       </span>
                       <h4 className="widget-event-title">{ev.title}</h4>
                       <div className="widget-event-meta">
@@ -234,29 +295,35 @@ const CalendarPage = () => {
                 })}
               </div>
             ) : (
-              <p className="no-events-text">आज कोणताही नियोजित कार्यक्रम नाही.</p>
+              <p className="no-events-text">
+                {isMr ? 'आज कोणताही नियोजित कार्यक्रम नाही.' : 'No events scheduled for today.'}
+              </p>
             )}
           </div>
 
-          {/* Upcoming 7-Day Events Widget */}
-          <div className="side-widget-card upcoming-widget">
+          {/* Upcoming 7 Days Events Card */}
+          <div className="side-widget-card">
             <div className="widget-header">
-              <h3>🗓️ पुढील ७ दिवसांतील कार्यक्रम ({upcomingEvents.length})</h3>
+              <h3>
+                🗓️ {isMr ? 'पुढील ७ दिवसांतील कार्यक्रम' : 'Upcoming 7 Days'} ({upcomingEvents.length})
+              </h3>
             </div>
 
             {upcomingEvents.length > 0 ? (
               <div className="widget-events-list">
                 {upcomingEvents.map((ev) => {
-                  const cfg = EVENT_TYPE_CONFIG[ev.event_type] || EVENT_TYPE_CONFIG.MEETING;
+                  const cfg = EVENT_TYPE_CLASS[ev.event_type] || EVENT_TYPE_CLASS.MEETING;
                   return (
                     <div key={ev.id} className="widget-event-item">
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <span className="widget-event-badge" style={{ backgroundColor: cfg.bg, color: cfg.color }}>
-                          {cfg.mr}
+                        <span className={`widget-event-badge ${cfg.class}`}>
+                          {isMr ? cfg.mr : cfg.en}
                         </span>
-                        <span className="upcoming-date-tag">📅 {ev.event_date}</span>
+                        <span style={{ fontSize: '11px', color: 'var(--text-3)', fontFamily: 'JetBrains Mono' }}>
+                          📅 {ev.event_date}
+                        </span>
                       </div>
-                      <h4 className="widget-event-title" style={{ marginTop: '0.35rem' }}>{ev.title}</h4>
+                      <h4 className="widget-event-title" style={{ marginTop: '4px' }}>{ev.title}</h4>
                       <div className="widget-event-meta">
                         <span>⏱️ {ev.start_time ? ev.start_time.slice(0, 5) : '—'}</span>
                         {ev.location && <span>📍 {ev.location}</span>}
@@ -266,13 +333,15 @@ const CalendarPage = () => {
                 })}
               </div>
             ) : (
-              <p className="no-events-text">पुढील ७ दिवसांत कोणताही कार्यक्रम नाही.</p>
+              <p className="no-events-text">
+                {isMr ? 'पुढील ७ दिवसांत कोणताही कार्यक्रम नाही.' : 'No upcoming events in next 7 days.'}
+              </p>
             )}
           </div>
         </div>
       </div>
 
-      {/* ── Add Event Modal ─────────────────────────────────── */}
+      {/* ── Add Event Form Modal ─────────────────────────────── */}
       <CalendarFormModal
         isOpen={isFormOpen}
         onClose={() => setIsFormOpen(false)}

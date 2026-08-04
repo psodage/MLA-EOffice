@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>MLA E-Office — Gram / Ward Organization</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--sb:#1B3A5C;--sw:240px;--th:56px;--p:#1B3A5C;--pl:#EFF4F9;--bg:#F5F7FA;--c:#FFF;--t1:#0F172A;--t2:#475569;--t3:#64748B;--t4:#94A3B8;--b:#DDE3EB;--ok:#16A34A;--okb:#F0FDF4;--wr:#D97706;--wrb:#FFFBEB;--er:#DC2626;--erb:#FEF2F2;--in:#2563EB;--inb:#EFF6FF;--pu:#7C3AED;--pub:#F5F3FF;--r:3px;--ss:0 1px 3px rgba(15,23,42,.08)}
+    [data-theme="dark"]{--sb:#0D1B2A;--p:#5A9BD5;--pl:#1A3355;--bg:#0F1419;--c:#1A2332;--t1:#E2ECF4;--t2:#8EA3B8;--t3:#6B8299;--t4:#4F6479;--b:#2A3A4E;--ok:#22C55E;--okb:#0D2818;--wr:#F59E0B;--wrb:#2A1F0A;--er:#EF4444;--erb:#2A1010;--in:#3B82F6;--inb:#0D1F3A;--pu:#A78BFA;--pub:#1A1030;--ss:0 1px 3px rgba(0,0,0,.4)}
+    body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--t1);transition:background .2s,color .2s}
+    .mr{font-family:'Noto Sans Devanagari',sans-serif}
+    .app{display:flex;min-height:100vh}
+
+    /* Sidebar */
+    .sidebar{width:var(--sw);background:var(--sb);color:#fff;position:fixed;top:0;left:0;bottom:0;z-index:200;display:flex;flex-direction:column;overflow:hidden}
+    .sidebar-logo{height:var(--th);display:flex;align-items:center;padding:0 16px;gap:10px;border-bottom:1px solid rgba(255,255,255,.1)}
+    .sidebar-logo .icon{width:32px;height:32px;background:rgba(255,255,255,.12);border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:16px}
+    .sidebar-logo .name{font-size:15px;font-weight:700}
+    .sidebar-nav{flex:1;padding:8px 0;overflow-y:auto}
+    .ns{padding:16px 16px 4px;font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:rgba(255,255,255,.35);font-weight:600}
+    .ni{display:flex;align-items:center;gap:12px;padding:9px 16px;margin:1px 8px;border-radius:var(--r);cursor:pointer;font-size:13px;font-weight:500;color:rgba(255,255,255,.7);text-decoration:none;transition:background .12s}
+    .ni:hover{background:rgba(255,255,255,.08);color:#fff}.ni.active{background:rgba(255,255,255,.12);color:#fff}
+    .ni .ic{width:20px;text-align:center;font-size:15px;opacity:.7}.ni.active .ic{opacity:1}
+
+    /* Topbar */
+    .topbar{position:fixed;top:0;left:var(--sw);right:0;height:var(--th);background:var(--c);border-bottom:1px solid var(--b);display:flex;align-items:center;padding:0 24px;z-index:300;gap:16px}
+    .tb-toggle{width:36px;height:36px;border:none;background:none;cursor:pointer;border-radius:var(--r);font-size:18px;color:var(--t3);display:flex;align-items:center;justify-content:center}
+    .tb-actions{display:flex;align-items:center;gap:8px;margin-left:auto}
+    .tb-btn{width:36px;height:36px;border:1px solid var(--b);background:var(--c);border-radius:var(--r);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--t3);position:relative}
+    .tb-btn .bdg{position:absolute;top:-4px;right:-4px;width:18px;height:18px;border-radius:9px;background:var(--er);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center}
+    .tb-avatar{width:32px;height:32px;border-radius:var(--r);background:var(--p);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;cursor:pointer}
+    [data-theme="dark"] .tb-avatar{background:#1A3355;color:#5A9BD5}
+
+    /* Main */
+    .main{margin-left:var(--sw);margin-top:var(--th);padding:24px}
+    .breadcrumb{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--t3);margin-bottom:16px}
+    .breadcrumb a{color:var(--p);text-decoration:none}
+    .ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px}
+    .ph .title{font-size:22px;font-weight:700}
+    .ph .sub{font-size:13px;color:var(--t3);margin-top:2px}
+    .btn{height:36px;padding:0 16px;border-radius:var(--r);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;border:none;transition:all .12s}
+    .btn-p{background:var(--p);color:#fff}.btn-o{background:transparent;color:var(--t2);border:1px solid var(--b)}
+    .btn-o:hover{border-color:var(--p);color:var(--p)}
+
+    /* Summary Stats */
+    .stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:12px;margin-bottom:20px}
+    .stat{background:var(--c);border:1px solid var(--b);border-radius:var(--r);padding:14px;box-shadow:var(--ss);text-align:center}
+    .stat-val{font-size:24px;font-weight:700;margin-bottom:2px}
+    .stat-label{font-size:11px;color:var(--t3)}
+
+    /* Tabs */
+    .tabs{display:flex;gap:0;margin-bottom:16px;border-bottom:2px solid var(--b)}
+    .tab{padding:10px 20px;font-size:13px;font-weight:500;color:var(--t3);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .12s}
+    .tab:hover{color:var(--t1)}
+    .tab.active{color:var(--p);border-bottom-color:var(--p);font-weight:600}
+    .tab .tab-count{font-size:11px;background:var(--bg);padding:1px 7px;border-radius:10px;margin-left:6px;font-weight:500}
+    .tab.active .tab-count{background:var(--pl);color:var(--p)}
+
+    /* Filter Bar */
+    .filter-bar{background:var(--c);border:1px solid var(--b);border-radius:var(--r);padding:12px;margin-bottom:16px;display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;box-shadow:var(--ss)}
+    .fg{display:flex;flex-direction:column;gap:3px}
+    .fl{font-size:10px;font-weight:600;color:var(--t4);text-transform:uppercase;letter-spacing:.5px}
+    .fi{height:30px;padding:0 8px;border:1px solid var(--b);border-radius:var(--r);font-size:12px;color:var(--t1);font-family:inherit;background:var(--bg);outline:none;min-width:130px}
+    select.fi{appearance:auto;cursor:pointer}
+
+    /* Taluka Group */
+    .taluka-group{margin-bottom:24px}
+    .taluka-header{display:flex;align-items:center;gap:10px;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--b)}
+    .taluka-icon{width:28px;height:28px;border-radius:var(--r);background:var(--pl);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+    .taluka-name{font-size:15px;font-weight:600;color:var(--t1)}
+    .taluka-name-mr{font-size:12px;color:var(--t3);margin-left:4px;font-family:'Noto Sans Devanagari',sans-serif}
+    .taluka-count{font-size:11px;color:var(--t4);background:var(--bg);padding:2px 8px;border-radius:10px;font-weight:500;margin-left:auto}
+
+    /* Area Card Grid */
+    .area-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+    .area-card{background:var(--c);border:1px solid var(--b);border-radius:var(--r);box-shadow:var(--ss);padding:16px;transition:border .12s,box-shadow .12s;cursor:pointer;position:relative}
+    .area-card:hover{border-color:var(--p);box-shadow:0 2px 8px rgba(27,58,92,.12)}
+    .area-card-header{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px}
+    .area-icon{width:40px;height:40px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+    .area-icon.village{background:var(--okb);color:var(--ok)}
+    .area-icon.ward{background:var(--inb);color:var(--in)}
+    .area-icon.gp{background:var(--pub);color:var(--pu)}
+    .area-info{flex:1;min-width:0}
+    .area-name{font-size:14px;font-weight:600;color:var(--t1);margin-bottom:1px}
+    .area-name-mr{font-size:12px;color:var(--t3);font-family:'Noto Sans Devanagari',sans-serif}
+    .area-type-badge{font-size:10px;font-weight:600;padding:2px 7px;border-radius:2px;text-transform:uppercase;letter-spacing:.3px;position:absolute;top:12px;right:12px}
+    .type-village{background:var(--okb);color:var(--ok)}
+    .type-ward{background:var(--inb);color:var(--in)}
+    .type-gp{background:var(--pub);color:var(--pu)}
+    .area-parent{font-size:11px;color:var(--t4);margin-top:2px}
+
+    /* Area Stats Mini Grid */
+    .area-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px}
+    .area-stat{text-align:center;padding:8px 4px;background:var(--bg);border-radius:var(--r)}
+    .area-stat-val{font-size:16px;font-weight:700}
+    .area-stat-label{font-size:9px;color:var(--t4);text-transform:uppercase;letter-spacing:.3px;margin-top:1px}
+
+    /* Progress Bar */
+    .area-progress{margin-bottom:10px}
+    .progress-header{display:flex;justify-content:space-between;font-size:11px;color:var(--t3);margin-bottom:4px}
+    .progress-bar{height:6px;background:var(--bg);border-radius:3px;overflow:hidden;display:flex}
+    .progress-fill-ok{background:var(--ok);height:100%}
+    .progress-fill-wr{background:var(--wr);height:100%}
+    .progress-fill-er{background:var(--er);height:100%}
+
+    /* Area Footer */
+    .area-footer{display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid var(--b)}
+    .area-booths{font-size:11px;color:var(--t3)}
+    .area-booths strong{color:var(--t2)}
+    .area-pramukh{display:flex;align-items:center;gap:4px;font-size:11px}
+    .pramukh-dot{width:8px;height:8px;border-radius:50%}
+    .pramukh-yes{background:var(--ok)}
+    .pramukh-no{background:var(--er)}
+
+    /* Detail Drawer (right side) — shown when area is selected */
+    .layout{display:grid;grid-template-columns:1fr 380px;gap:16px}
+    .list-panel{min-width:0}
+    .detail-panel{background:var(--c);border:1px solid var(--b);border-radius:var(--r);box-shadow:var(--ss);overflow:hidden;position:sticky;top:calc(var(--th) + 24px);max-height:calc(100vh - var(--th) - 48px);overflow-y:auto}
+    .dp-header{padding:20px;border-bottom:1px solid var(--b)}
+    .dp-title{font-size:17px;font-weight:700;margin-bottom:2px}
+    .dp-sub{font-size:12px;color:var(--t3)}
+    .dp-close{position:absolute;top:16px;right:16px;width:28px;height:28px;border:1px solid var(--b);background:var(--c);border-radius:var(--r);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--t3)}
+    .dp-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px}
+    .dp-stat{text-align:center;padding:12px;background:var(--bg);border-radius:var(--r)}
+    .dp-stat-val{font-size:20px;font-weight:700}
+    .dp-stat-label{font-size:10px;color:var(--t3);margin-top:1px}
+    .dp-body{padding:20px}
+    .dp-section-title{font-size:12px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;margin-top:16px}
+    .dp-section-title:first-child{margin-top:0}
+
+    /* Linked Items in Detail */
+    .linked-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--b);border-radius:var(--r);margin-bottom:6px;font-size:12px;transition:border .12s;cursor:pointer}
+    .linked-item:hover{border-color:var(--p)}
+    .li-icon{width:28px;height:28px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+    .li-info{flex:1;min-width:0}
+    .li-title{font-weight:500;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .li-meta{font-size:10px;color:var(--t4)}
+    .li-status{font-size:10px;font-weight:600;padding:2px 6px;border-radius:2px}
+    .status-pending{background:var(--wrb);color:var(--wr)}
+    .status-resolved{background:var(--okb);color:var(--ok)}
+    .status-progress{background:var(--inb);color:var(--in)}
+
+    /* Worker mini avatar row */
+    .worker-avatars{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}
+    .w-avatar{width:28px;height:28px;border-radius:var(--r);background:var(--pl);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:var(--p);cursor:pointer;border:1px solid var(--b)}
+    .w-avatar:hover{border-color:var(--p)}
+    .w-more{background:var(--bg);color:var(--t3);font-size:9px}
+
+    /* Theme toggle, wireframe badge */
+    .tt{position:fixed;top:10px;right:16px;z-index:400;display:flex;gap:4px}
+    .tt button{background:var(--c);border:1px solid var(--b);border-radius:var(--r);padding:5px 10px;cursor:pointer;font-size:11px;font-family:inherit;color:var(--t3)}
+    .tt button.active{background:#1B3A5C;color:#fff;border-color:#1B3A5C}
+    [data-theme="dark"] .tt button.active{background:#5A9BD5;color:#0F1419}
+    .wfb{position:fixed;bottom:16px;right:16px;z-index:400;background:#1B3A5C;color:#fff;padding:5px 10px;font-size:10px;font-weight:600;border-radius:var(--r);text-transform:uppercase;letter-spacing:1px;opacity:.8}
+
+    @media(max-width:1200px){.layout{grid-template-columns:1fr}.detail-panel{display:none}}
+    @media(max-width:768px){.sidebar{transform:translateX(-100%)}.topbar{left:0}.main{margin-left:0;padding:16px}.area-grid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}}
+  </style>
+</head>
+<body>
+  <div class="tt"><button class="active" onclick="setTheme('light')">☀ Light</button><button onclick="setTheme('dark')">🌙 Dark</button></div>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="sidebar-logo"><div class="icon">🏛️</div><div class="name">MLA E-Office</div></div>
+      <nav class="sidebar-nav">
+        <div class="ns">Office</div><a class="ni"><span class="ic">📊</span>Dashboard</a><a class="ni"><span class="ic">📨</span>Inward & Outward</a><a class="ni"><span class="ic">👤</span>Visitor Book</a>
+        <div class="ns">Public</div><a class="ni"><span class="ic">📝</span>Nivedans</a><a class="ni"><span class="ic">🏗️</span>Dev Works</a>
+        <div class="ns">Network</div><a class="ni"><span class="ic">👥</span>Karyakarta</a><a class="ni active"><span class="ic">📍</span>Gram/Ward</a><a class="ni"><span class="ic">🗳️</span>Booths</a>
+        <div class="ns">Tools</div><a class="ni"><span class="ic">📅</span>Calendar</a><a class="ni"><span class="ic">💬</span>WhatsApp</a><a class="ni"><span class="ic">📑</span>Reports</a>
+        <div style="height:1px;background:rgba(255,255,255,.1);margin:8px 16px"></div><a class="ni"><span class="ic">⚙️</span>Settings</a>
+      </nav>
+    </aside>
+    <header class="topbar">
+      <button class="tb-toggle">☰</button>
+      <div class="tb-actions"><button class="tb-btn">🌐</button><button class="tb-btn">🔔<span class="bdg">3</span></button><div class="tb-avatar">RP</div></div>
+    </header>
+    <main class="main">
+      <div class="breadcrumb"><a href="#">Dashboard</a><span style="color:var(--t4)">/</span><a href="#">Constituency</a><span style="color:var(--t4)">/</span><span>Gram & Ward</span></div>
+      <div class="ph">
+        <div><h1 class="title">Gram / Ward Organization · <span class="mr">ग्राम / वॉर्ड रचना</span></h1><p class="sub">Geographical hierarchy — area-wise filtering and constituency management</p></div>
+        <div style="display:flex;gap:8px"><button class="btn btn-o">📥 Import Excel</button><button class="btn btn-o">📄 Export PDF</button><button class="btn btn-p">+ Add Area · क्षेत्र जोडा</button></div>
+      </div>
+
+      <!-- Summary Stats -->
+      <div class="stats">
+        <div class="stat"><div class="stat-val" style="color:var(--t1)">3</div><div class="stat-label">Talukas · तालुके</div></div>
+        <div class="stat"><div class="stat-val" style="color:var(--pu)">18</div><div class="stat-label">Gram Panchayats · ग्रा.पं.</div></div>
+        <div class="stat"><div class="stat-val" style="color:var(--ok)">47</div><div class="stat-label">Villages · गावे</div></div>
+        <div class="stat"><div class="stat-val" style="color:var(--in)">12</div><div class="stat-label">City Wards · वॉर्ड</div></div>
+        <div class="stat"><div class="stat-val" style="color:var(--wr)">156</div><div class="stat-label">Booths · बूथ</div></div>
+        <div class="stat"><div class="stat-val" style="color:var(--er)">34</div><div class="stat-label">Pending Nivedans · प्रलंबित</div></div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <div class="tab active">📍 All Areas<span class="tab-count">59</span></div>
+        <div class="tab">🏡 Villages<span class="tab-count">47</span></div>
+        <div class="tab">🏙️ City Wards<span class="tab-count">12</span></div>
+        <div class="tab">🏘️ Gram Panchayats<span class="tab-count">18</span></div>
+      </div>
+
+      <!-- Filter Bar -->
+      <div class="filter-bar">
+        <div class="fg"><span class="fl">Search</span><input class="fi" placeholder="Village, ward name..." style="min-width:180px"></div>
+        <div class="fg"><span class="fl">Taluka</span><select class="fi"><option>All Talukas</option><option selected>Haveli</option><option>Maval</option><option>Shirur</option></select></div>
+        <div class="fg"><span class="fl">Gram Panchayat</span><select class="fi"><option>All GPs</option><option>Wadgaon GP</option><option>Pirangut GP</option><option>Urse GP</option></select></div>
+        <div class="fg"><span class="fl">Area Type</span><select class="fi"><option>All Types</option><option>Village</option><option>Ward</option></select></div>
+        <div class="fg"><span class="fl">Complaint Status</span><select class="fi"><option>Any</option><option>Has Pending</option><option>All Resolved</option></select></div>
+      </div>
+
+      <!-- Layout: List + Detail -->
+      <div class="layout">
+        <div class="list-panel">
+
+          <!-- Taluka Group 1: Haveli -->
+          <div class="taluka-group">
+            <div class="taluka-header">
+              <div class="taluka-icon">📍</div>
+              <span class="taluka-name">Haveli Taluka</span><span class="taluka-name-mr">हवेली तालुका</span>
+              <span class="taluka-count">22 areas · 92 booths</span>
+            </div>
+            <div class="area-grid">
+              <!-- Card 1: Wadgaon Village (selected) -->
+              <div class="area-card" style="border-color:var(--p)">
+                <span class="area-type-badge type-village">Village</span>
+                <div class="area-card-header">
+                  <div class="area-icon village">🏡</div>
+                  <div class="area-info">
+                    <div class="area-name">Wadgaon · <span class="mr">वडगाव</span></div>
+                    <div class="area-parent">GP: Wadgaon · Haveli Taluka</div>
+                  </div>
+                </div>
+                <div class="area-stats">
+                  <div class="area-stat"><div class="area-stat-val" style="color:var(--er)">8</div><div class="area-stat-label">Complaints</div></div>
+                  <div class="area-stat"><div class="area-stat-val" style="color:var(--in)">3</div><div class="area-stat-label">Dev Works</div></div>
+                  <div class="area-stat"><div class="area-stat-val" style="color:var(--pu)">24</div><div class="area-stat-label">Workers</div></div>
+                  <div class="area-stat"><div class="area-stat-val" style="color:var(--ok)">6</div><div class="area-stat-label">Booths</div></div>
+                </div>
+                <div class="area-progress">
+                  <div class="progress-header"><span>Nivedan Resolution</span><span>5 / 8 resolved</span></div>
+                  <div class="progress-bar"><div class="progress-fill-ok" style="width:62.5%"></div><div class="progress-fill-wr" style="width:12.5%"></div><div class="progress-fill-er" style="width:25%"></div></div>
+                </div>
+                <div class="area-footer">
+                  <span class="area-booths">🗳️ <strong>6</strong> booths · 4,812 voters</span>
+                  <span class="area-pramukh"><span class="pramukh-dot pramukh-yes"></span>All Pramukh assigned</span>
+                </div>
+              </div>
+
+              <!-- Card 2: Pimpri Ward 5 -->
+              <div class="area-card">
+                <span class="area-type-badge type-ward">Ward</span>
+                <div class="area-card-header">
+                  <div class="area-icon ward">🏙️</div>
+                  <div class="area-info">
+                    <div class="area-name">Pimpri (Ward 5) · <span class="mr">पिंपरी (वॉर्ड ५)</span></div>
+                    <div class="area-parent">Haveli Taluka · Urban</div>
+                  </div>
+                </div>
+                <div class="area-stats">
+                  <div class="area-stat"><div class="area-stat-val" style="color:var(--er)">14</div><div class="area-stat-label">Complaints</div></div>
+                  <div class="area-stat"><div class="area-stat-val" style="color:var(--in)">5</div><div class="area-stat-label">Dev Works</div></div>
+                  <div class="area-stat"><div class="area-stat-val" style="color:var(--pu)">38</div><div class="area-stat-label">Workers</div></div>
+                  <div class="area-stat"><div class="area-stat-val" style="color:var(--ok)">12</div><div class="area-stat-label">Booths</div></div>
+                </div>
+                <div class="area-progress">
+                  <div class="progress-header"><span>Nivedan Resolution</span><span>9 / 14 resolved</span></div>
+                  <div class="progress-bar"><div class="progress-fill-ok" style="width:64%"></div><div class="progress-fill-wr" style="width:14%"></div><div class="progress-fill-er" style="width:22%"></div></div>
+                </div>
+                <div class="area-footer">
+                  <span class="area-booths">🗳️ <strong>12</strong> booths · 10,245 voters</span>
+                  <span class="area-pramukh"><span class="pramukh-dot pramukh-yes"></span>All Pramukh assigned</span>
+                </div>
+              </div>
+
+              <!-- Card 3: Shivaji Nagar Ward 1 -->
+              <div class="area-card">
+                <span class="area-type-badge type-ward">Ward</span>
+                <div class="area-card-header">
+                  <div class="area-icon ward">🏙️</div>
+                  <div class="area-info">
+                    <div class="area-name">Shivaji Nagar (Ward 1) · <span class="mr">शिवाजी नगर (वॉर्ड १)</span></div>
+                    <div class="area-parent">Haveli Taluka · Urban</div>
+                  </div>
+                </div>
+                <div class="area-stats">
+                  <div class="area-stat"><div class="area-stat-val" style="color:var(--er)">6</div><div class="area-stat-label">Complaints</div></div>
+                  <div class="area-stat"><div class="area-stat-val" style="color:var(--in)">2</div><div class="area-stat-label">Dev Works</div></div>
+                  <div class="area-stat"><div class="area-stat-val" style="color:var(--pu)">18</div><div class="area-stat-label">Workers</div></div>
+                  <div class="area-stat"><div class="area-stat-val" style="color:var(--ok)">8</div><div class="area-stat-label">Booths</div></div>
+                </div>
+                <div class="area-progress">
+                  <div class="progress-header"><span>Nivedan Resolution</span><span>4 / 6 resolved</span></div>
+                  <div class="progress-bar"><div class="progress-fill-ok" style="width:66%"></div><div class="progress-fill-wr" style="width:17%"></div><div class="progress-fill-er" style="width:17%"></div></div>
+                </div>
+                <div class="area-footer">
+                  <span class="area-booths">🗳️ <strong>8</strong> booths · 6,720 voters</span>
+                  <span class="area-pramukh"><span class="pramukh-dot pramukh-yes"></span>All Pramukh assigned</span>
+                </div>
+              </div>
+
+              <!-- Card 4: Ambegaon Village -->
+              <div class="area-card">
+                <span class="area-type-badge type-village">Village</span>
+                <div class="area-card-header">
+                  <div class="area-icon village">🏡</div>
+                  <div class="area-info">
+                    <div class="area-name">Ambegaon · <span class="mr">आंबेगाव</span></div>
+                    <div class="area-parent">GP: Ambegaon · Haveli Taluka</div>
+                  </div>
+                </div>
+                <div class="area-stats">
+                  <div class="area-stat"><div class="area-stat-val" style="color:var(--er)">3</div><div class="area-stat-label">Complaints</div></div>
+                  <div class="area-stat"><div class="area-stat-val" style="color:var(--in)">1</div><div class="area-stat-label">Dev Works</div></div>
+                  <div class="area-stat"><div class="area-stat-val" style="color:var(--pu)">12</div><div class="area-stat-label">Workers</div></div>
+                  <div class="area-stat"><div class="area-stat-val" style="color:var(--ok)">4</div><div class="area-stat-label">Booths</div></div>
+                </div>
+                <div class="area-progress">
+                  <div class="progress-header"><span>Nivedan Resolution</span><span>2 / 3 resolved</span></div>
+                  <div class="progress-bar"><div class="progress-fill-ok" style="width:66%"></div><div class="progress-fill-er" style="width:34%"></div></div>
+                </div>
+                <div class="area-footer">
+                  <span class="area-booths">🗳️ <strong>4</strong> booths · 2,340 voters</span>
+                  <span class="area-pramukh"><span class="pramukh-dot pramukh-no"></span>1 Pramukh missing</span>
+                </div>
+              </div>
+
+              <!-- Card 5: Pirangut -->
+              <div class="area-card">
+                <span class="area-type-badge type-village">Village</span>
+                <div class="area-card-header">
+                  <div class="area-icon village">🏡</div>
+                  <div class="area-info">
+                    <div class="area-name">Pirangut · <span class="mr">पिरंगुट</span></div>
+                    <div class="area-parent">GP: Pirangut · Haveli Taluka</div>
+                  </div>
+                </div>
+                <div class="area-stats">
+                  <div class="area-stat"><div class="area-stat-val" style="color:var(--er)">5</div><div class="area-stat-label">Complaints</div></div>
+                  <div class="area-stat"><div class="area-stat-val" style="color:var(--in)">2</div><div class="area-stat-label">Dev Works</div></div>
+                  <div class="area-stat"><div class="area-stat-val" style="color:var(--pu)">16</div><div class="area-stat-label">Workers</div></div>
+                  <div class="area-stat"><div class="area-stat-val" style="color:var(--ok)">5</div><div class="area-stat-label">Booths</div></div>
+                </div>
+                <div class="area-progress">
+                  <div class="progress-header"><span>Nivedan Resolution</span><span>3 / 5 resolved</span></div>
+                  <div class="progress-bar"><div class="progress-fill-ok" style="width:60%"></div><div class="progress-fill-wr" style="width:20%"></div><div class="progress-fill-er" style="width:20%"></div></div>
+                </div>
+                <div class="area-footer">
+                  <span class="area-booths">🗳️ <strong>5</strong> booths · 3,580 voters</span>
+                  <span class="area-pramukh"><span class="pramukh-dot pramukh-yes"></span>All Pramukh assigned</span>
+                </div>
+              </div>
+
+              <!-- Card 6: Urse -->
+              <div class="area-card">
+                <span class="area-type-badge type-village">Village</span>
+                <div class="area-card-header">
+                  <div class="area-icon village">🏡</div>
+                  <div class="area-info">
+                    <div class="area-name">Urse · <span class="mr">उर्से</span></div>
+                    <div class="area-parent">GP: Urse · Haveli Taluka</div>
+                  </div>
+                </div>
+                <div class="area-stats">
+                  <div class="area-stat"><div class="area-stat-val" style="color:var(--er)">2</div><div class="area-stat-label">Complaints</div></div>
+                  <div class="area-stat"><div class="area-stat-val" style="color:var(--in)">1</div><div class="area-stat-label">Dev Works</div></div>
+                  <div class="area-stat"><div class="area-stat-val" style="color:var(--pu)">9</div><div class="area-stat-label">Workers</div></div>
+                  <div class="area-stat"><div class="area-stat-val" style="color:var(--ok)">3</div><div class="area-stat-label">Booths</div></div>
+                </div>
+                <div class="area-progress">
+                  <div class="progress-header"><span>Nivedan Resolution</span><span>1 / 2 resolved</span></div>
+                  <div class="progress-bar"><div class="progress-fill-ok" style="width:50%"></div><div class="progress-fill-er" style="width:50%"></div></div>
+                </div>
+                <div class="area-footer">
+                  <span class="area-booths">🗳️ <strong>3</strong> booths · 1,890 voters</span>
+                  <span class="area-pramukh"><span class="pramukh-dot pramukh-yes"></span>All Pramukh assigned</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Taluka Group 2: Maval (collapsed for brevity) -->
+          <div class="taluka-group">
+            <div class="taluka-header">
+              <div class="taluka-icon">📍</div>
+              <span class="taluka-name">Maval Taluka</span><span class="taluka-name-mr">मावळ तालुका</span>
+              <span class="taluka-count">14 areas · 38 booths</span>
+            </div>
+            <div class="area-grid">
+              <div class="area-card">
+                <span class="area-type-badge type-village">Village</span>
+                <div class="area-card-header">
+                  <div class="area-icon village">🏡</div>
+                  <div class="area-info">
+                    <div class="area-name">Talegaon Dabhade · <span class="mr">तळेगाव दाभाडे</span></div>
+                    <div class="area-parent">GP: Talegaon · Maval Taluka</div>
+                  </div>
+                </div>
+                <div class="area-stats">
+                  <div class="area-stat"><div class="area-stat-val" style="color:var(--er)">7</div><div class="area-stat-label">Complaints</div></div>
+                  <div class="area-stat"><div class="area-stat-val" style="color:var(--in)">4</div><div class="area-stat-label">Dev Works</div></div>
+                  <div class="area-stat"><div class="area-stat-val" style="color:var(--pu)">22</div><div class="area-stat-label">Workers</div></div>
+                  <div class="area-stat"><div class="area-stat-val" style="color:var(--ok)">8</div><div class="area-stat-label">Booths</div></div>
+                </div>
+                <div class="area-progress">
+                  <div class="progress-header"><span>Nivedan Resolution</span><span>4 / 7 resolved</span></div>
+                  <div class="progress-bar"><div class="progress-fill-ok" style="width:57%"></div><div class="progress-fill-wr" style="width:14%"></div><div class="progress-fill-er" style="width:29%"></div></div>
+                </div>
+                <div class="area-footer">
+                  <span class="area-booths">🗳️ <strong>8</strong> booths · 6,120 voters</span>
+                  <span class="area-pramukh"><span class="pramukh-dot pramukh-no"></span>2 Pramukh missing</span>
+                </div>
+              </div>
+              <div class="area-card">
+                <span class="area-type-badge type-village">Village</span>
+                <div class="area-card-header">
+                  <div class="area-icon village">🏡</div>
+                  <div class="area-info">
+                    <div class="area-name">Lonavala · <span class="mr">लोणावळा</span></div>
+                    <div class="area-parent">GP: Lonavala · Maval Taluka</div>
+                  </div>
+                </div>
+                <div class="area-stats">
+                  <div class="area-stat"><div class="area-stat-val" style="color:var(--er)">4</div><div class="area-stat-label">Complaints</div></div>
+                  <div class="area-stat"><div class="area-stat-val" style="color:var(--in)">2</div><div class="area-stat-label">Dev Works</div></div>
+                  <div class="area-stat"><div class="area-stat-val" style="color:var(--pu)">14</div><div class="area-stat-label">Workers</div></div>
+                  <div class="area-stat"><div class="area-stat-val" style="color:var(--ok)">5</div><div class="area-stat-label">Booths</div></div>
+                </div>
+                <div class="area-progress">
+                  <div class="progress-header"><span>Nivedan Resolution</span><span>3 / 4 resolved</span></div>
+                  <div class="progress-bar"><div class="progress-fill-ok" style="width:75%"></div><div class="progress-fill-er" style="width:25%"></div></div>
+                </div>
+                <div class="area-footer">
+                  <span class="area-booths">🗳️ <strong>5</strong> booths · 3,890 voters</span>
+                  <span class="area-pramukh"><span class="pramukh-dot pramukh-yes"></span>All Pramukh assigned</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Detail Panel (Wadgaon selected) -->
+        <div class="detail-panel" style="position:relative">
+          <div class="dp-header" style="position:relative">
+            <button class="dp-close">✕</button>
+            <div class="dp-title">🏡 Wadgaon · <span class="mr">वडगाव</span></div>
+            <div class="dp-sub">Village · Wadgaon GP · Haveli Taluka</div>
+            <div class="dp-stats">
+              <div class="dp-stat"><div class="dp-stat-val" style="color:var(--er)">8</div><div class="dp-stat-label">Nivedans · निवेदने</div></div>
+              <div class="dp-stat"><div class="dp-stat-val" style="color:var(--in)">3</div><div class="dp-stat-label">Dev Works · विकास कामे</div></div>
+              <div class="dp-stat"><div class="dp-stat-val" style="color:var(--pu)">24</div><div class="dp-stat-label">Workers · कार्यकर्ते</div></div>
+              <div class="dp-stat"><div class="dp-stat-val" style="color:var(--ok)">6</div><div class="dp-stat-label">Booths · बूथ</div></div>
+            </div>
+          </div>
+          <div class="dp-body">
+            <!-- Booth List -->
+            <div class="dp-section-title">🗳️ Booths in Wadgaon (6)</div>
+            <div class="linked-item">
+              <div class="li-icon" style="background:var(--pl);color:var(--p);font-weight:700;font-size:12px">12</div>
+              <div class="li-info"><div class="li-title">Booth 12 — ZP School</div><div class="li-meta">Pramukh: Vishnu Gaikwad · 845 voters</div></div>
+            </div>
+            <div class="linked-item">
+              <div class="li-icon" style="background:var(--pl);color:var(--p);font-weight:700;font-size:12px">13</div>
+              <div class="li-info"><div class="li-title">Booth 13 — Gram Panchayat Office</div><div class="li-meta">Pramukh: Anil Shinde · 912 voters</div></div>
+            </div>
+            <div class="linked-item">
+              <div class="li-icon" style="background:var(--pl);color:var(--p);font-weight:700;font-size:12px">14</div>
+              <div class="li-info"><div class="li-title">Booth 14 — Community Hall</div><div class="li-meta">Pramukh: Suresh Pawar · 738 voters</div></div>
+            </div>
+
+            <!-- Recent Nivedans -->
+            <div class="dp-section-title">📝 Recent Nivedans (8)</div>
+            <div class="linked-item">
+              <div class="li-icon" style="background:var(--erb)">📝</div>
+              <div class="li-info"><div class="li-title">Road repair near ZP School</div><div class="li-meta">NIV/2026/0345 · 28 Jul 2026</div></div>
+              <span class="li-status status-pending">Pending</span>
+            </div>
+            <div class="linked-item">
+              <div class="li-icon" style="background:var(--wrb)">📝</div>
+              <div class="li-info"><div class="li-title">Water supply pipeline leakage</div><div class="li-meta">NIV/2026/0312 · 22 Jul 2026</div></div>
+              <span class="li-status status-progress">In Progress</span>
+            </div>
+            <div class="linked-item">
+              <div class="li-icon" style="background:var(--okb)">📝</div>
+              <div class="li-info"><div class="li-title">Street light installation request</div><div class="li-meta">NIV/2026/0289 · 15 Jul 2026</div></div>
+              <span class="li-status status-resolved">Resolved</span>
+            </div>
+
+            <!-- Active Dev Works -->
+            <div class="dp-section-title">🏗️ Active Development Works (3)</div>
+            <div class="linked-item">
+              <div class="li-icon" style="background:var(--inb)">🏗️</div>
+              <div class="li-info"><div class="li-title">Road widening — Wadgaon to NH-4</div><div class="li-meta">MLALAD · ₹45 Lakhs · 60% complete</div></div>
+              <span class="li-status status-progress">In Progress</span>
+            </div>
+            <div class="linked-item">
+              <div class="li-icon" style="background:var(--inb)">🏗️</div>
+              <div class="li-info"><div class="li-title">Community hall construction</div><div class="li-meta">ZP Fund · ₹28 Lakhs · 35% complete</div></div>
+              <span class="li-status status-progress">In Progress</span>
+            </div>
+
+            <!-- Key Workers -->
+            <div class="dp-section-title">👥 Key Workers (24 total)</div>
+            <div class="worker-avatars">
+              <div class="w-avatar" title="Vishnu Gaikwad">VG</div>
+              <div class="w-avatar" title="Anil Shinde">AS</div>
+              <div class="w-avatar" title="Suresh Pawar">SP</div>
+              <div class="w-avatar" title="Meena Kale">MK</div>
+              <div class="w-avatar" title="Ravi Jadhav">RJ</div>
+              <div class="w-avatar" title="Deepak Thorat">DT</div>
+              <div class="w-avatar w-more">+18</div>
+            </div>
+            <div style="margin-top:16px;display:flex;gap:8px">
+              <button class="btn btn-o" style="height:32px;font-size:12px">📄 Area Report</button>
+              <button class="btn btn-p" style="height:32px;font-size:12px">👁 View Full Detail</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <div class="wfb">Wireframe · Gram/Ward Organization</div>
+  <script>function setTheme(t){document.documentElement.setAttribute('data-theme',t);document.querySelectorAll('.tt button').forEach(b=>b.classList.remove('active'));event.target.classList.add('active');}</script>
+</body>
+</html>

@@ -1,17 +1,22 @@
 // src/pages/nivedan/NivedanDetailModal.jsx
 // ============================================================
 // Modal for Viewing Nivedan Details, Status Transitions, Notes,
-// and Immutable Vertical Activity History Log Timeline.
+// WhatsApp Logs and Immutable Vertical Activity History Timeline.
+// 1:1 Layout Match with WIREFRAMES/nivedan_detail.html
+// Clean Language Toggle (EN / MR) Support
 // ============================================================
 
 import { useState } from 'react';
-import NivedanStatusBadge from '../../components/nivedan/NivedanStatusBadge.jsx';
-import PriorityBadge from '../../components/inward/PriorityBadge.jsx';
+import useLangStore from '../../store/langStore.js';
 import api from '../../services/api.js';
 
 const NivedanDetailModal = ({ isOpen, onClose, entry, onUpdateSuccess }) => {
+  const { lang } = useLangStore();
+  const isMr = lang === 'MR';
+
   const [updating, setUpdating] = useState(false);
   const [newNote, setNewNote] = useState('');
+  const [targetStatus, setTargetStatus] = useState('');
   const [resolutionNotes, setResolutionNotes] = useState('');
   const [showResolveInput, setShowResolveInput] = useState(false);
 
@@ -28,13 +33,13 @@ const NivedanDetailModal = ({ isOpen, onClose, entry, onUpdateSuccess }) => {
       await api.patch(`/nivedans/${entry.id}/status`, {
         status: newStatus,
         resolution_notes: resolutionNotes,
-        note: resolutionNotes || `स्थिती बदल: ${newStatus}`,
+        note: resolutionNotes || `Status changed to ${newStatus}`,
       });
       setShowResolveInput(false);
       onUpdateSuccess();
       onClose();
     } catch (err) {
-      alert(err?.response?.data?.message || 'स्थिती बदलताना त्रुटी आली.');
+      alert(err?.response?.data?.message || (isMr ? 'स्थिती बदलताना त्रुटी आली.' : 'Error updating status.'));
     } finally {
       setUpdating(false);
     }
@@ -42,203 +47,396 @@ const NivedanDetailModal = ({ isOpen, onClose, entry, onUpdateSuccess }) => {
 
   const handleAddNote = async (e) => {
     e.preventDefault();
-    if (!newNote.trim()) return;
+    if (!newNote.trim() && !targetStatus) return;
 
     setUpdating(true);
     try {
-      await api.post(`/nivedans/${entry.id}/timeline`, {
-        note: newNote,
-        is_internal: true,
-      });
+      if (targetStatus) {
+        await api.patch(`/nivedans/${entry.id}/status`, {
+          status: targetStatus,
+          note: newNote || `Status updated to ${targetStatus}`,
+        });
+      } else {
+        await api.post(`/nivedans/${entry.id}/timeline`, {
+          note: newNote,
+          is_internal: true,
+        });
+      }
+
       setNewNote('');
+      setTargetStatus('');
       onUpdateSuccess();
     } catch (err) {
-      alert(err?.response?.data?.message || 'टीप जोडताना त्रुटी आली.');
+      alert(err?.response?.data?.message || (isMr ? 'टीप जोडताना त्रुटी आली.' : 'Error adding note.'));
     } finally {
       setUpdating(false);
     }
   };
 
+  const getStatusBadge = (status) => {
+    switch (status) {
+      case 'PENDING':
+        return <span className="badge-pill status-pending">{isMr ? '🟡 प्रलंबित' : '🟡 Pending'}</span>;
+      case 'IN_PROGRESS':
+        return <span className="badge-pill status-progress">{isMr ? '🔵 प्रगतीपथावर' : '🔵 In Progress'}</span>;
+      case 'FORWARDED':
+        return <span className="badge-pill status-forwarded">{isMr ? '🟠 पाठवलेले' : '🟠 Forwarded'}</span>;
+      case 'ESCALATED':
+        return <span className="badge-pill status-escalated">{isMr ? '⚠️ कालावधी उलटलेले' : '⚠️ Escalated'}</span>;
+      case 'RESOLVED':
+        return <span className="badge-pill status-resolved">{isMr ? '🟢 मार्गी लागलेले' : '🟢 Resolved'}</span>;
+      default:
+        return <span className="badge-pill">{status}</span>;
+    }
+  };
+
+  const formattedDate = entry.created_at
+    ? new Date(entry.created_at).toLocaleString(isMr ? 'mr-IN' : 'en-US', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      })
+    : '—';
+
   return (
-    <div className="inward-modal-overlay" onClick={onClose}>
-      <div className="inward-modal-container detail-modal" onClick={(e) => e.stopPropagation()}>
-        <div className="inward-modal-header">
-          <div className="modal-title-group">
-            <span className="detail-ref-badge">{entry.tracking_id}</span>
-            <h3>निवेदन तपशील व टाइमलाईन (Petition Details & Timeline)</h3>
+    <div className="nivedan-modal-overlay" onClick={onClose}>
+      <div className="nivedan-modal-card wide" onClick={(e) => e.stopPropagation()}>
+        {/* Modal Header */}
+        <div className="modal-header">
+          <div className="breadcrumb-bar" style={{ margin: 0 }}>
+            <span>{isMr ? 'डॅशबोर्ड' : 'Dashboard'}</span>
+            <span>/</span>
+            <span>{isMr ? 'निवेदने' : 'Nivedans'}</span>
+            <span>/</span>
+            <span style={{ fontWeight: 700, color: 'var(--primary)' }}>{entry.tracking_id}</span>
           </div>
           <button className="modal-close-btn" onClick={onClose}>✕</button>
         </div>
 
-        <div className="detail-modal-body">
-          {/* Top Status & Meta Card */}
-          <div className="detail-summary-bar">
-            <div className="summary-item">
-              <span className="item-label">नागरिकाचे नाव (Citizen)</span>
-              <span className="item-value">👤 {entry.citizen_name}</span>
-            </div>
-            <div className="summary-item">
-              <span className="item-label">मोबाईल (Mobile)</span>
-              <span className="item-value">📱 {entry.citizen_mobile}</span>
-            </div>
-            <div className="summary-item">
-              <span className="item-label">प्राधान्यक्रम (Priority)</span>
-              <PriorityBadge priority={entry.priority} />
-            </div>
-            <div className="summary-item">
-              <span className="item-label">सध्याची स्थिती (Status)</span>
-              <NivedanStatusBadge status={entry.status} />
-            </div>
-          </div>
-
-          {/* Citizen Details */}
-          <div className="detail-section">
-            <h4 className="section-title">🏠 नागरिक व वर्गवारी माहिती</h4>
-            <div className="info-grid">
-              <div><strong>पत्ता:</strong> {entry.citizen_address_line || '—'}</div>
-              <div><strong>वर्गवारी:</strong> {entry.category?.name_mr || '—'}</div>
-              <div><strong>विभाग:</strong> {entry.forwardedDepartment?.name_mr || '—'}</div>
-            </div>
-          </div>
-
-          {/* Subject & Description */}
-          <div className="detail-section">
-            <h4 className="section-title">📝 विषयाचा सविस्तर मसुदा</h4>
-            <div className="subject-box">
-              <strong>विषय:</strong> {entry.subject}
-            </div>
-            <div className="description-box">
-              <strong>तपशील:</strong> {entry.description}
-            </div>
-          </div>
-
-          {/* Status Actions Box */}
-          <div className="detail-section status-actions-box">
-            <h4 className="section-title">⚡ कार्यस्थिती अपडेट (Status Transition)</h4>
-
-            <div className="whatsapp-toggle-bar" style={{ marginBottom: '0.85rem', display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(34, 197, 94, 0.1)', padding: '0.5rem 0.85rem', borderRadius: '8px', border: '1px solid rgba(34, 197, 94, 0.3)', color: '#4ade80', fontSize: '0.82rem' }}>
-              <input
-                type="checkbox"
-                id="whatsapp-check"
-                defaultChecked={true}
-                style={{ accentColor: '#22c55e', cursor: 'pointer' }}
-              />
-              <label htmlFor="whatsapp-check" style={{ cursor: 'pointer', fontWeight: 600 }}>
-                💬 नागरिकाला व्हॉट्सॲप अलर्ट संदेश पाठवा (Send WhatsApp SMS Alert to Citizen)
-              </label>
-            </div>
-
-            {showResolveInput && (
-              <div className="resolve-notes-input-box">
-                <label>पूर्ण झाल्याची नोंद व टिप्पणी (Resolution Note):</label>
-                <textarea
-                  value={resolutionNotes}
-                  onChange={(e) => setResolutionNotes(e.target.value)}
-                  placeholder="नागरिकाच्या अर्जावर काय कार्यवाही करण्यात आली त्याची नोंद लिहा..."
-                  rows={2}
-                />
+        <div className="modal-body">
+          {/* Detail Header Card (Matching nivedan_detail.html) */}
+          <div className="detail-header-card">
+            <div className="dh-top-row">
+              <div>
+                <div className="dh-id-title">{entry.tracking_id}</div>
+                <div className="dh-sub-title">{entry.subject}</div>
+              </div>
+              <div className="dh-action-buttons">
+                {getStatusBadge(entry.status)}
                 <button
-                  className="status-btn btn-complete"
+                  className="btn btn-outline"
+                  onClick={() => alert(isMr ? 'निवेदन संपादित करा...' : 'Edit Petition...')}
+                >
+                  ✏️ {isMr ? 'संपादित करा' : 'Edit'}
+                </button>
+                <button className="btn btn-outline" onClick={() => window.print()}>
+                  🖨️ {isMr ? 'पावती प्रिंट' : 'Print Receipt'}
+                </button>
+                <button
+                  className="btn btn-outline"
+                  onClick={() => alert(isMr ? 'अधिकारी नियुक्त करा...' : 'Assign User...')}
+                >
+                  👤+ {isMr ? 'नियुक्त करा' : 'Assign'}
+                </button>
+                <button
+                  className="btn btn-primary"
+                  style={{ background: 'var(--success, #16A34A)' }}
+                  disabled={updating || entry.status === 'RESOLVED'}
                   onClick={() => handleStatusChange('RESOLVED')}
                 >
-                  ✓ पूर्ण म्हणून नोंदवा (Confirm Resolution)
+                  ✓ {isMr ? 'मार्गी लागले' : 'Mark Resolved'}
+                </button>
+                <button
+                  className="btn btn-outline"
+                  style={{ color: 'var(--error, #DC2626)', borderColor: 'var(--error, #DC2626)' }}
+                  disabled={updating || entry.status === 'REJECTED'}
+                  onClick={() => handleStatusChange('REJECTED')}
+                >
+                  ✕ {isMr ? 'नाकारा' : 'Reject'}
                 </button>
               </div>
-            )}
+            </div>
 
-            <div className="status-buttons-group">
-              <button
-                className="status-btn btn-progress"
-                onClick={() => handleStatusChange('IN_PROGRESS')}
-                disabled={updating || entry.status === 'IN_PROGRESS'}
-              >
-                प्रगतीपथावर (IN_PROGRESS)
-              </button>
-
-              <button
-                className="status-btn btn-assign"
-                onClick={() => handleStatusChange('FORWARDED')}
-                disabled={updating || entry.status === 'FORWARDED'}
-              >
-                विभागाकडे पाठवले (FORWARDED)
-              </button>
-
-              <button
-                className="status-btn btn-complete"
-                onClick={() => setShowResolveInput(!showResolveInput)}
-                disabled={updating || entry.status === 'RESOLVED'}
-              >
-                ✓ मार्गी लावले / पूर्ण (RESOLVED)
-              </button>
-
-              <button
-                className="status-btn btn-cancel"
-                onClick={() => handleStatusChange('REJECTED')}
-                disabled={updating || entry.status === 'REJECTED'}
-              >
-                ✕ नाकारले (REJECTED)
-              </button>
+            {/* Dh Meta Grid */}
+            <div className="dh-meta-grid">
+              <div className="meta-item">
+                <span className="meta-label">{isMr ? 'नागरिक नाव' : 'Citizen Name'}</span>
+                <span className="meta-value">👤 {entry.citizen_name}</span>
+              </div>
+              <div className="meta-item">
+                <span className="meta-label">{isMr ? 'मोबाईल' : 'Mobile'}</span>
+                <span className="meta-value" style={{ fontFamily: 'JetBrains Mono' }}>
+                  📱 {entry.citizen_mobile}
+                </span>
+              </div>
+              <div className="meta-item">
+                <span className="meta-label">{isMr ? 'वर्गवारी' : 'Category'}</span>
+                <span className="meta-value">
+                  {isMr ? entry.category?.name_mr : entry.category?.name_en || entry.category?.name_mr || '—'}
+                </span>
+              </div>
+              <div className="meta-item">
+                <span className="meta-label">{isMr ? 'प्राधान्य' : 'Priority'}</span>
+                <span
+                  className="meta-value"
+                  style={{ color: entry.priority === 'HIGH' || entry.priority === 'URGENT' ? 'var(--error)' : 'var(--text-1)' }}
+                >
+                  {entry.priority === 'HIGH' || entry.priority === 'URGENT'
+                    ? isMr
+                      ? '🔴 अतिमहत्त्वाचे (High)'
+                      : '🔴 High'
+                    : entry.priority === 'MEDIUM'
+                    ? isMr
+                      ? '🟡 मध्यम (Medium)'
+                      : '🟡 Medium'
+                    : isMr
+                    ? '🔵 सामान्य (Low)'
+                    : '🔵 Low'}
+                </span>
+              </div>
+              <div className="meta-item">
+                <span className="meta-label">{isMr ? 'वॉर्ड / गाव' : 'Ward / Village'}</span>
+                <span className="meta-value">{entry.citizen_address_line || entry.citizen_city || '—'}</span>
+              </div>
+              <div className="meta-item">
+                <span className="meta-label">{isMr ? 'दाखल वेळ' : 'Created Date'}</span>
+                <span className="meta-value" style={{ fontSize: '12px' }}>{formattedDate}</span>
+              </div>
+              <div className="meta-item">
+                <span className="meta-label">{isMr ? 'नियुक्त अधिकारी' : 'Assigned To'}</span>
+                <span className="meta-value" style={{ color: entry.assignedToUser ? 'var(--text-1)' : 'var(--text-4)' }}>
+                  {entry.assignedToUser?.full_name || (isMr ? '— अद्याप अनियुक्त —' : '— Unassigned —')}
+                </span>
+              </div>
+              <div className="meta-item">
+                <span className="meta-label">{isMr ? 'नोंदवणारे अधिकारी' : 'Created By'}</span>
+                <span className="meta-value">{entry.createdByUser?.full_name || 'Rajesh Patil (PA)'}</span>
+              </div>
             </div>
           </div>
 
-          {/* Timeline Activity Log History */}
-          <div className="detail-section timeline-section">
-            <h4 className="section-title">📜 टाइमलाईन आणि घडामोडींचा इतिहास (Activity Timeline)</h4>
-
-            {/* Note Input */}
-            <form onSubmit={handleAddNote} className="add-note-form">
-              <input
-                type="text"
-                value={newNote}
-                onChange={(e) => setNewNote(e.target.value)}
-                placeholder="कार्यालयीन नोंद किंवा टीप जोडा (Add Internal Note)..."
+          {/* Resolution Notes Box if resolving */}
+          {showResolveInput && (
+            <div
+              style={{
+                background: 'var(--success-bg, #F0FDF4)',
+                border: '1px solid var(--success-border, #BBF7D0)',
+                padding: '14px',
+                borderRadius: '4px',
+                marginBottom: '16px',
+              }}
+            >
+              <label style={{ fontSize: '12px', fontWeight: 700, color: 'var(--success)', display: 'block', marginBottom: '6px' }}>
+                {isMr ? 'मार्गी लागल्याचा सविस्तर शेरा (Resolution Notes)' : 'Resolution Details & Notes'}
+              </label>
+              <textarea
+                className="nivedan-form-input"
+                style={{ height: '60px', marginBottom: '8px' }}
+                value={resolutionNotes}
+                onChange={(e) => setResolutionNotes(e.target.value)}
+                placeholder={isMr ? 'उदा. संबंधित विभागाने काम पूर्ण केले असून नागरिकाला कळवले आहे...' : 'Enter resolution details...'}
               />
-              <button type="submit" className="btn-secondary" disabled={updating}>
-                + टीप जोडा
+              <button
+                className="btn btn-primary"
+                style={{ height: '32px', fontSize: '12px', background: 'var(--success)' }}
+                onClick={() => handleStatusChange('RESOLVED')}
+              >
+                {isMr ? 'पूर्ण झाले म्हणून नोंदवा' : 'Confirm Resolution'}
               </button>
-            </form>
+            </div>
+          )}
 
-            {/* Vertical Timeline */}
-            <div className="vertical-timeline">
-              {Array.isArray(entry.timeline) && entry.timeline.length > 0 ? (
-                entry.timeline.map((t) => {
-                  let actionIcon = '🔄';
-                  if (t.action_type === 'CREATED') actionIcon = '📌';
-                  else if (t.action_type === 'RESOLVED') actionIcon = '✅';
-                  else if (t.action_type === 'FORWARDED') actionIcon = '📤';
-                  else if (t.action_type === 'NOTE_ADDED') actionIcon = '💬';
+          {/* 2-Column Content Grid */}
+          <div className="detail-content-grid">
+            {/* Left Column: Description & Attachments & WhatsApp Logs */}
+            <div>
+              {/* Description Card */}
+              <div className="detail-card">
+                <div className="detail-card-header">
+                  📄 {isMr ? 'सविस्तर वर्णन (Description)' : 'Description'}
+                </div>
+                <div className="detail-card-body">
+                  <div className="description-text">
+                    {entry.description || (isMr ? 'नागरिकाने मांडलेली तक्रार/निवेदन सविस्तर नोंदवलेले आहे.' : 'Detailed grievance petition filed by citizen.')}
+                  </div>
 
-                  return (
-                    <div key={t.id} className="timeline-item">
-                      <div className="timeline-dot"></div>
-                      <div className="timeline-content">
-                        <div className="timeline-top">
-                          <span className="timeline-action">{actionIcon} {t.action_type}</span>
-                          <span className="timeline-date">{new Date(t.created_at).toLocaleString('mr-IN')}</span>
-                        </div>
-                        <p className="timeline-note">{t.note}</p>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <span className="timeline-performer">
-                            👤 {t.performer?.full_name || 'कार्यालय प्रतिनिधी'}
-                          </span>
-                          <span style={{ fontSize: '0.68rem', padding: '0.1rem 0.4rem', borderRadius: '4px', background: t.is_internal ? 'rgba(234, 88, 12, 0.2)' : 'rgba(56, 189, 248, 0.2)', color: t.is_internal ? '#fb923c' : '#38bdf8' }}>
-                            {t.is_internal ? '🔒 अंतर्गत नोंद' : '🌐 सार्वजनिक'}
-                          </span>
+                  {/* Attachments List */}
+                  <div className="attach-list">
+                    <div className="attach-item">
+                      <span>📄</span>
+                      <span className="name">nivedan_application_document.pdf</span>
+                      <span className="size">1.2 MB</span>
+                      <span style={{ color: 'var(--primary)', fontWeight: 700, fontSize: '12px' }}>↓</span>
+                    </div>
+                    {entry.attachment_urls && (
+                      <div className="attach-item">
+                        <span>🖼️</span>
+                        <span className="name">{entry.attachment_urls}</span>
+                        <span className="size">Attachment</span>
+                        <span style={{ color: 'var(--primary)', fontWeight: 700, fontSize: '12px' }}>↓</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* WhatsApp Log Card */}
+              <div className="detail-card">
+                <div className="detail-card-header">
+                  💬 {isMr ? 'व्हॉट्सअॅप सूचना इतिहास (WhatsApp Notifications)' : 'WhatsApp Notifications'}
+                </div>
+                <div className="detail-card-body">
+                  <div className="wa-item">
+                    <span>📤</span>
+                    <div style={{ flex: 1 }}>
+                      <strong style={{ color: 'var(--text-1)' }}>
+                        {isMr ? 'पोहोच पावती संदेश (Acknowledgment)' : 'Acknowledgment SMS'}
+                      </strong>
+                      <br />
+                      <span style={{ color: 'var(--text-3)' }}>
+                        {isMr ? `नागरिक ${entry.citizen_mobile} ला पाठवले` : `Sent to ${entry.citizen_mobile}`}
+                      </span>
+                    </div>
+                    <span className="wa-status-badge" style={{ background: 'var(--success-bg)', color: 'var(--success)' }}>
+                      {isMr ? 'पावलेला' : 'Delivered'}
+                    </span>
+                    <span style={{ color: 'var(--text-4)', fontSize: '11px' }}>{formattedDate}</span>
+                  </div>
+
+                  <div className="wa-item">
+                    <span>📤</span>
+                    <div style={{ flex: 1 }}>
+                      <strong style={{ color: 'var(--text-1)' }}>
+                        {isMr ? 'स्थिती अपडेट संदेश (Status Update)' : 'Status Update Notice'}
+                      </strong>
+                      <br />
+                      <span style={{ color: 'var(--text-3)' }}>
+                        {isMr ? 'अद्याप न पाठवलेला' : 'Pending notification dispatch'}
+                      </span>
+                    </div>
+                    <span className="wa-status-badge" style={{ background: 'var(--bg-page)', color: 'var(--text-4)' }}>
+                      {isMr ? 'प्रलंबित' : 'Pending'}
+                    </span>
+                    <span style={{ color: 'var(--text-4)', fontSize: '11px' }}>—</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column: Activity Timeline & Add Note */}
+            <div className="detail-card">
+              <div className="detail-card-header">
+                📋 {isMr ? 'क्रिया टाइमलाइन (Activity Timeline)' : 'Activity Timeline'}
+              </div>
+              <div className="detail-card-body">
+                <div className="timeline">
+                  {entry.timelines && entry.timelines.length > 0 ? (
+                    entry.timelines.map((tl) => (
+                      <div className="tl-item" key={tl.id}>
+                        <div className="tl-dot">📝</div>
+                        <div className="tl-content">
+                          <div className="tl-title">{tl.note}</div>
+                          <div className="tl-desc">
+                            {isMr ? 'द्वारा:' : 'By:'} <strong>{tl.createdByUser?.full_name || 'Rajesh Patil (PA)'}</strong>
+                          </div>
+                          <div className="tl-time">
+                            {new Date(tl.created_at).toLocaleString(isMr ? 'mr-IN' : 'en-US')}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  );
-                })
-              ) : (
-                <p className="no-attachments">कोणतीही टाइमलाईन नोंद उपलब्ध नाही.</p>
-              )}
+                    ))
+                  ) : (
+                    <>
+                      <div className="tl-item">
+                        <div className="tl-dot" style={{ background: 'var(--warning-bg)', color: 'var(--warning)' }}>📝</div>
+                        <div className="tl-content">
+                          <div className="tl-title">{isMr ? 'निवेदन नोंदवले (Nivedan Created)' : 'Nivedan Registered'}</div>
+                          <div className="tl-desc">
+                            {isMr
+                              ? `द्वारे नोंदणीकृत: Rajesh Patil (PA). वर्गवारी: ${entry.category?.name_mr || 'सामान्य'}`
+                              : `Registered by Rajesh Patil (PA). Category: ${entry.category?.name_en || 'General'}`}
+                          </div>
+                          <div className="tl-time">{formattedDate}</div>
+                        </div>
+                      </div>
+
+                      <div className="tl-item">
+                        <div className="tl-dot" style={{ background: 'var(--success-bg)', color: 'var(--success)' }}>💬</div>
+                        <div className="tl-content">
+                          <div className="tl-title">{isMr ? 'व्हॉट्सअॅप पाठवले' : 'WhatsApp Sent'}</div>
+                          <div className="tl-desc">
+                            {isMr
+                              ? `पोहोच संदेश पाठवला. ट्रॅकिंग ID: ${entry.tracking_id}`
+                              : `Acknowledgment sent. Tracking ID: ${entry.tracking_id}`}
+                          </div>
+                          <div className="tl-time">{formattedDate}</div>
+                        </div>
+                      </div>
+
+                      <div className="tl-item">
+                        <div className="tl-dot" style={{ background: 'var(--info-bg)', color: 'var(--info)' }}>🔄</div>
+                        <div className="tl-content">
+                          <div className="tl-title">{isMr ? 'ऑटो-रूट सुचवलेले' : 'Auto-Route Suggested'}</div>
+                          <div className="tl-desc">
+                            {isMr
+                              ? `प्रणालीद्वारे सुचवलेला विभाग: ${entry.forwardedDepartment?.name_mr || 'जलसंपदा विभाग'}`
+                              : `Suggested Department: ${entry.forwardedDepartment?.name_en || 'Water Supply Dept'}`}
+                          </div>
+                          <div className="tl-time">{formattedDate}</div>
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </div>
+
+                {/* Add Internal Note & Status Change Form */}
+                <form onSubmit={handleAddNote} className="add-note-box">
+                  <textarea
+                    value={newNote}
+                    onChange={(e) => setNewNote(e.target.value)}
+                    placeholder={isMr ? 'टीप किंवा अपडेट जोडा... / Add a note or update...' : 'Add a note or update...'}
+                  />
+                  <div className="add-note-actions">
+                    <select
+                      style={{
+                        height: '32px',
+                        border: '1px solid var(--border)',
+                        borderRadius: '4px',
+                        padding: '0 8px',
+                        fontSize: '12px',
+                        background: 'var(--bg-card)',
+                        color: 'var(--text-1)',
+                        fontFamily: 'inherit',
+                      }}
+                      value={targetStatus}
+                      onChange={(e) => setTargetStatus(e.target.value)}
+                    >
+                      <option value="">{isMr ? 'स्थिती बदला...' : 'Change Status To...'}</option>
+                      <option value="IN_PROGRESS">{isMr ? 'प्रगतीपथावर (In Progress)' : 'In Progress'}</option>
+                      <option value="FORWARDED">{isMr ? 'पाठवलेले (Forwarded)' : 'Forwarded'}</option>
+                      <option value="ESCALATED">{isMr ? 'कालावधी उलटलेले (Escalated)' : 'Escalated'}</option>
+                      <option value="RESOLVED">{isMr ? 'मार्गी लागले (Resolved)' : 'Resolved'}</option>
+                      <option value="REJECTED">{isMr ? 'नाकारले (Rejected)' : 'Rejected'}</option>
+                    </select>
+                    <button className="btn btn-primary" type="submit" style={{ height: '32px', fontSize: '12px' }} disabled={updating}>
+                      + {isMr ? 'टीप जोडा' : 'Add Note'}
+                    </button>
+                  </div>
+                </form>
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="modal-actions">
-          <button className="btn-secondary" onClick={onClose}>
-            बंद करा (Close)
+        {/* Modal Footer */}
+        <div className="modal-footer">
+          <button className="btn btn-outline" onClick={() => window.print()}>
+            🖨️ {isMr ? 'पावती प्रिंट करा' : 'Print Receipt'}
+          </button>
+          <button className="btn btn-primary" onClick={onClose}>
+            {isMr ? 'बंद करा' : 'Close'}
           </button>
         </div>
       </div>

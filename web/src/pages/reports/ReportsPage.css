@@ -1,65 +1,298 @@
 /* src/pages/reports/ReportsPage.css */
 /* ============================================================
-   MLA E-Office — Reports & Analytics Module Styling
+   MLA E-Office — Reports & Analytics Module Redesign Styling
+   Matching wireframe: WIREFRAMES/reports.html
    ============================================================ */
 
-.reports-filter-bar {
-  grid-template-columns: 1fr 1fr auto !important;
+.reports-page-container {
+  padding: 24px;
+  max-width: 1600px;
+  margin: 0 auto;
+  font-family: 'Inter', -apple-system, sans-serif;
+  color: var(--t1, #0f172a);
+}
+
+.reports-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.reports-header .title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--t1, #0f172a);
+  margin: 0;
+}
+
+.reports-header .sub {
+  font-size: 13px;
+  color: var(--t3, #64748b);
+  margin-top: 4px;
+}
+
+/* ── Segmented Switch for Language Toggle ──────────────────── */
+.segmented-switch {
+  display: inline-flex;
+  background: rgba(15, 23, 42, 0.08);
+  border-radius: 6px;
+  padding: 3px;
+  border: 1px solid var(--b, #dde3eb);
+}
+
+[data-theme='dark'] .segmented-switch {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.segmented-switch button {
+  background: transparent;
+  border: none;
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--t3, #64748b);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.segmented-switch button.active {
+  background: var(--p, #1b3a5c);
+  color: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme='dark'] .segmented-switch button.active {
+  background: #5a9bd5;
+  color: #0f1419;
+}
+
+/* ── Report Cards Grid ─────────────────────────────────────── */
+.report-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.report-card {
+  background: var(--c, #ffffff);
+  border: 1px solid var(--b, #dde3eb);
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+  overflow: hidden;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+  cursor: pointer;
+}
+
+.report-card:hover {
+  border-color: var(--p, #1b3a5c);
+  box-shadow: 0 4px 14px rgba(27, 58, 92, 0.12);
+  transform: translateY(-2px);
+}
+
+.report-card.active {
+  border-color: var(--p, #1b3a5c);
+  box-shadow: 0 0 0 2px rgba(27, 58, 92, 0.2);
+}
+
+.rc-header {
+  padding: 20px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.rc-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.rc-info {
+  flex: 1;
+}
+
+.rc-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--t1, #0f172a);
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+
+.rc-desc {
+  font-size: 12px;
+  color: var(--t3, #64748b);
+  line-height: 1.45;
+}
+
+.rc-footer {
+  padding: 12px 20px;
+  border-top: 1px solid var(--b, #dde3eb);
+  background: var(--bg, #f5f7fa);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.rc-formats {
+  display: flex;
+  gap: 4px;
+}
+
+.rc-fmt {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 2px;
+  background: var(--c, #ffffff);
+  border: 1px solid var(--b, #dde3eb);
+  color: var(--t3, #64748b);
+  font-weight: 600;
+}
+
+.rc-gen {
+  font-size: 12px;
+  color: var(--p, #1b3a5c);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ── Quick Generate Section ────────────────────────────────── */
+.section-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  margin-top: 32px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--t1, #0f172a);
+}
+
+.quick-form {
+  background: var(--c, #ffffff);
+  border: 1px solid var(--b, #dde3eb);
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+  padding: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: flex-end;
+}
+
+.quick-form .fg {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.quick-form .fl {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--t3, #64748b);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.quick-form .fi {
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid var(--b, #dde3eb);
+  border-radius: 4px;
+  font-size: 13px;
+  color: var(--t1, #0f172a);
+  font-family: inherit;
+  background: var(--c, #ffffff);
+  outline: none;
+  min-width: 160px;
+  transition: border-color 0.15s ease;
+}
+
+.quick-form select.fi {
+  appearance: auto;
+  cursor: pointer;
+}
+
+.quick-form .fi:focus {
+  border-color: var(--p, #1b3a5c);
+}
+
+/* ── Analytics Visualization Cards ─────────────────────────── */
+.analytics-preview-card {
+  background: var(--c, #ffffff);
+  border: 1px solid var(--b, #dde3eb);
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+  padding: 20px;
+  margin-top: 24px;
 }
 
 .report-section-title {
-  font-size: 1.15rem;
-  color: #ff9933;
+  font-size: 16px;
+  color: var(--p, #1b3a5c);
   margin-top: 0;
-  margin-bottom: 1.25rem;
-  font-family: 'Noto Sans Devanagari', sans-serif;
-  border-bottom: 1px solid #334155;
-  padding-bottom: 0.65rem;
+  margin-bottom: 16px;
+  font-weight: 700;
+  border-bottom: 1px solid var(--b, #dde3eb);
+  padding-bottom: 10px;
 }
 
 .reports-stat-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
 }
 
 .report-metric-card {
-  background: rgba(15, 23, 42, 0.8);
-  border: 1px solid rgba(255, 153, 51, 0.25);
-  border-radius: 12px;
-  padding: 1.1rem 1.25rem;
+  background: var(--bg, #f5f7fa);
+  border: 1px solid var(--b, #dde3eb);
+  border-radius: 4px;
+  padding: 14px;
   display: flex;
   flex-direction: column;
 }
 
 .metric-val {
-  font-size: 1.6rem;
+  font-size: 22px;
   font-weight: 800;
-  color: #ff9933;
+  color: var(--p, #1b3a5c);
   line-height: 1.2;
+  font-family: 'JetBrains Mono', monospace;
 }
 
 .metric-lbl {
-  font-size: 0.78rem;
-  color: #94a3b8;
-  margin-top: 0.25rem;
-  font-family: 'Noto Sans Devanagari', sans-serif;
+  font-size: 11px;
+  color: var(--t3, #64748b);
+  margin-top: 4px;
+  font-weight: 600;
 }
 
 .chart-row-item {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  margin-bottom: 0.85rem;
+  gap: 14px;
+  margin-bottom: 10px;
 }
 
 .chart-label-col {
   width: 220px;
-  font-size: 0.82rem;
-  color: #e2e8f0;
+  font-size: 12px;
+  color: var(--t1, #0f172a);
   font-weight: 600;
-  font-family: 'Noto Sans Devanagari', sans-serif;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -67,23 +300,38 @@
 
 .chart-bar-bg {
   flex: 1;
-  height: 12px;
-  background: #0f172a;
-  border-radius: 6px;
+  height: 10px;
+  background: var(--bg, #f5f7fa);
+  border-radius: 4px;
   overflow: hidden;
-  border: 1px solid #334155;
+  border: 1px solid var(--b, #dde3eb);
 }
 
 .chart-bar-fill {
   height: 100%;
-  border-radius: 6px;
+  border-radius: 4px;
   transition: width 0.4s ease;
 }
 
 .chart-value-col {
   width: 180px;
   text-align: right;
-  font-size: 0.82rem;
+  font-size: 12px;
   font-weight: 700;
-  color: #ff9933;
+  color: var(--p, #1b3a5c);
 }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .report-grid {
+    grid-template-columns: 1fr;
+  }
+  .quick-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .quick-form .fi {
+    min-width: 100%;
+  }
+}
+

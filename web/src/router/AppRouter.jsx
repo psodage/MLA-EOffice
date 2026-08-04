@@ -10,9 +10,11 @@ import DashboardPage from '../pages/DashboardPage.jsx';
 import InwardListPage from '../pages/inward/InwardListPage.jsx';
 import OutwardListPage from '../pages/outward/OutwardListPage.jsx';
 import NivedanListPage from '../pages/nivedan/NivedanListPage.jsx';
+import NivedanDetailPage from '../pages/nivedan/NivedanDetailPage.jsx';
 import PublicTrackingPage from '../pages/nivedan/PublicTrackingPage.jsx';
 import VisitorListPage from '../pages/visitors/VisitorListPage.jsx';
 import DevWorksListPage from '../pages/devworks/DevWorksListPage.jsx';
+import DevWorkDetailPage from '../pages/devworks/DevWorkDetailPage.jsx';
 import KaryakartaListPage from '../pages/karyakarta/KaryakartaListPage.jsx';
 import CalendarPage from '../pages/calendar/CalendarPage.jsx';
 import WhatsAppLogsPage from '../pages/whatsapp/WhatsAppLogsPage.jsx';
@@ -110,6 +112,16 @@ const AppRouter = () => {
 
         {/* Nivedan / Petitions Module */}
         <Route
+          path="/nivedan/:id"
+          element={
+            <ProtectedRoute module="nivedan">
+              <MainLayout>
+                <NivedanDetailPage />
+              </MainLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/nivedan/*"
           element={
             <ProtectedRoute module="nivedan">
@@ -133,6 +145,26 @@ const AppRouter = () => {
         />
 
         {/* Development Works Module */}
+        <Route
+          path="/devworks"
+          element={
+            <ProtectedRoute module="devworks">
+              <MainLayout>
+                <DevWorksListPage />
+              </MainLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/devworks/:id"
+          element={
+            <ProtectedRoute module="devworks">
+              <MainLayout>
+                <DevWorkDetailPage />
+              </MainLayout>
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/devworks/*"
           element={

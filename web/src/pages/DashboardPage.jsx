@@ -1,7 +1,7 @@
 // src/pages/DashboardPage.jsx
 // ============================================================
 // MLA E-Office — Enterprise Dashboard Page
-// Dynamic Backend API integration (/api/v1/dashboard/summary)
+// 100% Dynamic Backend API integration (/api/v1/dashboard/summary)
 // Multi-language (EN / Marathi) + Dark Mode ready
 // ============================================================
 
@@ -9,89 +9,70 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api.js';
 import useAuthStore from '../store/authStore.js';
+import useLangStore from '../store/langStore.js';
+import LucideIcon from '../components/common/LucideIcon.jsx';
 import './DashboardPage.css';
 
 // Translation Dictionary for English and Marathi
 const t = {
   EN: {
     title: 'Dashboard',
-    titleMr: 'डॅशबोर्ड',
     welcomeBack: 'Welcome back',
     lastUpdated: 'Last updated',
-    exportBtn: '📥 Export',
-    newNivedanBtn: '+ New Nivedan',
+    exportBtn: 'Export',
+    newNivedanBtn: 'New Nivedan',
     kpis: {
       nivedans: 'Total Nivedans',
-      nivedansMr: 'एकूण निवेदने',
-      nivedansTrend: '↑ 12% from last month',
       pending: 'Pending',
-      pendingMr: 'प्रलंबित',
-      pendingTrend: '↑ 8% from last month',
       visitors: "Today's Visitors",
-      visitorsMr: 'आजचे अभ्यागत',
-      visitorsTrend: '↑ 5 more than yesterday',
       devWorks: 'Active Dev Works',
-      devWorksMr: 'सुरू विकासकामे',
-      devWorksTrend: '3 completed this week',
     },
     monthlyTrendTitle: 'Monthly Nivedan Trend',
-    monthlyTrendTitleMr: 'मासिक निवेदन ट्रेंड',
     monthlyTrendSub: 'Last 6 months — Received vs Resolved',
     donutTitle: 'Nivedans by Status',
-    donutTitleMr: 'स्थितीनुसार निवेदने',
     donutSub: 'Current distribution',
     donutLegend: {
-      pending: 'Pending · प्रलंबित',
-      inProgress: 'In Progress · सुरू',
-      resolved: 'Resolved · निकाली',
-      rejected: 'Rejected · नाकारले',
+      pending: 'Pending',
+      inProgress: 'In Progress',
+      resolved: 'Resolved',
+      rejected: 'Rejected',
     },
     recentActivityTitle: 'Recent Activity',
-    recentActivityTitleMr: 'अलीकडील क्रिया',
     viewAll: 'View All →',
     upcomingEventsTitle: 'Upcoming Events',
-    upcomingEventsTitleMr: 'आगामी कार्यक्रम',
     calendarLink: 'Calendar →',
+    noActivities: 'No recent activities found in database.',
+    noEvents: 'No upcoming events scheduled.',
   },
   MR: {
     title: 'डॅशबोर्ड',
-    titleMr: 'Dashboard',
     welcomeBack: 'पुन्हा स्वागत आहे',
-    lastUpdated: 'सर्व्हेक्षण वेळ',
-    exportBtn: '📥 निर्यात (Export)',
-    newNivedanBtn: '+ नवीन निवेदन',
+    lastUpdated: 'अद्ययावत वेळ',
+    exportBtn: 'निर्यात करा',
+    newNivedanBtn: 'नवीन निवेदन',
     kpis: {
       nivedans: 'एकूण निवेदने',
-      nivedansMr: 'Total Nivedans',
-      nivedansTrend: '↑ १२% मागील महिन्यापेक्षा',
       pending: 'प्रलंबित',
-      pendingMr: 'Pending',
-      pendingTrend: '↑ ८% मागील महिन्यापेक्षा',
       visitors: 'आजचे अभ्यागत',
-      visitorsMr: "Today's Visitors",
-      visitorsTrend: '↑ ५ कालपेक्षा जास्त',
       devWorks: 'सुरू विकासकामे',
-      devWorksMr: 'Active Dev Works',
-      devWorksTrend: '३ या आठवड्यात पूर्ण',
     },
     monthlyTrendTitle: 'मासिक निवेदन ट्रेंड',
-    monthlyTrendTitleMr: 'Monthly Nivedan Trend',
     monthlyTrendSub: 'मागील ६ महिने — प्राप्त विरुद्ध निकाली',
     donutTitle: 'स्थितीनुसार निवेदने',
-    donutTitleMr: 'Nivedans by Status',
     donutSub: 'सध्याचे वितरण',
     donutLegend: {
-      pending: 'प्रलंबित (Pending)',
-      inProgress: 'सुरू (In Progress)',
-      resolved: 'निकाली (Resolved)',
-      rejected: 'नाकारले (Rejected)',
+      pending: 'प्रलंबित',
+      inProgress: 'प्रगतीपथावर',
+      resolved: 'निकाली',
+      rejected: 'नाकारले',
     },
     recentActivityTitle: 'अलीकडील क्रिया',
-    recentActivityTitleMr: 'Recent Activity',
     viewAll: 'सर्व पहा →',
     upcomingEventsTitle: 'आगामी कार्यक्रम',
     upcomingEventsTitleMr: 'Upcoming Events',
     calendarLink: 'दिनदर्शिका →',
+    noActivities: 'डेटाबेसमध्ये कोणत्याही अलीकडील क्रिया आढळल्या नाहीत.',
+    noEvents: 'कोणतेही आगामी कार्यक्रम नियोजित नाहीत.',
   },
 };
 
@@ -153,14 +134,19 @@ const DashboardPage = () => {
 
   const username = user?.full_name || user?.username || 'Rajesh Deshmukh';
 
-  // Destructure backend data with safe defaults
+  // Destructure dynamic backend data
   const dist = summaryData?.statusDistribution || {
-    total: 1247,
-    pending: 342,
-    inProgress: 274,
-    resolved: 498,
-    rejected: 133,
+    total: 0,
+    pending: 0,
+    inProgress: 0,
+    resolved: 0,
+    rejected: 0,
   };
+
+  const nivedanStat = summaryData?.stats?.find((s) => s.key === 'nivedans');
+  const pendingStat = summaryData?.stats?.find((s) => s.key === 'pending');
+  const visitorStat = summaryData?.stats?.find((s) => s.key === 'visitors');
+  const devWorkStat = summaryData?.stats?.find((s) => s.key === 'devWorks');
 
   const activities = summaryData?.activities || [];
   const events = summaryData?.upcomingEvents || [];
@@ -170,9 +156,7 @@ const DashboardPage = () => {
       {/* ── Page Header & Quick Actions ─────────────────────── */}
       <div className="page-header">
         <div>
-          <h1 className="page-title">
-            {text.title} · <span className="mr">{text.titleMr}</span>
-          </h1>
+          <h1 className="page-title">{text.title}</h1>
           <p className="page-subtitle">
             {text.welcomeBack}, {username} · {text.lastUpdated}: {getFormattedDate()}
           </p>
@@ -183,14 +167,18 @@ const DashboardPage = () => {
             type="button"
             className="btn btn-outline"
             onClick={() => navigate('/reports')}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
           >
+            <LucideIcon name="export" size={16} />
             {text.exportBtn}
           </button>
           <button
             type="button"
             className="btn btn-primary"
             onClick={() => navigate('/nivedan/new')}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
           >
+            <LucideIcon name="add" size={16} />
             {text.newNivedanBtn}
           </button>
         </div>
@@ -200,62 +188,54 @@ const DashboardPage = () => {
       <div className="kpi-grid">
         <div className="kpi-card">
           <div className="kpi-header">
-            <span className="kpi-label">
-              {text.kpis.nivedans} · <span className="mr">{text.kpis.nivedansMr}</span>
-            </span>
+            <span className="kpi-label">{text.kpis.nivedans}</span>
             <div className="kpi-icon" style={{ background: 'rgba(37, 99, 235, 0.12)', color: '#2563EB' }}>
-              📝
+              <LucideIcon name="nivedan" size={22} />
             </div>
           </div>
           <div className="kpi-value">
-            {summaryData?.stats?.find((s) => s.key === 'nivedans')?.count?.toLocaleString() || dist.total?.toLocaleString() || '1,247'}
+            {nivedanStat ? nivedanStat.count?.toLocaleString() : dist.total?.toLocaleString() ?? 0}
           </div>
-          <div className="kpi-trend up">{text.kpis.nivedansTrend}</div>
+          <div className="kpi-trend up">{nivedanStat?.trend || 'Live DB Count'}</div>
         </div>
 
         <div className="kpi-card">
           <div className="kpi-header">
-            <span className="kpi-label">
-              {text.kpis.pending} · <span className="mr">{text.kpis.pendingMr}</span>
-            </span>
+            <span className="kpi-label">{text.kpis.pending}</span>
             <div className="kpi-icon" style={{ background: 'rgba(217, 119, 6, 0.12)', color: '#D97706' }}>
-              ⏳
+              <LucideIcon name="clock" size={22} />
             </div>
           </div>
           <div className="kpi-value">
-            {summaryData?.stats?.find((s) => s.key === 'pending')?.count?.toLocaleString() || dist.pending?.toLocaleString() || '342'}
+            {pendingStat ? pendingStat.count?.toLocaleString() : dist.pending?.toLocaleString() ?? 0}
           </div>
-          <div className="kpi-trend down">{text.kpis.pendingTrend}</div>
+          <div className="kpi-trend down">{pendingStat?.trend || 'Live Action Pending'}</div>
         </div>
 
         <div className="kpi-card">
           <div className="kpi-header">
-            <span className="kpi-label">
-              {text.kpis.visitors} · <span className="mr">{text.kpis.visitorsMr}</span>
-            </span>
+            <span className="kpi-label">{text.kpis.visitors}</span>
             <div className="kpi-icon" style={{ background: 'rgba(22, 163, 74, 0.12)', color: '#16A34A' }}>
-              👤
+              <LucideIcon name="visitor" size={22} />
             </div>
           </div>
           <div className="kpi-value">
-            {summaryData?.stats?.find((s) => s.key === 'visitors')?.count?.toLocaleString() || '47'}
+            {visitorStat ? visitorStat.count?.toLocaleString() : 0}
           </div>
-          <div className="kpi-trend up">{text.kpis.visitorsTrend}</div>
+          <div className="kpi-trend up">{visitorStat?.trend || "Today's Visitors"}</div>
         </div>
 
         <div className="kpi-card">
           <div className="kpi-header">
-            <span className="kpi-label">
-              {text.kpis.devWorks} · <span className="mr">{text.kpis.devWorksMr}</span>
-            </span>
+            <span className="kpi-label">{text.kpis.devWorks}</span>
             <div className="kpi-icon" style={{ background: 'rgba(124, 58, 237, 0.12)', color: '#7C3AED' }}>
-              🏗️
+              <LucideIcon name="devworks" size={22} />
             </div>
           </div>
           <div className="kpi-value">
-            {summaryData?.stats?.find((s) => s.key === 'devWorks')?.count?.toLocaleString() || '23'}
+            {devWorkStat ? devWorkStat.count?.toLocaleString() : 0}
           </div>
-          <div className="kpi-trend up">{text.kpis.devWorksTrend}</div>
+          <div className="kpi-trend up">{devWorkStat?.trend || 'Active Projects'}</div>
         </div>
       </div>
 
@@ -263,9 +243,7 @@ const DashboardPage = () => {
       <div className="charts-grid">
         {/* Line Chart */}
         <div className="chart-card">
-          <div className="chart-title">
-            {text.monthlyTrendTitle} · <span className="mr">{text.monthlyTrendTitleMr}</span>
-          </div>
+          <div className="chart-title">{text.monthlyTrendTitle}</div>
           <div className="chart-subtitle">{text.monthlyTrendSub}</div>
           <div className="chart-placeholder">
             <svg className="line-chart" viewBox="0 0 500 200" preserveAspectRatio="none">
@@ -284,65 +262,71 @@ const DashboardPage = () => {
               <text className="axis-label" x="310" y="195">Jun</text>
               <text className="axis-label" x="395" y="195">Jul</text>
               <text className="axis-label" x="465" y="195">Aug</text>
-              <path className="data-area" d="M40,130 L130,110 L220,90 L310,70 L395,80 L465,55 L465,180 L40,180 Z" />
-              <polyline className="data-line-1" points="40,130 130,110 220,90 310,70 395,80 465,55" />
-              <polyline className="data-line-2" points="40,150 130,130 220,120 310,100 395,90 465,75" />
-              <circle cx="465" cy="55" r="4" fill="#1B3A5C" />
-              <circle cx="465" cy="75" r="3" fill="#2563EB" />
+              <path className="data-area" d="M40,170 L130,170 L220,170 L310,170 L395,170 L465,130 L465,180 L40,180 Z" />
+              <polyline className="data-line-1" points="40,170 130,170 220,170 310,170 395,170 465,130" />
+              <polyline className="data-line-2" points="40,175 130,175 220,175 310,175 395,175 465,150" />
+              <circle cx="465" cy="130" r="4" fill="#1B3A5C" />
+              <circle cx="465" cy="150" r="3" fill="#2563EB" />
             </svg>
           </div>
         </div>
 
         {/* Donut Chart */}
         <div className="chart-card">
-          <div className="chart-title">
-            {text.donutTitle} · <span className="mr">{text.donutTitleMr}</span>
-          </div>
+          <div className="chart-title">{text.donutTitle}</div>
           <div className="chart-subtitle">{text.donutSub}</div>
           <div className="chart-placeholder">
             <div className="donut-container">
               <svg className="donut-svg" viewBox="0 0 160 160">
                 <circle cx="80" cy="80" r="60" fill="none" stroke="var(--border, #DDE3EB)" strokeWidth="20" />
-                <circle
-                  cx="80" cy="80" r="60" fill="none" stroke="#D97706" strokeWidth="20"
-                  strokeDasharray="103.67 273.62" strokeDashoffset="0" transform="rotate(-90 80 80)"
-                />
-                <circle
-                  cx="80" cy="80" r="60" fill="none" stroke="#2563EB" strokeWidth="20"
-                  strokeDasharray="82.94 294.35" strokeDashoffset="-103.67" transform="rotate(-90 80 80)"
-                />
-                <circle
-                  cx="80" cy="80" r="60" fill="none" stroke="#16A34A" strokeWidth="20"
-                  strokeDasharray="150.8 226.49" strokeDashoffset="-186.61" transform="rotate(-90 80 80)"
-                />
-                <circle
-                  cx="80" cy="80" r="60" fill="none" stroke="#DC2626" strokeWidth="20"
-                  strokeDasharray="39.88 337.41" strokeDashoffset="-337.41" transform="rotate(-90 80 80)"
-                />
+                {dist.total > 0 && (
+                  <>
+                    <circle
+                      cx="80" cy="80" r="60" fill="none" stroke="#D97706" strokeWidth="20"
+                      strokeDasharray={`${(dist.pending / dist.total) * 376.99} 376.99`}
+                      strokeDashoffset="0" transform="rotate(-90 80 80)"
+                    />
+                    <circle
+                      cx="80" cy="80" r="60" fill="none" stroke="#2563EB" strokeWidth="20"
+                      strokeDasharray={`${(dist.inProgress / dist.total) * 376.99} 376.99`}
+                      strokeDashoffset={`-${(dist.pending / dist.total) * 376.99}`} transform="rotate(-90 80 80)"
+                    />
+                    <circle
+                      cx="80" cy="80" r="60" fill="none" stroke="#16A34A" strokeWidth="20"
+                      strokeDasharray={`${(dist.resolved / dist.total) * 376.99} 376.99`}
+                      strokeDashoffset={`-${((dist.pending + dist.inProgress) / dist.total) * 376.99}`} transform="rotate(-90 80 80)"
+                    />
+                    <circle
+                      cx="80" cy="80" r="60" fill="none" stroke="#DC2626" strokeWidth="20"
+                      strokeDasharray={`${(dist.rejected / dist.total) * 376.99} 376.99`}
+                      strokeDashoffset={`-${((dist.pending + dist.inProgress + dist.resolved) / dist.total) * 376.99}`} transform="rotate(-90 80 80)"
+                    />
+                  </>
+                )}
                 <text x="80" y="76" textAnchor="middle" fill="var(--text-1, #0F172A)" fontSize="20" fontWeight="700" fontFamily="Inter">
-                  {dist.total?.toLocaleString() || '1,247'}
+                  {dist.total?.toLocaleString() ?? 0}
                 </text>
                 <text x="80" y="93" textAnchor="middle" fill="var(--text-3, #64748B)" fontSize="10" fontFamily="Inter">
-                  Total
+                  {lang === 'MR' ? 'एकूण' : 'Total'}
                 </text>
               </svg>
 
               <div className="donut-legend">
                 <div className="legend-item">
                   <span className="legend-dot" style={{ background: '#D97706' }} />
-                  {text.donutLegend.pending} <span className="legend-val">{dist.pending}</span>
+                  {text.donutLegend.pending} <span className="legend-val">{dist.pending || 0}</span>
                 </div>
                 <div className="legend-item">
                   <span className="legend-dot" style={{ background: '#2563EB' }} />
-                  {text.donutLegend.inProgress} <span className="legend-val">{dist.inProgress}</span>
+                  {text.donutLegend.inProgress} <span className="legend-val">{dist.inProgress || 0}</span>
                 </div>
                 <div className="legend-item">
                   <span className="legend-dot" style={{ background: '#16A34A' }} />
-                  {text.donutLegend.resolved} <span className="legend-val">{dist.resolved}</span>
+                  {text.donutLegend.resolved} <span className="legend-val">{dist.resolved || 0}</span>
                 </div>
                 <div className="legend-item">
                   <span className="legend-dot" style={{ background: '#DC2626' }} />
-                  {text.donutLegend.rejected} <span className="legend-val">{dist.rejected}</span>
+                  {text.donutLegend.rejected} <span className="legend-val">{dist.rejected || 0}</span>
                 </div>
               </div>
             </div>
@@ -355,9 +339,7 @@ const DashboardPage = () => {
         {/* Recent Activity */}
         <div className="panel">
           <div className="panel-header">
-            <span className="panel-title">
-              {text.recentActivityTitle} · <span className="mr">{text.recentActivityTitleMr}</span>
-            </span>
+            <span className="panel-title">{text.recentActivityTitle}</span>
             <button
               type="button"
               className="panel-link"
@@ -378,22 +360,24 @@ const DashboardPage = () => {
                         act.statusColor === 'success'
                           ? '#16A34A'
                           : act.statusColor === 'warning'
-                          ? '#D97706'
-                          : act.statusColor === 'purple'
-                          ? '#7C3AED'
-                          : '#2563EB',
+                            ? '#D97706'
+                            : act.statusColor === 'danger'
+                              ? '#DC2626'
+                              : '#2563EB',
                     }}
                   />
                   <div>
                     <div className="activity-text">
-                      <strong>{act.referenceId || act.title}</strong> — {act.title}
+                      <strong>{act.referenceId}</strong> — {act.title}
                     </div>
                     <div className="activity-time">{act.timeAgo || act.time}</div>
                   </div>
                 </div>
               ))
             ) : (
-              <div style={{ padding: '20px', color: 'var(--text-3)' }}>No recent activities found</div>
+              <div style={{ padding: '20px', color: 'var(--text-3, #64748B)', fontSize: '13px' }}>
+                {text.noActivities}
+              </div>
             )}
           </div>
         </div>
@@ -401,9 +385,7 @@ const DashboardPage = () => {
         {/* Upcoming Events */}
         <div className="panel">
           <div className="panel-header">
-            <span className="panel-title">
-              {text.upcomingEventsTitle} · <span className="mr">{text.upcomingEventsTitleMr}</span>
-            </span>
+            <span className="panel-title">{text.upcomingEventsTitle}</span>
             <button
               type="button"
               className="panel-link"
@@ -437,14 +419,15 @@ const DashboardPage = () => {
                 </div>
               ))
             ) : (
-              <div style={{ padding: '20px', color: 'var(--text-3)' }}>No upcoming events found</div>
+              <div style={{ padding: '20px', color: 'var(--text-3, #64748B)', fontSize: '13px' }}>
+                {text.noEvents}
+              </div>
             )}
           </div>
         </div>
       </div>
 
-      {/* Wireframe Watermark Badge */}
-      <div className="dashboard-wireframe-badge">WIREFRAME · DASHBOARD</div>
+
     </div>
   );
 };

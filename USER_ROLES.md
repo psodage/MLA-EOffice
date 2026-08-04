@@ -659,7 +659,7 @@ sequenceDiagram
 ---
 
 👑 MLA	mla	Pa@12345	Executive Owner (Full Dashboard & Governance)
-👨‍💼 PA	pa	Pa@12345	Senior Office Manager (Pending Nivedans, Inward, AI Outward)
+👨‍💼 PA	pa	  	Senior Office Manager (Pending Nivedans, Inward, AI Outward)
 🖥️ RECEPTIONIST	receptionist	Pa@12345	Front Desk Clerk (Today's Visitors, Nivedan Registration)
 🕵️‍♂️ AUDITOR	auditor	Pa@12345	Field Inspector (DevWorks Progress & Booth Verification)
 ⚙️ ADMIN	admin	Pa@12345	System Administrator (User & Audit Management)

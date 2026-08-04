@@ -1,8 +1,4 @@
-// src/components/inward/InwardStatusBadge.jsx
-// ============================================================
-// Status Badge Component for Inward Entries
-// PENDING | ASSIGNED | IN_PROGRESS | COMPLETED | CANCELLED
-// ============================================================
+import useLangStore from '../../store/langStore.js';
 
 const STATUS_CONFIG = {
   PENDING: {
@@ -48,6 +44,7 @@ const STATUS_CONFIG = {
 };
 
 const InwardStatusBadge = ({ status }) => {
+  const { lang } = useLangStore();
   const config = STATUS_CONFIG[status] || STATUS_CONFIG.PENDING;
 
   return (
@@ -63,7 +60,6 @@ const InwardStatusBadge = ({ status }) => {
         color: config.color,
         fontSize: '0.78rem',
         fontWeight: 600,
-        fontFamily: "'Noto Sans Devanagari', sans-serif",
         lineHeight: 1.2,
       }}
     >
@@ -76,8 +72,7 @@ const InwardStatusBadge = ({ status }) => {
           boxShadow: `0 0 6px ${config.dot}`,
         }}
       />
-      <span>{config.mr}</span>
-      <span style={{ opacity: 0.7, fontSize: '0.7rem' }}>({config.en})</span>
+      <span>{lang === 'MR' ? config.mr : config.en}</span>
     </span>
   );
 };
