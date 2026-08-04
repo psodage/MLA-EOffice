@@ -1,10 +1,5 @@
-// src/pages/devworks/DevWorkFormModal.jsx
-// ============================================================
-// Form Modal for Creating & Editing Development Works Projects
-// Inputs: Name, Category, Funding Source, Budget, GPS Lat/Lng, Contractor
-// ============================================================
-
 import { useState, useEffect } from 'react';
+import { X, HardHat, AlertTriangle, Save } from 'lucide-react';
 import api from '../../services/api.js';
 
 const CATEGORY_OPTIONS = [
@@ -117,14 +112,16 @@ const DevWorkFormModal = ({ isOpen, onClose, onSuccess }) => {
       <div className="inward-modal-container" onClick={(e) => e.stopPropagation()}>
         <div className="inward-modal-header">
           <div className="modal-title-group">
-            <h3>🏗️ नवीन विकासकाम प्रकल्प नोंदणी (Add Infrastructure Project)</h3>
+            <h3 style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+              <HardHat size={18} /> नवीन विकासकाम प्रकल्प नोंदणी (Add Infrastructure Project)
+            </h3>
             <span className="modal-subtitle-en">Register Project, Funding, GPS Location & Budget</span>
           </div>
-          <button className="modal-close-btn" onClick={onClose}>✕</button>
+          <button className="modal-close-btn" onClick={onClose}><X size={18} /></button>
         </div>
 
         <form onSubmit={handleSubmit} className="inward-form">
-          {error && <div className="form-error-banner">⚠️ {error}</div>}
+          {error && <div className="form-error-banner" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><AlertTriangle size={16} /> {error}</div>}
 
           <div className="form-grid">
             {/* Project Name */}
@@ -305,8 +302,8 @@ const DevWorkFormModal = ({ isOpen, onClose, onSuccess }) => {
             <button type="button" className="btn-secondary" onClick={onClose}>
               रद्द करा (Cancel)
             </button>
-            <button type="submit" className="btn-primary" disabled={submitting}>
-              {submitting ? 'नोंदणी होत आहे...' : '🏗️ प्रकल्प जतन करा (Save Project)'}
+            <button type="submit" className="btn-primary" disabled={submitting} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+              <Save size={16} /> {submitting ? 'नोंदणी होत आहे...' : 'प्रकल्प जतन करा (Save Project)'}
             </button>
           </div>
         </form>

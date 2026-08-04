@@ -7,6 +7,7 @@
 // ============================================================
 
 import { useState, useEffect, useCallback } from 'react';
+import { Download, Upload, Plus, Cake, User, Calendar, MessageSquare, LayoutGrid, Table, Users, Phone, MapPin, Building, Edit, Eye, ChevronLeft, ChevronRight } from 'lucide-react';
 import api from '../../services/api.js';
 import useLangStore from '../../store/langStore.js';
 import KaryakartaFormModal from './KaryakartaFormModal.jsx';
@@ -14,12 +15,12 @@ import KaryakartaImportModal from './KaryakartaImportModal.jsx';
 import './KaryakartaListPage.css';
 
 const DESIGNATION_MAP = {
-  BOOTH_PRAMUKH: { en: '🗳️ Booth Pramukh', mr: '🗳️ बूथ प्रमुख', class: 'role-bp' },
-  WARD_HEAD: { en: '📍 Ward Head', mr: '📍 वॉर्ड प्रमुख', class: 'role-wh' },
-  SHAKTI_KENDRA: { en: '⚡ Shakti Kendra', mr: '⚡ शक्ती केंद्र प्रमुख', class: 'role-bp' },
-  KARYAKARTA: { en: '👥 Karyakarta', mr: '👥 कार्यकर्ता', class: 'role-kw' },
-  VOLUNTEER: { en: '🤝 Volunteer', mr: '🤝 स्वयंसेवक', class: 'role-vl' },
-  OTHER: { en: '📌 Other', mr: '📌 इतर', class: 'role-kw' },
+  BOOTH_PRAMUKH: { en: 'Booth Pramukh', mr: 'बूथ प्रमुख', class: 'role-bp' },
+  WARD_HEAD: { en: 'Ward Head', mr: 'वॉर्ड प्रमुख', class: 'role-wh' },
+  SHAKTI_KENDRA: { en: 'Shakti Kendra', mr: 'शक्ती केंद्र प्रमुख', class: 'role-bp' },
+  KARYAKARTA: { en: 'Karyakarta', mr: 'कार्यकर्ता', class: 'role-kw' },
+  VOLUNTEER: { en: 'Volunteer', mr: 'स्वयंसेवक', class: 'role-vl' },
+  OTHER: { en: 'Other', mr: 'इतर', class: 'role-kw' },
 };
 
 const SAMPLE_FALLBACK_WORKERS = [
@@ -58,67 +59,48 @@ const SAMPLE_FALLBACK_WORKERS = [
   },
   {
     id: 4,
-    full_name: 'Vishnu Gaikwad · विष्णू गायकवाड',
-    designation: 'BOOTH_PRAMUKH',
+    full_name: 'Vikas Jagtap · विकास जगताप',
+    designation: 'VOLUNTEER',
     mobile: '65432 10987',
-    booth_id: '12',
+    booth_id: '102',
     ward: 'Wadgaon Village',
     taluka: 'Haveli Taluka',
     address: 'Wadgaon',
-    date_of_birth: '1982-01-05',
-  },
-  {
-    id: 5,
-    full_name: 'Anand Kamble · आनंद कांबळे',
-    designation: 'VOLUNTEER',
-    mobile: '54321 09876',
-    booth_id: '3',
-    ward: 'Ambegaon Village',
-    taluka: 'Maval Taluka',
-    address: 'Ambegaon',
-    date_of_birth: '1995-09-25',
-  },
-  {
-    id: 6,
-    full_name: 'Mangesh Jadhav · मंगेश जाधव',
-    designation: 'KARYAKARTA',
-    mobile: '43210 98765',
-    booth_id: '146',
-    ward: 'Ward 5, Pimpri',
-    taluka: 'Haveli Taluka',
-    address: 'Pimpri Ward 5',
-    date_of_birth: '1990-06-18',
+    date_of_birth: '1995-09-05',
   },
 ];
 
 const getInitials = (name) => {
-  if (!name) return 'KP';
-  const cleanName = name.split('·')[0].trim();
-  const parts = cleanName.split(' ');
+  if (!name) return 'KW';
+  const clean = name.split('·')[0].trim();
+  const parts = clean.split(' ');
   if (parts.length >= 2) return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
-  return cleanName.slice(0, 2).toUpperCase();
+  return clean.slice(0, 2).toUpperCase();
 };
 
 const KaryakartaListPage = () => {
-  const { lang, setLang } = useLangStore();
+  const { lang } = useLangStore();
   const isMr = lang === 'MR';
 
   const [items, setItems] = useState([]);
-  const [birthdays, setBirthdays] = useState([]);
   const [summary, setSummary] = useState({
-    totalWorkers: 1247,
-    boothPramukhsCount: 156,
-    wardHeadsCount: 42,
-    karyakartasCount: 834,
-    volunteersCount: 215,
+    totalWorkers: 0,
+    boothPramukhsCount: 0,
+    wardHeadsCount: 0,
+    karyakartasCount: 0,
+    volunteersCount: 0,
   });
+  const [birthdays, setBirthdays] = useState([]);
   const [meta, setMeta] = useState({ page: 1, limit: 20, totalItems: 0, totalPages: 1 });
   const [loading, setLoading] = useState(true);
+  const [viewMode, setViewMode] = useState('CARDS'); // 'CARDS' | 'TABLE'
 
-  // View mode: 'CARDS' | 'TABLE'
-  const [viewMode, setViewMode] = useState('CARDS');
+  // Modals
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isImportOpen, setIsImportOpen] = useState(false);
+  const [selectedWorkerForDetail, setSelectedWorkerForDetail] = useState(null);
 
-  // Multi-facet Filters
+  // Filters State
   const [filters, setFilters] = useState({
     search: '',
     designation: 'ALL',
@@ -128,46 +110,52 @@ const KaryakartaListPage = () => {
     page: 1,
   });
 
-  // Modal states
-  const [isFormOpen, setIsFormOpen] = useState(false);
-  const [isImportOpen, setIsImportOpen] = useState(false);
-  const [selectedWorkerForDetail, setSelectedWorkerForDetail] = useState(null);
-
   const fetchKaryakartas = useCallback(async () => {
     setLoading(true);
     try {
-      const params = {
-        page: filters.page,
-        limit: 20,
-      };
+      const params = { page: filters.page, limit: 20 };
       if (filters.search) params.search = filters.search;
       if (filters.designation !== 'ALL') params.designation = filters.designation;
+      if (filters.taluka !== 'ALL') params.taluka = filters.taluka;
+      if (filters.village_ward !== 'ALL') params.village_ward = filters.village_ward;
       if (filters.booth_id !== 'ALL') params.booth_id = filters.booth_id;
 
       const { data } = await api.get('/karyakartas', { params });
-      const fetchedItems = data.data && data.data.length > 0 ? data.data : SAMPLE_FALLBACK_WORKERS;
-      setItems(fetchedItems);
+      const apiItems = data.data || [];
+      const apiMeta = data.meta || { page: 1, limit: 20, totalItems: apiItems.length, totalPages: 1 };
 
-      setSummary({
-        totalWorkers: data.summary?.totalKaryakartas || 1247,
-        boothPramukhsCount: data.summary?.boothPramukhsCount || 156,
-        wardHeadsCount: 42,
-        karyakartasCount: 834,
-        volunteersCount: 215,
-      });
-
-      setMeta(data.meta || { page: 1, limit: 20, totalItems: fetchedItems.length, totalPages: 1 });
+      if (apiItems.length > 0) {
+        setItems(apiItems);
+        setMeta(apiMeta);
+        setSummary({
+          totalWorkers: apiMeta.totalItems || apiItems.length,
+          boothPramukhsCount: apiItems.filter((i) => i.designation === 'BOOTH_PRAMUKH').length,
+          wardHeadsCount: apiItems.filter((i) => i.designation === 'WARD_HEAD').length,
+          karyakartasCount: apiItems.filter((i) => i.designation === 'KARYAKARTA').length,
+          volunteersCount: apiItems.filter((i) => i.designation === 'VOLUNTEER').length,
+        });
+      } else {
+        setItems(SAMPLE_FALLBACK_WORKERS);
+        setSummary({
+          totalWorkers: SAMPLE_FALLBACK_WORKERS.length,
+          boothPramukhsCount: 1,
+          wardHeadsCount: 1,
+          karyakartasCount: 1,
+          volunteersCount: 1,
+        });
+        setMeta({ page: 1, limit: 20, totalItems: 4, totalPages: 1 });
+      }
     } catch (err) {
-      console.warn('API fetch error, falling back to sample worker dataset:', err);
+      console.warn('API error, using sample fallback karyakarta data:', err);
       setItems(SAMPLE_FALLBACK_WORKERS);
       setSummary({
-        totalWorkers: 1247,
-        boothPramukhsCount: 156,
-        wardHeadsCount: 42,
-        karyakartasCount: 834,
-        volunteersCount: 215,
+        totalWorkers: SAMPLE_FALLBACK_WORKERS.length,
+        boothPramukhsCount: 1,
+        wardHeadsCount: 1,
+        karyakartasCount: 1,
+        volunteersCount: 1,
       });
-      setMeta({ page: 1, limit: 20, totalItems: 6, totalPages: 1 });
+      setMeta({ page: 1, limit: 20, totalItems: 4, totalPages: 1 });
     } finally {
       setLoading(false);
     }
@@ -176,21 +164,20 @@ const KaryakartaListPage = () => {
   const fetchBirthdays = useCallback(async () => {
     try {
       const { data } = await api.get('/karyakartas/birthdays');
-      setBirthdays(data.data && data.data.length > 0 ? data.data : [
-        { id: 1, full_name: 'Ramesh Patil', designation: 'BOOTH_PRAMUKH', booth_id: '145', mobile: '9876543210', date_of_birth: '15 Aug' },
-        { id: 3, full_name: 'Priya Deshmukh', designation: 'KARYAKARTA', booth_id: '148', mobile: '7654321098', date_of_birth: '10 Aug' },
-      ]);
+      setBirthdays(data.data || []);
     } catch (err) {
-      setBirthdays([
-        { id: 1, full_name: 'Ramesh Patil', designation: 'BOOTH_PRAMUKH', booth_id: '145', mobile: '9876543210', date_of_birth: '15 Aug' },
-      ]);
+      console.warn('Birthday fetch error, setting sample birthday list:', err);
+      setBirthdays(SAMPLE_FALLBACK_WORKERS.slice(0, 2));
     }
   }, []);
 
   useEffect(() => {
     fetchKaryakartas();
+  }, [fetchKaryakartas]);
+
+  useEffect(() => {
     fetchBirthdays();
-  }, [fetchKaryakartas, fetchBirthdays]);
+  }, [fetchBirthdays]);
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
@@ -199,7 +186,7 @@ const KaryakartaListPage = () => {
 
   const sendWhatsAppWish = (worker) => {
     const text = encodeURIComponent(
-      `सस्नेह नमस्कार ${worker.full_name}जी,\n\nआमदार कार्यालयाच्या वतीने आपणास वाढदिवसाच्या हार्दिक हार्दिक शुभेच्छा! 💐🎂\nआपणास उदंड आयुष्य व उत्तम आरोग्य लाभो हीच ईश्वरचरणी प्रार्थना!`
+      `सस्नेह नमस्कार ${worker.full_name}जी,\n\nआमदार कार्यालयाच्या वतीने आपणास वाढदिवसाच्या हार्दिक हार्दिक शुभेच्छा!\nआपणास उदंड आयुष्य व उत्तम आरोग्य लाभो हीच ईश्वरचरणी प्रार्थना!`
     );
     window.open(`https://wa.me/91${worker.mobile.replace(/\s+/g, '')}?text=${text}`, '_blank');
   };
@@ -218,14 +205,14 @@ const KaryakartaListPage = () => {
         </div>
 
         <div className="karyakarta-actions">
-          <button className="btn-o" onClick={() => alert(isMr ? 'कार्यकर्ता यादी एक्सपोर्ट होत आहे...' : 'Exporting directory...')}>
-            📥 {isMr ? 'एक्सपोर्ट' : 'Export'}
+          <button className="btn-o" onClick={() => alert(isMr ? 'कार्यकर्ता यादी एक्सपोर्ट होत आहे...' : 'Exporting directory...')} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+            <Download size={14} /> {isMr ? 'एक्सपोर्ट' : 'Export'}
           </button>
-          <button className="btn-o" onClick={() => setIsImportOpen(true)}>
-            📤 {isMr ? 'इम्पोर्ट CSV' : 'Import CSV'}
+          <button className="btn-o" onClick={() => setIsImportOpen(true)} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+            <Upload size={14} /> {isMr ? 'इम्पोर्ट CSV' : 'Import CSV'}
           </button>
-          <button className="btn-p" onClick={() => setIsFormOpen(true)}>
-            + {isMr ? 'कार्यकर्ता जोडा' : 'Add Worker'}
+          <button className="btn-p" onClick={() => setIsFormOpen(true)} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+            <Plus size={14} /> {isMr ? 'कार्यकर्ता जोडा' : 'Add Worker'}
           </button>
         </div>
       </div>
@@ -262,7 +249,7 @@ const KaryakartaListPage = () => {
       {birthdays.length > 0 && (
         <div className="birthday-widget-banner">
           <div className="birthday-widget-header">
-            <span className="birthday-icon">🎂</span>
+            <span className="birthday-icon"><Cake size={22} /></span>
             <div>
               <h3>{isMr ? 'या सप्ताहातील कार्यकर्त्यांचे वाढदिवस' : 'Upcoming Birthdays (Next 7 Days)'}</h3>
               <p>{isMr ? 'वाढदिवस असलेल्या कार्यकर्त्यांना थेट WhatsApp वर शुभेच्छा पाठवा' : 'Send direct WhatsApp birthday wishes to workers'}</p>
@@ -272,17 +259,19 @@ const KaryakartaListPage = () => {
           <div className="birthday-cards-scroll">
             {birthdays.map((b) => (
               <div key={b.id} className="birthday-card">
-                <div className="birthday-avatar">👤</div>
+                <div className="birthday-avatar"><User size={18} /></div>
                 <div className="birthday-info">
                   <span className="birthday-name">{b.full_name}</span>
                   <span className="birthday-sub">
                     {DESIGNATION_MAP[b.designation]?.mr || b.designation} | {isMr ? `बूथ क्र. ${b.booth_id || 101}` : `Booth ${b.booth_id || 101}`}
                   </span>
-                  <span className="birthday-dob">📅 {b.date_of_birth}</span>
+                  <span className="birthday-dob" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                    <Calendar size={12} /> {b.date_of_birth}
+                  </span>
                 </div>
 
-                <button className="btn-whatsapp-wish" onClick={() => sendWhatsAppWish(b)}>
-                  💬 WhatsApp {isMr ? 'शुभेच्छा' : 'Wish'}
+                <button className="btn-whatsapp-wish" onClick={() => sendWhatsAppWish(b)} style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                  <MessageSquare size={14} /> WhatsApp {isMr ? 'शुभेच्छा' : 'Wish'}
                 </button>
               </div>
             ))}
@@ -351,14 +340,16 @@ const KaryakartaListPage = () => {
           <button
             className={`vt-btn ${viewMode === 'CARDS' ? 'active' : ''}`}
             onClick={() => setViewMode('CARDS')}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}
           >
-            📇 {isMr ? 'कार्ड्स' : 'Cards'}
+            <LayoutGrid size={14} /> {isMr ? 'कार्ड्स' : 'Cards'}
           </button>
           <button
             className={`vt-btn ${viewMode === 'TABLE' ? 'active' : ''}`}
             onClick={() => setViewMode('TABLE')}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}
           >
-            📋 {isMr ? 'तक्ता' : 'Table'}
+            <Table size={14} /> {isMr ? 'तक्ता' : 'Table'}
           </button>
         </div>
       </div>
@@ -370,7 +361,7 @@ const KaryakartaListPage = () => {
         </div>
       ) : items.length === 0 ? (
         <div style={{ padding: '40px', textAlign: 'center', color: 'var(--t3)' }}>
-          <div style={{ fontSize: '32px', marginBottom: '8px' }}>👥</div>
+          <div style={{ fontSize: '32px', marginBottom: '8px' }}><Users size={32} /></div>
           <h3>{isMr ? 'कोणताही कार्यकर्ता सापडला नाही' : 'No workers found'}</h3>
           <p>{isMr ? 'कृपया शोध किंवा फिल्टर बदलून प्रयत्न करा.' : 'Please adjust your search or filters.'}</p>
         </div>
@@ -392,11 +383,17 @@ const KaryakartaListPage = () => {
                         {isMr ? desigCfg.mr : desigCfg.en}
                       </span>
                       <div className="wc-detail">
-                        📱 <strong style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '11px' }}>{worker.mobile}</strong>
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                          <Phone size={11} /> <strong style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '11px' }}>{worker.mobile}</strong>
+                        </span>
                         <br />
-                        📍 Booth {worker.booth_id || 101} · {worker.ward || 'Ward 5'}
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                          <MapPin size={11} /> Booth {worker.booth_id || 101} · {worker.ward || 'Ward 5'}
+                        </span>
                         <br />
-                        🏘️ {worker.taluka || 'Haveli Taluka'}
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                          <Building size={11} /> {worker.taluka || 'Haveli Taluka'}
+                        </span>
                       </div>
                       <div className="wc-actions">
                         <button
@@ -407,7 +404,7 @@ const KaryakartaListPage = () => {
                             window.location.href = `tel:${worker.mobile.replace(/\s+/g, '')}`;
                           }}
                         >
-                          📞
+                          <Phone size={13} />
                         </button>
                         <button
                           className="wc-btn"
@@ -417,7 +414,7 @@ const KaryakartaListPage = () => {
                             sendWhatsAppWish(worker);
                           }}
                         >
-                          💬
+                          <MessageSquare size={13} />
                         </button>
                         <button
                           className="wc-btn"
@@ -427,7 +424,7 @@ const KaryakartaListPage = () => {
                             setIsFormOpen(true);
                           }}
                         >
-                          ✏️
+                          <Edit size={13} />
                         </button>
                         <button
                           className="wc-btn"
@@ -437,7 +434,7 @@ const KaryakartaListPage = () => {
                             setSelectedWorkerForDetail(worker);
                           }}
                         >
-                          👁
+                          <Eye size={13} />
                         </button>
                       </div>
                     </div>
@@ -472,18 +469,31 @@ const KaryakartaListPage = () => {
                             {isMr ? desigCfg.mr : desigCfg.en}
                           </span>
                         </td>
-                        <td style={{ fontFamily: 'JetBrains Mono', fontSize: '12px' }}>📱 {worker.mobile}</td>
-                        <td>📍 Booth {worker.booth_id || 101} · {worker.ward || 'Ward 5'}</td>
-                        <td>🏘️ {worker.taluka || 'Haveli Taluka'}</td>
+                        <td style={{ fontFamily: 'JetBrains Mono', fontSize: '12px' }}>
+                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                            <Phone size={12} /> {worker.mobile}
+                          </span>
+                        </td>
+                        <td>
+                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                            <MapPin size={12} /> Booth {worker.booth_id || 101} · {worker.ward || 'Ward 5'}
+                          </span>
+                        </td>
+                        <td>
+                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                            <Building size={12} /> {worker.taluka || 'Haveli Taluka'}
+                          </span>
+                        </td>
                         <td style={{ textAlign: 'right' }}>
                           <button
                             className="btn-whatsapp-wish"
+                            style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}
                             onClick={(e) => {
                               e.stopPropagation();
                               sendWhatsAppWish(worker);
                             }}
                           >
-                            💬 WhatsApp
+                            <MessageSquare size={13} /> WhatsApp
                           </button>
                         </td>
                       </tr>
@@ -505,20 +515,20 @@ const KaryakartaListPage = () => {
               <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                 <button
                   className="btn-o"
-                  style={{ height: '28px', padding: '0 8px', fontSize: '11px' }}
+                  style={{ height: '28px', padding: '0 8px', fontSize: '11px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}
                   disabled={meta.page <= 1}
                   onClick={() => setFilters((prev) => ({ ...prev, page: prev.page - 1 }))}
                 >
-                  ← {isMr ? 'मागील' : 'Prev'}
+                  <ChevronLeft size={14} /> {isMr ? 'मागील' : 'Prev'}
                 </button>
                 <span style={{ fontWeight: 600 }}>{meta.page}</span>
                 <button
                   className="btn-o"
-                  style={{ height: '28px', padding: '0 8px', fontSize: '11px' }}
+                  style={{ height: '28px', padding: '0 8px', fontSize: '11px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}
                   disabled={meta.page >= meta.totalPages}
                   onClick={() => setFilters((prev) => ({ ...prev, page: prev.page + 1 }))}
                 >
-                  {isMr ? 'पुढील' : 'Next'} →
+                  {isMr ? 'पुढील' : 'Next'} <ChevronRight size={14} />
                 </button>
               </div>
             </div>
