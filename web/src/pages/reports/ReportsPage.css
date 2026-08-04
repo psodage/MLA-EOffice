@@ -338,6 +338,7 @@
   .reports-page-container {
     padding: 12px 8px;
   }
+@media (max-width: 639px) {
   .reports-stat-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -359,5 +360,48 @@
     gap: 12px;
   }
 }
+
+/* ── Dark Mode Overrides ────────────────────────────────────── */
+[data-theme="dark"] .report-card,
+[data-theme="dark"] .quick-form,
+[data-theme="dark"] .reports-stat-card,
+[data-theme="dark"] .reports-preview-card {
+  background: var(--c, #1a2332) !important;
+  border-color: var(--b, #2a364f) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+}
+
+[data-theme="dark"] .report-card:hover {
+  border-color: var(--p, #5a9bd5) !important;
+}
+
+[data-theme="dark"] .rc-footer {
+  background: var(--bg, #0f1419) !important;
+  border-top-color: var(--b, #2a364f) !important;
+}
+
+[data-theme="dark"] .rc-fmt {
+  background: var(--c, #1a2332) !important;
+  border-color: var(--b, #2a364f) !important;
+  color: var(--t3, #94a3b8) !important;
+}
+
+[data-theme="dark"] .quick-form select,
+[data-theme="dark"] .quick-form input {
+  background: var(--bg, #0f1419) !important;
+  border-color: var(--b, #2a364f) !important;
+  color: var(--t1, #f8fafc) !important;
+}
+
+[data-theme="dark"] .rc-title,
+[data-theme="dark"] .section-title,
+[data-theme="dark"] .quick-form label {
+  color: var(--t1, #f8fafc) !important;
+}
+
+[data-theme="dark"] .rc-desc {
+  color: var(--t3, #94a3b8) !important;
+}
+
 
 

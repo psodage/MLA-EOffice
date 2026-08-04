@@ -4,6 +4,8 @@
    Matching wireframes: dev_works_list.html & dev_works_detail.html
    ============================================================ */
 
+@import '../inward/InwardListPage.css';
+
 /* ── Container & Header ────────────────────────────────────── */
 .devworks-page-container {
   max-width: var(--page-max-width, 1400px);
@@ -902,55 +904,320 @@
   margin-top: 2px;
 }
 
-/* ── Responsive Rules ──────────────────────────────────────── */
-@media (max-width: 1024px) {
-  .content-grid {
-    grid-template-columns: 1fr;
+/* ── Tablet Responsiveness (768px - 1024px) ─────────────────── */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .devworks-stats {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 10px !important;
   }
-  .map-view-wrapper {
-    grid-template-columns: 1fr;
-  }
-}
 
-@media (max-width: 768px) {
   .devworks-filter-bar {
-    grid-template-columns: 1fr;
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 10px !important;
+    padding: 12px !important;
   }
+
+  .devworks-filter-bar .filter-fg:first-child {
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+  }
+
+  .filter-reset-btn {
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
   .card-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 14px !important;
   }
-  .meta-grid {
-    grid-template-columns: 1fr 1fr;
+
+  .content-grid {
+    grid-template-columns: 1fr !important;
   }
-  .photo-grid {
-    grid-template-columns: 1fr 1fr;
+
+  .map-view-wrapper {
+    grid-template-columns: 1fr !important;
   }
 }
 
-@media (max-width: 639px) {
+/* ── Mobile Responsiveness Redesign (< 767px) ────────────────── */
+@media (max-width: 767px) {
   .devworks-page-container {
-    padding: 12px 8px;
+    gap: 14px !important;
+    padding: 10px 12px !important;
+    width: 100% !important;
   }
+
+  /* Page Header */
+  .devworks-header {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+    margin-bottom: 4px !important;
+  }
+
+  .devworks-title-group .title {
+    font-size: 20px !important;
+    line-height: 1.25 !important;
+    margin-bottom: 2px !important;
+  }
+
+  .devworks-title-group .sub {
+    font-size: 12px !important;
+  }
+
+  .devworks-actions {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 8px !important;
+    width: 100% !important;
+    margin-top: 4px !important;
+  }
+
+  .devworks-actions .btn-p,
+  .devworks-actions .btn-o {
+    flex: 1 !important;
+    height: 36px !important;
+    padding: 0 10px !important;
+    font-size: 13px !important;
+    border-radius: 4px !important;
+    justify-content: center !important;
+    white-space: nowrap !important;
+    width: 100% !important;
+  }
+
+  /* KPI Stats Grid - Exactly 2 per row */
+  .devworks-stats {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+    margin-bottom: 14px !important;
+  }
+
+  .devworks-stat-card {
+    padding: 10px 12px !important;
+    min-height: 100px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+  }
+
+  .stat-val {
+    font-size: 24px !important;
+    margin-bottom: 2px !important;
+  }
+
+  .stat-label {
+    font-size: 12px !important;
+    font-weight: 600 !important;
+  }
+
+  .stat-sub {
+    font-size: 11px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  /* View Toggle Toolbar */
+  .devworks-toolbar {
+    width: 100% !important;
+    margin-bottom: 10px !important;
+  }
+
+  .view-toggle {
+    width: 100% !important;
+    display: flex !important;
+  }
+
+  .vt-btn {
+    flex: 1 !important;
+    justify-content: center !important;
+    text-align: center !important;
+    padding: 8px 10px !important;
+    font-size: 12px !important;
+  }
+
+  /* Filter Bar */
+  .devworks-filter-bar {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+    padding: 12px !important;
+    border-radius: 4px !important;
+    margin-bottom: 14px !important;
+  }
+
+  .filter-fg {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .filter-fg:first-child {
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+  }
+
+  .filter-reset-btn {
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+    height: 34px !important;
+    justify-content: center !important;
+    font-size: 12px !important;
+  }
+
+  .filter-fi {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 34px !important;
+    font-size: 12px !important;
+  }
+
+  /* Cards Grid */
+  .card-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  .pc-header,
+  .pc-body,
+  .pc-footer {
+    padding: 12px 14px !important;
+  }
+
+  .pc-title {
+    font-size: 14px !important;
+  }
+
+  /* Table View */
+  .table-card {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 4px !important;
+    border: 1px solid var(--b, #dde3eb) !important;
+  }
+
+  .devworks-table {
+    width: 100% !important;
+    min-width: 820px !important;
+  }
+
+  .devworks-table td,
+  .devworks-table th {
+    padding: 8px 10px !important;
+    font-size: 12px !important;
+  }
+
+  /* Map View */
+  .map-view-wrapper {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+
+  .map-sidebar {
+    max-height: 280px !important;
+  }
+
+  .map-canvas-container {
+    min-height: 340px !important;
+  }
+
+  /* Pagination Bar */
+  .pagination-bar {
+    flex-direction: column !important;
+    gap: 10px !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    padding: 12px !important;
+  }
+
+  .pagination-bar > span {
+    font-size: 12px !important;
+    text-align: center !important;
+    width: 100% !important;
+  }
+
+  .pagination-controls {
+    display: flex !important;
+    gap: 6px !important;
+    justify-content: center !important;
+    width: 100% !important;
+  }
+
+  .page-btn {
+    height: 34px !important;
+    min-width: 34px !important;
+    padding: 0 10px !important;
+    font-size: 12px !important;
+    justify-content: center !important;
+  }
+
+  /* Detail Card & Grids */
+  .detail-header-card {
+    padding: 16px !important;
+  }
+
+  .dh-title {
+    font-size: 18px !important;
+  }
+
+  .content-grid {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+
   .meta-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
   }
+
   .photo-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
   }
-  .devworks-modal-container {
-    max-width: 95vw;
-    margin: 8px;
+
+  /* Modals */
+  .devworks-modal-overlay,
+  .inward-modal-overlay {
+    padding: 8px !important;
   }
-  .page-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
+
+  .devworks-modal-container,
+  .inward-modal-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    max-height: 94vh !important;
+    margin: 0 !important;
+    border-radius: 8px !important;
   }
-  .page-header-actions {
-    width: 100%;
-    flex-wrap: wrap;
+
+  .inward-modal-header {
+    padding: 12px 14px !important;
+  }
+
+  .inward-modal-body,
+  .form-section {
+    padding: 12px 14px !important;
+  }
+
+  .form-footer {
+    flex-direction: column-reverse !important;
+    gap: 8px !important;
+    padding: 12px 14px !important;
+    width: 100% !important;
+  }
+
+  .form-footer button {
+    width: 100% !important;
+    justify-content: center !important;
+    height: 38px !important;
+    font-size: 13px !important;
   }
 }
+
 
 /* ── Dark Mode Overrides ────────────────────────────────────── */
 [data-theme="dark"] .devworks-stat-card,
