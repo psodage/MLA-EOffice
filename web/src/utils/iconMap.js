@@ -25,10 +25,10 @@ import {
   Columns3, FileCheck2, Share2, Contact as ContactBadge, FileSpreadsheet, Warehouse,
   Briefcase, Globe, Vote as VoteBallot, CalendarCheck, MailCheck, TrendingUp, Cog, KeyRound, Landmark as LandmarkGov,
 
-  // Common Actions & Controls
-  DownloadCloud, PlusCircle, Pencil, Trash2, ListFilter, Search, LogOut,
+// Common Actions & Controls
+  Download, Plus, Pencil, Trash2, ListFilter, Search, LogOut,
   Sun, Moon, RefreshCw, Eye, CheckCheck, XCircle, Clock as ClockIcon,
-  User, Phone, Printer, Paperclip, HelpCircle
+  User, Phone, Printer, Paperclip, HelpCircle, DownloadCloud, PlusCircle
 } from 'lucide-react';
 
 export const COHESIVE_ICON_FAMILIES = {
@@ -114,8 +114,10 @@ export const COHESIVE_ICON_FAMILIES = {
 };
 
 export const COMMON_ACTION_MAP = {
-  export: DownloadCloud,
-  add: PlusCircle,
+  export: Download,
+  download: Download,
+  add: Plus,
+  plus: Plus,
   edit: Pencil,
   delete: Trash2,
   filter: ListFilter,

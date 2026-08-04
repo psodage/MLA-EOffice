@@ -7,6 +7,7 @@
 
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Download, Plus } from 'lucide-react';
 import api from '../services/api.js';
 import useAuthStore from '../store/authStore.js';
 import useLangStore from '../store/langStore.js';
@@ -171,7 +172,7 @@ const DashboardPage = () => {
             onClick={() => navigate('/reports')}
             style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
           >
-            <LucideIcon name="export" size={16} />
+            <Download size={16} />
             {text.exportBtn}
           </button>
           <button
@@ -180,7 +181,7 @@ const DashboardPage = () => {
             onClick={() => navigate('/nivedan/new')}
             style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
           >
-            <LucideIcon name="add" size={16} />
+            <Plus size={16} />
             {text.newNivedanBtn}
           </button>
         </div>
