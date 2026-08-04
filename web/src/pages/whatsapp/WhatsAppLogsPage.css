@@ -4,6 +4,8 @@
    Matching WIREFRAMES/whatsapp.html & Enterprise Tokens
    ============================================================ */
 
+@import '../inward/InwardListPage.css';
+
 .wa-page-container {
   display: flex;
   flex-direction: column;
@@ -680,37 +682,250 @@
   color: var(--text-4, #94A3B8);
 }
 
-/* Responsive */
-@media (max-width: 1200px) {
+/* ── Tablet Responsiveness (768px - 1024px) ─────────────────── */
+@media (min-width: 768px) and (max-width: 1024px) {
   .wa-layout {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  .wa-stats-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 10px !important;
+  }
+
+  .wa-quick-actions {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
   }
 }
 
-@media (max-width: 768px) {
-  .wa-stats-grid {
-    grid-template-columns: repeat(2, 1fr);
+/* ── Mobile Responsiveness Redesign (< 767px) ────────────────── */
+@media (max-width: 767px) {
+  .wa-page-container {
+    gap: 14px !important;
+    padding: 10px 12px !important;
+    width: 100% !important;
   }
-}
 
-@media (max-width: 639px) {
-  .whatsapp-page-container {
-    padding: 12px 8px;
+  /* Page Header */
+  .wa-page-container .page-header {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+    margin-bottom: 2px !important;
   }
+
+  .wa-page-container .page-title {
+    font-size: 20px !important;
+    line-height: 1.25 !important;
+    margin-bottom: 2px !important;
+  }
+
+  .wa-page-container .page-subtitle {
+    font-size: 12px !important;
+  }
+
+  .wa-page-container .page-actions {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 8px !important;
+    width: 100% !important;
+    margin-top: 4px !important;
+  }
+
+  .wa-page-container .btn,
+  .wa-page-container .btn-p,
+  .wa-page-container .btn-o,
+  .wa-page-container .btn-wa {
+    flex: 1 !important;
+    height: 36px !important;
+    padding: 0 10px !important;
+    font-size: 13px !important;
+    border-radius: 4px !important;
+    justify-content: center !important;
+    white-space: nowrap !important;
+    width: 100% !important;
+  }
+
+  /* KPI Stats Grid - Exactly 2 per row */
   .wa-stats-grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
   }
+
+  .wa-stat-card {
+    padding: 10px 12px !important;
+    min-height: 100px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+  }
+
+  .wa-stat-val {
+    font-size: 24px !important;
+    margin-bottom: 2px !important;
+  }
+
+  .wa-stat-label {
+    font-size: 12px !important;
+    font-weight: 600 !important;
+  }
+
+  .wa-stat-trend {
+    font-size: 10.5px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  /* Tabs Navigation Bar */
+  .wa-tabs-bar {
+    display: flex !important;
+    width: 100% !important;
+    overflow-x: auto !important;
+    scrollbar-width: none !important;
+    -webkit-overflow-scrolling: touch !important;
+    border-bottom: 2px solid var(--border, #DDE3EB) !important;
+    margin-bottom: 10px !important;
+  }
+
+  .wa-tabs-bar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .wa-tab-btn {
+    flex: 1 !important;
+    min-width: max-content !important;
+    text-align: center !important;
+    justify-content: center !important;
+    padding: 10px 12px !important;
+    font-size: 13px !important;
+    white-space: nowrap !important;
+  }
+
+  /* Quick Actions Cards */
+  .wa-quick-actions {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+  }
+
+  .qa-card {
+    min-width: 0 !important;
+    padding: 10px 12px !important;
+    gap: 10px !important;
+  }
+
+  .qa-icon {
+    width: 34px !important;
+    height: 34px !important;
+    font-size: 16px !important;
+  }
+
+  .qa-title {
+    font-size: 12.5px !important;
+  }
+
+  .qa-desc {
+    font-size: 10.5px !important;
+  }
+
+  /* Main Layout */
+  .wa-layout {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+
+  /* Recent Activity Rows */
+  .msg-row {
+    padding: 10px 12px !important;
+    gap: 10px !important;
+  }
+
+  .msg-icon {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 14px !important;
+  }
+
+  .msg-recipient {
+    font-size: 12px !important;
+  }
+
+  .msg-template {
+    font-size: 11px !important;
+  }
+
+  .msg-status {
+    font-size: 9.5px !important;
+    padding: 2px 5px !important;
+  }
+
+  /* Delivery Breakdown Ring */
   .ring-container {
-    flex-direction: column;
+    padding: 12px !important;
+    gap: 14px !important;
+    flex-direction: column !important;
+    align-items: center !important;
   }
-  .page-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
+
+  .ring-legend {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 6px 10px !important;
   }
-  .nivedan-modal-container {
-    max-width: 95vw;
-    margin: 8px;
+
+  /* Broadcast Modal */
+  .nivedan-modal-overlay,
+  .inward-modal-overlay,
+  .modal-overlay {
+    padding: 8px !important;
+  }
+
+  .nivedan-modal-card,
+  .inward-modal-container,
+  .modal-content-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    max-height: 94vh !important;
+    margin: 0 !important;
+    border-radius: 8px !important;
+  }
+
+  .modal-header,
+  .inward-modal-header {
+    padding: 12px 14px !important;
+  }
+
+  .modal-body,
+  .inward-modal-body {
+    padding: 12px 14px !important;
+  }
+
+  .nivedan-form-grid,
+  .form-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  .modal-footer,
+  .form-footer {
+    flex-direction: column-reverse !important;
+    gap: 8px !important;
+    padding: 12px 14px !important;
+    width: 100% !important;
+  }
+
+  .modal-footer button,
+  .form-footer button {
+    width: 100% !important;
+    justify-content: center !important;
+    height: 38px !important;
+    font-size: 13px !important;
   }
 }
+
 

@@ -4,6 +4,8 @@
    Matching wireframe: WIREFRAMES/reports.html
    ============================================================ */
 
+@import '../inward/InwardListPage.css';
+
 .reports-page-container {
   max-width: var(--page-max-width, 1400px);
   margin: 0 auto;
@@ -320,46 +322,175 @@
   color: var(--p, #1b3a5c);
 }
 
-/* Responsive */
-@media (max-width: 768px) {
+/* ── Tablet Responsiveness (768px - 1024px) ─────────────────── */
+@media (min-width: 768px) and (max-width: 1024px) {
   .report-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 14px !important;
   }
+
   .quick-form {
-    flex-direction: column;
-    align-items: stretch;
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+    padding: 16px !important;
   }
-  .quick-form .fi {
-    min-width: 100%;
+
+  .quick-form button {
+    grid-column: span 1 !important;
   }
 }
 
-@media (max-width: 639px) {
+/* ── Mobile Responsiveness Redesign (< 767px) ────────────────── */
+@media (max-width: 767px) {
   .reports-page-container {
-    padding: 12px 8px;
+    gap: 14px !important;
+    padding: 10px 12px !important;
+    width: 100% !important;
   }
-@media (max-width: 639px) {
+
+  /* Page Header */
+  .reports-header {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+    margin-bottom: 14px !important;
+  }
+
+  .reports-header .title {
+    font-size: 20px !important;
+    line-height: 1.25 !important;
+    margin: 0 0 2px 0 !important;
+  }
+
+  .reports-header .sub {
+    font-size: 12px !important;
+  }
+
+  .reports-actions {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 8px !important;
+    width: 100% !important;
+    margin-top: 4px !important;
+  }
+
+  .reports-actions .btn-o,
+  .reports-actions .btn-p {
+    flex: 1 !important;
+    height: 36px !important;
+    padding: 0 10px !important;
+    font-size: 13px !important;
+    border-radius: 4px !important;
+    justify-content: center !important;
+    white-space: nowrap !important;
+    width: 100% !important;
+  }
+
+  /* Report Suite Grid */
+  .report-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  .rc-header {
+    padding: 14px 16px !important;
+    gap: 12px !important;
+  }
+
+  .rc-icon {
+    width: 40px !important;
+    height: 40px !important;
+    font-size: 18px !important;
+  }
+
+  .rc-title {
+    font-size: 14px !important;
+  }
+
+  .rc-footer {
+    padding: 10px 16px !important;
+  }
+
+  /* Quick Form */
+  .quick-form {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    padding: 14px !important;
+    align-items: stretch !important;
+  }
+
+  .quick-form .fg {
+    width: 100% !important;
+  }
+
+  .quick-form .fi {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 36px !important;
+    font-size: 13px !important;
+  }
+
+  .quick-form .btn-p,
+  .quick-form .btn-o {
+    width: 100% !important;
+    justify-content: center !important;
+    height: 38px !important;
+    font-size: 13px !important;
+  }
+
+  /* Analytics Preview Card */
+  .analytics-preview-card {
+    padding: 14px !important;
+    margin-top: 16px !important;
+  }
+
   .reports-stat-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
   }
+
+  .report-metric-card {
+    padding: 10px 12px !important;
+  }
+
+  .metric-val {
+    font-size: 20px !important;
+  }
+
+  .metric-lbl {
+    font-size: 11px !important;
+  }
+
+  /* Chart Row Items */
   .chart-row-item {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 4px;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 4px !important;
+    margin-bottom: 12px !important;
   }
-  .chart-label-col, .chart-value-col {
-    width: 100%;
-    text-align: left;
+
+  .chart-label-col {
+    width: 100% !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    text-align: left !important;
   }
+
   .chart-bar-bg {
-    width: 100%;
+    width: 100% !important;
+    height: 8px !important;
   }
-  .page-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
+
+  .chart-value-col {
+    width: 100% !important;
+    text-align: right !important;
+    font-size: 11px !important;
   }
 }
+
 
 /* ── Dark Mode Overrides ────────────────────────────────────── */
 [data-theme="dark"] .report-card,
