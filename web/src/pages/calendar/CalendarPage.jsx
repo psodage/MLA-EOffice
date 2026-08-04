@@ -10,6 +10,7 @@ import { useState, useEffect, useCallback } from 'react';
 import api from '../../services/api.js';
 import useLangStore from '../../store/langStore.js';
 import CalendarFormModal from './CalendarFormModal.jsx';
+import LucideIcon from '../../components/common/LucideIcon.jsx';
 import './CalendarPage.css';
 
 const EVENT_TYPE_CLASS = {
@@ -138,28 +139,11 @@ const CalendarPage = () => {
         </div>
 
         <div className="page-actions">
-          {/* Segmented Language Toggle Switch */}
-          <div className="segmented-switch" style={{ marginRight: '8px' }}>
-            <button
-              type="button"
-              className={lang === 'EN' ? 'active' : ''}
-              onClick={() => setLang('EN')}
-            >
-              EN
-            </button>
-            <button
-              type="button"
-              className={lang === 'MR' ? 'active' : ''}
-              onClick={() => setLang('MR')}
-              style={{ fontFamily: "'Noto Sans Devanagari', sans-serif" }}
-            >
-              मराठी
-            </button>
-          </div>
-
-          <button className="btn btn-primary" onClick={() => openFormForDate(todayDayNum)}>
-            <span>➕</span>
-            <span>+ {isMr ? 'नवीन कार्यक्रम' : 'New Event'}</span>
+          <button className="btn-o" onClick={() => alert(isMr ? 'दिनदर्शिका एक्सपोर्ट होत आहे...' : 'Exporting calendar...')}>
+            📥 {isMr ? 'एक्सपोर्ट' : 'Export'}
+          </button>
+          <button className="btn-p" onClick={() => openFormForDate(todayDayNum)}>
+            + {isMr ? 'नवीन कार्यक्रम' : 'New Event'}
           </button>
         </div>
       </div>

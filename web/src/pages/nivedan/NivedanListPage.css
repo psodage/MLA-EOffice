@@ -911,3 +911,33 @@ select.nivedan-form-input {
     grid-template-columns: 1fr 1fr;
   }
 }
+
+@media (max-width: 639px) {
+  .nivedan-page-container {
+    padding: 12px 8px;
+  }
+  .nivedan-summary-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .dh-meta-grid {
+    grid-template-columns: 1fr;
+  }
+  .nivedan-modal-container {
+    max-width: 95vw;
+    margin: 8px;
+  }
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .page-header-actions {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+  .btn-create {
+    width: 100%;
+    justify-content: center;
+  }
+}
+

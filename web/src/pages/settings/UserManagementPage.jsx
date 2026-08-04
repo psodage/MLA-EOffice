@@ -5,24 +5,109 @@
 // ============================================================
 
 import { useState, useEffect, useCallback } from 'react';
+import useLangStore from '../../store/langStore.js';
 import api from '../../services/api.js';
 import useAuthStore from '../../store/authStore.js';
 import './UserManagementPage.css';
 
-const MODULE_OPTIONS = [
-  { id: 'inward', labelMr: '📫 आवक नोंदवही (Inward Register)' },
-  { id: 'outward', labelMr: '📤 जावक नोंदवही (Outward Register)' },
-  { id: 'nivedan', labelMr: '📋 तक्रार निवारण (Nivedan / Petitions)' },
-  { id: 'visitor', labelMr: '👥 नागरिक भेट (Visitor Book)' },
-  { id: 'devworks', labelMr: '🏗️ विकासकामे (Development Works)' },
-  { id: 'karyakarta', labelMr: '🚩 कार्यकर्ता नोंदवही (Karyakarta Directory)' },
-  { id: 'calendar', labelMr: '📅 दिनदर्शिका (Calendar & Schedule)' },
-  { id: 'reports', labelMr: '📊 अहवाल व विश्लेषण (Reports & Analytics)' },
+const MODULE_OPTIONS_EN = [
+  { id: 'inward', label: '📫 Inward Register' },
+  { id: 'outward', label: '📤 Outward Register' },
+  { id: 'nivedan', label: '📋 Petitions & Complaints' },
+  { id: 'visitor', label: '👥 Visitor Book' },
+  { id: 'devworks', label: '🏗️ Development Works' },
+  { id: 'karyakarta', label: '🚩 Karyakarta Directory' },
+  { id: 'calendar', label: '📅 Calendar & Schedule' },
+  { id: 'reports', label: '📊 Reports & Analytics' },
 ];
+
+const MODULE_OPTIONS_MR = [
+  { id: 'inward', label: '📫 आवक नोंदवही (Inward Register)' },
+  { id: 'outward', label: '📤 जावक नोंदवही (Outward Register)' },
+  { id: 'nivedan', label: '📋 तक्रार निवारण (Nivedan / Petitions)' },
+  { id: 'visitor', label: '👥 नागरिक भेट (Visitor Book)' },
+  { id: 'devworks', label: '🏗️ विकासकामे (Development Works)' },
+  { id: 'karyakarta', label: '🚩 कार्यकर्ता नोंदवही (Karyakarta Directory)' },
+  { id: 'calendar', label: '📅 दिनदर्शिका (Calendar & Schedule)' },
+  { id: 'reports', label: '📊 अहवाल व विश्लेषण (Reports & Analytics)' },
+];
+
+const t = {
+  EN: {
+    title: 'User Management & Office Settings',
+    subtitle: 'Manage system users, role-based access permissions, department directory, and greeting calendars',
+    addUser: 'Add New User',
+    tabUsers: '⚙️ User Management',
+    tabDepartments: '🏢 Department Directory',
+    tabGreetings: '🎂 Greetings Calendar',
+    tabCategories: '🏷️ Petition Categories',
+    secUsers: '⚙️ System Users & Module Permissions',
+    colUser: 'User & Username',
+    colRole: 'Role',
+    colMobile: 'Mobile',
+    colModules: 'Accessible Modules',
+    colStatus: 'Status',
+    colActions: 'Actions',
+    active: '🟢 Active',
+    inactive: '🔴 Inactive',
+    editModules: '✏️ Modules',
+    resetPassword: '🔑 Password',
+    secDept: '🏢 Government Departments & Head Officers',
+    colDept: 'Department Name',
+    colHead: 'Head Officer Name',
+    colContact: 'Contact Mobile',
+    colEmail: 'Email',
+    secGreet: '🎂 Festival & Birthday Greeting Presets',
+    colOccasion: 'Occasion / Event',
+    colDate: 'Scheduled Date',
+    colTemplate: 'Message Template (WhatsApp)',
+    secCat: '🏷️ Petition Classification & Priority System',
+    colCatName: 'Category Name',
+    colSla: 'Default SLA (Days)',
+    colDeptAssigned: 'Assigned Dept',
+    loading: 'Loading settings data...',
+  },
+  MR: {
+    title: 'वापरकर्ता व्यवस्थापन व सेटिंग्ज (Settings)',
+    subtitle: 'प्रणाली वापरकर्ते, रोल-बेस्ड ॲक्सेस परवानग्या, विभाग मार्गदर्शिका व व्हॉट्सॲप कॅलेंडर',
+    addUser: 'नवीन वापरकर्ता जोडा (Add User)',
+    tabUsers: '⚙️ वापरकर्ता व्यवस्थापन (Users)',
+    tabDepartments: '🏢 विभाग मार्गदर्शिका (Departments)',
+    tabGreetings: '🎂 सण व वाढदिवस कॅलेंडर (Greetings)',
+    tabCategories: '🏷️ तक्रार वर्गवारी (Categories)',
+    secUsers: '⚙️ प्रणाली वापरकर्ते व मॉड्युल्स ॲक्सेस (User Administration)',
+    colUser: 'वापरकर्त्याचे नाव व युझरनेम (User)',
+    colRole: 'रोल (Role)',
+    colMobile: 'मोबाईल (Mobile)',
+    colModules: 'ॲक्सेस असलेले मॉड्युल्स (Accessible Modules)',
+    colStatus: 'स्टेटस (Status)',
+    colActions: 'कृती (Actions)',
+    active: '🟢 सक्रिय (Active)',
+    inactive: '🔴 निष्क्रिय (Inactive)',
+    editModules: '✏️ मॉड्युल्स',
+    resetPassword: '🔑 पासवर्ड',
+    secDept: '🏢 शासन विभाग अधिकारी मार्गदर्शिका (Department Directory)',
+    colDept: 'विभाग नाव (Department)',
+    colHead: 'प्रमुख अधिकारी नाव व पद (Head Officer)',
+    colContact: 'संपर्क क्रमांक (Contact Mobile)',
+    colEmail: 'ईमेल (Email)',
+    secGreet: '🎂 सण व दिनविशेष शुभेच्छा संदेश कॅलेंडर',
+    colOccasion: 'प्रसंग / सण',
+    colDate: 'दिनांक',
+    colTemplate: 'शुभेच्छा संदेश (WhatsApp Template)',
+    secCat: '🏷️ तक्रार/निवेदन वर्गवारी रचना',
+    colCatName: 'वर्गवारी नाव',
+    colSla: 'SLA कालावधी (दिवस)',
+    colDeptAssigned: 'संबंधित विभाग',
+    loading: 'माहिती लोड होत आहे...',
+  },
+};
 
 const UserManagementPage = () => {
   const { user: currentUser } = useAuthStore();
   const isAdmin = currentUser?.role === 'ADMIN';
+  const { lang } = useLangStore();
+  const text = t[lang] || t.EN;
 
   const [activeTab, setActiveTab] = useState(isAdmin ? 'USERS' : 'DEPARTMENTS');
   const [users, setUsers] = useState([]);
@@ -145,16 +230,14 @@ const UserManagementPage = () => {
       {/* ── Page Header ─────────────────────────────────────── */}
       <div className="inward-page-header">
         <div className="title-group">
-          <h1 className="page-title-mr">⚙️ वापरकर्ता व्यवस्थापन व सेटिंग्ज (Settings)</h1>
-          <p className="page-subtitle">
-            प्रणाली वापरकर्ते, रोल-बेस्ड ॲक्सेस परवानग्या, विभाग मार्गदर्शिका व व्हॉट्सॲप कॅलेंडर
-          </p>
+          <h1 className="page-title-mr">⚙️ {text.title}</h1>
+          <p className="page-subtitle">{text.subtitle}</p>
         </div>
 
         {isAdmin && activeTab === 'USERS' && (
           <button className="create-inward-btn" onClick={() => setShowAddUserModal(true)}>
             <span>➕</span>
-            <span>नवीन वापरकर्ता जोडा (Add User)</span>
+            <span>{text.addUser}</span>
           </button>
         )}
       </div>
@@ -166,26 +249,26 @@ const UserManagementPage = () => {
             className={`status-tab-btn ${activeTab === 'USERS' ? 'active' : ''}`}
             onClick={() => setActiveTab('USERS')}
           >
-            ⚙️ वापरकर्ता व्यवस्थापन (Users)
+            {text.tabUsers}
           </button>
         )}
         <button
           className={`status-tab-btn ${activeTab === 'DEPARTMENTS' ? 'active' : ''}`}
           onClick={() => setActiveTab('DEPARTMENTS')}
         >
-          🏢 विभाग मार्गदर्शिका (Departments)
+          {text.tabDepartments}
         </button>
         <button
           className={`status-tab-btn ${activeTab === 'GREETINGS' ? 'active' : ''}`}
           onClick={() => setActiveTab('GREETINGS')}
         >
-          🎂 सण व वाढदिवस कॅलेंडर (Greetings)
+          {text.tabGreetings}
         </button>
         <button
           className={`status-tab-btn ${activeTab === 'CATEGORIES' ? 'active' : ''}`}
           onClick={() => setActiveTab('CATEGORIES')}
         >
-          🏷️ तक्रार वर्गवारी (Categories)
+          {text.tabCategories}
         </button>
       </div>
 
@@ -194,25 +277,25 @@ const UserManagementPage = () => {
         {loading ? (
           <div className="table-loading-box">
             <div className="mini-spinner"></div>
-            <p>माहिती लोड होत आहे...</p>
+            <p>{text.loading}</p>
           </div>
         ) : (
           <>
             {/* 1. User Management (Admin Only) */}
             {activeTab === 'USERS' && isAdmin && (
               <div>
-                <h3 className="settings-section-title">⚙️ प्रणाली वापरकर्ते व मॉड्युल्स ॲक्सेस (User Administration)</h3>
+                <h3 className="settings-section-title">{text.secUsers}</h3>
 
                 <div className="table-responsive">
                   <table className="inward-table">
                     <thead>
                       <tr>
-                        <th>वापरकर्त्याचे नाव व युझरनेम (User)</th>
-                        <th>रोल (Role)</th>
-                        <th>मोबाईल (Mobile)</th>
-                        <th>ॲक्सेस असलेले मॉड्युल्स (Accessible Modules)</th>
-                        <th>स्टेटस (Status)</th>
-                        <th style={{ textAlign: 'right' }}>कृती (Actions)</th>
+                        <th>{text.colUser}</th>
+                        <th>{text.colRole}</th>
+                        <th>{text.colMobile}</th>
+                        <th>{text.colModules}</th>
+                        <th>{text.colStatus}</th>
+                        <th style={{ textAlign: 'right' }}>{text.colActions}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -238,7 +321,7 @@ const UserManagementPage = () => {
                               className={`user-active-toggle-btn ${u.is_active ? 'active' : 'inactive'}`}
                               onClick={() => handleToggleActive(u.id)}
                             >
-                              {u.is_active ? '🟢 सक्रिय (Active)' : '🔴 निष्क्रिय (Inactive)'}
+                              {u.is_active ? text.active : text.inactive}
                             </button>
                           </td>
                           <td style={{ textAlign: 'right' }}>
@@ -248,14 +331,14 @@ const UserManagementPage = () => {
                                 style={{ fontSize: '0.75rem', padding: '0.3rem 0.6rem' }}
                                 onClick={() => openModuleEditor(u)}
                               >
-                                ✏️ मॉड्युल्स
+                                {text.editModules}
                               </button>
                               <button
                                 className="btn-secondary"
                                 style={{ fontSize: '0.75rem', padding: '0.3rem 0.6rem', color: '#f87171' }}
                                 onClick={() => handleResetPassword(u.id)}
                               >
-                                🔑 पासवर्ड
+                                {text.resetPassword}
                               </button>
                             </div>
                           </td>
@@ -270,21 +353,21 @@ const UserManagementPage = () => {
             {/* 2. Department Directory */}
             {activeTab === 'DEPARTMENTS' && (
               <div>
-                <h3 className="settings-section-title">🏢 शासन विभाग अधिकारी मार्गदर्शिका (Department Directory)</h3>
+                <h3 className="settings-section-title">{text.secDept}</h3>
                 <div className="table-responsive">
                   <table className="inward-table">
                     <thead>
                       <tr>
-                        <th>विभाग नाव (Department)</th>
-                        <th>प्रमुख अधिकारी नाव व पद (Head Officer)</th>
-                        <th>संपर्क क्रमांक (Contact Mobile)</th>
-                        <th>ईमेल (Email)</th>
+                        <th>{text.colDept}</th>
+                        <th>{text.colHead}</th>
+                        <th>{text.colContact}</th>
+                        <th>{text.colEmail}</th>
                       </tr>
                     </thead>
                     <tbody>
                       {departments.map((d) => (
                         <tr key={d.id}>
-                          <td className="sender-name-primary">🏢 {d.name_mr}</td>
+                          <td className="sender-name-primary">🏢 {lang === 'MR' ? d.name_mr : d.name_en || d.name_mr}</td>
                           <td>{d.head_officer_name || '—'}</td>
                           <td>📱 {d.contact_number || '—'}</td>
                           <td>✉️ {d.email || '—'}</td>
@@ -299,15 +382,15 @@ const UserManagementPage = () => {
             {/* 3. WhatsApp Greeting Calendar */}
             {activeTab === 'GREETINGS' && (
               <div>
-                <h3 className="settings-section-title">🎂 सण व दिनविशेष व्हॉट्सॲप कॅलेंडर (Greeting Calendar)</h3>
+                <h3 className="settings-section-title">{text.secGreet}</h3>
                 <div className="table-responsive">
                   <table className="inward-table">
                     <thead>
                       <tr>
-                        <th>सण / दिनविशेष (Festival Event)</th>
-                        <th>तारीख (Event Date)</th>
-                        <th>टेम्प्लेट कोड (WABA Template)</th>
-                        <th>स्टेटस (Status)</th>
+                        <th>{text.colOccasion}</th>
+                        <th>{text.colDate}</th>
+                        <th>{text.colTemplate}</th>
+                        <th>{text.colStatus}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -316,7 +399,7 @@ const UserManagementPage = () => {
                           <td className="sender-name-primary">🎉 {g.event_name}</td>
                           <td>📅 {g.event_date}</td>
                           <td style={{ fontFamily: 'monospace', color: '#38bdf8' }}>{g.template_name}</td>
-                          <td><span className="user-active-toggle-btn active">🟢 सक्रिय</span></td>
+                          <td><span className="user-active-toggle-btn active">{text.active}</span></td>
                         </tr>
                       ))}
                     </tbody>
@@ -328,14 +411,14 @@ const UserManagementPage = () => {
             {/* 4. Nivedan Categories */}
             {activeTab === 'CATEGORIES' && (
               <div>
-                <h3 className="settings-section-title">🏷️ तक्रार निवारण वर्गवारी सूची (Nivedan Categories)</h3>
+                <h3 className="settings-section-title">{text.secCat}</h3>
                 <div className="table-responsive">
                   <table className="inward-table">
                     <thead>
                       <tr>
-                        <th>वर्गवारी नाव (Marathi Name)</th>
-                        <th>English Name</th>
-                        <th>डिफॉल्ट विभाग (Default Dept ID)</th>
+                        <th>{text.colCatName} (Marathi)</th>
+                        <th>{text.colCatName} (English)</th>
+                        <th>{text.colDeptAssigned}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -343,7 +426,7 @@ const UserManagementPage = () => {
                         <tr key={c.id}>
                           <td className="sender-name-primary">🏷️ {c.name_mr}</td>
                           <td>{c.name_en}</td>
-                          <td>विभाग #{c.default_department_id || 1}</td>
+                          <td>{lang === 'MR' ? `विभाग #${c.default_department_id || 1}` : `Department #${c.default_department_id || 1}`}</td>
                         </tr>
                       ))}
                     </tbody>

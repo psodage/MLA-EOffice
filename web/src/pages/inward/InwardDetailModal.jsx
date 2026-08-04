@@ -5,6 +5,7 @@
 // ============================================================
 
 import { useState } from 'react';
+import { X, Calendar, User, FileText, Tag, Paperclip, ExternalLink, Users, Zap, Check } from 'lucide-react';
 import InwardStatusBadge from '../../components/inward/InwardStatusBadge.jsx';
 import PriorityBadge from '../../components/inward/PriorityBadge.jsx';
 import api from '../../services/api.js';
@@ -53,7 +54,7 @@ const InwardDetailModal = ({ isOpen, onClose, entry, onUpdateSuccess }) => {
             <span className="detail-ref-badge">{entry.inward_number}</span>
             <h3>आवक पत्र तपशील (Inward Details)</h3>
           </div>
-          <button className="modal-close-btn" onClick={onClose}>✕</button>
+          <button className="modal-close-btn" onClick={onClose}><X size={18} /></button>
         </div>
 
         <div className="detail-modal-body">
@@ -61,7 +62,9 @@ const InwardDetailModal = ({ isOpen, onClose, entry, onUpdateSuccess }) => {
           <div className="detail-summary-bar">
             <div className="summary-item">
               <span className="item-label">प्राप्त दिनांक (Received Date)</span>
-              <span className="item-value">📅 {entry.date_received}</span>
+              <span className="item-value" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                <Calendar size={14} /> {entry.date_received}
+              </span>
             </div>
             <div className="summary-item">
               <span className="item-label">प्राधान्यक्रम (Priority)</span>
@@ -75,7 +78,9 @@ const InwardDetailModal = ({ isOpen, onClose, entry, onUpdateSuccess }) => {
 
           {/* Main Info Blocks */}
           <div className="detail-section">
-            <h4 className="section-title">👤 पाठवणाऱ्याची माहिती (Sender Details)</h4>
+            <h4 className="section-title" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <User size={16} /> पाठवणाऱ्याची माहिती (Sender Details)
+            </h4>
             <div className="info-grid">
               <div><strong>नाव (Sender):</strong> {entry.sender_name}</div>
               <div><strong>पदनाम (Designation):</strong> {entry.sender_designation || '—'}</div>
@@ -84,7 +89,9 @@ const InwardDetailModal = ({ isOpen, onClose, entry, onUpdateSuccess }) => {
           </div>
 
           <div className="detail-section">
-            <h4 className="section-title">📝 विषय व तपशील (Subject & Description)</h4>
+            <h4 className="section-title" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <FileText size={16} /> विषय व तपशील (Subject & Description)
+            </h4>
             <div className="subject-box">
               <strong>विषय:</strong> {entry.subject}
             </div>
@@ -98,7 +105,9 @@ const InwardDetailModal = ({ isOpen, onClose, entry, onUpdateSuccess }) => {
           {/* Tags */}
           {Array.isArray(entry.tags) && entry.tags.length > 0 && (
             <div className="detail-section">
-              <h4 className="section-title">🏷️ टॅग्स (Tags)</h4>
+              <h4 className="section-title" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <Tag size={16} /> टॅग्स (Tags)
+              </h4>
               <div className="tags-container">
                 {entry.tags.map((t, idx) => (
                   <span key={idx} className="tag-pill">#{t}</span>
@@ -109,12 +118,14 @@ const InwardDetailModal = ({ isOpen, onClose, entry, onUpdateSuccess }) => {
 
           {/* Attachments */}
           <div className="detail-section">
-            <h4 className="section-title">📎 जोडपत्रे / फाईल्स (Attachments)</h4>
+            <h4 className="section-title" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <Paperclip size={16} /> जोडपत्रे / फाईल्स (Attachments)
+            </h4>
             {Array.isArray(entry.attachment_urls) && entry.attachment_urls.length > 0 ? (
               <div className="attachments-list">
                 {entry.attachment_urls.map((url, idx) => (
-                  <a key={idx} href={url} target="_blank" rel="noopener noreferrer" className="attachment-link">
-                    📄 जोडपत्र फाईल {idx + 1} (PDF / Document) ↗
+                  <a key={idx} href={url} target="_blank" rel="noopener noreferrer" className="attachment-link" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                    <FileText size={14} /> जोडपत्र फाईल {idx + 1} (PDF / Document) <ExternalLink size={14} />
                   </a>
                 ))}
               </div>
@@ -125,12 +136,14 @@ const InwardDetailModal = ({ isOpen, onClose, entry, onUpdateSuccess }) => {
 
           {/* Assign Control */}
           <div className="detail-section assign-control-box">
-            <h4 className="section-title">👥 जबाबदारी नियुक्ती (Assign Staff / PA)</h4>
+            <h4 className="section-title" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <Users size={16} /> जबाबदारी नियुक्ती (Assign Staff / PA)
+            </h4>
             <div className="assign-row">
               <select value={assignedUser} onChange={handleAssignChange} disabled={updating}>
                 <option value="">-- अनियुक्त (Unassigned) --</option>
-                <option value="2">👨‍💼 सुरेश पाटील (PA / Senior Office Manager)</option>
-                <option value="4">🕵️‍♂️ राहुल जाधव (Field Auditor)</option>
+                <option value="2">सुरेश पाटील (PA / Senior Office Manager)</option>
+                <option value="4">राहुल जाधव (Field Auditor)</option>
               </select>
               <span className="assign-status-text">
                 {entry.assignedTo ? `नियुक्त: ${entry.assignedTo.full_name}` : 'सध्या कोणाकडेही नियुक्त नाही'}
@@ -140,7 +153,9 @@ const InwardDetailModal = ({ isOpen, onClose, entry, onUpdateSuccess }) => {
 
           {/* Status Quick Transitions */}
           <div className="detail-section status-actions-box">
-            <h4 className="section-title">⚡ कार्यस्थिती अपडेट करा (Quick Status Update)</h4>
+            <h4 className="section-title" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <Zap size={16} /> कार्यस्थिती अपडेट करा (Quick Status Update)
+            </h4>
             <div className="status-buttons-group">
               <button
                 className="status-btn btn-assign"
@@ -162,16 +177,18 @@ const InwardDetailModal = ({ isOpen, onClose, entry, onUpdateSuccess }) => {
                 className="status-btn btn-complete"
                 onClick={() => handleStatusChange('COMPLETED')}
                 disabled={updating || entry.status === 'COMPLETED'}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}
               >
-                ✓ पूर्ण (COMPLETED)
+                <Check size={14} /> पूर्ण (COMPLETED)
               </button>
 
               <button
                 className="status-btn btn-cancel"
                 onClick={() => handleStatusChange('CANCELLED')}
                 disabled={updating || entry.status === 'CANCELLED'}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}
               >
-                ✕ रद्द (CANCEL)
+                <X size={14} /> रद्द (CANCEL)
               </button>
             </div>
           </div>

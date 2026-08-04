@@ -83,3 +83,10 @@
   accent-color: #ff9933;
   cursor: pointer;
 }
+
+@media (max-width: 639px) {
+  .modules-checkbox-grid {
+    grid-template-columns: 1fr;
+  }
+}
+

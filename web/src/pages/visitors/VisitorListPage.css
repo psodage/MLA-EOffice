@@ -922,3 +922,33 @@ select.fi {
     min-width: 800px;
   }
 }
+
+@media (max-width: 639px) {
+  .visitor-page-container {
+    padding: 12px 8px;
+  }
+  .visitor-summary-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .modal-content-card {
+    max-width: 95vw;
+    margin: 8px;
+  }
+  .pass-grid {
+    grid-template-columns: 1fr;
+  }
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .page-header-actions {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+  .btn-checkin {
+    width: 100%;
+    justify-content: center;
+  }
+}
+

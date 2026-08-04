@@ -5,13 +5,28 @@
 
 .public-tracking-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #0a1020 0%, #0f172a 100%);
+  background: var(--bg-page, linear-gradient(135deg, #0a1020 0%, #0f172a 100%));
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 3rem 1.5rem;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 1.5rem 3rem;
   font-family: 'Noto Sans Devanagari', 'Inter', sans-serif;
-  color: #f8fafc;
+  color: var(--text-1, #f8fafc);
+  position: relative;
+}
+
+[data-theme="light"] .public-tracking-container {
+  background: linear-gradient(135deg, #eef2f6 0%, #f8fafc 100%);
+  color: #0f172a;
+}
+
+.public-header-toggles {
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-bottom: 1.5rem;
 }
 
 .public-tracking-card {
@@ -23,6 +38,12 @@
   padding: 2.5rem;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(12px);
+}
+
+[data-theme="light"] .public-tracking-card {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(255, 153, 51, 0.4);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
 }
 
 .portal-header {
@@ -116,6 +137,43 @@
   margin-bottom: 1.25rem;
   padding-bottom: 0.5rem;
   border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+}
+
+[data-theme="light"] .search-input-wrapper {
+  background: #ffffff;
+  border-color: #cbd5e1;
+}
+
+[data-theme="light"] .input-prefix {
+  background: #f1f5f9;
+  color: #475569;
+  border-right-color: #cbd5e1;
+}
+
+[data-theme="light"] .search-input-wrapper input {
+  color: #0f172a;
+}
+
+[data-theme="light"] .citizen-petition-card {
+  background: rgba(241, 245, 249, 0.8);
+  border-color: rgba(255, 153, 51, 0.3);
+}
+
+[data-theme="light"] .citizen-subject {
+  color: #0f172a;
+}
+
+[data-theme="light"] .citizen-desc {
+  color: #334155;
+}
+
+[data-theme="light"] .citizen-meta-grid {
+  background: rgba(226, 232, 240, 0.7);
+  color: #475569;
+}
+
+[data-theme="light"] .t-note {
+  color: #1e293b;
 }
 
 .petitions-cards-list {
@@ -226,3 +284,20 @@
   border-top: 1px solid #334155;
   padding-top: 1rem;
 }
+
+@media (max-width: 639px) {
+  .public-tracking-card {
+    padding: 1.25rem 1rem;
+  }
+  .search-input-wrapper {
+    flex-direction: column;
+  }
+  .input-prefix {
+    border-right: none;
+    border-bottom: 1px solid #334155;
+  }
+  .citizen-meta-grid {
+    grid-template-columns: 1fr;
+  }
+}
+

@@ -8,19 +8,20 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate, useLocation, Link } from 'react-router-dom';
+import { ArrowLeft, MapPin, Edit, Camera, BarChart2, Save, FileText, Check, ArrowRight, Circle, Plus } from 'lucide-react';
 import api from '../../services/api.js';
 import useLangStore from '../../store/langStore.js';
 import './DevWorksListPage.css';
 
 const CATEGORY_MAP = {
-  ROAD: { en: '🛣️ Road', mr: '🛣️ रस्ते / पूल', bg: 'var(--inb, #eff6ff)', color: 'var(--in, #2563eb)' },
-  WATER_PIPELINE: { en: '💧 Water', mr: '💧 पाणीपुरवठा', bg: 'var(--okb, #f0fdf4)', color: 'var(--ok, #16a34a)' },
-  HOSPITAL: { en: '🏥 Hospital', mr: '🏥 रुग्णालय', bg: 'var(--erb, #fef2f2)', color: 'var(--er, #dc2626)' },
-  SCHOOL: { en: '🏫 School', mr: '🏫 शाळा / शिक्षण', bg: 'var(--erb, #fef2f2)', color: 'var(--er, #dc2626)' },
-  STREET_LIGHT: { en: '⚡ Street Light', mr: '⚡ रस्त्यावरील दिवे', bg: 'var(--pub, #f5f3ff)', color: 'var(--pu, #7c3aed)' },
-  ELECTRIFICATION: { en: '⚡ Electrification', mr: '⚡ विद्युतीकरण', bg: 'var(--pub, #f5f3ff)', color: 'var(--pu, #7c3aed)' },
-  COMMUNITY_HALL: { en: '🏛️ Hall', mr: '🏛️ समाजमंदिर', bg: 'var(--wrb, #fffbeb)', color: 'var(--wr, #d97706)' },
-  OTHER: { en: '🏗️ Other', mr: '🏗️ इतर प्रकल्प', bg: 'var(--bg, #f5f7fa)', color: 'var(--t2, #475569)' },
+  ROAD: { en: 'Road', mr: 'रस्ते / पूल', bg: 'var(--inb, #eff6ff)', color: 'var(--in, #2563eb)' },
+  WATER_PIPELINE: { en: 'Water', mr: 'पाणीपुरवठा', bg: 'var(--okb, #f0fdf4)', color: 'var(--ok, #16a34a)' },
+  HOSPITAL: { en: 'Hospital', mr: 'रुग्णालय', bg: 'var(--erb, #fef2f2)', color: 'var(--er, #dc2626)' },
+  SCHOOL: { en: 'School', mr: 'शाळा / शिक्षण', bg: 'var(--erb, #fef2f2)', color: 'var(--er, #dc2626)' },
+  STREET_LIGHT: { en: 'Street Light', mr: 'रस्त्यावरील दिवे', bg: 'var(--pub, #f5f3ff)', color: 'var(--pu, #7c3aed)' },
+  ELECTRIFICATION: { en: 'Electrification', mr: 'विद्युतीकरण', bg: 'var(--pub, #f5f3ff)', color: 'var(--pu, #7c3aed)' },
+  COMMUNITY_HALL: { en: 'Hall', mr: 'समाजमंदिर', bg: 'var(--wrb, #fffbeb)', color: 'var(--wr, #d97706)' },
+  OTHER: { en: 'Other', mr: 'इतर प्रकल्प', bg: 'var(--bg, #f5f7fa)', color: 'var(--t2, #475569)' },
 };
 
 const STATUS_MAP = {
@@ -114,13 +115,8 @@ const DevWorkDetailPage = () => {
   }, [id, entry]);
 
   useEffect(() => {
-    if (entry) {
-      setProgressVal(entry.progress_percentage || 0);
-      setSpentVal(entry.budget_spent || 0);
-      setStatusVal(entry.status || 'SANCTIONED');
-    }
     fetchProjectDetails();
-  }, [id]);
+  }, [id, fetchProjectDetails]);
 
   if (loading) {
     return (
@@ -133,10 +129,10 @@ const DevWorkDetailPage = () => {
   if (!entry) {
     return (
       <div className="devworks-page-container" style={{ padding: '60px', textAlign: 'center' }}>
-        <h2>{isMr ? 'प्रकल्प सापडला नाही' : 'Project Not Found'}</h2>
-        <Link to="/devworks" className="btn-p" style={{ marginTop: '16px', display: 'inline-flex' }}>
-          ← {isMr ? 'विकासकामे यादीवर परत जा' : 'Back to Development Works List'}
-        </Link>
+        <h3>{isMr ? 'प्रकल्प सापडला नाही.' : 'Project not found.'}</h3>
+        <button className="btn-p" onClick={() => navigate('/devworks')} style={{ marginTop: '16px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+          <ArrowLeft size={16} /> {isMr ? 'मागे जा' : 'Back to list'}
+        </button>
       </div>
     );
   }
@@ -148,12 +144,7 @@ const DevWorkDetailPage = () => {
   const catConfig = CATEGORY_MAP[entry.category] || CATEGORY_MAP.OTHER;
   const statusConfig = STATUS_MAP[statusVal] || STATUS_MAP.SANCTIONED;
 
-  const photosList = Array.isArray(entry.photos) && entry.photos.length > 0
-    ? entry.photos
-    : [
-        { id: 101, photo_url: 'https://images.unsplash.com/photo-1541888946425-d0fbb186a5b7?w=800', photo_stage: 'BEFORE', caption: 'कामापूर्वीची परिस्थिती', created_at: '2026-03-01' },
-        { id: 102, photo_url: 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=800', photo_stage: 'DURING', caption: 'काम सुरू असताना', created_at: '2026-07-15' },
-      ];
+  const photosList = Array.isArray(entry.photos) ? entry.photos : [];
 
   const filteredPhotos = activePhotoStage === 'ALL'
     ? photosList
@@ -201,29 +192,11 @@ const DevWorkDetailPage = () => {
 
   return (
     <div className="devworks-page-container">
-      {/* Top Header Row with Language Switcher */}
+      {/* Top Header Row */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-        <button className="btn-o" onClick={() => navigate('/devworks')}>
-          ← {isMr ? 'विकासकामे यादीवर परत जा' : 'Back to Development Works List'}
+        <button className="btn-o" onClick={() => navigate('/devworks')} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+          <ArrowLeft size={16} /> {isMr ? 'विकासकामे यादीवर परत जा' : 'Back to Development Works List'}
         </button>
-
-        <div className="segmented-switch">
-          <button
-            type="button"
-            className={lang === 'EN' ? 'active' : ''}
-            onClick={() => setLang('EN')}
-          >
-            EN
-          </button>
-          <button
-            type="button"
-            className={lang === 'MR' ? 'active' : ''}
-            onClick={() => setLang('MR')}
-            style={{ fontFamily: "'Noto Sans Devanagari', sans-serif" }}
-          >
-            मराठी
-          </button>
-        </div>
       </div>
 
       {/* ── Breadcrumb Navigation ────────────────────────────── */}
@@ -243,18 +216,20 @@ const DevWorkDetailPage = () => {
               {isMr ? catConfig.mr : catConfig.en}
             </span>
             <div className="dh-title">{entry.project_name}</div>
-            <div className="dh-loc">📍 {entry.location}</div>
+            <div className="dh-loc" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+              <MapPin size={14} /> {entry.location}
+            </div>
           </div>
 
           <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
             <span className={`badge ${statusConfig.badgeClass}`}>
-              🟡 {isMr ? statusConfig.mr : statusConfig.en}
+              {isMr ? statusConfig.mr : statusConfig.en}
             </span>
-            <button className="btn-o" onClick={() => setShowEditSection(!showEditSection)}>
-              ✏️ {isMr ? 'संपादित करा' : 'Edit'}
+            <button className="btn-o" onClick={() => setShowEditSection(!showEditSection)} style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+              <Edit size={14} /> {isMr ? 'संपादित करा' : 'Edit'}
             </button>
-            <button className="btn-p" onClick={() => setShowPhotoForm(!showPhotoForm)}>
-              📷 {isMr ? 'फोटो जोडा' : 'Add Photo'}
+            <button className="btn-p" onClick={() => setShowPhotoForm(!showPhotoForm)} style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+              <Camera size={14} /> {isMr ? 'फोटो जोडा' : 'Add Photo'}
             </button>
           </div>
         </div>
@@ -285,19 +260,19 @@ const DevWorkDetailPage = () => {
         {/* Meta Grid */}
         <div className="meta-grid">
           <div className="meta-item">
-            <span className="meta-label">{isMr ? 'अर्थसंकल्प · अंदाजपत्रक' : 'Budget'}</span>
+            <span className="meta-label">{isMr ? 'अर्थसंकल्प' : 'Budget'}</span>
             <span className="meta-value" style={{ fontFamily: 'JetBrains Mono', color: 'var(--p, #1b3a5c)', fontSize: '18px', fontWeight: 700 }}>
               {formatCurrency(allocated)}
             </span>
           </div>
           <div className="meta-item">
-            <span className="meta-label">{isMr ? 'खर्च ·Spent' : 'Spent'}</span>
+            <span className="meta-label">{isMr ? 'खर्च' : 'Spent'}</span>
             <span className="meta-value" style={{ fontFamily: 'JetBrains Mono' }}>
               {formatCurrency(spent)} ({spentPct}%)
             </span>
           </div>
           <div className="meta-item">
-            <span className="meta-label">{isMr ? 'निधीचा स्रोत · निधी' : 'Funding Source'}</span>
+            <span className="meta-label">{isMr ? 'निधीचा स्रोत' : 'Funding Source'}</span>
             <span className="meta-value">{entry.funding_source || 'State PWD'}</span>
           </div>
           <div className="meta-item">
@@ -322,8 +297,8 @@ const DevWorkDetailPage = () => {
       {/* Quick Edit Progress Section */}
       {showEditSection && (
         <div className="card" style={{ padding: '16px', marginBottom: '16px', border: '1px solid var(--p, #1b3a5c)' }}>
-          <h4 style={{ fontSize: '14px', fontWeight: 600, marginBottom: '12px', color: 'var(--p, #1b3a5c)' }}>
-            📊 {isMr ? 'प्रगती टक्केवारी व खर्च अपडेट करा' : 'Update Project Progress & Spent Budget'}
+          <h4 style={{ fontSize: '14px', fontWeight: 600, marginBottom: '12px', color: 'var(--p, #1b3a5c)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <BarChart2 size={16} /> {isMr ? 'प्रगती टक्केवारी व खर्च अपडेट करा' : 'Update Project Progress & Spent Budget'}
           </h4>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr auto', gap: '12px', alignItems: 'flex-end' }}>
             <div>
@@ -361,8 +336,8 @@ const DevWorkDetailPage = () => {
                 <option value="DELAYED">Delayed (विलंबित)</option>
               </select>
             </div>
-            <button className="btn-p" onClick={handleSaveProgress} disabled={updating}>
-              {updating ? (isMr ? 'जतन होत आहे...' : 'Saving...') : `💾 ${isMr ? 'जतन करा' : 'Save'}`}
+            <button className="btn-p" onClick={handleSaveProgress} disabled={updating} style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+              <Save size={14} /> {updating ? (isMr ? 'जतन होत आहे...' : 'Saving...') : (isMr ? 'जतन करा' : 'Save')}
             </button>
           </div>
         </div>
@@ -371,8 +346,8 @@ const DevWorkDetailPage = () => {
       {/* Photo Upload Form Drawer */}
       {showPhotoForm && (
         <form onSubmit={handleUploadPhoto} className="card" style={{ padding: '16px', marginBottom: '16px', border: '1px solid var(--p, #1b3a5c)' }}>
-          <h4 style={{ fontSize: '14px', fontWeight: 600, marginBottom: '12px' }}>
-            📷 {isMr ? 'नवीन जिओटॅग फोटो अपलोड करा' : 'Upload Geotagged Progress Photo'}
+          <h4 style={{ fontSize: '14px', fontWeight: 600, marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <Camera size={16} /> {isMr ? 'नवीन जिओटॅग फोटो अपलोड करा' : 'Upload Geotagged Progress Photo'}
           </h4>
           <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '10px', marginBottom: '10px' }}>
             <input
@@ -380,13 +355,13 @@ const DevWorkDetailPage = () => {
               className="filter-fi"
               value={photoUrl}
               onChange={(e) => setPhotoUrl(e.target.value)}
-              placeholder={isMr ? 'इमेज फाईल URL (Cloudinary / Direct image link)...' : 'Image file URL...'}
+              placeholder={isMr ? 'इमेज फाईल URL...' : 'Image file URL...'}
               required
             />
             <select className="filter-fi" value={photoStage} onChange={(e) => setPhotoStage(e.target.value)}>
-              <option value="BEFORE">🟢 कामापूर्वी (BEFORE)</option>
-              <option value="DURING">🟡 काम सुरू असताना (DURING)</option>
-              <option value="AFTER">🔵 काम पूर्ण झाल्यावर (AFTER)</option>
+              <option value="BEFORE">कामापूर्वी (BEFORE)</option>
+              <option value="DURING">काम सुरू असताना (DURING)</option>
+              <option value="AFTER">काम पूर्ण झाल्यावर (AFTER)</option>
             </select>
           </div>
           <div style={{ display: 'flex', gap: '10px' }}>
@@ -396,10 +371,10 @@ const DevWorkDetailPage = () => {
               style={{ flex: 1 }}
               value={photoCaption}
               onChange={(e) => setPhotoCaption(e.target.value)}
-              placeholder={isMr ? 'फोटोचे वर्णन / कॅप्शन...' : 'Photo description / caption...'}
+              placeholder={isMr ? 'फोटोचे वर्णन...' : 'Photo description...'}
             />
-            <button type="submit" className="btn-p" disabled={uploadingPhoto}>
-              {uploadingPhoto ? '...' : `💾 ${isMr ? 'अपलोड' : 'Upload'}`}
+            <button type="submit" className="btn-p" disabled={uploadingPhoto} style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+              <Save size={14} /> {uploadingPhoto ? '...' : (isMr ? 'अपलोड' : 'Upload')}
             </button>
           </div>
         </form>
@@ -409,8 +384,8 @@ const DevWorkDetailPage = () => {
       <div className="content-grid">
         {/* Photo Gallery */}
         <div className="card">
-          <div className="card-header">
-            📷 {isMr ? 'प्रगती फोटो · Progress Photos' : 'Progress Photos'}
+          <div className="card-header" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <Camera size={16} /> {isMr ? 'प्रगती फोटो' : 'Progress Photos'}
             <span style={{ color: 'var(--t4)', fontWeight: 400, marginLeft: 'auto', fontSize: '12px' }}>
               {filteredPhotos.length} {isMr ? 'फोटो' : 'photos'}
             </span>
@@ -446,7 +421,7 @@ const DevWorkDetailPage = () => {
                 </div>
               ))}
               <div className="photo photo-add" onClick={() => setShowPhotoForm(true)} title="Add Photo">
-                +
+                <Plus size={20} />
               </div>
             </div>
           </div>
@@ -454,8 +429,8 @@ const DevWorkDetailPage = () => {
 
         {/* Milestones Timeline */}
         <div className="card">
-          <div className="card-header">
-            📋 {isMr ? 'प्रकल्पाचे टप्पे · Milestones' : 'Milestones'}
+          <div className="card-header" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <FileText size={16} /> {isMr ? 'प्रकल्पाचे टप्पे · Milestones' : 'Milestones'}
           </div>
           <div className="card-body" style={{ padding: '12px 20px' }}>
             {DEFAULT_MILESTONES.map((m) => {
@@ -470,7 +445,7 @@ const DevWorkDetailPage = () => {
                       color: isDone ? 'var(--ok, #16a34a)' : isOngoing ? 'var(--wr, #d97706)' : 'var(--t4, #94a3b8)',
                     }}
                   >
-                    {isDone ? '✓' : isOngoing ? '→' : '○'}
+                    {isDone ? <Check size={12} /> : isOngoing ? <ArrowRight size={12} /> : <Circle size={10} />}
                   </div>
                   <div className="ml-content">
                     <div className="ml-title">{m.title}</div>

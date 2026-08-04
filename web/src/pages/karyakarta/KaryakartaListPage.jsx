@@ -218,25 +218,6 @@ const KaryakartaListPage = () => {
         </div>
 
         <div className="karyakarta-actions">
-          {/* Segmented Language Toggle */}
-          <div className="segmented-switch">
-            <button
-              type="button"
-              className={lang === 'EN' ? 'active' : ''}
-              onClick={() => setLang('EN')}
-            >
-              EN
-            </button>
-            <button
-              type="button"
-              className={lang === 'MR' ? 'active' : ''}
-              onClick={() => setLang('MR')}
-              style={{ fontFamily: "'Noto Sans Devanagari', sans-serif" }}
-            >
-              मराठी
-            </button>
-          </div>
-
           <button className="btn-o" onClick={() => alert(isMr ? 'कार्यकर्ता यादी एक्सपोर्ट होत आहे...' : 'Exporting directory...')}>
             📥 {isMr ? 'एक्सपोर्ट' : 'Export'}
           </button>

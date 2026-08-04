@@ -5,12 +5,92 @@
 // ============================================================
 
 import { useState, useEffect, useCallback } from 'react';
+import { Send, Plus, Sparkles, Edit, CheckCircle2, Clock, FileText, Link as LinkIcon, RotateCcw, ChevronLeft, ChevronRight } from 'lucide-react';
+import useLangStore from '../../store/langStore.js';
 import api from '../../services/api.js';
 import OutwardFormModal from './OutwardFormModal.jsx';
 import OutwardDetailModal from './OutwardDetailModal.jsx';
 import './OutwardListPage.css';
 
+const t = {
+  EN: {
+    title: 'Outward Register',
+    subtitle: 'Manage outgoing letters, AI drafting, and approval workflows sent to government departments',
+    newOutward: 'New Outward Letter',
+    searchLabel: 'Search',
+    searchPlaceholder: 'Search recipient, subject, or outward number...',
+    approvalLabel: 'Approval Status',
+    allStatus: 'All Status',
+    approved: 'Approved Letters',
+    draft: 'Draft / Pending',
+    draftTypeLabel: 'Draft Type',
+    allDrafts: 'All Types',
+    aiDraftOnly: 'Gemini AI Drafts',
+    departmentLabel: 'Department',
+    allDepts: 'All Departments',
+    reset: 'Reset',
+    colOutwardNo: 'Outward No.',
+    colDate: 'Date Sent',
+    colRecipient: 'Recipient & Dept',
+    colSubject: 'Subject',
+    colType: 'Draft Type',
+    colApproval: 'Approval',
+    colAction: 'Action',
+    aiBadge: 'Gemini AI',
+    manualBadge: 'Manual',
+    approvedBadge: 'Approved',
+    draftBadge: 'Draft',
+    viewLetter: 'View Letter',
+    refInward: 'Ref Inward:',
+    loading: 'Loading outward letters...',
+    emptyTitle: 'No Outward Letters Found',
+    emptyText: 'Try adjusting your search query or filter options.',
+    pageInfo: (totalItems, page, totalPages) => `Showing page ${page} of ${totalPages} (Total ${totalItems} records)`,
+    prev: 'Previous',
+    next: 'Next',
+  },
+  MR: {
+    title: 'जावक नोंदवही (Outward Register)',
+    subtitle: 'आमदार कार्यालयातून शासकीय विभागांना पाठवलेली पत्रे, AI मसुदा व मंजुरी प्रक्रिया',
+    newOutward: 'नवीन जावक पत्र नोंद (New Outward)',
+    searchLabel: 'शोध (Search)',
+    searchPlaceholder: 'मिळणारा अधिकारी, विषय किंवा जावक क्र. शोधा...',
+    approvalLabel: 'मंजुरी स्थिती (Approval)',
+    allStatus: 'सर्व पत्रे (All Status)',
+    approved: 'मंजूर पत्रे (Approved)',
+    draft: 'मसुदा (Draft / Pending)',
+    draftTypeLabel: 'मसुदा प्रकार (Draft Type)',
+    allDrafts: 'सर्व (All)',
+    aiDraftOnly: 'Gemini AI मसुदा',
+    departmentLabel: 'शासकीय विभाग (Department)',
+    allDepts: 'सर्व विभाग (All Depts)',
+    reset: 'रिसेट',
+    colOutwardNo: 'जावक क्र. (Outward No)',
+    colDate: 'निर्गमित दिनांक (Date)',
+    colRecipient: 'पत्र मिळणारा व विभाग (Recipient & Dept)',
+    colSubject: 'विषय (Subject)',
+    colType: 'AI मसुदा (Type)',
+    colApproval: 'मंजुरी (Approval)',
+    colAction: 'कृती (Action)',
+    aiBadge: 'Gemini AI',
+    manualBadge: 'मॅन्युअल',
+    approvedBadge: 'मंजूर (Approved)',
+    draftBadge: 'मसुदा (Draft)',
+    viewLetter: 'पत्र पहा (View)',
+    refInward: 'संदर्भ आवक:',
+    loading: 'जावक पत्रे लोड होत आहेत...',
+    emptyTitle: 'कोणतेही जावक पत्र सापडले नाही',
+    emptyText: 'कृपया शोध किंवा फिल्टर बदलून पुन्हा प्रयत्न करा.',
+    pageInfo: (totalItems, page, totalPages) => `एकूण ${totalItems} पैकी पान ${page} (Total Pages: ${totalPages})`,
+    prev: 'मागील (Prev)',
+    next: 'पुढील (Next)',
+  },
+};
+
 const OutwardListPage = () => {
+  const { lang } = useLangStore();
+  const text = t[lang] || t.EN;
+
   const [items, setItems] = useState([]);
   const [meta, setMeta] = useState({ page: 1, limit: 20, totalItems: 0, totalPages: 1 });
   const [departments, setDepartments] = useState([]);
@@ -19,11 +99,9 @@ const OutwardListPage = () => {
   // Filter state
   const [filters, setFilters] = useState({
     search: '',
-    departmentId: 'ALL',
     approved: 'ALL',
     isAiDrafted: 'ALL',
-    startDate: '',
-    endDate: '',
+    departmentId: 'ALL',
     page: 1,
   });
 
@@ -54,16 +132,13 @@ const OutwardListPage = () => {
         limit: 20,
       };
       if (filters.search) params.search = filters.search;
+      if (filters.approved !== 'ALL') params.approved = filters.approved;
+      if (filters.isAiDrafted !== 'ALL') params.isAiDrafted = filters.isAiDrafted;
       if (filters.departmentId !== 'ALL') params.departmentId = filters.departmentId;
-      if (filters.approved === 'APPROVED') params.approved = 'TRUE';
-      if (filters.approved === 'DRAFT') params.approved = 'FALSE';
-      if (filters.isAiDrafted === 'AI_ONLY') params.isAiDrafted = 'true';
-      if (filters.startDate) params.startDate = filters.startDate;
-      if (filters.endDate) params.endDate = filters.endDate;
 
       const { data } = await api.get('/outward', { params });
       setItems(data.data || []);
-      setMeta(data.meta || { page: 1, limit: 20, totalItems: 0, totalPages: 1 });
+      setMeta(data.meta || { page: 1, limit: 20, totalItems: data.data?.length || 0, totalPages: 1 });
     } catch (err) {
       console.error('Failed to fetch outward list:', err);
     } finally {
@@ -83,17 +158,15 @@ const OutwardListPage = () => {
   const handleResetFilters = () => {
     setFilters({
       search: '',
-      departmentId: 'ALL',
       approved: 'ALL',
       isAiDrafted: 'ALL',
-      startDate: '',
-      endDate: '',
+      departmentId: 'ALL',
       page: 1,
     });
   };
 
-  const openDetailModal = (entry) => {
-    setSelectedForDetail(entry);
+  const openDetailModal = (item) => {
+    setSelectedForDetail(item);
     setIsDetailOpen(true);
   };
 
@@ -102,63 +175,63 @@ const OutwardListPage = () => {
       {/* ── Page Header ─────────────────────────────────────── */}
       <div className="inward-page-header">
         <div className="title-group">
-          <h1 className="page-title-mr">📤 जावक नोंदवही (Outward Register)</h1>
-          <p className="page-subtitle">
-            आमदार कार्यालयातून शासकीय विभागांना पाठवलेली पत्रे, AI मसुदा व मंजुरी प्रक्रिया
-          </p>
+          <h1 className="page-title-mr" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+            <Send size={20} /> {text.title}
+          </h1>
+          <p className="page-subtitle">{text.subtitle}</p>
         </div>
 
-        <button className="create-inward-btn" onClick={() => setIsFormOpen(true)}>
-          <span>✨</span>
-          <span>नवीन जावक पत्र नोंद (New Outward)</span>
+        <button className="create-inward-btn" onClick={() => setIsFormOpen(true)} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+          <Plus size={16} />
+          <span>{text.newOutward}</span>
         </button>
       </div>
 
       {/* ── Filter Bar ──────────────────────────────────────── */}
       <div className="inward-filter-bar outward-filter-bar">
         <div className="filter-group search-group">
-          <label>शोध (Search)</label>
+          <label>{text.searchLabel}</label>
           <input
             type="text"
             name="search"
             value={filters.search}
             onChange={handleFilterChange}
-            placeholder="मिळणारा अधिकारी, विषय किंवा जावक क्र. शोधा..."
+            placeholder={text.searchPlaceholder}
           />
         </div>
 
         <div className="filter-group">
-          <label>मंजुरी स्थिती (Approval)</label>
+          <label>{text.approvalLabel}</label>
           <select name="approved" value={filters.approved} onChange={handleFilterChange}>
-            <option value="ALL">सर्व पत्रे (All Status)</option>
-            <option value="APPROVED">🟢 मंजूर पत्रे (Approved)</option>
-            <option value="DRAFT">🟡 मसुदा (Draft / Pending)</option>
+            <option value="ALL">{text.allStatus}</option>
+            <option value="APPROVED">{text.approved}</option>
+            <option value="DRAFT">{text.draft}</option>
           </select>
         </div>
 
         <div className="filter-group">
-          <label>मसुदा प्रकार (Draft Type)</label>
+          <label>{text.draftTypeLabel}</label>
           <select name="isAiDrafted" value={filters.isAiDrafted} onChange={handleFilterChange}>
-            <option value="ALL">सर्व (All)</option>
-            <option value="AI_ONLY">🤖 Gemini AI मसुदा</option>
+            <option value="ALL">{text.allDrafts}</option>
+            <option value="AI_ONLY">{text.aiDraftOnly}</option>
           </select>
         </div>
 
         <div className="filter-group">
-          <label>शासकीय विभाग (Department)</label>
+          <label>{text.departmentLabel}</label>
           <select name="departmentId" value={filters.departmentId} onChange={handleFilterChange}>
-            <option value="ALL">सर्व विभाग (All Depts)</option>
+            <option value="ALL">{text.allDepts}</option>
             {departments.map((d) => (
               <option key={d.id} value={d.id}>
-                {d.name_mr} ({d.short_code})
+                {lang === 'MR' ? d.name_mr : d.name_en || d.name_mr} ({d.short_code})
               </option>
             ))}
           </select>
         </div>
 
         <div className="filter-actions">
-          <button className="reset-filter-btn" onClick={handleResetFilters} title="फिल्टर रिसेट करा">
-            🔄 रिसेट
+          <button className="reset-filter-btn" onClick={handleResetFilters} title={text.reset} style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+            <RotateCcw size={14} /> {text.reset}
           </button>
         </div>
       </div>
@@ -168,26 +241,26 @@ const OutwardListPage = () => {
         {loading ? (
           <div className="table-loading-box">
             <div className="mini-spinner"></div>
-            <p>जावक पत्रे लोड होत आहेत...</p>
+            <p>{text.loading}</p>
           </div>
         ) : items.length === 0 ? (
           <div className="table-empty-box">
-            <div className="empty-icon">📤</div>
-            <h3>कोणतेही जावक पत्र सापडले नाही</h3>
-            <p>कृपया शोध किंवा फिल्टर बदलून पुन्हा प्रयत्न करा.</p>
+            <div className="empty-icon"><Send size={32} /></div>
+            <h3>{text.emptyTitle}</h3>
+            <p>{text.emptyText}</p>
           </div>
         ) : (
           <div className="table-responsive">
             <table className="inward-table">
               <thead>
                 <tr>
-                  <th>जावक क्र. (Outward No)</th>
-                  <th>निर्गमित दिनांक (Date)</th>
-                  <th>पत्र मिळणारा व विभाग (Recipient & Dept)</th>
-                  <th>विषय (Subject)</th>
-                  <th>AI मसुदा (Type)</th>
-                  <th>मंजुरी (Approval)</th>
-                  <th style={{ textAlign: 'right' }}>कृती (Action)</th>
+                  <th>{text.colOutwardNo}</th>
+                  <th>{text.colDate}</th>
+                  <th>{text.colRecipient}</th>
+                  <th>{text.colSubject}</th>
+                  <th>{text.colType}</th>
+                  <th>{text.colApproval}</th>
+                  <th style={{ textAlign: 'right' }}>{text.colAction}</th>
                 </tr>
               </thead>
               <tbody>
@@ -198,27 +271,33 @@ const OutwardListPage = () => {
                     <td className="col-sender">
                       <div className="sender-name-primary">{item.recipient_name}</div>
                       {item.recipientDepartment && (
-                        <span className="dept-tag">{item.recipientDepartment.name_mr}</span>
+                        <span className="dept-tag">
+                          {lang === 'MR'
+                            ? item.recipientDepartment.name_mr
+                            : item.recipientDepartment.name_en || item.recipientDepartment.name_mr}
+                        </span>
                       )}
                     </td>
                     <td className="col-subject">
                       <div className="subject-line">{item.subject}</div>
                       {item.referenceInward && (
-                        <span className="ref-inward-tag">🔗 संदर्भ आवक: {item.referenceInward.inward_number}</span>
+                        <span className="ref-inward-tag" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                          <LinkIcon size={12} /> {text.refInward} {item.referenceInward.inward_number}
+                        </span>
                       )}
                     </td>
                     <td>
                       {item.is_ai_drafted ? (
-                        <span className="ai-draft-badge">🤖 Gemini AI</span>
+                        <span className="ai-draft-badge" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}><Sparkles size={12} /> {text.aiBadge}</span>
                       ) : (
-                        <span className="manual-draft-badge">✍️ मॅन्युअल</span>
+                        <span className="manual-draft-badge" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}><Edit size={12} /> {text.manualBadge}</span>
                       )}
                     </td>
                     <td>
                       {item.approved_by ? (
-                        <span className="approved-status-badge">🟢 मंजूर (Approved)</span>
+                        <span className="approved-status-badge" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}><CheckCircle2 size={12} /> {text.approvedBadge}</span>
                       ) : (
-                        <span className="draft-status-badge">🟡 मसुदा (Draft)</span>
+                        <span className="draft-status-badge" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}><Clock size={12} /> {text.draftBadge}</span>
                       )}
                     </td>
                     <td style={{ textAlign: 'right' }}>
@@ -228,9 +307,10 @@ const OutwardListPage = () => {
                           e.stopPropagation();
                           openDetailModal(item);
                         }}
-                        title="पत्र व मुद्रण पहा"
+                        title={text.viewLetter}
+                        style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}
                       >
-                        📄 पत्र पहा (View)
+                        <FileText size={14} /> {text.viewLetter}
                       </button>
                     </td>
                   </tr>
@@ -244,7 +324,7 @@ const OutwardListPage = () => {
         {!loading && meta.totalPages > 1 && (
           <div className="pagination-bar">
             <span className="pagination-info">
-              एकूण {meta.totalItems} पैकी पान {meta.page} (Total Pages: {meta.totalPages})
+              {text.pageInfo(meta.totalItems, meta.page, meta.totalPages)}
             </span>
 
             <div className="pagination-controls">
@@ -252,8 +332,9 @@ const OutwardListPage = () => {
                 className="page-btn"
                 disabled={meta.page <= 1}
                 onClick={() => setFilters((prev) => ({ ...prev, page: prev.page - 1 }))}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}
               >
-                ← मागील (Prev)
+                <ChevronLeft size={14} /> {text.prev}
               </button>
 
               <span className="current-page-num">{meta.page}</span>
@@ -263,7 +344,7 @@ const OutwardListPage = () => {
                 disabled={meta.page >= meta.totalPages}
                 onClick={() => setFilters((prev) => ({ ...prev, page: prev.page + 1 }))}
               >
-                पुढील (Next) →
+                {text.next}
               </button>
             </div>
           </div>

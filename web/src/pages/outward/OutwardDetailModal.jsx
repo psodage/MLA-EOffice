@@ -1,10 +1,5 @@
-// src/pages/outward/OutwardDetailModal.jsx
-// ============================================================
-// Modal for Viewing Official Government Outward Letterhead,
-// Approving the Draft, and Printing the Finalized Letter.
-// ============================================================
-
 import { useState } from 'react';
+import { X, Landmark, CheckCircle2, Printer, Check } from 'lucide-react';
 import api from '../../services/api.js';
 import './OutwardLetterPrint.css';
 
@@ -38,14 +33,14 @@ const OutwardDetailModal = ({ isOpen, onClose, entry, onUpdateSuccess }) => {
             <span className="detail-ref-badge">{entry.outward_number}</span>
             <h3>जावक पत्र पाहणे व मुद्रण (Outward Letter Preview)</h3>
           </div>
-          <button className="modal-close-btn" onClick={onClose}>✕</button>
+          <button className="modal-close-btn" onClick={onClose}><X size={18} /></button>
         </div>
 
         <div className="outward-letterhead-container printable-letter-area">
           {/* Official Government Letterhead Header */}
           <div className="letterhead-header">
             <div className="emblem-box">
-              <span className="state-emblem">🏛️</span>
+              <Landmark size={24} color="#b91c1c" />
             </div>
             <div className="header-text-block">
               <h2 className="mla-name-title">महाराष्ट्र विधानसभा • आमदार कार्यालय</h2>
@@ -82,9 +77,8 @@ const OutwardDetailModal = ({ isOpen, onClose, entry, onUpdateSuccess }) => {
           <div className="letter-signature-block">
             <div className="sign-stamp-area">
               {entry.approver ? (
-                <div className="approval-stamp">
-                  <span className="stamp-icon">✓ APPROVED</span>
-                  <span className="stamp-by">मंजूर: {entry.approver.full_name}</span>
+                <div className="approval-stamp" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                  <CheckCircle2 size={14} /> APPROVED — मंजूर: {entry.approver.full_name}
                 </div>
               ) : (
                 <div className="draft-watermark-tag">मसुदा (DRAFT - PENDING APPROVAL)</div>
@@ -106,13 +100,13 @@ const OutwardDetailModal = ({ isOpen, onClose, entry, onUpdateSuccess }) => {
           </button>
 
           {!entry.approved_by && (
-            <button className="btn-approve" onClick={handleApprove} disabled={approving}>
-              {approving ? 'मंजूर होत आहे...' : '✓ पत्र मंजूर करा (Approve Letter)'}
+            <button className="btn-approve" onClick={handleApprove} disabled={approving} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+              <Check size={16} /> {approving ? 'मंजूर होत आहे...' : 'पत्र मंजूर करा (Approve Letter)'}
             </button>
           )}
 
-          <button className="btn-primary" onClick={handlePrint}>
-            🖨️ मुद्रित करा (Print Letter)
+          <button className="btn-primary" onClick={handlePrint} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+            <Printer size={16} /> मुद्रित करा (Print Letter)
           </button>
         </div>
       </div>

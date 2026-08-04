@@ -928,3 +928,29 @@
   }
 }
 
+@media (max-width: 639px) {
+  .devworks-page-container {
+    padding: 12px 8px;
+  }
+  .meta-grid {
+    grid-template-columns: 1fr;
+  }
+  .photo-grid {
+    grid-template-columns: 1fr;
+  }
+  .devworks-modal-container {
+    max-width: 95vw;
+    margin: 8px;
+  }
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .page-header-actions {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+}
+
+

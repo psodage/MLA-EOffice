@@ -1,12 +1,5 @@
-// src/pages/nivedan/NivedanDetailModal.jsx
-// ============================================================
-// Modal for Viewing Nivedan Details, Status Transitions, Notes,
-// WhatsApp Logs and Immutable Vertical Activity History Timeline.
-// 1:1 Layout Match with WIREFRAMES/nivedan_detail.html
-// Clean Language Toggle (EN / MR) Support
-// ============================================================
-
 import { useState } from 'react';
+import { X, Edit, Printer, UserPlus, Check, User, Phone, FileText, Paperclip, Download, MessageSquare, Send, List, RotateCcw, Plus } from 'lucide-react';
 import useLangStore from '../../store/langStore.js';
 import api from '../../services/api.js';
 
@@ -76,15 +69,15 @@ const NivedanDetailModal = ({ isOpen, onClose, entry, onUpdateSuccess }) => {
   const getStatusBadge = (status) => {
     switch (status) {
       case 'PENDING':
-        return <span className="badge-pill status-pending">{isMr ? '🟡 प्रलंबित' : '🟡 Pending'}</span>;
+        return <span className="badge-pill status-pending">{isMr ? 'प्रलंबित' : 'Pending'}</span>;
       case 'IN_PROGRESS':
-        return <span className="badge-pill status-progress">{isMr ? '🔵 प्रगतीपथावर' : '🔵 In Progress'}</span>;
+        return <span className="badge-pill status-progress">{isMr ? 'प्रगतीपथावर' : 'In Progress'}</span>;
       case 'FORWARDED':
-        return <span className="badge-pill status-forwarded">{isMr ? '🟠 पाठवलेले' : '🟠 Forwarded'}</span>;
+        return <span className="badge-pill status-forwarded">{isMr ? 'पाठवलेले' : 'Forwarded'}</span>;
       case 'ESCALATED':
-        return <span className="badge-pill status-escalated">{isMr ? '⚠️ कालावधी उलटलेले' : '⚠️ Escalated'}</span>;
+        return <span className="badge-pill status-escalated">{isMr ? 'कालावधी उलटलेले' : 'Escalated'}</span>;
       case 'RESOLVED':
-        return <span className="badge-pill status-resolved">{isMr ? '🟢 मार्गी लागलेले' : '🟢 Resolved'}</span>;
+        return <span className="badge-pill status-resolved">{isMr ? 'मार्गी लागलेले' : 'Resolved'}</span>;
       default:
         return <span className="badge-pill">{status}</span>;
     }
@@ -112,7 +105,7 @@ const NivedanDetailModal = ({ isOpen, onClose, entry, onUpdateSuccess }) => {
             <span>/</span>
             <span style={{ fontWeight: 700, color: 'var(--primary)' }}>{entry.tracking_id}</span>
           </div>
-          <button className="modal-close-btn" onClick={onClose}>✕</button>
+          <button className="modal-close-btn" onClick={onClose}><X size={18} /></button>
         </div>
 
         <div className="modal-body">
@@ -128,33 +121,35 @@ const NivedanDetailModal = ({ isOpen, onClose, entry, onUpdateSuccess }) => {
                 <button
                   className="btn btn-outline"
                   onClick={() => alert(isMr ? 'निवेदन संपादित करा...' : 'Edit Petition...')}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}
                 >
-                  ✏️ {isMr ? 'संपादित करा' : 'Edit'}
+                  <Edit size={14} /> {isMr ? 'संपादित करा' : 'Edit'}
                 </button>
-                <button className="btn btn-outline" onClick={() => window.print()}>
-                  🖨️ {isMr ? 'पावती प्रिंट' : 'Print Receipt'}
+                <button className="btn btn-outline" onClick={() => window.print()} style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                  <Printer size={14} /> {isMr ? 'पावती प्रिंट' : 'Print Receipt'}
                 </button>
                 <button
                   className="btn btn-outline"
                   onClick={() => alert(isMr ? 'अधिकारी नियुक्त करा...' : 'Assign User...')}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}
                 >
-                  👤+ {isMr ? 'नियुक्त करा' : 'Assign'}
+                  <UserPlus size={14} /> {isMr ? 'नियुक्त करा' : 'Assign'}
                 </button>
                 <button
                   className="btn btn-primary"
-                  style={{ background: 'var(--success, #16A34A)' }}
+                  style={{ background: 'var(--success, #16A34A)', display: 'inline-flex', alignItems: 'center', gap: '4px' }}
                   disabled={updating || entry.status === 'RESOLVED'}
                   onClick={() => handleStatusChange('RESOLVED')}
                 >
-                  ✓ {isMr ? 'मार्गी लागले' : 'Mark Resolved'}
+                  <Check size={14} /> {isMr ? 'मार्गी लागले' : 'Mark Resolved'}
                 </button>
                 <button
                   className="btn btn-outline"
-                  style={{ color: 'var(--error, #DC2626)', borderColor: 'var(--error, #DC2626)' }}
+                  style={{ color: 'var(--error, #DC2626)', borderColor: 'var(--error, #DC2626)', display: 'inline-flex', alignItems: 'center', gap: '4px' }}
                   disabled={updating || entry.status === 'REJECTED'}
                   onClick={() => handleStatusChange('REJECTED')}
                 >
-                  ✕ {isMr ? 'नाकारा' : 'Reject'}
+                  <X size={14} /> {isMr ? 'नाकारा' : 'Reject'}
                 </button>
               </div>
             </div>
@@ -163,12 +158,14 @@ const NivedanDetailModal = ({ isOpen, onClose, entry, onUpdateSuccess }) => {
             <div className="dh-meta-grid">
               <div className="meta-item">
                 <span className="meta-label">{isMr ? 'नागरिक नाव' : 'Citizen Name'}</span>
-                <span className="meta-value">👤 {entry.citizen_name}</span>
+                <span className="meta-value" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                  <User size={12} /> {entry.citizen_name}
+                </span>
               </div>
               <div className="meta-item">
                 <span className="meta-label">{isMr ? 'मोबाईल' : 'Mobile'}</span>
-                <span className="meta-value" style={{ fontFamily: 'JetBrains Mono' }}>
-                  📱 {entry.citizen_mobile}
+                <span className="meta-value" style={{ fontFamily: 'JetBrains Mono', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                  <Phone size={12} /> {entry.citizen_mobile}
                 </span>
               </div>
               <div className="meta-item">
@@ -185,15 +182,15 @@ const NivedanDetailModal = ({ isOpen, onClose, entry, onUpdateSuccess }) => {
                 >
                   {entry.priority === 'HIGH' || entry.priority === 'URGENT'
                     ? isMr
-                      ? '🔴 अतिमहत्त्वाचे (High)'
-                      : '🔴 High'
+                      ? 'अतिमहत्त्वाचे (High)'
+                      : 'High'
                     : entry.priority === 'MEDIUM'
                     ? isMr
-                      ? '🟡 मध्यम (Medium)'
-                      : '🟡 Medium'
+                      ? 'मध्यम (Medium)'
+                      : 'Medium'
                     : isMr
-                    ? '🔵 सामान्य (Low)'
-                    : '🔵 Low'}
+                    ? 'सामान्य (Low)'
+                    : 'Low'}
                 </span>
               </div>
               <div className="meta-item">
@@ -254,8 +251,8 @@ const NivedanDetailModal = ({ isOpen, onClose, entry, onUpdateSuccess }) => {
             <div>
               {/* Description Card */}
               <div className="detail-card">
-                <div className="detail-card-header">
-                  📄 {isMr ? 'सविस्तर वर्णन (Description)' : 'Description'}
+                <div className="detail-card-header" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <FileText size={16} /> {isMr ? 'सविस्तर वर्णन (Description)' : 'Description'}
                 </div>
                 <div className="detail-card-body">
                   <div className="description-text">
@@ -265,17 +262,17 @@ const NivedanDetailModal = ({ isOpen, onClose, entry, onUpdateSuccess }) => {
                   {/* Attachments List */}
                   <div className="attach-list">
                     <div className="attach-item">
-                      <span>📄</span>
+                      <FileText size={16} />
                       <span className="name">nivedan_application_document.pdf</span>
                       <span className="size">1.2 MB</span>
-                      <span style={{ color: 'var(--primary)', fontWeight: 700, fontSize: '12px' }}>↓</span>
+                      <span style={{ color: 'var(--primary)', fontWeight: 700, fontSize: '12px' }}><Download size={14} /></span>
                     </div>
                     {entry.attachment_urls && (
                       <div className="attach-item">
-                        <span>🖼️</span>
+                        <Paperclip size={16} />
                         <span className="name">{entry.attachment_urls}</span>
                         <span className="size">Attachment</span>
-                        <span style={{ color: 'var(--primary)', fontWeight: 700, fontSize: '12px' }}>↓</span>
+                        <span style={{ color: 'var(--primary)', fontWeight: 700, fontSize: '12px' }}><Download size={14} /></span>
                       </div>
                     )}
                   </div>
@@ -284,12 +281,12 @@ const NivedanDetailModal = ({ isOpen, onClose, entry, onUpdateSuccess }) => {
 
               {/* WhatsApp Log Card */}
               <div className="detail-card">
-                <div className="detail-card-header">
-                  💬 {isMr ? 'व्हॉट्सअॅप सूचना इतिहास (WhatsApp Notifications)' : 'WhatsApp Notifications'}
+                <div className="detail-card-header" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <MessageSquare size={16} /> {isMr ? 'व्हॉट्सअॅप सूचना इतिहास (WhatsApp Notifications)' : 'WhatsApp Notifications'}
                 </div>
                 <div className="detail-card-body">
                   <div className="wa-item">
-                    <span>📤</span>
+                    <Send size={14} />
                     <div style={{ flex: 1 }}>
                       <strong style={{ color: 'var(--text-1)' }}>
                         {isMr ? 'पोहोच पावती संदेश (Acknowledgment)' : 'Acknowledgment SMS'}
@@ -306,7 +303,7 @@ const NivedanDetailModal = ({ isOpen, onClose, entry, onUpdateSuccess }) => {
                   </div>
 
                   <div className="wa-item">
-                    <span>📤</span>
+                    <Send size={14} />
                     <div style={{ flex: 1 }}>
                       <strong style={{ color: 'var(--text-1)' }}>
                         {isMr ? 'स्थिती अपडेट संदेश (Status Update)' : 'Status Update Notice'}
@@ -327,15 +324,15 @@ const NivedanDetailModal = ({ isOpen, onClose, entry, onUpdateSuccess }) => {
 
             {/* Right Column: Activity Timeline & Add Note */}
             <div className="detail-card">
-              <div className="detail-card-header">
-                📋 {isMr ? 'क्रिया टाइमलाइन (Activity Timeline)' : 'Activity Timeline'}
+              <div className="detail-card-header" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <List size={16} /> {isMr ? 'क्रिया टाइमलाइन (Activity Timeline)' : 'Activity Timeline'}
               </div>
               <div className="detail-card-body">
                 <div className="timeline">
                   {entry.timelines && entry.timelines.length > 0 ? (
                     entry.timelines.map((tl) => (
                       <div className="tl-item" key={tl.id}>
-                        <div className="tl-dot">📝</div>
+                        <div className="tl-dot"><Edit size={14} /></div>
                         <div className="tl-content">
                           <div className="tl-title">{tl.note}</div>
                           <div className="tl-desc">
@@ -350,7 +347,7 @@ const NivedanDetailModal = ({ isOpen, onClose, entry, onUpdateSuccess }) => {
                   ) : (
                     <>
                       <div className="tl-item">
-                        <div className="tl-dot" style={{ background: 'var(--warning-bg)', color: 'var(--warning)' }}>📝</div>
+                        <div className="tl-dot" style={{ background: 'var(--warning-bg)', color: 'var(--warning)' }}><Edit size={14} /></div>
                         <div className="tl-content">
                           <div className="tl-title">{isMr ? 'निवेदन नोंदवले (Nivedan Created)' : 'Nivedan Registered'}</div>
                           <div className="tl-desc">
@@ -363,7 +360,7 @@ const NivedanDetailModal = ({ isOpen, onClose, entry, onUpdateSuccess }) => {
                       </div>
 
                       <div className="tl-item">
-                        <div className="tl-dot" style={{ background: 'var(--success-bg)', color: 'var(--success)' }}>💬</div>
+                        <div className="tl-dot" style={{ background: 'var(--success-bg)', color: 'var(--success)' }}><MessageSquare size={14} /></div>
                         <div className="tl-content">
                           <div className="tl-title">{isMr ? 'व्हॉट्सअॅप पाठवले' : 'WhatsApp Sent'}</div>
                           <div className="tl-desc">
@@ -376,7 +373,7 @@ const NivedanDetailModal = ({ isOpen, onClose, entry, onUpdateSuccess }) => {
                       </div>
 
                       <div className="tl-item">
-                        <div className="tl-dot" style={{ background: 'var(--info-bg)', color: 'var(--info)' }}>🔄</div>
+                        <div className="tl-dot" style={{ background: 'var(--info-bg)', color: 'var(--info)' }}><RotateCcw size={14} /></div>
                         <div className="tl-content">
                           <div className="tl-title">{isMr ? 'ऑटो-रूट सुचवलेले' : 'Auto-Route Suggested'}</div>
                           <div className="tl-desc">
@@ -420,8 +417,8 @@ const NivedanDetailModal = ({ isOpen, onClose, entry, onUpdateSuccess }) => {
                       <option value="RESOLVED">{isMr ? 'मार्गी लागले (Resolved)' : 'Resolved'}</option>
                       <option value="REJECTED">{isMr ? 'नाकारले (Rejected)' : 'Rejected'}</option>
                     </select>
-                    <button className="btn btn-primary" type="submit" style={{ height: '32px', fontSize: '12px' }} disabled={updating}>
-                      + {isMr ? 'टीप जोडा' : 'Add Note'}
+                    <button className="btn btn-primary" type="submit" style={{ height: '32px', fontSize: '12px', display: 'inline-flex', alignItems: 'center', gap: '4px' }} disabled={updating}>
+                      <Plus size={14} /> {isMr ? 'टीप जोडा' : 'Add Note'}
                     </button>
                   </div>
                 </form>
@@ -432,8 +429,8 @@ const NivedanDetailModal = ({ isOpen, onClose, entry, onUpdateSuccess }) => {
 
         {/* Modal Footer */}
         <div className="modal-footer">
-          <button className="btn btn-outline" onClick={() => window.print()}>
-            🖨️ {isMr ? 'पावती प्रिंट करा' : 'Print Receipt'}
+          <button className="btn btn-outline" onClick={() => window.print()} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+            <Printer size={14} /> {isMr ? 'पावती प्रिंट करा' : 'Print Receipt'}
           </button>
           <button className="btn btn-primary" onClick={onClose}>
             {isMr ? 'बंद करा' : 'Close'}

@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>MLA E-Office — WhatsApp Automation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--sb:#1B3A5C;--sw:240px;--th:56px;--p:#1B3A5C;--pl:#EFF4F9;--bg:#F5F7FA;--c:#FFF;--t1:#0F172A;--t2:#475569;--t3:#64748B;--t4:#94A3B8;--b:#DDE3EB;--ok:#16A34A;--okb:#F0FDF4;--wr:#D97706;--wrb:#FFFBEB;--er:#DC2626;--erb:#FEF2F2;--in:#2563EB;--inb:#EFF6FF;--pu:#7C3AED;--pub:#F5F3FF;--wa:#25D366;--wab:#E8F8ED;--r:3px;--ss:0 1px 3px rgba(15,23,42,.08)}
+    [data-theme="dark"]{--sb:#0D1B2A;--p:#5A9BD5;--pl:#1A3355;--bg:#0F1419;--c:#1A2332;--t1:#E2ECF4;--t2:#8EA3B8;--t3:#6B8299;--t4:#4F6479;--b:#2A3A4E;--ok:#22C55E;--okb:#0D2818;--wr:#F59E0B;--wrb:#2A1F0A;--er:#EF4444;--erb:#2A1010;--in:#3B82F6;--inb:#0D1F3A;--pu:#A78BFA;--pub:#1A1030;--wa:#25D366;--wab:#0D2818;--ss:0 1px 3px rgba(0,0,0,.4)}
+    body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--t1);transition:background .2s,color .2s}
+    .mr{font-family:'Noto Sans Devanagari',sans-serif}
+    .mono{font-family:'JetBrains Mono',monospace}
+    .app{display:flex;min-height:100vh}
+
+    /* Sidebar */
+    .sidebar{width:var(--sw);background:var(--sb);color:#fff;position:fixed;top:0;left:0;bottom:0;z-index:200;display:flex;flex-direction:column;overflow:hidden}
+    .sidebar-logo{height:var(--th);display:flex;align-items:center;padding:0 16px;gap:10px;border-bottom:1px solid rgba(255,255,255,.1)}
+    .sidebar-logo .icon{width:32px;height:32px;background:rgba(255,255,255,.12);border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:16px}
+    .sidebar-logo .name{font-size:15px;font-weight:700}
+    .sidebar-nav{flex:1;padding:8px 0;overflow-y:auto}
+    .ns{padding:16px 16px 4px;font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:rgba(255,255,255,.35);font-weight:600}
+    .ni{display:flex;align-items:center;gap:12px;padding:9px 16px;margin:1px 8px;border-radius:var(--r);cursor:pointer;font-size:13px;font-weight:500;color:rgba(255,255,255,.7);text-decoration:none;transition:background .12s}
+    .ni:hover{background:rgba(255,255,255,.08);color:#fff}.ni.active{background:rgba(255,255,255,.12);color:#fff}
+    .ni .ic{width:20px;text-align:center;font-size:15px;opacity:.7}.ni.active .ic{opacity:1}
+    .nd{height:1px;background:rgba(255,255,255,.1);margin:8px 16px}
+
+    /* Topbar */
+    .topbar{position:fixed;top:0;left:var(--sw);right:0;height:var(--th);background:var(--c);border-bottom:1px solid var(--b);display:flex;align-items:center;padding:0 24px;z-index:300;gap:16px}
+    .tb-toggle{width:36px;height:36px;border:none;background:none;cursor:pointer;border-radius:var(--r);font-size:18px;color:var(--t3);display:flex;align-items:center;justify-content:center}
+    .tb-actions{display:flex;align-items:center;gap:8px;margin-left:auto}
+    .tb-btn{width:36px;height:36px;border:1px solid var(--b);background:var(--c);border-radius:var(--r);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--t3);position:relative}
+    .tb-btn .bdg{position:absolute;top:-4px;right:-4px;width:18px;height:18px;border-radius:9px;background:var(--er);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center}
+    .tb-avatar{width:32px;height:32px;border-radius:var(--r);background:var(--p);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;cursor:pointer}
+    [data-theme="dark"] .tb-avatar{background:#1A3355;color:#5A9BD5}
+
+    /* Main */
+    .main{margin-left:var(--sw);margin-top:var(--th);padding:24px}
+    .breadcrumb{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--t3);margin-bottom:16px}
+    .breadcrumb a{color:var(--p);text-decoration:none}
+    .ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px}
+    .ph .title{font-size:22px;font-weight:700}
+    .ph .sub{font-size:13px;color:var(--t3);margin-top:2px}
+    .btn{height:36px;padding:0 16px;border-radius:var(--r);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;border:none;transition:all .12s}
+    .btn-p{background:var(--p);color:#fff}.btn-o{background:transparent;color:var(--t2);border:1px solid var(--b)}
+    .btn-wa{background:var(--wa);color:#fff}
+    .btn-o:hover{border-color:var(--p);color:var(--p)}
+
+    /* KPI Stats */
+    .stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;margin-bottom:20px}
+    .stat{background:var(--c);border:1px solid var(--b);border-radius:var(--r);padding:16px;box-shadow:var(--ss);text-align:center;position:relative;overflow:hidden}
+    .stat-val{font-size:26px;font-weight:700;margin-bottom:2px}
+    .stat-label{font-size:11px;color:var(--t3)}
+    .stat-trend{font-size:10px;margin-top:4px;font-weight:500}
+    .stat-trend.up{color:var(--ok)}.stat-trend.down{color:var(--er)}
+
+    /* Tabs */
+    .tabs{display:flex;gap:0;margin-bottom:20px;border-bottom:2px solid var(--b)}
+    .tab{padding:10px 20px;font-size:13px;font-weight:500;color:var(--t3);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .12s}
+    .tab:hover{color:var(--t1)}
+    .tab.active{color:var(--p);border-bottom-color:var(--p);font-weight:600}
+    .tab .tab-count{font-size:11px;background:var(--bg);padding:1px 7px;border-radius:10px;margin-left:6px;font-weight:500}
+    .tab.active .tab-count{background:var(--pl);color:var(--p)}
+
+    /* Quick Actions */
+    .quick-actions{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap}
+    .qa-card{background:var(--c);border:1px solid var(--b);border-radius:var(--r);padding:14px 18px;box-shadow:var(--ss);display:flex;align-items:center;gap:12px;cursor:pointer;transition:border .12s,box-shadow .12s;flex:1;min-width:200px}
+    .qa-card:hover{border-color:var(--p);box-shadow:0 2px 8px rgba(27,58,92,.12)}
+    .qa-icon{width:40px;height:40px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+    .qa-info{flex:1}
+    .qa-title{font-size:13px;font-weight:600;color:var(--t1)}
+    .qa-desc{font-size:11px;color:var(--t3)}
+
+    /* Two Column Layout */
+    .layout{display:grid;grid-template-columns:1fr 380px;gap:16px}
+
+    /* Activity/Log Table */
+    .panel{background:var(--c);border:1px solid var(--b);border-radius:var(--r);box-shadow:var(--ss);overflow:hidden}
+    .panel-header{padding:14px 16px;border-bottom:1px solid var(--b);display:flex;align-items:center;justify-content:space-between}
+    .panel-title{font-size:14px;font-weight:600}
+    .panel-action{font-size:12px;color:var(--p);cursor:pointer;font-weight:500}
+
+    /* Message Log Rows */
+    .msg-list{max-height:calc(100vh - 380px);overflow-y:auto}
+    .msg-row{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--b);transition:background .1s;cursor:pointer}
+    .msg-row:last-child{border-bottom:none}
+    .msg-row:hover{background:var(--pl)}
+    .msg-icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+    .msg-icon.auto{background:var(--wab);color:var(--wa)}
+    .msg-icon.broadcast{background:var(--inb);color:var(--in)}
+    .msg-icon.bot{background:var(--pub);color:var(--pu)}
+    .msg-icon.greeting{background:var(--wrb);color:var(--wr)}
+    .msg-info{flex:1;min-width:0}
+    .msg-recipient{font-size:13px;font-weight:500;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .msg-template{font-size:11px;color:var(--t3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .msg-meta{text-align:right;flex-shrink:0}
+    .msg-time{font-size:11px;color:var(--t4)}
+    .msg-status{font-size:10px;font-weight:600;padding:2px 7px;border-radius:2px;margin-top:3px;display:inline-block}
+    .status-sent{background:var(--inb);color:var(--in)}
+    .status-delivered{background:var(--wab);color:var(--wa)}
+    .status-read{background:var(--okb);color:var(--ok)}
+    .status-failed{background:var(--erb);color:var(--er)}
+    .status-pending{background:var(--wrb);color:var(--wr)}
+
+    /* Delivery Status Ticks */
+    .ticks{font-size:13px;margin-right:3px}
+    .tick-sent{color:var(--t4)}
+    .tick-delivered{color:var(--in)}
+    .tick-read{color:var(--wa)}
+
+    /* Template Cards */
+    .template-grid{display:grid;grid-template-columns:1fr;gap:8px;padding:12px 16px}
+    .tpl-card{border:1px solid var(--b);border-radius:var(--r);padding:12px;transition:border .12s;cursor:pointer}
+    .tpl-card:hover{border-color:var(--p)}
+    .tpl-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+    .tpl-name{font-size:12px;font-weight:600;color:var(--t1)}
+    .tpl-code{font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--t4);background:var(--bg);padding:1px 5px;border-radius:2px}
+    .tpl-category{font-size:10px;font-weight:600;padding:2px 6px;border-radius:2px}
+    .cat-utility{background:var(--inb);color:var(--in)}
+    .cat-marketing{background:var(--wrb);color:var(--wr)}
+    .tpl-preview{font-size:11px;color:var(--t3);line-height:1.5;margin-top:4px;font-family:'Noto Sans Devanagari',sans-serif;background:var(--bg);padding:8px;border-radius:var(--r);border-left:3px solid var(--wa)}
+    .tpl-meta{display:flex;gap:12px;margin-top:8px;font-size:10px;color:var(--t4)}
+
+    /* Broadcast Compose Panel */
+    .compose-section{padding:16px}
+    .compose-section .section-title{font-size:13px;font-weight:600;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+    .form-group{display:flex;flex-direction:column;gap:4px;margin-bottom:12px}
+    .form-label{font-size:12px;font-weight:500;color:var(--t2)}
+    .form-input{height:34px;padding:0 10px;border:1px solid var(--b);border-radius:var(--r);font-size:13px;color:var(--t1);font-family:inherit;background:var(--c);outline:none;transition:border .2s}
+    .form-input:focus{border-color:var(--p);box-shadow:0 0 0 3px rgba(27,58,92,.1)}
+    select.form-input{appearance:auto;cursor:pointer}
+    textarea.form-input{height:auto;padding:8px 10px;resize:vertical;min-height:70px;line-height:1.5}
+
+    /* Audience Chips */
+    .audience-chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+    .chip{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:12px;font-size:11px;font-weight:500;cursor:pointer;border:1px solid var(--b);transition:all .12s}
+    .chip:hover{border-color:var(--p)}
+    .chip.selected{background:var(--pl);border-color:var(--p);color:var(--p)}
+    .chip .x{font-size:10px;opacity:.6;cursor:pointer}
+
+    /* Delivery Ring Chart (CSS only) */
+    .ring-container{display:flex;justify-content:center;align-items:center;padding:20px;gap:20px}
+    .ring{width:100px;height:100px;border-radius:50%;background:conic-gradient(var(--ok) 0% 42%,var(--wa) 42% 78%,var(--in) 78% 91%,var(--er) 91% 100%);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .ring-inner{width:68px;height:68px;border-radius:50%;background:var(--c);display:flex;align-items:center;justify-content:center;flex-direction:column}
+    .ring-val{font-size:18px;font-weight:700;color:var(--t1)}
+    .ring-label{font-size:9px;color:var(--t4)}
+    .ring-legend{display:flex;flex-direction:column;gap:6px}
+    .legend-item{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--t2)}
+    .legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+    /* Theme toggle, wireframe badge */
+    .tt{position:fixed;top:10px;right:16px;z-index:400;display:flex;gap:4px}
+    .tt button{background:var(--c);border:1px solid var(--b);border-radius:var(--r);padding:5px 10px;cursor:pointer;font-size:11px;font-family:inherit;color:var(--t3)}
+    .tt button.active{background:#1B3A5C;color:#fff;border-color:#1B3A5C}
+    [data-theme="dark"] .tt button.active{background:#5A9BD5;color:#0F1419}
+    .wfb{position:fixed;bottom:16px;right:16px;z-index:400;background:#1B3A5C;color:#fff;padding:5px 10px;font-size:10px;font-weight:600;border-radius:var(--r);text-transform:uppercase;letter-spacing:1px;opacity:.8}
+
+    @media(max-width:1200px){.layout{grid-template-columns:1fr}}
+    @media(max-width:768px){.sidebar{transform:translateX(-100%)}.topbar{left:0}.main{margin-left:0;padding:16px}.stats{grid-template-columns:repeat(2,1fr)}}
+  </style>
+</head>
+<body>
+  <div class="tt"><button class="active" onclick="setTheme('light')">☀ Light</button><button onclick="setTheme('dark')">🌙 Dark</button></div>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="sidebar-logo"><div class="icon">🏛️</div><div class="name">MLA E-Office</div></div>
+      <nav class="sidebar-nav">
+        <div class="ns">Office</div><a class="ni"><span class="ic">📊</span>Dashboard</a><a class="ni"><span class="ic">📨</span>Inward & Outward</a><a class="ni"><span class="ic">👤</span>Visitor Book</a>
+        <div class="ns">Public</div><a class="ni"><span class="ic">📝</span>Nivedans</a><a class="ni"><span class="ic">🏗️</span>Dev Works</a>
+        <div class="ns">Network</div><a class="ni"><span class="ic">👥</span>Karyakarta</a><a class="ni"><span class="ic">📍</span>Gram/Ward</a><a class="ni"><span class="ic">🗳️</span>Booths</a>
+        <div class="ns">Tools</div><a class="ni"><span class="ic">📅</span>Calendar</a><a class="ni active"><span class="ic">💬</span>WhatsApp</a><a class="ni"><span class="ic">📑</span>Reports</a>
+        <div class="nd"></div><a class="ni"><span class="ic">⚙️</span>Settings</a>
+      </nav>
+    </aside>
+    <header class="topbar">
+      <button class="tb-toggle">☰</button>
+      <div class="tb-actions"><button class="tb-btn">🌐</button><button class="tb-btn">🔔<span class="bdg">3</span></button><div class="tb-avatar">RP</div></div>
+    </header>
+    <main class="main">
+      <div class="breadcrumb"><a href="#">Dashboard</a><span style="color:var(--t4)">/</span><span>WhatsApp</span></div>
+      <div class="ph">
+        <div><h1 class="title">💬 WhatsApp Automation · <span class="mr">व्हॉट्सअॅप ऑटोमेशन</span></h1><p class="sub">Automated messaging engine — citizen updates, broadcasts, and greetings</p></div>
+        <div style="display:flex;gap:8px"><button class="btn btn-o">📋 Delivery Log</button><button class="btn btn-wa">📢 New Broadcast · नवीन प्रसारण</button></div>
+      </div>
+
+      <!-- KPI Stats -->
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-val" style="color:var(--wa)">1,247</div>
+          <div class="stat-label">Sent Today · आज पाठवले</div>
+          <div class="stat-trend up">↑ 12% vs yesterday</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val" style="color:var(--ok)">96.2%</div>
+          <div class="stat-label">Delivery Rate · वितरण दर</div>
+          <div class="stat-trend up">↑ 0.8%</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val" style="color:var(--er)">47</div>
+          <div class="stat-label">Failed · अयशस्वी</div>
+          <div class="stat-trend down">↑ 12 from yesterday</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val" style="color:var(--wr)">23</div>
+          <div class="stat-label">Pending Queue · प्रतीक्षा</div>
+          <div class="stat-trend">Processing...</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val" style="color:var(--in)">8,412</div>
+          <div class="stat-label">This Month · या महिन्यात</div>
+          <div class="stat-trend up">↑ 18% vs last month</div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <div class="tab active">📊 Overview · सारांश</div>
+        <div class="tab">📢 Broadcasts · प्रसारण<span class="tab-count">4</span></div>
+        <div class="tab">📝 Templates · नमुने<span class="tab-count">11</span></div>
+        <div class="tab">📋 Delivery Log · वितरण लॉग</div>
+        <div class="tab">🎉 Greetings · शुभेच्छा</div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="quick-actions">
+        <div class="qa-card">
+          <div class="qa-icon" style="background:var(--wab);color:var(--wa)">📢</div>
+          <div class="qa-info"><div class="qa-title">New Broadcast</div><div class="qa-desc">Send to workers / groups</div></div>
+        </div>
+        <div class="qa-card">
+          <div class="qa-icon" style="background:var(--wrb);color:var(--wr)">🎂</div>
+          <div class="qa-info"><div class="qa-title">Birthday Greetings</div><div class="qa-desc">3 birthdays today</div></div>
+        </div>
+        <div class="qa-card">
+          <div class="qa-icon" style="background:var(--erb);color:var(--er)">⚠️</div>
+          <div class="qa-info"><div class="qa-title">Retry Failed</div><div class="qa-desc">47 failed messages</div></div>
+        </div>
+        <div class="qa-card">
+          <div class="qa-icon" style="background:var(--pub);color:var(--pu)">🤖</div>
+          <div class="qa-info"><div class="qa-title">Bot Activity</div><div class="qa-desc">12 queries today</div></div>
+        </div>
+      </div>
+
+      <!-- Layout: Recent Activity + Side Panel -->
+      <div class="layout">
+        <!-- Recent Activity -->
+        <div class="panel">
+          <div class="panel-header">
+            <span class="panel-title">📋 Recent Activity · अलीकडील कार्य</span>
+            <span class="panel-action">View All →</span>
+          </div>
+          <div class="msg-list">
+            <!-- Auto: Nivedan Ack -->
+            <div class="msg-row">
+              <div class="msg-icon auto">📋</div>
+              <div class="msg-info">
+                <div class="msg-recipient">सुरेश जाधव · <span class="mono" style="font-size:11px;color:var(--t4)">98765 43210</span></div>
+                <div class="msg-template">NIV_ACK — Nivedan Acknowledgment · तक्रार पोहोचपावती</div>
+              </div>
+              <div class="msg-meta">
+                <div class="msg-time">2 min ago</div>
+                <span class="msg-status status-read"><span class="ticks tick-read">✓✓</span> Read</span>
+              </div>
+            </div>
+            <!-- Auto: Status Update -->
+            <div class="msg-row">
+              <div class="msg-icon auto">🔄</div>
+              <div class="msg-info">
+                <div class="msg-recipient">अनिता कांबळे · <span class="mono" style="font-size:11px;color:var(--t4)">87654 32109</span></div>
+                <div class="msg-template">NIV_STATUS — Status Update · स्थिती अद्ययावत</div>
+              </div>
+              <div class="msg-meta">
+                <div class="msg-time">8 min ago</div>
+                <span class="msg-status status-delivered"><span class="ticks tick-delivered">✓✓</span> Delivered</span>
+              </div>
+            </div>
+            <!-- Broadcast -->
+            <div class="msg-row">
+              <div class="msg-icon broadcast">📢</div>
+              <div class="msg-info">
+                <div class="msg-recipient">Broadcast: Haveli Taluka Workers · <span style="color:var(--t4);font-size:11px">156 recipients</span></div>
+                <div class="msg-template">EVENT_INVITE — ग्रामसभा कार्यक्रम, वडगाव · 05/08/2026</div>
+              </div>
+              <div class="msg-meta">
+                <div class="msg-time">25 min ago</div>
+                <span class="msg-status status-sent"><span class="ticks tick-sent">✓</span> Sent</span>
+              </div>
+            </div>
+            <!-- Bot reply -->
+            <div class="msg-row">
+              <div class="msg-icon bot">🤖</div>
+              <div class="msg-info">
+                <div class="msg-recipient">प्रकाश मोरे · <span class="mono" style="font-size:11px;color:var(--t4)">76543 21098</span></div>
+                <div class="msg-template">BOT_STATUS — Tracking ID: NIV-2026-01247 · Auto-reply</div>
+              </div>
+              <div class="msg-meta">
+                <div class="msg-time">32 min ago</div>
+                <span class="msg-status status-read"><span class="ticks tick-read">✓✓</span> Read</span>
+              </div>
+            </div>
+            <!-- Failed -->
+            <div class="msg-row">
+              <div class="msg-icon" style="background:var(--erb);color:var(--er)">❌</div>
+              <div class="msg-info">
+                <div class="msg-recipient">रमेश पवार · <span class="mono" style="font-size:11px;color:var(--t4)">65432 10987</span></div>
+                <div class="msg-template">NIV_RESOLVED — Nivedan Resolved · Number not on WhatsApp</div>
+              </div>
+              <div class="msg-meta">
+                <div class="msg-time">45 min ago</div>
+                <span class="msg-status status-failed">✕ Failed</span>
+              </div>
+            </div>
+            <!-- Birthday greeting -->
+            <div class="msg-row">
+              <div class="msg-icon greeting">🎂</div>
+              <div class="msg-info">
+                <div class="msg-recipient">मंगेश जाधव · <span class="mono" style="font-size:11px;color:var(--t4)">43210 98765</span></div>
+                <div class="msg-template">GREETING — Birthday Greeting · वाढदिवस शुभेच्छा</div>
+              </div>
+              <div class="msg-meta">
+                <div class="msg-time">1 hr ago</div>
+                <span class="msg-status status-read"><span class="ticks tick-read">✓✓</span> Read</span>
+              </div>
+            </div>
+            <!-- Nivedan Resolved -->
+            <div class="msg-row">
+              <div class="msg-icon auto">✅</div>
+              <div class="msg-info">
+                <div class="msg-recipient">विनोद शिंदे · <span class="mono" style="font-size:11px;color:var(--t4)">54321 09876</span></div>
+                <div class="msg-template">NIV_RESOLVED — Nivedan Resolved · तक्रार निकाली</div>
+              </div>
+              <div class="msg-meta">
+                <div class="msg-time">1 hr ago</div>
+                <span class="msg-status status-delivered"><span class="ticks tick-delivered">✓✓</span> Delivered</span>
+              </div>
+            </div>
+            <!-- Welcome -->
+            <div class="msg-row">
+              <div class="msg-icon auto">🎉</div>
+              <div class="msg-info">
+                <div class="msg-recipient">नवीन कार्यकर्ता · <span class="mono" style="font-size:11px;color:var(--t4)">32109 87654</span></div>
+                <div class="msg-template">KK_WELCOME — New Karyakarta Welcome · स्वागत</div>
+              </div>
+              <div class="msg-meta">
+                <div class="msg-time">2 hr ago</div>
+                <span class="msg-status status-sent"><span class="ticks tick-sent">✓</span> Sent</span>
+              </div>
+            </div>
+            <!-- Work Update -->
+            <div class="msg-row">
+              <div class="msg-icon broadcast">🏗️</div>
+              <div class="msg-info">
+                <div class="msg-recipient">Broadcast: Wadgaon Area Workers · <span style="color:var(--t4);font-size:11px">24 recipients</span></div>
+                <div class="msg-template">WORK_UPDATE — Road widening 60% complete · विकास काम अद्ययावत</div>
+              </div>
+              <div class="msg-meta">
+                <div class="msg-time">3 hr ago</div>
+                <span class="msg-status status-delivered"><span class="ticks tick-delivered">✓✓</span> Delivered</span>
+              </div>
+            </div>
+            <!-- Pending -->
+            <div class="msg-row">
+              <div class="msg-icon" style="background:var(--wrb);color:var(--wr)">⏳</div>
+              <div class="msg-info">
+                <div class="msg-recipient">दीपक थोरात · <span class="mono" style="font-size:11px;color:var(--t4)">21098 76543</span></div>
+                <div class="msg-template">NIV_STATUS — Status Update · In queue</div>
+              </div>
+              <div class="msg-meta">
+                <div class="msg-time">3 hr ago</div>
+                <span class="msg-status status-pending">⏳ Pending</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Side: Delivery Chart + Templates -->
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <!-- Delivery Breakdown -->
+          <div class="panel">
+            <div class="panel-header">
+              <span class="panel-title">📊 Delivery Breakdown · वितरण विभाजन</span>
+              <span class="panel-action" style="font-size:11px;color:var(--t4)">Today</span>
+            </div>
+            <div class="ring-container">
+              <div class="ring"><div class="ring-inner"><div class="ring-val">1,247</div><div class="ring-label">Total</div></div></div>
+              <div class="ring-legend">
+                <div class="legend-item"><span class="legend-dot" style="background:var(--ok)"></span>Read — 524 (42%)</div>
+                <div class="legend-item"><span class="legend-dot" style="background:var(--wa)"></span>Delivered — 449 (36%)</div>
+                <div class="legend-item"><span class="legend-dot" style="background:var(--in)"></span>Sent — 163 (13%)</div>
+                <div class="legend-item"><span class="legend-dot" style="background:var(--er)"></span>Failed — 47 (4%)</div>
+                <div class="legend-item"><span class="legend-dot" style="background:var(--wr)"></span>Pending — 64 (5%)</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Active Templates -->
+          <div class="panel">
+            <div class="panel-header">
+              <span class="panel-title">📝 Active Templates · सक्रिय नमुने</span>
+              <span class="panel-action">Manage →</span>
+            </div>
+            <div class="template-grid">
+              <div class="tpl-card">
+                <div class="tpl-header">
+                  <span class="tpl-name">Nivedan Acknowledgment</span>
+                  <div style="display:flex;gap:4px;align-items:center"><span class="tpl-code">NIV_ACK</span><span class="tpl-category cat-utility">Utility</span></div>
+                </div>
+                <div class="tpl-preview">नमस्कार {{name}}, आपली तक्रार क्र. {{tracking_id}} नोंदवली गेली आहे...</div>
+                <div class="tpl-meta"><span>📤 Used: 312 times</span><span>✅ Approved</span></div>
+              </div>
+              <div class="tpl-card">
+                <div class="tpl-header">
+                  <span class="tpl-name">Event Invitation</span>
+                  <div style="display:flex;gap:4px;align-items:center"><span class="tpl-code">EVENT_INVITE</span><span class="tpl-category cat-marketing">Marketing</span></div>
+                </div>
+                <div class="tpl-preview">आपणास {{event_name}} कार्यक्रमास निमंत्रण. दिनांक: {{date}}, ठिकाण: {{location}}</div>
+                <div class="tpl-meta"><span>📤 Used: 89 times</span><span>✅ Approved</span></div>
+              </div>
+              <div class="tpl-card">
+                <div class="tpl-header">
+                  <span class="tpl-name">Broadcast Announcement</span>
+                  <div style="display:flex;gap:4px;align-items:center"><span class="tpl-code">BROADCAST</span><span class="tpl-category cat-marketing">Marketing</span></div>
+                </div>
+                <div class="tpl-preview">{{mla_name}} कार्यालयाकडून: {{custom_message}}</div>
+                <div class="tpl-meta"><span>📤 Used: 45 times</span><span>✅ Approved</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <div class="wfb">Wireframe · WhatsApp Automation</div>
+  <script>function setTheme(t){document.documentElement.setAttribute('data-theme',t);document.querySelectorAll('.tt button').forEach(b=>b.classList.remove('active'));event.target.classList.add('active');}</script>
+</body>
+</html>

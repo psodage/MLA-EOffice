@@ -8,20 +8,21 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Download, Plus, LayoutGrid, Table, MapPin, RotateCcw, Building2, BarChart2, Camera, AlertTriangle, ChevronLeft, ChevronRight, Landmark, Map, HardHat } from 'lucide-react';
 import api from '../../services/api.js';
 import useLangStore from '../../store/langStore.js';
 import DevWorkFormModal from './DevWorkFormModal.jsx';
 import './DevWorksListPage.css';
 
 const CATEGORY_MAP = {
-  ROAD: { en: '🛣️ Road', mr: '🛣️ रस्ते / पूल', bg: 'var(--inb, #eff6ff)', color: 'var(--in, #2563eb)' },
-  WATER_PIPELINE: { en: '💧 Water', mr: '💧 पाणीपुरवठा', bg: 'var(--okb, #f0fdf4)', color: 'var(--ok, #16a34a)' },
-  HOSPITAL: { en: '🏥 Hospital', mr: '🏥 रुग्णालय', bg: 'var(--erb, #fef2f2)', color: 'var(--er, #dc2626)' },
-  SCHOOL: { en: '🏫 School', mr: '🏫 शाळा / शिक्षण', bg: 'var(--erb, #fef2f2)', color: 'var(--er, #dc2626)' },
-  STREET_LIGHT: { en: '⚡ Street Light', mr: '⚡ रस्त्यावरील दिवे', bg: 'var(--pub, #f5f3ff)', color: 'var(--pu, #7c3aed)' },
-  ELECTRIFICATION: { en: '⚡ Electrification', mr: '⚡ विद्युतीकरण', bg: 'var(--pub, #f5f3ff)', color: 'var(--pu, #7c3aed)' },
-  COMMUNITY_HALL: { en: '🏛️ Hall', mr: '🏛️ समाजमंदिर', bg: 'var(--wrb, #fffbeb)', color: 'var(--wr, #d97706)' },
-  OTHER: { en: '🏗️ Other', mr: '🏗️ इतर प्रकल्प', bg: 'var(--bg, #f5f7fa)', color: 'var(--t2, #475569)' },
+  ROAD: { en: 'Road', mr: 'रस्ते / पूल', bg: 'var(--inb, #eff6ff)', color: 'var(--in, #2563eb)' },
+  WATER_PIPELINE: { en: 'Water', mr: 'पाणीपुरवठा', bg: 'var(--okb, #f0fdf4)', color: 'var(--ok, #16a34a)' },
+  HOSPITAL: { en: 'Hospital', mr: 'रुग्णालय', bg: 'var(--erb, #fef2f2)', color: 'var(--er, #dc2626)' },
+  SCHOOL: { en: 'School', mr: 'शाळा / शिक्षण', bg: 'var(--erb, #fef2f2)', color: 'var(--er, #dc2626)' },
+  STREET_LIGHT: { en: 'Street Light', mr: 'रस्त्यावरील दिवे', bg: 'var(--pub, #f5f3ff)', color: 'var(--pu, #7c3aed)' },
+  ELECTRIFICATION: { en: 'Electrification', mr: 'विद्युतीकरण', bg: 'var(--pub, #f5f3ff)', color: 'var(--pu, #7c3aed)' },
+  COMMUNITY_HALL: { en: 'Hall', mr: 'समाजमंदिर', bg: 'var(--wrb, #fffbeb)', color: 'var(--wr, #d97706)' },
+  OTHER: { en: 'Other', mr: 'इतर प्रकल्प', bg: 'var(--bg, #f5f7fa)', color: 'var(--t2, #475569)' },
 };
 
 const STATUS_MAP = {
@@ -58,91 +59,86 @@ const SAMPLE_FALLBACK_PROJECTS = [
     project_name: 'Wadgaon Village Water Tank',
     category: 'WATER_PIPELINE',
     location: 'Wadgaon · Haveli Taluka',
-    geo_latitude: 18.7324,
-    geo_longitude: 73.6842,
-    funding_source: 'ZP · जि.प.',
+    geo_latitude: 18.6654,
+    geo_longitude: 73.7712,
+    funding_source: 'MLALAD',
     budget_allocated: 8500000.0,
     budget_spent: 8500000.0,
-    contractor_name: 'Jal Nirman Corp',
-    contractor_contact: '98220 98765',
-    start_date: '15 Jan 2026',
-    expected_completion_date: '20 Jul 2026',
-    actual_completion_date: '20 Jul 2026',
+    contractor_name: 'Mahalaxmi Waterworks',
+    contractor_contact: '98220 99887',
+    start_date: '10 Jan 2026',
+    expected_completion_date: '30 Jun 2026',
+    actual_completion_date: '25 Jun 2026',
     status: 'COMPLETED',
     progress_percentage: 100,
     photos: [
-      { id: 103, photo_url: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800', photo_stage: 'AFTER' },
+      { id: 103, photo_url: 'https://images.unsplash.com/photo-1574482620826-40685ca5ebd2?w=800', photo_stage: 'AFTER' },
     ],
   },
   {
     id: 3,
-    project_name: 'Ambegaon ZP School Building Repair',
-    category: 'SCHOOL',
-    location: 'Ambegaon · Maval Taluka',
-    geo_latitude: 18.8241,
-    geo_longitude: 73.5921,
-    funding_source: 'Education Dept',
-    budget_allocated: 4200000.0,
-    budget_spent: 1470000.0,
-    contractor_name: 'Deshmukh Builders',
+    project_name: 'Sub-District Hospital Extension',
+    category: 'HOSPITAL',
+    location: 'Chinchwad City Hospital Road',
+    geo_latitude: 18.6255,
+    geo_longitude: 73.8055,
+    funding_source: 'State Grant',
+    budget_allocated: 45000000.0,
+    budget_spent: 12000000.0,
+    contractor_name: 'Apex Health Constructions',
     contractor_contact: '94220 11223',
-    start_date: '01 Dec 2025',
-    expected_completion_date: '15 Jun 2026',
+    start_date: '01 Nov 2025',
+    expected_completion_date: '01 May 2026',
     status: 'DELAYED',
     progress_percentage: 35,
     photos: [],
   },
   {
     id: 4,
-    project_name: 'Street Light Installation — Booth 145-150',
+    project_name: 'Zilla Parishad Primary School Solarization',
     category: 'ELECTRIFICATION',
-    location: 'Shivaji Nagar · Ward 1',
-    geo_latitude: 18.5308,
-    geo_longitude: 73.8475,
-    funding_source: 'MSEDCL',
-    budget_allocated: 1200000.0,
+    location: 'Rahata Town',
+    geo_latitude: 19.6465,
+    geo_longitude: 74.4842,
+    funding_source: 'ZP Fund',
+    budget_allocated: 3200000.0,
     budget_spent: 0.0,
-    contractor_name: 'TBD',
-    contractor_contact: '—',
-    start_date: '15 Aug 2026',
-    expected_completion_date: '30 Sep 2026',
+    contractor_name: 'Green Grid Power',
+    contractor_contact: '91580 44332',
+    start_date: '15 Jul 2026',
+    expected_completion_date: '30 Nov 2026',
     status: 'SANCTIONED',
     progress_percentage: 0,
     photos: [],
   },
 ];
 
-const formatCurrency = (val) => {
-  const num = Number(val) || 0;
-  if (num >= 10000000) {
-    return `₹ ${(num / 10000000).toFixed(2)} Cr`;
-  }
-  return `₹ ${(num / 100000).toFixed(2)} L`;
+const formatCurrency = (amount) => {
+  if (amount == null) return '₹ 0';
+  const val = Number(amount);
+  if (val >= 10000000) return `₹ ${(val / 10000000).toFixed(2)} Cr`;
+  if (val >= 100000) return `₹ ${(val / 100000).toFixed(2)} Lakh`;
+  return `₹ ${val.toLocaleString('en-IN')}`;
 };
 
 const DevWorksListPage = () => {
   const navigate = useNavigate();
-  const { lang, setLang } = useLangStore();
+  const { lang } = useLangStore();
   const isMr = lang === 'MR';
 
   const [items, setItems] = useState([]);
   const [summary, setSummary] = useState({
-    totalProjects: 54,
-    sanctionedCount: 8,
-    inProgressCount: 23,
-    completedCount: 18,
-    delayedCount: 5,
-    totalBudgetAllocated: 0,
-    totalBudgetSpent: 0,
+    totalProjects: 0,
+    sanctionedCount: 0,
+    inProgressCount: 0,
+    completedCount: 0,
+    delayedCount: 0,
   });
   const [meta, setMeta] = useState({ page: 1, limit: 20, totalItems: 0, totalPages: 1 });
   const [loading, setLoading] = useState(true);
-
-  // View Mode: 'CARDS' | 'TABLE' | 'MAP'
-  const [viewMode, setViewMode] = useState('CARDS');
+  const [viewMode, setViewMode] = useState('CARDS'); // 'CARDS' | 'TABLE' | 'MAP'
   const [selectedMapItem, setSelectedMapItem] = useState(null);
 
-  // Filter State
   const [filters, setFilters] = useState({
     search: '',
     category: 'ALL',
@@ -151,52 +147,51 @@ const DevWorksListPage = () => {
     page: 1,
   });
 
-  // Modal State
   const [isFormOpen, setIsFormOpen] = useState(false);
 
   const fetchDevWorks = useCallback(async () => {
     setLoading(true);
     try {
-      const params = {
-        page: filters.page,
-        limit: 20,
-      };
+      const params = { page: filters.page, limit: 20 };
       if (filters.search) params.search = filters.search;
       if (filters.category !== 'ALL') params.category = filters.category;
       if (filters.status !== 'ALL') params.status = filters.status;
       if (filters.funding_source !== 'ALL') params.funding_source = filters.funding_source;
 
       const { data } = await api.get('/devworks', { params });
-      const fetchedItems = data.data && data.data.length > 0 ? data.data : SAMPLE_FALLBACK_PROJECTS;
-      setItems(fetchedItems);
+      const apiItems = data.data || [];
+      const apiMeta = data.meta || { page: 1, limit: 20, totalItems: apiItems.length, totalPages: 1 };
 
-      const compCount = fetchedItems.filter((i) => i.status === 'COMPLETED').length;
-      const progCount = fetchedItems.filter((i) => i.status === 'IN_PROGRESS').length;
-      const sancCount = fetchedItems.filter((i) => i.status === 'SANCTIONED').length;
-      const delayCount = fetchedItems.filter((i) => i.status === 'DELAYED').length;
-
-      setSummary({
-        totalProjects: data.summary?.totalProjects || fetchedItems.length,
-        sanctionedCount: sancCount || 8,
-        inProgressCount: data.summary?.inProgressCount || progCount || 23,
-        completedCount: data.summary?.completedCount || compCount || 18,
-        delayedCount: delayCount || 5,
-        totalBudgetAllocated: data.summary?.totalBudgetAllocated || 0,
-        totalBudgetSpent: data.summary?.totalBudgetSpent || 0,
-      });
-
-      setMeta(data.meta || { page: 1, limit: 20, totalItems: fetchedItems.length, totalPages: 1 });
+      if (apiItems.length > 0) {
+        setItems(apiItems);
+        setMeta(apiMeta);
+        setSummary({
+          totalProjects: apiMeta.totalItems || apiItems.length,
+          sanctionedCount: apiItems.filter((i) => i.status === 'SANCTIONED').length,
+          inProgressCount: apiItems.filter((i) => i.status === 'IN_PROGRESS').length,
+          completedCount: apiItems.filter((i) => i.status === 'COMPLETED').length,
+          delayedCount: apiItems.filter((i) => i.status === 'DELAYED').length,
+        });
+      } else {
+        setItems(SAMPLE_FALLBACK_PROJECTS);
+        setSummary({
+          totalProjects: SAMPLE_FALLBACK_PROJECTS.length,
+          sanctionedCount: 1,
+          inProgressCount: 1,
+          completedCount: 1,
+          delayedCount: 1,
+        });
+        setMeta({ page: 1, limit: 20, totalItems: 4, totalPages: 1 });
+      }
     } catch (err) {
-      console.warn('API fetch error, falling back to wireframe sample dataset:', err);
+      console.warn('API error, using sample fallback development works:', err);
       setItems(SAMPLE_FALLBACK_PROJECTS);
       setSummary({
-        totalProjects: 54,
-        sanctionedCount: 8,
-        inProgressCount: 23,
-        completedCount: 18,
-        delayedCount: 5,
-        totalBudgetAllocated: 38400000,
-        totalBudgetSpent: 27610000,
+        totalProjects: SAMPLE_FALLBACK_PROJECTS.length,
+        sanctionedCount: 1,
+        inProgressCount: 1,
+        completedCount: 1,
+        delayedCount: 1,
       });
       setMeta({ page: 1, limit: 20, totalItems: 4, totalPages: 1 });
     } finally {
@@ -229,7 +224,6 @@ const DevWorksListPage = () => {
 
   return (
     <div className="devworks-page-container">
-      {/* ── Page Header ─────────────────────────────────────── */}
       <div className="devworks-header">
         <div className="devworks-title-group">
           <h1 className="title">
@@ -243,60 +237,36 @@ const DevWorksListPage = () => {
         </div>
 
         <div className="devworks-actions">
-          {/* Segmented Language Toggle */}
-          <div className="segmented-switch">
-            <button
-              type="button"
-              className={lang === 'EN' ? 'active' : ''}
-              onClick={() => setLang('EN')}
-            >
-              EN
-            </button>
-            <button
-              type="button"
-              className={lang === 'MR' ? 'active' : ''}
-              onClick={() => setLang('MR')}
-              style={{ fontFamily: "'Noto Sans Devanagari', sans-serif" }}
-            >
-              मराठी
-            </button>
-          </div>
-
-          <button className="btn-o" onClick={() => alert(isMr ? 'विकासकामे अहवाल एक्सपोर्ट होत आहे...' : 'Exporting development works report...')}>
-            📥 {isMr ? 'एक्सपोर्ट' : 'Export'}
+          <button className="btn-o" onClick={() => alert(isMr ? 'विकासकामे अहवाल एक्सपोर्ट होत आहे...' : 'Exporting development works report...')} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+            <Download size={14} /> {isMr ? 'एक्सपोर्ट' : 'Export'}
           </button>
-          <button className="btn-p" onClick={() => setIsFormOpen(true)}>
-            + {isMr ? 'नवीन प्रकल्प' : 'New Project'}
+          <button className="btn-p" onClick={() => setIsFormOpen(true)} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+            <Plus size={14} /> {isMr ? 'नवीन प्रकल्प' : 'New Project'}
           </button>
         </div>
       </div>
 
-      {/* ── KPI Stats Grid (5 Cards matching wireframe) ──────── */}
       <div className="devworks-stats">
         <div className="devworks-stat-card">
           <div className="stat-val" style={{ color: 'var(--t1)' }}>{summary.totalProjects}</div>
           <div className="stat-label">{isMr ? 'एकूण प्रकल्प' : 'Total Projects'}</div>
           <div className="stat-sub">FY 2026–27</div>
         </div>
-
         <div className="devworks-stat-card">
           <div className="stat-val" style={{ color: 'var(--in, #2563eb)' }}>{summary.sanctionedCount}</div>
           <div className="stat-label">{isMr ? 'मंजूर' : 'Sanctioned'}</div>
           <div className="stat-sub">{isMr ? 'अजून सुरू नाही' : 'Not yet started'}</div>
         </div>
-
         <div className="devworks-stat-card">
           <div className="stat-val" style={{ color: 'var(--wr, #d97706)' }}>{summary.inProgressCount}</div>
           <div className="stat-label">{isMr ? 'सुरू' : 'In Progress'}</div>
           <div className="stat-sub">{isMr ? 'सरासरी ६२% पूर्ण' : 'Avg 62% complete'}</div>
         </div>
-
         <div className="devworks-stat-card">
           <div className="stat-val" style={{ color: 'var(--ok, #16a34a)' }}>{summary.completedCount}</div>
           <div className="stat-label">{isMr ? 'पूर्ण' : 'Completed'}</div>
           <div className="stat-sub">{isMr ? 'या वर्षात' : 'This year'}</div>
         </div>
-
         <div className="devworks-stat-card">
           <div className="stat-val" style={{ color: 'var(--er, #dc2626)' }}>{summary.delayedCount}</div>
           <div className="stat-label">{isMr ? 'विलंब' : 'Delayed'}</div>
@@ -304,31 +274,32 @@ const DevWorksListPage = () => {
         </div>
       </div>
 
-      {/* ── View Toggle Toolbar ────────────────────────────── */}
       <div className="devworks-toolbar">
         <div className="view-toggle">
           <button
             className={`vt-btn ${viewMode === 'CARDS' ? 'active' : ''}`}
             onClick={() => setViewMode('CARDS')}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
           >
-            🃏 {isMr ? 'कार्ड व्ह्यू' : 'Cards'}
+            <LayoutGrid size={14} /> {isMr ? 'कार्ड व्ह्यू' : 'Cards'}
           </button>
           <button
             className={`vt-btn ${viewMode === 'TABLE' ? 'active' : ''}`}
             onClick={() => setViewMode('TABLE')}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
           >
-            📋 {isMr ? 'तक्ता व्ह्यू' : 'Table'}
+            <Table size={14} /> {isMr ? 'तक्ता व्ह्यू' : 'Table'}
           </button>
           <button
             className={`vt-btn ${viewMode === 'MAP' ? 'active' : ''}`}
             onClick={() => setViewMode('MAP')}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
           >
-            📍 {isMr ? 'नकाशा' : 'Map'}
+            <MapPin size={14} /> {isMr ? 'नकाशा' : 'Map'}
           </button>
         </div>
       </div>
 
-      {/* ── Filter Bar ──────────────────────────────────────── */}
       <div className="devworks-filter-bar">
         <div className="filter-fg">
           <span className="filter-fl">{isMr ? 'शोध' : 'Search'}</span>
@@ -346,12 +317,12 @@ const DevWorksListPage = () => {
           <span className="filter-fl">{isMr ? 'प्रकार' : 'Category'}</span>
           <select className="filter-fi" name="category" value={filters.category} onChange={handleFilterChange}>
             <option value="ALL">{isMr ? 'सर्व प्रकार' : 'All Categories'}</option>
-            <option value="ROAD">{isMr ? '🛣️ रस्ते / पूल' : 'Road'}</option>
-            <option value="WATER_PIPELINE">{isMr ? '💧 पाणीपुरवठा' : 'Water'}</option>
-            <option value="SCHOOL">{isMr ? '🏫 शाळा / शिक्षण' : 'School'}</option>
-            <option value="ELECTRIFICATION">{isMr ? '⚡ विद्युतीकरण' : 'Electrification'}</option>
-            <option value="HOSPITAL">{isMr ? '🏥 रुग्णालय' : 'Hospital'}</option>
-            <option value="COMMUNITY_HALL">{isMr ? '🏛️ समाजमंदिर' : 'Community Hall'}</option>
+            <option value="ROAD">{isMr ? 'रस्ते / पूल' : 'Road'}</option>
+            <option value="WATER_PIPELINE">{isMr ? 'पाणीपुरवठा' : 'Water'}</option>
+            <option value="SCHOOL">{isMr ? 'शाळा / शिक्षण' : 'School'}</option>
+            <option value="ELECTRIFICATION">{isMr ? 'विद्युतीकरण' : 'Electrification'}</option>
+            <option value="HOSPITAL">{isMr ? 'रुग्णालय' : 'Hospital'}</option>
+            <option value="COMMUNITY_HALL">{isMr ? 'समाजमंदिर' : 'Community Hall'}</option>
           </select>
         </div>
 
@@ -359,9 +330,9 @@ const DevWorksListPage = () => {
           <span className="filter-fl">{isMr ? 'निधीचा स्रोत' : 'Funding'}</span>
           <select className="filter-fi" name="funding_source" value={filters.funding_source} onChange={handleFilterChange}>
             <option value="ALL">{isMr ? 'सर्व निधी' : 'All Funding'}</option>
-            <option value="MLALAD">MLALAD (आमदार निधी)</option>
-            <option value="ZP_FUND">ZP Fund (जिल्हा परिषद)</option>
-            <option value="STATE_GRANT">State Grant (राज्य शासन)</option>
+            <option value="MLALAD">MLALAD</option>
+            <option value="ZP_FUND">ZP Fund</option>
+            <option value="STATE_GRANT">State Grant</option>
             <option value="MSEDCL">MSEDCL</option>
           </select>
         </div>
@@ -377,25 +348,23 @@ const DevWorksListPage = () => {
           </select>
         </div>
 
-        <button className="filter-reset-btn" onClick={handleResetFilters}>
-          🔄 {isMr ? 'रिसेट' : 'Reset'}
+        <button className="filter-reset-btn" onClick={handleResetFilters} style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+          <RotateCcw size={14} /> {isMr ? 'रिसेट' : 'Reset'}
         </button>
       </div>
 
-      {/* ── View Modes Rendering ────────────────────────────── */}
       {loading ? (
         <div style={{ padding: '40px', textAlign: 'center', color: 'var(--t3)' }}>
           <p>{isMr ? 'विकासकामे लोड होत आहेत...' : 'Loading development works...'}</p>
         </div>
       ) : items.length === 0 ? (
         <div style={{ padding: '40px', textAlign: 'center', color: 'var(--t3)' }}>
-          <div style={{ fontSize: '32px', marginBottom: '8px' }}>🏗️</div>
+          <div style={{ fontSize: '32px', marginBottom: '8px' }}><HardHat size={32} /></div>
           <h3>{isMr ? 'कोणतेही विकासकाम सापडले नाही' : 'No development works found'}</h3>
           <p>{isMr ? 'कृपया फिल्टर किंवा शोध पर्याय बदलून प्रयत्न करा.' : 'Please adjust your search or filters.'}</p>
         </div>
       ) : (
         <>
-          {/* 1. CARDS GRID VIEW */}
           {viewMode === 'CARDS' && (
             <div className="card-grid">
               {items.map((item) => {
@@ -415,7 +384,9 @@ const DevWorksListPage = () => {
                         </span>
                       </div>
                       <div className="pc-title">{item.project_name}</div>
-                      <div className="pc-loc">📍 {item.location}</div>
+                      <div className="pc-loc" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                        <MapPin size={12} /> {item.location}
+                      </div>
                     </div>
 
                     <div className="pc-body">
@@ -431,16 +402,15 @@ const DevWorksListPage = () => {
                         </div>
                         <div className="pg-info">
                           <span>{item.progress_percentage || 0}% Complete</span>
-                          <span style={{ color: item.status === 'DELAYED' ? 'var(--er)' : 'var(--t3)' }}>
+                          <span style={{ color: item.status === 'DELAYED' ? 'var(--er)' : 'var(--t3)', display: 'inline-flex', alignItems: 'center', gap: '2px' }}>
                             {item.status === 'COMPLETED'
                               ? `Completed: ${item.actual_completion_date || 'Jul 2026'}`
                               : item.status === 'DELAYED'
-                              ? `⚠ Overdue by 45 days`
+                              ? <><AlertTriangle size={11} /> Overdue by 45 days</>
                               : `Due: ${item.expected_completion_date || '15 Oct 2026'}`}
                           </span>
                         </div>
                       </div>
-
                       <div className="pc-meta">
                         <div className="pc-meta-item">
                           <span className="pc-meta-label">Contractor</span>
@@ -468,8 +438,8 @@ const DevWorksListPage = () => {
                     <div className="pc-footer">
                       <span className="pc-budget">{formatCurrency(item.budget_allocated)}</span>
                       <div className="pc-photos">
-                        <div className="pc-photo">📷</div>
-                        <div className="pc-photo">📷</div>
+                        <div className="pc-photo"><Camera size={12} /></div>
+                        <div className="pc-photo"><Camera size={12} /></div>
                         <div className="pc-photo" style={{ fontSize: '9px' }}>
                           +{Math.max(0, photosCount > 0 ? photosCount : 3)}
                         </div>
@@ -481,7 +451,6 @@ const DevWorksListPage = () => {
             </div>
           )}
 
-          {/* 2. TABLE VIEW */}
           {viewMode === 'TABLE' && (
             <div className="table-card">
               <table className="devworks-table">
@@ -504,7 +473,9 @@ const DevWorksListPage = () => {
                       <tr key={item.id} onClick={() => openDetailPage(item)}>
                         <td>
                           <div style={{ fontWeight: 600, color: 'var(--t1)' }}>{item.project_name}</div>
-                          <div style={{ fontSize: '12px', color: 'var(--t3)', marginTop: '2px' }}>📍 {item.location}</div>
+                          <div style={{ fontSize: '12px', color: 'var(--t3)', marginTop: '2px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                            <MapPin size={11} /> {item.location}
+                          </div>
                         </td>
                         <td>
                           <span className="pc-cat" style={{ background: catCfg.bg, color: catCfg.color }}>
@@ -512,8 +483,8 @@ const DevWorksListPage = () => {
                           </span>
                         </td>
                         <td>
-                          <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--t2)' }}>
-                            🏛️ {item.funding_source}
+                          <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--t2)', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                            <Landmark size={12} /> {item.funding_source}
                           </span>
                         </td>
                         <td style={{ fontFamily: 'JetBrains Mono', fontWeight: 700, color: 'var(--p)' }}>
@@ -535,10 +506,10 @@ const DevWorksListPage = () => {
                         <td style={{ textAlign: 'right' }}>
                           <button
                             className="btn-o"
-                            style={{ height: '30px', padding: '0 10px', fontSize: '11px' }}
+                            style={{ height: '30px', padding: '0 10px', fontSize: '11px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}
                             onClick={(e) => { e.stopPropagation(); openDetailPage(item); }}
                           >
-                            📊 {isMr ? 'तपशील' : 'Details'}
+                            <BarChart2 size={12} /> {isMr ? 'तपशील' : 'Details'}
                           </button>
                         </td>
                       </tr>
@@ -549,12 +520,11 @@ const DevWorksListPage = () => {
             </div>
           )}
 
-          {/* 3. MAP VIEW */}
           {viewMode === 'MAP' && (
             <div className="map-view-wrapper">
               <div className="map-sidebar">
-                <h4 style={{ fontSize: '14px', fontWeight: 700, color: 'var(--t1)', marginBottom: '4px' }}>
-                  📍 {isMr ? 'प्रकल्प नकाशा सूची' : 'Project Map Pin Index'}
+                <h4 style={{ fontSize: '14px', fontWeight: 700, color: 'var(--t1)', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <MapPin size={14} /> {isMr ? 'प्रकल्प नकाशा सूची' : 'Project Map Pin Index'}
                 </h4>
                 {items.map((item, idx) => (
                   <div
@@ -569,17 +539,17 @@ const DevWorksListPage = () => {
                       </span>
                     </div>
                     <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--t1)' }}>{item.project_name}</div>
-                    <div style={{ fontSize: '11px', color: 'var(--t3)', marginTop: '2px' }}>📍 {item.location}</div>
+                    <div style={{ fontSize: '11px', color: 'var(--t3)', marginTop: '2px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                      <MapPin size={11} /> {item.location}
+                    </div>
                   </div>
                 ))}
               </div>
-
               <div className="map-canvas-container">
                 <div className="simulated-map-grid" />
-                <div style={{ position: 'absolute', top: '16px', left: '16px', zIndex: 5, background: 'rgba(15, 23, 42, 0.85)', color: '#fff', padding: '8px 14px', borderRadius: '4px', fontSize: '12px', fontWeight: 600 }}>
-                  🗺️ {isMr ? 'क्षेत्रीय नकाशा - राहाता / अहमदनगर' : 'Geographic Coverage — Rahata / Ahmednagar'}
+                <div style={{ position: 'absolute', top: '16px', left: '16px', zIndex: 5, background: 'rgba(15, 23, 42, 0.85)', color: '#fff', padding: '8px 14px', borderRadius: '4px', fontSize: '12px', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                  <Map size={14} /> {isMr ? 'क्षेत्रीय नकाशा - राहाता / अहमदनगर' : 'Geographic Coverage — Rahata / Ahmednagar'}
                 </div>
-
                 {items.map((item, idx) => {
                   const leftPct = 20 + (idx * 22) % 65;
                   const topPct = 25 + (idx * 18) % 55;
@@ -587,11 +557,11 @@ const DevWorksListPage = () => {
                     <div
                       key={item.id}
                       className="map-pin"
-                      style={{ left: `${leftPct}%`, top: `${topPct}%` }}
+                      style={{ left: `${leftPct}%`, top: `${topPct}%`, display: 'inline-flex', alignItems: 'center', gap: '4px' }}
                       onClick={() => openDetailPage(item)}
                       title={`${item.project_name} (${item.progress_percentage || 0}%)`}
                     >
-                      📍 PIN 0{idx + 1} · {item.progress_percentage || 0}%
+                      <MapPin size={11} /> PIN 0{idx + 1} · {item.progress_percentage || 0}%
                     </div>
                   );
                 })}
@@ -612,16 +582,18 @@ const DevWorksListPage = () => {
                   className="page-btn"
                   disabled={meta.page <= 1}
                   onClick={() => setFilters((prev) => ({ ...prev, page: prev.page - 1 }))}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}
                 >
-                  ← {isMr ? 'मागील' : 'Prev'}
+                  <ChevronLeft size={14} /> {isMr ? 'मागील' : 'Prev'}
                 </button>
                 <span style={{ fontWeight: 600 }}>{meta.page}</span>
                 <button
                   className="page-btn"
                   disabled={meta.page >= meta.totalPages}
                   onClick={() => setFilters((prev) => ({ ...prev, page: prev.page + 1 }))}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}
                 >
-                  {isMr ? 'पुढील' : 'Next'} →
+                  {isMr ? 'पुढील' : 'Next'} <ChevronRight size={14} />
                 </button>
               </div>
             </div>

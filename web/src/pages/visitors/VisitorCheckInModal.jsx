@@ -1,24 +1,18 @@
-// src/pages/visitors/VisitorCheckInModal.jsx
-// ============================================================
-// 2-Step Visitor Check-In Modal Form
-// Step 1: 10-digit Mobile lookup (Auto-detects repeat visits)
-// Step 2: Pre-fills visitor name/address & records purpose
-// ============================================================
-
 import { useState, useEffect } from 'react';
+import { X, Users, Search, RotateCcw, LogIn, ArrowLeft, AlertTriangle } from 'lucide-react';
 import api from '../../services/api.js';
 
 const PURPOSE_OPTIONS = [
-  { value: 'GRIEVANCE', labelMr: 'तक्रार / निवेदने (Grievance / Petition)', icon: '📋' },
-  { value: 'COURTESY_CALL', labelMr: 'शुभेच्छा भेट (Courtesy Call)', icon: '🤝' },
-  { value: 'PARTY_WORK', labelMr: 'पक्ष कार्य / संघटना (Party Work)', icon: '🚩' },
-  { value: 'INVITATION', labelMr: 'निमंत्रण पत्रिका सुपूर्द (Invitation)', icon: '✉️' },
-  { value: 'PERSONAL_MEETING', labelMr: 'वैयक्तिक भेट (Personal Meeting)', icon: '👤' },
-  { value: 'DOCUMENT_SUBMISSION', labelMr: 'कागदपत्रे सादर करणे (Document Submission)', icon: '📄' },
-  { value: 'FOLLOWUP', labelMr: 'काम पाठपुरावा (Followup)', icon: '🔄' },
-  { value: 'RECOMMENDATION', labelMr: 'शिफारस मागणी (Recommendation)', icon: '👍' },
-  { value: 'GENERAL_INQUIRY', labelMr: 'सामान्य चौकशी (General Inquiry)', icon: '❓' },
-  { value: 'OTHER', labelMr: 'इतर (Other)', icon: '📌' },
+  { value: 'GRIEVANCE', labelMr: 'तक्रार / निवेदने (Grievance / Petition)' },
+  { value: 'COURTESY_CALL', labelMr: 'शुभेच्छा भेट (Courtesy Call)' },
+  { value: 'PARTY_WORK', labelMr: 'पक्ष कार्य / संघटना (Party Work)' },
+  { value: 'INVITATION', labelMr: 'निमंत्रण पत्रिका सुपूर्द (Invitation)' },
+  { value: 'PERSONAL_MEETING', labelMr: 'वैयक्तिक भेट (Personal Meeting)' },
+  { value: 'DOCUMENT_SUBMISSION', labelMr: 'कागदपत्रे सादर करणे (Document Submission)' },
+  { value: 'FOLLOWUP', labelMr: 'काम पाठपुरावा (Followup)' },
+  { value: 'RECOMMENDATION', labelMr: 'शिफारस मागणी (Recommendation)' },
+  { value: 'GENERAL_INQUIRY', labelMr: 'सामान्य चौकशी (General Inquiry)' },
+  { value: 'OTHER', labelMr: 'इतर (Other)' },
 ];
 
 const VisitorCheckInModal = ({ isOpen, onClose, onSuccess }) => {
@@ -123,16 +117,18 @@ const VisitorCheckInModal = ({ isOpen, onClose, onSuccess }) => {
       <div className="inward-modal-container" onClick={(e) => e.stopPropagation()}>
         <div className="inward-modal-header">
           <div className="modal-title-group">
-            <h3>👥 नवीन नागरिक भेट नोंद (Visitor Check-In)</h3>
+            <h3 style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+              <Users size={18} /> नवीन नागरिक भेट नोंद (Visitor Check-In)
+            </h3>
             <span className="modal-subtitle-en">Step {step} of 2 — Quick Entry & Repeat Detection</span>
           </div>
-          <button className="modal-close-btn" onClick={onClose}>✕</button>
+          <button className="modal-close-btn" onClick={onClose}><X size={18} /></button>
         </div>
 
         {step === 1 ? (
           /* Step 1: Mobile Lookup Form */
           <form onSubmit={handleMobileLookup} className="inward-form">
-            {error && <div className="form-error-banner">⚠️ {error}</div>}
+            {error && <div className="form-error-banner" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><AlertTriangle size={16} /> {error}</div>}
 
             <div className="form-group col-span-2">
               <label>भेटणाऱ्याचा १० अंकी मोबाईल नंबर (Mobile Number) <span className="req">*</span></label>
@@ -147,8 +143,8 @@ const VisitorCheckInModal = ({ isOpen, onClose, onSuccess }) => {
                   required
                   autoFocus
                 />
-                <button type="submit" className="btn-primary" disabled={lookingUp}>
-                  {lookingUp ? 'तपासत आहे...' : '🔍 शोधा (Lookup)'}
+                <button type="submit" className="btn-primary" disabled={lookingUp} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                  <Search size={16} /> {lookingUp ? 'तपासत आहे...' : 'शोधा (Lookup)'}
                 </button>
               </div>
               <small style={{ color: '#94a3b8', marginTop: '0.35rem', display: 'block' }}>
@@ -159,12 +155,12 @@ const VisitorCheckInModal = ({ isOpen, onClose, onSuccess }) => {
         ) : (
           /* Step 2: Visitor Details & Purpose Form */
           <form onSubmit={handleSubmit} className="inward-form">
-            {error && <div className="form-error-banner">⚠️ {error}</div>}
+            {error && <div className="form-error-banner" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><AlertTriangle size={16} /> {error}</div>}
 
             {/* Repeat Visitor Alert Banner */}
             {repeatInfo && repeatInfo.isRepeat && (
-              <div className="repeat-visitor-alert-banner">
-                🔁 <strong>पुनरावृत्ती भेटणारे (Repeat Visitor):</strong> हे नागरिक यापूर्वी <strong>{repeatInfo.previousCount} वेळा</strong> कार्यालयास भेट देऊन गेले आहेत.
+              <div className="repeat-visitor-alert-banner" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <RotateCcw size={16} /> <strong>पुनरावृत्ती भेटणारे (Repeat Visitor):</strong> हे नागरिक यापूर्वी <strong>{repeatInfo.previousCount} वेळा</strong> कार्यालयास भेट देऊन गेले आहेत.
               </div>
             )}
 
@@ -202,7 +198,7 @@ const VisitorCheckInModal = ({ isOpen, onClose, onSuccess }) => {
                 <select name="purpose" value={form.purpose} onChange={handleChange} required>
                   {PURPOSE_OPTIONS.map((p) => (
                     <option key={p.value} value={p.value}>
-                      {p.icon} {p.labelMr}
+                      {p.labelMr}
                     </option>
                   ))}
                 </select>
@@ -221,11 +217,11 @@ const VisitorCheckInModal = ({ isOpen, onClose, onSuccess }) => {
             </div>
 
             <div className="modal-actions">
-              <button type="button" className="btn-secondary" onClick={() => setStep(1)}>
-                ← मागे जा (Back)
+              <button type="button" className="btn-secondary" onClick={() => setStep(1)} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                <ArrowLeft size={16} /> मागे जा (Back)
               </button>
-              <button type="submit" className="btn-primary" disabled={submitting}>
-                {submitting ? 'नोंदणी होत आहे...' : '🚪 चेक-इन करा (Check-In)'}
+              <button type="submit" className="btn-primary" disabled={submitting} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                <LogIn size={16} /> {submitting ? 'नोंदणी होत आहे...' : 'चेक-इन करा (Check-In)'}
               </button>
             </div>
           </form>

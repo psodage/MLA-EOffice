@@ -1,9 +1,5 @@
-// src/pages/visitors/ConvertToNivedanModal.jsx
-// ============================================================
-// Modal to Convert Visitor Grievance into an Official Nivedan Petition
-// ============================================================
-
 import { useState, useEffect } from 'react';
+import { X, FileText, AlertTriangle } from 'lucide-react';
 import api from '../../services/api.js';
 
 const ConvertToNivedanModal = ({ isOpen, onClose, visitor, onSuccess }) => {
@@ -84,14 +80,16 @@ const ConvertToNivedanModal = ({ isOpen, onClose, visitor, onSuccess }) => {
       <div className="inward-modal-container" onClick={(e) => e.stopPropagation()}>
         <div className="inward-modal-header">
           <div className="modal-title-group">
-            <h3>📋 निवेदनात रूपांतर करा (Convert Visitor to Nivedan)</h3>
+            <h3 style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+              <FileText size={18} /> निवेदनात रूपांतर करा (Convert Visitor to Nivedan)
+            </h3>
             <span className="modal-subtitle-en">Create Official Petition from Visitor Grievance</span>
           </div>
-          <button className="modal-close-btn" onClick={onClose}>✕</button>
+          <button className="modal-close-btn" onClick={onClose}><X size={18} /></button>
         </div>
 
         <form onSubmit={handleSubmit} className="inward-form">
-          {error && <div className="form-error-banner">⚠️ {error}</div>}
+          {error && <div className="form-error-banner" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><AlertTriangle size={16} /> {error}</div>}
 
           <div className="form-grid">
             <div className="form-group">
@@ -143,8 +141,8 @@ const ConvertToNivedanModal = ({ isOpen, onClose, visitor, onSuccess }) => {
             <button type="button" className="btn-secondary" onClick={onClose}>
               रद्द करा (Cancel)
             </button>
-            <button type="submit" className="btn-primary" disabled={submitting}>
-              {submitting ? 'रुपांतर होत आहे...' : '📋 अधिकृत निवेदनात रूपांतर करा'}
+            <button type="submit" className="btn-primary" disabled={submitting} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+              <FileText size={16} /> {submitting ? 'रुपांतर होत आहे...' : 'अधिकृत निवेदनात रूपांतर करा'}
             </button>
           </div>
         </form>

@@ -6,6 +6,7 @@
 // ============================================================
 
 import { useState, useEffect } from 'react';
+import { X, UploadCloud, Paperclip, FileText, Save, Check, Inbox, AlertTriangle } from 'lucide-react';
 import api from '../../services/api.js';
 import useLangStore from '../../store/langStore.js';
 
@@ -194,19 +195,19 @@ const InwardFormModal = ({ isOpen, onClose, onSuccess, initialData = null, onSav
       <div className="inward-modal-container" onClick={(e) => e.stopPropagation()}>
         <div className="inward-modal-header">
           <div className="modal-title-group">
-            <h3>{initialData ? '✏️ Inward Details · आवक तपशील' : '📥 New Inward Entry · नवीन आवक नोंद'}</h3>
+            <h3>{initialData ? 'Inward Details · आवक तपशील' : 'New Inward Entry · नवीन आवक नोंद'}</h3>
             <span className="modal-subtitle-en">Register a received letter, document, or correspondence</span>
           </div>
-          <button type="button" className="modal-close-btn" onClick={onClose}>✕</button>
+          <button type="button" className="modal-close-btn" onClick={onClose}><X size={18} /></button>
         </div>
 
         <form onSubmit={(e) => handleSubmit(e, false)}>
           <div className="form-card" style={{ border: 'none', boxShadow: 'none' }}>
-            {error && <div className="form-error-banner" style={{ margin: '16px 24px 0' }}>⚠️ {error}</div>}
+            {error && <div className="form-error-banner" style={{ margin: '16px 24px 0', display: 'flex', alignItems: 'center', gap: '6px' }}><AlertTriangle size={16} /> {error}</div>}
 
             {/* Section 1: Inward Details */}
             <div className="form-section">
-              <div className="section-title">📨 Inward Details · <span className="mr">आवक तपशील</span></div>
+              <div className="section-title" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Inbox size={16} /> Inward Details · <span className="mr">आवक तपशील</span></div>
               <div className="section-desc">Letter/document received at MLA office</div>
               <div className="form-grid">
                 <div className="form-group">
@@ -238,9 +239,9 @@ const InwardFormModal = ({ isOpen, onClose, onSuccess, initialData = null, onSav
               </div>
             </div>
 
-            {/* Section 2: Sender Information */}
+            {/* Section 2: Sender Details */}
             <div className="form-section">
-              <div className="section-title">👤 Sender Information · <span class="mr">पाठवणाऱ्याची माहिती</span></div>
+              <div className="section-title">Sender Information · <span className="mr">पाठवणाऱ्याची माहिती</span></div>
               <div className="form-grid">
                 <div className="form-group">
                   <label className="form-label">
@@ -251,7 +252,7 @@ const InwardFormModal = ({ isOpen, onClose, onSuccess, initialData = null, onSav
                     name="sender_name"
                     value={form.sender_name}
                     onChange={handleChange}
-                    placeholder="e.g., Shri. D.K. Patil"
+                    placeholder="e.g., Shri. A.B. Kulkarni"
                     required
                   />
                 </div>
@@ -279,10 +280,10 @@ const InwardFormModal = ({ isOpen, onClose, onSuccess, initialData = null, onSav
                     value={form.sender_department_id}
                     onChange={handleChange}
                   >
-                    <option value="">Select department...</option>
-                    {departments.map((dept) => (
-                      <option key={dept.id} value={dept.id}>
-                        {dept.name_en || dept.name_mr} · {dept.name_mr} ({dept.short_code})
+                    <option value="">Select Department...</option>
+                    {departments.map((d) => (
+                      <option key={d.id} value={d.id}>
+                        {isMr ? d.name_mr : (d.name_en || d.name_mr)} ({d.short_code})
                       </option>
                     ))}
                   </select>
@@ -290,22 +291,22 @@ const InwardFormModal = ({ isOpen, onClose, onSuccess, initialData = null, onSav
 
                 <div className="form-group">
                   <label className="form-label">
-                    Reference Number <span className="mr-sub">संदर्भ क्रमांक</span>
+                    Reference / Letter Number <span className="mr-sub">संदर्भ पत्र क्र.</span>
                   </label>
                   <input
                     className="form-input"
                     name="reference_number"
                     value={form.reference_number}
                     onChange={handleChange}
-                    placeholder="Sender's letter/file number"
+                    placeholder="e.g., PWD/CE/2026/123"
                   />
                 </div>
               </div>
             </div>
 
-            {/* Section 3: Subject & Content */}
+            {/* Section 3: Subject & Priority */}
             <div className="form-section">
-              <div className="section-title">📄 Content · <span className="mr">सामग्री</span></div>
+              <div className="section-title">Subject & Category · <span className="mr">विषय व प्राधान्य</span></div>
               <div className="form-grid">
                 <div className="form-group form-full">
                   <label className="form-label">
@@ -316,7 +317,7 @@ const InwardFormModal = ({ isOpen, onClose, onSuccess, initialData = null, onSav
                     name="subject"
                     value={form.subject}
                     onChange={handleChange}
-                    placeholder="Subject line of the received document"
+                    placeholder="Brief description of the letter subject..."
                     required
                   />
                 </div>
@@ -350,7 +351,7 @@ const InwardFormModal = ({ isOpen, onClose, onSuccess, initialData = null, onSav
                   <div className="tag-list">
                     {form.tags.map((tag) => (
                       <span key={tag} className="tag">
-                        {tag} <span className="x" onClick={() => handleRemoveTag(tag)}>✕</span>
+                        {tag} <span className="x" onClick={() => handleRemoveTag(tag)} style={{ cursor: 'pointer', display: 'inline-flex', alignItems: 'center' }}><X size={12} /></span>
                       </span>
                     ))}
                   </div>
@@ -361,9 +362,9 @@ const InwardFormModal = ({ isOpen, onClose, onSuccess, initialData = null, onSav
                     Priority<span className="req">*</span> <span className="mr-sub">प्राधान्य</span>
                   </label>
                   <select className="form-input" name="priority" value={form.priority} onChange={handleChange}>
-                    <option value="LOW">🟢 Low · कमी</option>
-                    <option value="MEDIUM">🟡 Medium · मध्यम</option>
-                    <option value="HIGH">🔴 High · उच्च</option>
+                    <option value="LOW">Low · कमी</option>
+                    <option value="MEDIUM">Medium · मध्यम</option>
+                    <option value="HIGH">High · उच्च</option>
                   </select>
                 </div>
 
@@ -393,10 +394,10 @@ const InwardFormModal = ({ isOpen, onClose, onSuccess, initialData = null, onSav
 
             {/* Section 4: Attachments */}
             <div className="form-section">
-              <div className="section-title">📎 Scan / Upload Document · <span className="mr">दस्तऐवज अपलोड</span></div>
+              <div className="section-title" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Paperclip size={16} /> Scan / Upload Document · <span className="mr">दस्तऐवज अपलोड</span></div>
               <div className="section-desc">Upload the scanned PDF or photo of the received letter</div>
               <div className="file-drop">
-                <span className="ico">📤</span>
+                <span className="ico"><UploadCloud size={24} /></span>
                 <div className="text">
                   Drag & drop scanned document, or <strong style={{ color: 'var(--inw-p)' }}>click to browse</strong>
                 </div>
@@ -407,10 +408,10 @@ const InwardFormModal = ({ isOpen, onClose, onSuccess, initialData = null, onSav
                 <div className="file-list">
                   {form.files.map((file, idx) => (
                     <div key={idx} className="file-item">
-                      <span>📄</span>
+                      <FileText size={16} />
                       <span className="fname">{file.name}</span>
                       <span className="fsize">{file.size}</span>
-                      <span className="fremove" onClick={() => handleRemoveFile(idx)}>✕</span>
+                      <span className="fremove" onClick={() => handleRemoveFile(idx)} style={{ cursor: 'pointer', display: 'inline-flex', alignItems: 'center' }}><X size={14} /></span>
                     </div>
                   ))}
                 </div>
@@ -426,11 +427,11 @@ const InwardFormModal = ({ isOpen, onClose, onSuccess, initialData = null, onSav
                 <button type="button" className="btn btn-o" onClick={onClose}>
                   Cancel · रद्द करा
                 </button>
-                <button type="submit" className="btn btn-p" disabled={submitting}>
-                  {submitting ? 'Saving...' : '💾 Save · जतन करा'}
+                <button type="submit" className="btn btn-p" disabled={submitting} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                  <Save size={16} /> {submitting ? 'Saving...' : 'Save · जतन करा'}
                 </button>
-                <button type="button" className="btn btn-ok" onClick={(e) => handleSubmit(e, true)} disabled={submitting}>
-                  ✓ Save & Create Outward · जतन आणि जावक तयार करा
+                <button type="button" className="btn btn-ok" onClick={(e) => handleSubmit(e, true)} disabled={submitting} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                  <Check size={16} /> Save & Create Outward · जतन आणि जावक तयार करा
                 </button>
               </div>
             </div>

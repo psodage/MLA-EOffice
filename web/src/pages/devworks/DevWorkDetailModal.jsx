@@ -1,24 +1,17 @@
-// src/pages/devworks/DevWorkDetailModal.jsx
-// ============================================================
-// Development Works Project Detail View Modal
-// Redesigned to match WIREFRAMES/dev_works_detail.html
-// Features: Breadcrumb, Detailed Header, Progress Bar, Meta Grid,
-// Geotagged Photo Gallery (BEFORE/DURING/AFTER tabs) & Milestones Timeline
-// ============================================================
-
 import { useState } from 'react';
+import { MapPin, Edit, Camera, BarChart2, Save, FileText, Check, ArrowRight, Circle, Plus, X } from 'lucide-react';
 import api from '../../services/api.js';
 import useLangStore from '../../store/langStore.js';
 
 const CATEGORY_MAP = {
-  ROAD: { en: '🛣️ Road', mr: '🛣️ रस्ते / पूल', bg: 'var(--inb, #eff6ff)', color: 'var(--in, #2563eb)' },
-  WATER_PIPELINE: { en: '💧 Water', mr: '💧 पाणीपुरवठा', bg: 'var(--okb, #f0fdf4)', color: 'var(--ok, #16a34a)' },
-  HOSPITAL: { en: '🏥 Hospital', mr: '🏥 रुग्णालय', bg: 'var(--erb, #fef2f2)', color: 'var(--er, #dc2626)' },
-  SCHOOL: { en: '🏫 School', mr: '🏫 शाळा / शिक्षण', bg: 'var(--erb, #fef2f2)', color: 'var(--er, #dc2626)' },
-  STREET_LIGHT: { en: '⚡ Street Light', mr: '⚡ रस्त्यावरील दिवे', bg: 'var(--pub, #f5f3ff)', color: 'var(--pu, #7c3aed)' },
-  ELECTRIFICATION: { en: '⚡ Electrification', mr: '⚡ विद्युतीकरण', bg: 'var(--pub, #f5f3ff)', color: 'var(--pu, #7c3aed)' },
-  COMMUNITY_HALL: { en: '🏛️ Hall', mr: '🏛️ समाजमंदिर', bg: 'var(--wrb, #fffbeb)', color: 'var(--wr, #d97706)' },
-  OTHER: { en: '🏗️ Other', mr: '🏗️ इतर प्रकल्प', bg: 'var(--bg, #f5f7fa)', color: 'var(--t2, #475569)' },
+  ROAD: { en: 'Road', mr: 'रस्ते / पूल', bg: 'var(--inb, #eff6ff)', color: 'var(--in, #2563eb)' },
+  WATER_PIPELINE: { en: 'Water', mr: 'पाणीपुरवठा', bg: 'var(--okb, #f0fdf4)', color: 'var(--ok, #16a34a)' },
+  HOSPITAL: { en: 'Hospital', mr: 'रुग्णालय', bg: 'var(--erb, #fef2f2)', color: 'var(--er, #dc2626)' },
+  SCHOOL: { en: 'School', mr: 'शाळा / शिक्षण', bg: 'var(--erb, #fef2f2)', color: 'var(--er, #dc2626)' },
+  STREET_LIGHT: { en: 'Street Light', mr: 'रस्त्यावरील दिवे', bg: 'var(--pub, #f5f3ff)', color: 'var(--pu, #7c3aed)' },
+  ELECTRIFICATION: { en: 'Electrification', mr: 'विद्युतीकरण', bg: 'var(--pub, #f5f3ff)', color: 'var(--pu, #7c3aed)' },
+  COMMUNITY_HALL: { en: 'Hall', mr: 'समाजमंदिर', bg: 'var(--wrb, #fffbeb)', color: 'var(--wr, #d97706)' },
+  OTHER: { en: 'Other', mr: 'इतर प्रकल्प', bg: 'var(--bg, #f5f7fa)', color: 'var(--t2, #475569)' },
 };
 
 const STATUS_MAP = {
@@ -148,18 +141,20 @@ const DevWorkDetailModal = ({ isOpen, onClose, entry, onUpdateSuccess }) => {
                   {isMr ? catConfig.mr : catConfig.en}
                 </span>
                 <div className="dh-title">{entry.project_name}</div>
-                <div className="dh-loc">📍 {entry.location}</div>
+                <div className="dh-loc" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                  <MapPin size={14} /> {entry.location}
+                </div>
               </div>
 
               <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                 <span className={`badge ${statusConfig.badgeClass}`}>
                   {isMr ? statusConfig.mr : statusConfig.en}
                 </span>
-                <button className="btn-o" onClick={() => setShowEditSection(!showEditSection)}>
-                  ✏️ {isMr ? 'संपादित करा' : 'Edit'}
+                <button className="btn-o" onClick={() => setShowEditSection(!showEditSection)} style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                  <Edit size={14} /> {isMr ? 'संपादित करा' : 'Edit'}
                 </button>
-                <button className="btn-p" onClick={() => setShowPhotoForm(!showPhotoForm)}>
-                  📷 {isMr ? 'फोटो जोडा' : 'Add Photo'}
+                <button className="btn-p" onClick={() => setShowPhotoForm(!showPhotoForm)} style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                  <Camera size={14} /> {isMr ? 'फोटो जोडा' : 'Add Photo'}
                 </button>
               </div>
             </div>
@@ -227,8 +222,8 @@ const DevWorkDetailModal = ({ isOpen, onClose, entry, onUpdateSuccess }) => {
           {/* Quick Edit Progress Section */}
           {showEditSection && (
             <div className="card" style={{ padding: '16px', marginBottom: '16px', border: '1px solid var(--p, #1b3a5c)' }}>
-              <h4 style={{ fontSize: '14px', fontWeight: 600, marginBottom: '12px', color: 'var(--p, #1b3a5c)' }}>
-                📊 {isMr ? 'प्रगती टक्केवारी व खर्च अपडेट करा' : 'Update Project Progress & Spent Budget'}
+              <h4 style={{ fontSize: '14px', fontWeight: 600, marginBottom: '12px', color: 'var(--p, #1b3a5c)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <BarChart2 size={16} /> {isMr ? 'प्रगती टक्केवारी व खर्च अपडेट करा' : 'Update Project Progress & Spent Budget'}
               </h4>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr auto', gap: '12px', alignItems: 'flex-end' }}>
                 <div>
@@ -266,8 +261,8 @@ const DevWorkDetailModal = ({ isOpen, onClose, entry, onUpdateSuccess }) => {
                     <option value="DELAYED">Delayed (विलंबित)</option>
                   </select>
                 </div>
-                <button className="btn-p" onClick={handleSaveProgress} disabled={updating}>
-                  {updating ? (isMr ? 'जतन होत आहे...' : 'Saving...') : `💾 ${isMr ? 'जतन करा' : 'Save'}`}
+                <button className="btn-p" onClick={handleSaveProgress} disabled={updating} style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                  <Save size={14} /> {updating ? (isMr ? 'जतन होत आहे...' : 'Saving...') : (isMr ? 'जतन करा' : 'Save')}
                 </button>
               </div>
             </div>
@@ -276,8 +271,8 @@ const DevWorkDetailModal = ({ isOpen, onClose, entry, onUpdateSuccess }) => {
           {/* Photo Upload Form Drawer */}
           {showPhotoForm && (
             <form onSubmit={handleUploadPhoto} className="card" style={{ padding: '16px', marginBottom: '16px', border: '1px solid var(--p, #1b3a5c)' }}>
-              <h4 style={{ fontSize: '14px', fontWeight: 600, marginBottom: '12px' }}>
-                📷 {isMr ? 'नवीन जिओटॅग फोटो अपलोड करा' : 'Upload Geotagged Progress Photo'}
+              <h4 style={{ fontSize: '14px', fontWeight: 600, marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <Camera size={16} /> {isMr ? 'नवीन जिओटॅग फोटो अपलोड करा' : 'Upload Geotagged Progress Photo'}
               </h4>
               <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '10px', marginBottom: '10px' }}>
                 <input
@@ -285,13 +280,13 @@ const DevWorkDetailModal = ({ isOpen, onClose, entry, onUpdateSuccess }) => {
                   className="filter-fi"
                   value={photoUrl}
                   onChange={(e) => setPhotoUrl(e.target.value)}
-                  placeholder={isMr ? 'इमेज फाईल URL (Cloudinary / Direct image link)...' : 'Image file URL...'}
+                  placeholder={isMr ? 'इमेज फाईल URL...' : 'Image file URL...'}
                   required
                 />
                 <select className="filter-fi" value={photoStage} onChange={(e) => setPhotoStage(e.target.value)}>
-                  <option value="BEFORE">🟢 कामापूर्वी (BEFORE)</option>
-                  <option value="DURING">🟡 काम सुरू असताना (DURING)</option>
-                  <option value="AFTER">🔵 काम पूर्ण झाल्यावर (AFTER)</option>
+                  <option value="BEFORE">कामापूर्वी (BEFORE)</option>
+                  <option value="DURING">काम सुरू असताना (DURING)</option>
+                  <option value="AFTER">काम पूर्ण झाल्यावर (AFTER)</option>
                 </select>
               </div>
               <div style={{ display: 'flex', gap: '10px' }}>
@@ -301,10 +296,10 @@ const DevWorkDetailModal = ({ isOpen, onClose, entry, onUpdateSuccess }) => {
                   style={{ flex: 1 }}
                   value={photoCaption}
                   onChange={(e) => setPhotoCaption(e.target.value)}
-                  placeholder={isMr ? 'फोटोचे वर्णन / कॅप्शन...' : 'Photo description / caption...'}
+                  placeholder={isMr ? 'फोटोचे वर्णन...' : 'Photo description...'}
                 />
-                <button type="submit" className="btn-p" disabled={uploadingPhoto}>
-                  {uploadingPhoto ? '...' : `💾 ${isMr ? 'अपलोड' : 'Upload'}`}
+                <button type="submit" className="btn-p" disabled={uploadingPhoto} style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                  <Save size={14} /> {uploadingPhoto ? '...' : (isMr ? 'अपलोड' : 'Upload')}
                 </button>
               </div>
             </form>
@@ -314,8 +309,8 @@ const DevWorkDetailModal = ({ isOpen, onClose, entry, onUpdateSuccess }) => {
           <div className="content-grid">
             {/* Photo Gallery */}
             <div className="card">
-              <div className="card-header">
-                📷 {isMr ? 'प्रगती फोटो गॅलरी' : 'Progress Photos'}
+              <div className="card-header" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <Camera size={16} /> {isMr ? 'प्रगती फोटो गॅलरी' : 'Progress Photos'}
                 <span style={{ color: 'var(--t4)', fontWeight: 400, marginLeft: 'auto', fontSize: '12px' }}>
                   {filteredPhotos.length} {isMr ? 'फोटो' : 'photos'}
                 </span>
@@ -351,7 +346,7 @@ const DevWorkDetailModal = ({ isOpen, onClose, entry, onUpdateSuccess }) => {
                     </div>
                   ))}
                   <div className="photo photo-add" onClick={() => setShowPhotoForm(true)} title="Add Photo">
-                    +
+                    <Plus size={20} />
                   </div>
                 </div>
               </div>
@@ -359,8 +354,8 @@ const DevWorkDetailModal = ({ isOpen, onClose, entry, onUpdateSuccess }) => {
 
             {/* Milestones Timeline */}
             <div className="card">
-              <div className="card-header">
-                📋 {isMr ? 'प्रकल्पाचे टप्पे' : 'Project Milestones'}
+              <div className="card-header" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <FileText size={16} /> {isMr ? 'प्रकल्पाचे टप्पे' : 'Project Milestones'}
               </div>
               <div className="card-body" style={{ padding: '12px 20px' }}>
                 {DEFAULT_MILESTONES.map((m) => {
@@ -375,7 +370,7 @@ const DevWorkDetailModal = ({ isOpen, onClose, entry, onUpdateSuccess }) => {
                           color: isDone ? 'var(--ok, #16a34a)' : isOngoing ? 'var(--wr, #d97706)' : 'var(--t4, #94a3b8)',
                         }}
                       >
-                        {isDone ? '✓' : isOngoing ? '→' : '○'}
+                        {isDone ? <Check size={12} /> : isOngoing ? <ArrowRight size={12} /> : <Circle size={10} />}
                       </div>
                       <div className="ml-content">
                         <div className="ml-title">{m.title}</div>

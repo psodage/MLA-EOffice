@@ -4,7 +4,10 @@
 // Auth-aware: ProtectedRoute guards all protected pages.
 // ============================================================
 
+import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, Link } from 'react-router-dom';
+import { Sun, Moon, Globe, Flag } from 'lucide-react';
+import useLangStore from '../store/langStore.js';
 import LoginPage from '../pages/LoginPage.jsx';
 import DashboardPage from '../pages/DashboardPage.jsx';
 import InwardListPage from '../pages/inward/InwardListPage.jsx';
@@ -16,6 +19,8 @@ import VisitorListPage from '../pages/visitors/VisitorListPage.jsx';
 import DevWorksListPage from '../pages/devworks/DevWorksListPage.jsx';
 import DevWorkDetailPage from '../pages/devworks/DevWorkDetailPage.jsx';
 import KaryakartaListPage from '../pages/karyakarta/KaryakartaListPage.jsx';
+import GramWardPage from '../pages/gramward/GramWardPage.jsx';
+import BoothPage from '../pages/booth/BoothPage.jsx';
 import CalendarPage from '../pages/calendar/CalendarPage.jsx';
 import WhatsAppLogsPage from '../pages/whatsapp/WhatsAppLogsPage.jsx';
 import ReportsPage from '../pages/reports/ReportsPage.jsx';
@@ -39,30 +44,107 @@ const ModulePlaceholder = ({ titleMr, titleEn, icon }) => (
   </div>
 );
 
-const UnauthorizedPage = () => (
-  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', background: '#0a1020', color: '#e2e8f0' }}>
-    <div style={{ textAlign: 'center' }}>
-      <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>🚫</div>
-      <h1 style={{ fontSize: '1.5rem', color: '#FC5C7D', fontFamily: 'Noto Sans Devanagari, sans-serif' }}>प्रवेश नाकारला</h1>
-      <p style={{ color: '#8EA4C8', marginTop: '0.5rem' }}>You don't have permission to access this page.</p>
-      <Link to="/dashboard" style={{ display: 'inline-block', marginTop: '1.5rem', color: '#FF9933', textDecoration: 'none' }}>
-        ← परत डॅशबोर्डवर जा
-      </Link>
-    </div>
-  </div>
-);
+// ── Floating Toggle Controls for Standalone Pages ──────────
+const StandaloneToggles = ({ theme, setTheme }) => {
+  const { lang, setLang } = useLangStore();
 
-const NotFoundPage = () => (
-  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', background: '#0a1020', color: '#e2e8f0' }}>
-    <div style={{ textAlign: 'center' }}>
-      <h1 style={{ fontSize: '5rem', color: '#FF9933', lineHeight: 1 }}>404</h1>
-      <p style={{ color: '#8EA4C8', marginTop: '0.5rem' }}>पृष्ठ सापडले नाही / Page not found</p>
-      <Link to="/dashboard" style={{ display: 'inline-block', marginTop: '1.5rem', color: '#FF9933', textDecoration: 'none' }}>
-        ← परत जा
-      </Link>
+  return (
+    <div style={{ position: 'fixed', top: '16px', right: '20px', display: 'flex', gap: '10px', zIndex: 1000 }}>
+      <div className="segmented-switch">
+        <button
+          type="button"
+          className={theme === 'light' ? 'active' : ''}
+          onClick={() => setTheme('light')}
+          aria-label="Light Theme"
+        >
+          <Sun size={14} /> Light
+        </button>
+        <button
+          type="button"
+          className={theme === 'dark' ? 'active' : ''}
+          onClick={() => setTheme('dark')}
+          aria-label="Dark Theme"
+        >
+          <Moon size={14} /> Dark
+        </button>
+      </div>
+      <div className="segmented-switch" title="भाषा बदला / Change Language">
+        <button
+          type="button"
+          className={lang === 'EN' ? 'active' : ''}
+          onClick={() => setLang('EN')}
+          aria-label="English Language"
+          title="English"
+        >
+          <Globe size={14} /> EN
+        </button>
+        <button
+          type="button"
+          className={lang === 'MR' ? 'active' : ''}
+          onClick={() => setLang('MR')}
+          style={{ fontFamily: "'Noto Sans Devanagari', sans-serif" }}
+          aria-label="Marathi Language"
+          title="मराठी (Marathi)"
+        >
+          <Flag size={14} /> मराठी
+        </button>
+      </div>
     </div>
-  </div>
-);
+  );
+};
+
+const UnauthorizedPage = () => {
+  const [theme, setTheme] = useState(() => localStorage.getItem('mla_theme') || 'light');
+  const { lang } = useLangStore();
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('mla_theme', theme);
+  }, [theme]);
+
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', background: 'var(--color-bg-primary, #0a1020)', color: 'var(--color-text-primary, #e2e8f0)', position: 'relative' }}>
+      <StandaloneToggles theme={theme} setTheme={setTheme} />
+      <div style={{ textAlign: 'center', padding: '2rem' }}>
+        <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>🚫</div>
+        <h1 style={{ fontSize: '1.75rem', color: '#FC5C7D', fontFamily: 'Noto Sans Devanagari, sans-serif' }}>
+          {lang === 'MR' ? 'प्रवेश नाकारला' : 'Access Denied'}
+        </h1>
+        <p style={{ color: 'var(--color-text-secondary, #8EA4C8)', marginTop: '0.5rem' }}>
+          {lang === 'MR' ? 'आपल्याला या पृष्ठावर प्रवेश करण्याची परवानगी नाही.' : "You don't have permission to access this page."}
+        </p>
+        <Link to="/dashboard" style={{ display: 'inline-block', marginTop: '1.5rem', color: '#FF9933', textDecoration: 'none', fontWeight: 600 }}>
+          {lang === 'MR' ? '← डॅशबोर्डवर परत जा' : '← Return to Dashboard'}
+        </Link>
+      </div>
+    </div>
+  );
+};
+
+const NotFoundPage = () => {
+  const [theme, setTheme] = useState(() => localStorage.getItem('mla_theme') || 'light');
+  const { lang } = useLangStore();
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('mla_theme', theme);
+  }, [theme]);
+
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', background: 'var(--color-bg-primary, #0a1020)', color: 'var(--color-text-primary, #e2e8f0)', position: 'relative' }}>
+      <StandaloneToggles theme={theme} setTheme={setTheme} />
+      <div style={{ textAlign: 'center', padding: '2rem' }}>
+        <h1 style={{ fontSize: '5rem', color: '#FF9933', lineHeight: 1 }}>404</h1>
+        <p style={{ color: 'var(--color-text-secondary, #8EA4C8)', marginTop: '0.5rem', fontSize: '1.1rem' }}>
+          {lang === 'MR' ? 'पृष्ठ सापडले नाही' : 'Page Not Found'}
+        </p>
+        <Link to="/dashboard" style={{ display: 'inline-block', marginTop: '1.5rem', color: '#FF9933', textDecoration: 'none', fontWeight: 600 }}>
+          {lang === 'MR' ? '← परत जा' : '← Go Back'}
+        </Link>
+      </div>
+    </div>
+  );
+};
 
 const AppRouter = () => {
   return (
@@ -183,6 +265,60 @@ const AppRouter = () => {
             <ProtectedRoute module="karyakarta">
               <MainLayout>
                 <KaryakartaListPage />
+              </MainLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Gram / Ward Organization Module */}
+        <Route
+          path="/gram-ward"
+          element={
+            <ProtectedRoute module="karyakarta">
+              <MainLayout>
+                <GramWardPage />
+              </MainLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/gramward/*"
+          element={
+            <ProtectedRoute module="karyakarta">
+              <MainLayout>
+                <GramWardPage />
+              </MainLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Booth Structure Module */}
+        <Route
+          path="/booth"
+          element={
+            <ProtectedRoute module="karyakarta">
+              <MainLayout>
+                <BoothPage />
+              </MainLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/booth/*"
+          element={
+            <ProtectedRoute module="karyakarta">
+              <MainLayout>
+                <BoothPage />
+              </MainLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/booths/*"
+          element={
+            <ProtectedRoute module="karyakarta">
+              <MainLayout>
+                <BoothPage />
               </MainLayout>
             </ProtectedRoute>
           }

@@ -6,6 +6,7 @@
 // ============================================================
 
 import { useState, useEffect, useCallback } from 'react';
+import { Download, Plus, Inbox, Send, RotateCcw, Paperclip, FileText, Eye, Edit, Sparkles, CheckCircle2, Clock, ChevronLeft, ChevronRight } from 'lucide-react';
 import api from '../../services/api.js';
 import useLangStore from '../../store/langStore.js';
 import InwardFormModal from './InwardFormModal.jsx';
@@ -19,11 +20,11 @@ const t = {
   EN: {
     title: 'Inward & Outward Register',
     sub: 'Office correspondence register and tracking',
-    exportBtn: '📥 Export',
-    newInwardBtn: '+ New Inward',
-    newOutwardBtn: '+ New Outward',
-    tabInward: '📨 Inward',
-    tabOutward: '📤 Outward',
+    exportBtn: 'Export',
+    newInwardBtn: 'New Inward',
+    newOutwardBtn: 'New Outward',
+    tabInward: 'Inward',
+    tabOutward: 'Outward',
     filterSearchLabel: 'SEARCH',
     filterSearchInwardPh: 'Inward No, Sender, Subject...',
     filterSearchOutwardPh: 'Outward No, Recipient, Subject...',
@@ -35,25 +36,25 @@ const t = {
     allStatuses: 'All Statuses',
     filterPriority: 'PRIORITY',
     allPriority: 'All Priorities',
-    resetBtn: '🔄 Reset',
-    tableInwardCols: ['Inward No.', 'Date', 'Sender', 'Department', 'Subject', 'Pri', 'Status', 'Assigned', '📎', 'Actions'],
+    resetBtn: 'Reset',
+    tableInwardCols: ['Inward No.', 'Date', 'Sender', 'Department', 'Subject', 'Pri', 'Status', 'Assigned', 'Attachment', 'Actions'],
     tableOutwardCols: ['Outward No.', 'Date Sent', 'Recipient', 'Department', 'Subject', 'Draft Type', 'Approval', 'Ref Inward', 'Actions'],
     noInwardFound: 'No inward records found in database.',
     noOutwardFound: 'No outward records found in database.',
     showing: 'Showing',
     of: 'of',
     entries: 'entries',
-    prev: '‹ Prev',
-    next: 'Next ›',
+    prev: 'Prev',
+    next: 'Next',
   },
   MR: {
     title: 'आवक-जावक नोंदवही',
     sub: 'कार्यालयात प्राप्त व पाठवलेल्या सर्व शासकीय पत्रांची नोंदणी व पाठपुरावा',
-    exportBtn: '📥 निर्यात',
-    newInwardBtn: '+ नवीन आवक नोंद',
-    newOutwardBtn: '+ नवीन जावक नोंद',
-    tabInward: '📨 आवक पत्रे',
-    tabOutward: '📤 जावक पत्रे',
+    exportBtn: 'निर्यात',
+    newInwardBtn: 'नवीन आवक नोंद',
+    newOutwardBtn: 'नवीन जावक नोंद',
+    tabInward: 'आवक पत्रे',
+    tabOutward: 'जावक पत्रे',
     filterSearchLabel: 'शोध',
     filterSearchInwardPh: 'आवक क्र., पाठवणारा किंवा विषय शोधा...',
     filterSearchOutwardPh: 'जावक क्र., मिळणारा किंवा विषय शोधा...',
@@ -65,16 +66,16 @@ const t = {
     allStatuses: 'सर्व कार्यस्थिती',
     filterPriority: 'प्राधान्यक्रम',
     allPriority: 'सर्व प्राधान्यक्रम',
-    resetBtn: '🔄 रिसेट',
-    tableInwardCols: ['आवक क्र.', 'प्राप्त दिनांक', 'पाठवणारा', 'शासकीय विभाग', 'विषय', 'प्राधान्य', 'स्थिती', 'नियुक्त अधिकारी', '📎', 'कृती'],
+    resetBtn: 'रिसेट',
+    tableInwardCols: ['आवक क्र.', 'प्राप्त दिनांक', 'पाठवणारा', 'शासकीय विभाग', 'विषय', 'प्राधान्य', 'स्थिती', 'नियुक्त अधिकारी', 'जोडपत्र', 'कृती'],
     tableOutwardCols: ['जावक क्र.', 'निर्गमित दिनांक', 'प्राप्तकर्ता', 'शासकीय विभाग', 'विषय', 'मसुदा प्रकार', 'मंजुरी', 'संदर्भ आवक', 'कृती'],
     noInwardFound: 'डेटाबेसमध्ये कोणतेही आवक पत्र सापडले नाही.',
     noOutwardFound: 'डेटाबेसमध्ये कोणतेही जावक पत्र सापडले नाही.',
     showing: 'एकूण',
     of: 'पैकी',
     entries: 'नोंदी दर्शवित आहे',
-    prev: '‹ मागील',
-    next: 'पुढील ›',
+    prev: 'मागील',
+    next: 'पुढील',
   },
 };
 
@@ -257,9 +258,9 @@ const InwardListPage = () => {
   // Outward Approval Badges
   const getOutwardApprovalBadge = (approvedBy) => {
     if (approvedBy) {
-      return <span className="badge b-comp">{lang === 'MR' ? '🟢 मंजूर' : 'Approved'}</span>;
+      return <span className="badge b-comp" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}><CheckCircle2 size={12} /> {lang === 'MR' ? 'मंजूर' : 'Approved'}</span>;
     }
-    return <span className="badge b-pend">{lang === 'MR' ? '🟡 मसुदा' : 'Draft'}</span>;
+    return <span className="badge b-pend" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}><Clock size={12} /> {lang === 'MR' ? 'मसुदा' : 'Draft'}</span>;
   };
 
   const activeMeta = activeTab === 'INWARD' ? inwardMeta : outwardMeta;
@@ -275,16 +276,16 @@ const InwardListPage = () => {
         </div>
 
         <div style={{ display: 'flex', gap: '8px' }}>
-          <button type="button" className="btn btn-o">
-            {text.exportBtn}
+          <button type="button" className="btn btn-o" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+            <Download size={15} /> {text.exportBtn}
           </button>
           {activeTab === 'INWARD' ? (
-            <button type="button" className="btn btn-p" onClick={openInwardCreate}>
-              {text.newInwardBtn}
+            <button type="button" className="btn btn-p" onClick={openInwardCreate} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+              <Plus size={15} /> {text.newInwardBtn}
             </button>
           ) : (
-            <button type="button" className="btn btn-p" onClick={() => openOutwardCreate(null)}>
-              {text.newOutwardBtn}
+            <button type="button" className="btn btn-p" onClick={() => openOutwardCreate(null)} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+              <Plus size={15} /> {text.newOutwardBtn}
             </button>
           )}
         </div>
@@ -298,8 +299,9 @@ const InwardListPage = () => {
             setActiveTab('INWARD');
             setFilters((f) => ({ ...f, page: 1 }));
           }}
+          style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
         >
-          {text.tabInward} ({inwardMeta.totalItems || 389})
+          <Inbox size={16} /> {text.tabInward} ({inwardMeta.totalItems || 389})
         </div>
         <div
           className={`tab ${activeTab === 'OUTWARD' ? 'active' : ''}`}
@@ -307,8 +309,9 @@ const InwardListPage = () => {
             setActiveTab('OUTWARD');
             setFilters((f) => ({ ...f, page: 1 }));
           }}
+          style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
         >
-          {text.tabOutward} ({outwardMeta.totalItems || 156})
+          <Send size={16} /> {text.tabOutward} ({outwardMeta.totalItems || 156})
         </div>
       </div>
 
@@ -387,8 +390,8 @@ const InwardListPage = () => {
         )}
 
         <div className="fg" style={{ marginLeft: 'auto' }}>
-          <button type="button" className="btn btn-o" onClick={handleResetFilters} style={{ height: '32px', fontSize: '11px' }}>
-            {text.resetBtn}
+          <button type="button" className="btn btn-o" onClick={handleResetFilters} style={{ height: '32px', fontSize: '11px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+            <RotateCcw size={14} /> {text.resetBtn}
           </button>
         </div>
       </div>
@@ -405,7 +408,9 @@ const InwardListPage = () => {
             <thead>
               <tr>
                 {text.tableInwardCols.map((col, idx) => (
-                  <th key={idx}>{col}</th>
+                  <th key={idx}>
+                    {col === 'Attachment' || col === 'जोडपत्र' ? <Paperclip size={14} /> : col}
+                  </th>
                 ))}
               </tr>
             </thead>
@@ -431,7 +436,7 @@ const InwardListPage = () => {
                     <td style={{ fontSize: '12px', color: 'var(--inw-t4)' }}>
                       {item.assignedTo?.full_name || '—'}
                     </td>
-                    <td>📄</td>
+                    <td><FileText size={14} /></td>
                     <td>
                       <button
                         type="button"
@@ -442,7 +447,7 @@ const InwardListPage = () => {
                         }}
                         title={lang === 'MR' ? 'तपशील पहा' : 'View details'}
                       >
-                        👁
+                        <Eye size={14} />
                       </button>{' '}
                       <button
                         type="button"
@@ -450,7 +455,7 @@ const InwardListPage = () => {
                         onClick={(e) => openInwardEdit(item, e)}
                         title={lang === 'MR' ? 'संपादित करा' : 'Edit entry'}
                       >
-                        ✏️
+                        <Edit size={14} />
                       </button>
                     </td>
                   </tr>
@@ -491,9 +496,9 @@ const InwardListPage = () => {
                     <td style={{ maxWidth: '300px' }}>{item.subject}</td>
                     <td>
                       {item.is_ai_drafted ? (
-                        <span className="badge b-prog">✨ Gemini AI</span>
+                        <span className="badge b-prog" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}><Sparkles size={12} /> Gemini AI</span>
                       ) : (
-                        <span className="badge b-canc">✍️ {lang === 'MR' ? 'मॅन्युअल' : 'Manual'}</span>
+                        <span className="badge b-canc" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}><Edit size={12} /> {lang === 'MR' ? 'मॅन्युअल' : 'Manual'}</span>
                       )}
                     </td>
                     <td>{getOutwardApprovalBadge(item.approved_by)}</td>
@@ -510,7 +515,7 @@ const InwardListPage = () => {
                         }}
                         title={lang === 'MR' ? 'पत्र पहा व मुद्रण करा' : 'View & Print letter'}
                       >
-                        👁
+                        <Eye size={14} />
                       </button>
                     </td>
                   </tr>
@@ -539,8 +544,9 @@ const InwardListPage = () => {
               className="pg"
               disabled={filters.page <= 1}
               onClick={() => setFilters((f) => ({ ...f, page: f.page - 1 }))}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}
             >
-              {text.prev}
+              <ChevronLeft size={14} /> {text.prev}
             </button>
             <button type="button" className="pg active">
               {filters.page}
@@ -550,15 +556,15 @@ const InwardListPage = () => {
               className="pg"
               disabled={filters.page >= activeMeta.totalPages}
               onClick={() => setFilters((f) => ({ ...f, page: f.page + 1 }))}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}
             >
-              {text.next}
+              {text.next} <ChevronRight size={14} />
             </button>
           </div>
         </div>
       </div>
 
-      {/* Watermark Badge */}
-      <div className="wfb">WIREFRAME · INWARD LIST</div>
+
 
       {/* ── Modals ─────────────────────────────────────────── */}
       <InwardFormModal

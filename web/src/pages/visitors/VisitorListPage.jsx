@@ -6,10 +6,12 @@
 // ============================================================
 
 import { useState, useEffect, useCallback } from 'react';
+import { Download, Printer, Plus, Users, CheckCircle2, Clock, RotateCcw, FileText, Zap, Phone, Sparkles, LogOut, Eye, ChevronLeft, ChevronRight, X, Landmark } from 'lucide-react';
 import api from '../../services/api.js';
 import useLangStore from '../../store/langStore.js';
 import VisitorCheckInModal from './VisitorCheckInModal.jsx';
 import ConvertToNivedanModal from './ConvertToNivedanModal.jsx';
+import LucideIcon from '../../components/common/LucideIcon.jsx';
 import './VisitorListPage.css';
 
 const PURPOSE_LABELS = {
@@ -139,45 +141,17 @@ const VisitorListPage = () => {
       {/* ── Page Header ─────────────────────────────────────── */}
       <div className="page-header">
         <div>
-          <h1 className="page-title">
-            {isMr ? 'अभ्यागत पुस्तिका' : 'Visitor Book'}
-          </h1>
-          <p className="page-subtitle">
-            {isMr
-              ? 'आमदार कार्यालयात दररोज भेट देणाऱ्या नागरिकांची नोंदणी व डिजिटल रजिस्टर'
-              : 'Daily visitor register & footfall tracking'}
-          </p>
+          <h1 className="page-title">{isMr ? 'नागरिक भेट नोंदवही' : 'Visitor Book'}</h1>
         </div>
-
         <div className="page-actions">
-          {/* Segmented Language Toggle Switch */}
-          <div className="segmented-switch" style={{ marginRight: '8px' }}>
-            <button
-              type="button"
-              className={lang === 'EN' ? 'active' : ''}
-              onClick={() => setLang('EN')}
-            >
-              EN
-            </button>
-            <button
-              type="button"
-              className={lang === 'MR' ? 'active' : ''}
-              onClick={() => setLang('MR')}
-              style={{ fontFamily: "'Noto Sans Devanagari', sans-serif" }}
-            >
-              मराठी
-            </button>
-          </div>
-
-          <button className="btn btn-outline" onClick={() => alert(isMr ? 'अभ्यागत अहवाल एक्सपोर्ट होत आहे...' : 'Exporting visitor register...')}>
-            📥 {isMr ? 'अहवाल एक्सपोर्ट' : 'Export Register'}
+          <button className="btn-o" onClick={() => alert(isMr ? 'अभ्यागत अहवाल एक्सपोर्ट होत आहे...' : 'Exporting visitor register...')} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+            <Download size={14} /> {isMr ? 'एक्सपोर्ट' : 'Export'}
           </button>
-          <button className="btn btn-outline" onClick={() => window.print()}>
-            🖨️ {isMr ? 'प्रिंट नोंदवही' : 'Print Log'}
+          <button className="btn-o" onClick={() => window.print()} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+            <Printer size={14} /> {isMr ? 'प्रिंट नोंदवही' : 'Print Log'}
           </button>
-          <button className="btn btn-primary" onClick={() => setIsCheckInOpen(true)}>
-            <span>🚪</span>
-            <span>+ {isMr ? 'नवीन भेट नोंद' : 'Check In'}</span>
+          <button className="btn-p" onClick={() => setIsCheckInOpen(true)} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+            <Plus size={14} /> {isMr ? 'नवीन भेट नोंद' : 'Check In'}
           </button>
         </div>
       </div>
@@ -188,7 +162,7 @@ const VisitorListPage = () => {
           <div className="kpi-header">
             <span className="kpi-label">{isMr ? 'आजचे एकूण नागरिक' : "Today's Total"}</span>
             <div className="kpi-icon-box" style={{ background: 'var(--info-bg, #EFF6FF)', color: 'var(--info, #2563EB)' }}>
-              👥
+              <Users size={18} />
             </div>
           </div>
           <div className="kpi-value">{summary.totalVisitorsToday}</div>
@@ -199,7 +173,7 @@ const VisitorListPage = () => {
           <div className="kpi-header">
             <span className="kpi-label">{isMr ? 'बाहेर गेले' : 'Checked Out'}</span>
             <div className="kpi-icon-box" style={{ background: 'var(--success-bg, #F0FDF4)', color: 'var(--success, #16A34A)' }}>
-              ✅
+              <CheckCircle2 size={18} />
             </div>
           </div>
           <div className="kpi-value" style={{ color: 'var(--success, #16A34A)' }}>{checkedOutCount}</div>
@@ -210,7 +184,7 @@ const VisitorListPage = () => {
           <div className="kpi-header">
             <span className="kpi-label">{isMr ? 'कार्यालयात उपस्थित' : 'Still Inside'}</span>
             <div className="kpi-icon-box" style={{ background: 'var(--warning-bg, #FFFBEB)', color: 'var(--warning, #D97706)' }}>
-              ⏳
+              <Clock size={18} />
             </div>
           </div>
           <div className="kpi-value" style={{ color: 'var(--warning, #D97706)' }}>{summary.currentlyInOffice}</div>
@@ -223,7 +197,7 @@ const VisitorListPage = () => {
           <div className="kpi-header">
             <span className="kpi-label">{isMr ? 'पुनरावृत्ती भेट देणारे' : 'Repeat Visitors'}</span>
             <div className="kpi-icon-box" style={{ background: 'var(--purple-bg, #F5F3FF)', color: 'var(--purple, #7C3AED)' }}>
-              🔄
+              <RotateCcw size={18} />
             </div>
           </div>
           <div className="kpi-value" style={{ color: 'var(--purple, #7C3AED)' }}>{summary.repeatVisitorsCount}</div>
@@ -234,7 +208,7 @@ const VisitorListPage = () => {
           <div className="kpi-header">
             <span className="kpi-label">{isMr ? 'निवेदनात रूपांतरित' : 'Converted to Nivedan'}</span>
             <div className="kpi-icon-box" style={{ background: 'var(--orange-bg, #FFF7ED)', color: 'var(--orange, #EA580C)' }}>
-              📋
+              <FileText size={18} />
             </div>
           </div>
           <div className="kpi-value" style={{ color: 'var(--orange, #EA580C)' }}>{summary.convertedCount}</div>
@@ -246,7 +220,7 @@ const VisitorListPage = () => {
       <div className="toolbar-row">
         <div className="date-nav">
           <button className="date-btn" title="Previous Day" onClick={() => handleDateShift(-1)}>
-            ‹
+            <ChevronLeft size={16} />
           </button>
           <input
             type="date"
@@ -256,7 +230,7 @@ const VisitorListPage = () => {
             className="date-current-input"
           />
           <button className="date-btn" title="Next Day" onClick={() => handleDateShift(1)}>
-            ›
+            <ChevronRight size={16} />
           </button>
           <button className="date-today-btn" onClick={handleTodayClick}>
             {isMr ? 'आज' : 'Today'}
@@ -264,8 +238,8 @@ const VisitorListPage = () => {
         </div>
 
         <div className="peak-banner">
-          <span>
-            ⚡ <strong>{isMr ? 'सर्वाधिक भेट वेळ:' : 'Peak Traffic Hour:'}</strong>{' '}
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+            <Zap size={14} color="#eab308" /> <strong>{isMr ? 'सर्वाधिक भेट वेळ:' : 'Peak Traffic Hour:'}</strong>{' '}
             {isMr ? 'सकाळी ११:०० ते दुपारी १२:०० (१२ नागरिक)' : '11:00 AM – 12:00 PM (12 visitors)'}
           </span>
         </div>
@@ -301,8 +275,8 @@ const VisitorListPage = () => {
           <span className="fl">{isMr ? 'स्थिती' : 'Status'}</span>
           <select className="fi" name="status" value={filters.status} onChange={handleFilterChange}>
             <option value="ALL">{isMr ? 'सर्व स्थिती' : 'All Status'}</option>
-            <option value="INSIDE">⏳ {isMr ? 'कार्यालयात उपस्थित' : 'Inside / Waiting'}</option>
-            <option value="CHECKED_OUT">✅ {isMr ? 'बाहेर गेले' : 'Checked Out'}</option>
+            <option value="INSIDE">{isMr ? 'कार्यालयात उपस्थित' : 'Inside / Waiting'}</option>
+            <option value="CHECKED_OUT">{isMr ? 'बाहेर गेले' : 'Checked Out'}</option>
           </select>
         </div>
 
@@ -317,8 +291,9 @@ const VisitorListPage = () => {
               page: 1,
             })
           }
+          style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}
         >
-          {isMr ? 'फिल्टर पूर्ववत करा' : 'Reset Filters'}
+          <RotateCcw size={14} /> {isMr ? 'फिल्टर पूर्ववत करा' : 'Reset Filters'}
         </button>
       </div>
 
@@ -330,7 +305,7 @@ const VisitorListPage = () => {
           </div>
         ) : items.length === 0 ? (
           <div style={{ padding: '40px', textAlign: 'center', color: 'var(--text-3)' }}>
-            <div style={{ fontSize: '32px', marginBottom: '8px' }}>👥</div>
+            <div style={{ fontSize: '32px', marginBottom: '8px' }}><Users size={32} /></div>
             <h3>{isMr ? 'या दिवशी कोणतीही भेट नोंद सापडली नाही' : 'No visitor records found for this date'}</h3>
             <p>{isMr ? 'कृपया तारीख किंवा शोध पर्याय बदलून पहा.' : 'Please select another date or change search filter.'}</p>
           </div>
@@ -364,7 +339,7 @@ const VisitorListPage = () => {
                 return (
                   <tr key={item.id}>
                     <td style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '12px', fontWeight: 600 }}>
-                      ⏱️ {inTimeStr}
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}><Clock size={12} /> {inTimeStr}</span>
                     </td>
 
                     <td>
@@ -373,7 +348,9 @@ const VisitorListPage = () => {
                         <div className="visitor-meta">
                           <span className="visitor-name">{item.visitor_name}</span>
                           <span className="visitor-contact">
-                            <span style={{ fontFamily: 'JetBrains Mono, monospace' }}>📱 {item.mobile}</span>
+                            <span style={{ fontFamily: 'JetBrains Mono, monospace', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                              <Phone size={12} /> {item.mobile}
+                            </span>
                           </span>
                         </div>
                       </div>
@@ -381,11 +358,13 @@ const VisitorListPage = () => {
 
                     <td>
                       {item.is_repeat_visitor ? (
-                        <span className="badge-pill badge-repeat">
-                          🔄 {item.previous_visit_count} {isMr ? 'वेळ भेट' : 'rd Visit'}
+                        <span className="badge-pill badge-repeat" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                          <RotateCcw size={12} /> {item.previous_visit_count} {isMr ? 'वेळ भेट' : 'rd Visit'}
                         </span>
                       ) : (
-                        <span className="badge-pill badge-first">✨ {isMr ? 'पहिली भेट' : 'First Visit'}</span>
+                        <span className="badge-pill badge-first" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                          <Sparkles size={12} /> {isMr ? 'पहिली भेट' : 'First Visit'}
+                        </span>
                       )}
                     </td>
 
@@ -404,9 +383,11 @@ const VisitorListPage = () => {
 
                     <td>
                       {outTimeStr ? (
-                        <span className="badge-pill badge-out">🚪 {isMr ? `बाहेर: ${outTimeStr}` : `Checked Out (${outTimeStr})`}</span>
+                        <span className="badge-pill badge-out" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                          <LogOut size={12} /> {isMr ? `बाहेर: ${outTimeStr}` : `Checked Out (${outTimeStr})`}
+                        </span>
                       ) : (
-                        <span className="badge-pill badge-in">
+                        <span className="badge-pill badge-in" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
                           <span className="pulse-dot"></span> {isMr ? 'कार्यालयात उपस्थित' : 'Inside / Waiting'}
                         </span>
                       )}
@@ -420,8 +401,9 @@ const VisitorListPage = () => {
                             title="Mark Check-Out"
                             onClick={() => handleCheckOut(item.id)}
                             disabled={checkingOutId === item.id}
+                            style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}
                           >
-                            {checkingOutId === item.id ? '...' : isMr ? '🚪 चेक-आऊट' : '🚪 Check Out'}
+                            <LogOut size={13} /> {checkingOutId === item.id ? '...' : isMr ? 'चेक-आऊट' : 'Check Out'}
                           </button>
                         )}
 
@@ -430,8 +412,9 @@ const VisitorListPage = () => {
                             className="btn-act convert"
                             title="Convert to Nivedan"
                             onClick={() => openConvertModal(item)}
+                            style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}
                           >
-                            📋 {isMr ? 'निवेदनात नोंद' : 'Convert'}
+                            <FileText size={13} /> {isMr ? 'निवेदनात नोंद' : 'Convert'}
                           </button>
                         )}
 
@@ -439,8 +422,9 @@ const VisitorListPage = () => {
                           className="btn-act"
                           title="View Gate Pass Details"
                           onClick={() => openDetailModal(item)}
+                          style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}
                         >
-                          👁️ {isMr ? 'तपशील' : 'Details'}
+                          <Eye size={13} /> {isMr ? 'तपशील' : 'Details'}
                         </button>
                       </div>
                     </td>
@@ -465,16 +449,18 @@ const VisitorListPage = () => {
                 className="page-btn"
                 disabled={meta.page <= 1}
                 onClick={() => setFilters((prev) => ({ ...prev, page: prev.page - 1 }))}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}
               >
-                ← {isMr ? 'मागील' : 'Previous'}
+                <ChevronLeft size={14} /> {isMr ? 'मागील' : 'Previous'}
               </button>
               <span style={{ fontWeight: 600, padding: '0 6px' }}>{meta.page}</span>
               <button
                 className="page-btn"
                 disabled={meta.page >= meta.totalPages}
                 onClick={() => setFilters((prev) => ({ ...prev, page: prev.page + 1 }))}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}
               >
-                {isMr ? 'पुढील' : 'Next'} →
+                {isMr ? 'पुढील' : 'Next'} <ChevronRight size={14} />
               </button>
             </div>
           </div>
@@ -502,7 +488,7 @@ const VisitorListPage = () => {
             <div className="modal-header">
               <h3 className="modal-title">{isMr ? 'अभ्यागत माहिती व गेट पास' : 'Visitor Details & Gate Pass'}</h3>
               <button className="modal-close-btn" onClick={() => setIsDetailOpen(false)}>
-                ✕
+                <X size={18} />
               </button>
             </div>
             <div className="modal-body">
@@ -513,14 +499,14 @@ const VisitorListPage = () => {
                 <div className="visitor-meta">
                   <span className="visitor-name" style={{ fontSize: '16px' }}>{selectedDetail.visitor_name}</span>
                   <span className="visitor-contact" style={{ fontSize: '13px' }}>
-                    <span style={{ fontFamily: 'JetBrains Mono' }}>📱 {selectedDetail.mobile}</span> · {selectedDetail.address_line || 'राहाता'}
+                    <span style={{ fontFamily: 'JetBrains Mono', display: 'inline-flex', alignItems: 'center', gap: '4px' }}><Phone size={13} /> {selectedDetail.mobile}</span> · {selectedDetail.address_line || 'राहाता'}
                   </span>
                 </div>
               </div>
 
               <div className="gate-pass-ticket">
                 <div className="pass-header">
-                  <span className="pass-brand">🏛️ MLA E-OFFICE GATE PASS</span>
+                  <span className="pass-brand" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}><Landmark size={16} /> MLA E-OFFICE GATE PASS</span>
                   <span className="pass-tag">ENTRY PERMIT</span>
                 </div>
                 <div className="pass-grid">
@@ -564,8 +550,8 @@ const VisitorListPage = () => {
               </div>
             </div>
             <div className="modal-footer">
-              <button className="btn btn-outline" onClick={() => window.print()}>
-                🖨️ {isMr ? 'पास प्रिंट करा' : 'Print Ticket'}
+              <button className="btn btn-outline" onClick={() => window.print()} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                <Printer size={14} /> {isMr ? 'पास प्रिंट करा' : 'Print Ticket'}
               </button>
               <button className="btn btn-primary" onClick={() => setIsDetailOpen(false)}>
                 {isMr ? 'बंद करा' : 'Close'}

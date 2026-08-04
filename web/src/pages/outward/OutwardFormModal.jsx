@@ -7,6 +7,7 @@
 // ============================================================
 
 import { useState, useEffect } from 'react';
+import { X, Sparkles, Save, Check, FileText, Printer, FileDown, Building2 } from 'lucide-react';
 import api from '../../services/api.js';
 import useLangStore from '../../store/langStore.js';
 
@@ -202,10 +203,10 @@ const OutwardFormModal = ({ isOpen, onClose, onSuccess, initialInwardData = null
       <div className="inward-modal-container outward-modal-large" onClick={(e) => e.stopPropagation()}>
         <div className="inward-modal-header">
           <div className="modal-title-group">
-            <h3>📤 New Outward Letter · <span className="mr">नवीन जावक पत्र</span></h3>
+            <h3>New Outward Letter · <span className="mr">नवीन जावक पत्र</span></h3>
             <span className="modal-subtitle-en">Draft and send an official letter from MLA office</span>
           </div>
-          <button type="button" className="modal-close-btn" onClick={onClose}>✕</button>
+          <button type="button" className="modal-close-btn" onClick={onClose}><X size={18} /></button>
         </div>
 
         <form onSubmit={handleSubmit} style={{ padding: '20px' }}>
@@ -216,7 +217,7 @@ const OutwardFormModal = ({ isOpen, onClose, onSuccess, initialInwardData = null
             <div className="form-card" style={{ border: 'none', boxShadow: 'none' }}>
               {/* Section 1: Letter Details */}
               <div className="form-section">
-                <div className="section-title">📤 Letter Details · <span className="mr">पत्र तपशील</span></div>
+                <div className="section-title">Letter Details · <span className="mr">पत्र तपशील</span></div>
                 <div className="form-grid">
                   <div className="form-group">
                     <label className="form-label">
@@ -279,13 +280,13 @@ const OutwardFormModal = ({ isOpen, onClose, onSuccess, initialInwardData = null
                 </div>
               </div>
 
-              {/* Section 2: Recipient */}
+              {/* Section 2: Recipient Information */}
               <div className="form-section">
-                <div className="section-title">👤 Recipient · <span className="mr">प्राप्तकर्ता</span></div>
+                <div className="section-title">Recipient Information · <span className="mr">पत्र मिळणाऱ्याची माहिती</span></div>
                 <div className="form-grid">
                   <div className="form-group">
                     <label className="form-label">
-                      Recipient Name<span className="req">*</span> <span className="mr-sub">प्राप्तकर्ता नाव</span>
+                      Recipient Name<span className="req">*</span> <span className="mr-sub">मिळणाऱ्याचे नाव</span>
                     </label>
                     <input
                       className="form-input"
@@ -308,9 +309,9 @@ const OutwardFormModal = ({ isOpen, onClose, onSuccess, initialInwardData = null
                       placeholder="e.g., Executive Engineer"
                     />
                   </div>
-                  <div className="form-group form-full">
+                  <div className="form-group">
                     <label className="form-label">
-                      Department<span className="req">*</span> <span className="mr-sub">विभाग</span>
+                      Department / Office<span className="req">*</span> <span className="mr-sub">विभाग</span>
                     </label>
                     <select
                       className="form-input"
@@ -331,15 +332,16 @@ const OutwardFormModal = ({ isOpen, onClose, onSuccess, initialInwardData = null
 
               {/* Section 3: Letter Content */}
               <div className="form-section">
-                <div className="section-title">📝 Letter Content · <span className="mr">पत्र सामग्री</span></div>
+                <div className="section-title">Letter Content · <span className="mr">पत्र सामग्री</span></div>
 
                 <button
                   type="button"
                   className="ai-btn"
                   onClick={handleGenerateAiDraft}
                   disabled={draftingAi}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
                 >
-                  <span className="sparkle">✨</span>
+                  <Sparkles size={16} />
                   {draftingAi ? 'AI मसुदा तयार होत आहे...' : 'Generate AI Draft · AI मसुदा तयार करा'}
                 </button>
 
@@ -372,8 +374,8 @@ const OutwardFormModal = ({ isOpen, onClose, onSuccess, initialInwardData = null
                       required
                     />
                     {isAiDrafted && (
-                      <span className="form-hint" style={{ color: 'var(--inw-pu)', fontWeight: 600 }}>
-                        ✨ AI-drafted in Marathi · AI ने मराठीत मसुदा तयार केला
+                      <span className="form-hint" style={{ color: 'var(--inw-pu)', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                        <Sparkles size={12} /> AI-drafted in Marathi · AI ने मराठीत मसुदा तयार केला
                       </span>
                     )}
                   </div>
@@ -385,11 +387,11 @@ const OutwardFormModal = ({ isOpen, onClose, onSuccess, initialInwardData = null
                 <button type="button" className="btn btn-o" onClick={onClose}>
                   Cancel
                 </button>
-                <button type="button" className="btn btn-p" onClick={handleSubmit} disabled={submitting}>
-                  💾 Save Draft
+                <button type="button" className="btn btn-p" onClick={handleSubmit} disabled={submitting} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                  <Save size={16} /> Save Draft
                 </button>
-                <button type="submit" className="btn btn-ok" disabled={submitting}>
-                  ✓ Submit for Approval
+                <button type="submit" className="btn btn-ok" disabled={submitting} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                  <Check size={16} /> Submit for Approval
                 </button>
               </div>
             </div>
@@ -397,7 +399,9 @@ const OutwardFormModal = ({ isOpen, onClose, onSuccess, initialInwardData = null
             {/* ── Right Column: Live Government Letterhead Preview ── */}
             <div className="preview-panel">
               <div className="preview-header">
-                <span className="preview-title">📋 Letter Preview</span>
+                <span className="preview-title" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                  <FileText size={16} /> Letter Preview
+                </span>
                 <div style={{ display: 'flex', gap: '4px' }}>
                   <button
                     type="button"
@@ -410,14 +414,6 @@ const OutwardFormModal = ({ isOpen, onClose, onSuccess, initialInwardData = null
                       fontSize: '11px',
                       cursor: 'pointer',
                       color: 'var(--inw-t3)',
-                    }}
-                  >
-                    🖨️ Print
-                  </button>
-                  <button
-                    type="button"
-                    style={{
-                      padding: '4px 8px',
                       border: '1px solid var(--inw-b)',
                       borderRadius: 'var(--inw-r)',
                       background: 'var(--inw-c)',

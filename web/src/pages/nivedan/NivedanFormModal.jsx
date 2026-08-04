@@ -5,12 +5,18 @@
 // ============================================================
 
 import { useState, useEffect } from 'react';
-import api from '../../services/api.js';
+import { X, Plus, Lightbulb, AlertTriangle, Send } from 'lucide-react';
 import useLangStore from '../../store/langStore.js';
+import api from '../../services/api.js';
 
 const NivedanFormModal = ({ isOpen, onClose, onSuccess }) => {
   const { lang } = useLangStore();
   const isMr = lang === 'MR';
+
+  const [categories, setCategories] = useState([]);
+  const [departments, setDepartments] = useState([]);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState('');
 
   const [form, setForm] = useState({
     citizen_name: '',
@@ -18,19 +24,14 @@ const NivedanFormModal = ({ isOpen, onClose, onSuccess }) => {
     citizen_address_line: '',
     citizen_city: 'राहाता',
     category_id: '',
-    department_forwarded_to_id: '',
+    forwarded_department_id: '',
     subject: '',
     description: '',
     priority: 'MEDIUM',
     attachment_urls: '',
-    assigned_to_user_id: '',
   });
 
-  const [categories, setCategories] = useState([]);
-  const [departments, setDepartments] = useState([]);
   const [autoDeptName, setAutoDeptName] = useState('');
-  const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState('');
 
   useEffect(() => {
     if (!isOpen) return;
@@ -44,10 +45,9 @@ const NivedanFormModal = ({ isOpen, onClose, onSuccess }) => {
         setCategories(catRes.data.data || []);
         setDepartments(deptRes.data.data || []);
       } catch (err) {
-        console.error('Failed to load categories/departments:', err);
+        console.error('Failed to load modal dropdowns:', err);
       }
     };
-
     fetchData();
 
     setForm({
@@ -56,12 +56,11 @@ const NivedanFormModal = ({ isOpen, onClose, onSuccess }) => {
       citizen_address_line: '',
       citizen_city: 'राहाता',
       category_id: '',
-      department_forwarded_to_id: '',
+      forwarded_department_id: '',
       subject: '',
       description: '',
       priority: 'MEDIUM',
       attachment_urls: '',
-      assigned_to_user_id: '',
     });
     setAutoDeptName('');
     setError('');
@@ -76,18 +75,19 @@ const NivedanFormModal = ({ isOpen, onClose, onSuccess }) => {
   };
 
   const handleCategoryChange = (e) => {
-    const catId = e.target.value;
-    setForm((prev) => ({ ...prev, category_id: catId }));
-    setAutoDeptName('');
+    const selectedCatId = e.target.value;
+    handleChange(e);
 
-    if (catId) {
-      const selectedCat = categories.find((c) => String(c.id) === String(catId));
-      if (selectedCat && selectedCat.default_department_id) {
-        setForm((prev) => ({ ...prev, department_forwarded_to_id: String(selectedCat.default_department_id) }));
-        const deptObj = departments.find((d) => String(d.id) === String(selectedCat.default_department_id));
-        if (deptObj) {
-          setAutoDeptName(isMr ? deptObj.name_mr : deptObj.name_en || deptObj.name_mr);
-        }
+    const selectedCat = categories.find((c) => String(c.id) === String(selectedCatId));
+    if (selectedCat && selectedCat.default_department_id) {
+      setForm((prev) => ({
+        ...prev,
+        forwarded_department_id: String(selectedCat.default_department_id),
+      }));
+
+      const dept = departments.find((d) => String(d.id) === String(selectedCat.default_department_id));
+      if (dept) {
+        setAutoDeptName(isMr ? dept.name_mr : dept.name_en || dept.name_mr);
       }
     }
   };
@@ -95,28 +95,37 @@ const NivedanFormModal = ({ isOpen, onClose, onSuccess }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.citizen_name.trim()) {
-      setError(isMr ? 'कृपया नागरिकाचे नाव प्रविष्ट करा' : 'Please enter citizen name');
+      setError(isMr ? 'कृपया नागरिकाचे नाव प्रविष्ट करा.' : 'Citizen name is required.');
       return;
     }
-    if (!form.citizen_mobile.trim() || form.citizen_mobile.trim().length < 10) {
-      setError(isMr ? 'कृपया १० अंकी वैध मोबाईल क्रमांक प्रविष्ट करा' : 'Please enter valid 10-digit mobile number');
+    if (!form.citizen_mobile.trim() || form.citizen_mobile.length < 10) {
+      setError(isMr ? 'कृपया १० अंकी मोबाईल नंबर टाका.' : 'Valid 10-digit mobile number required.');
       return;
     }
     if (!form.category_id) {
-      setError(isMr ? 'कृपया निवेदनाची वर्गवारी निवडा' : 'Please select petition category');
+      setError(isMr ? 'कृपया निवेदन वर्गवारी निवडा.' : 'Please select petition category.');
       return;
     }
     if (!form.subject.trim()) {
-      setError(isMr ? 'कृपया निवेदनाचा विषय लिहा' : 'Please enter petition subject');
+      setError(isMr ? 'कृपया विषय प्रविष्ट करा.' : 'Subject is required.');
       return;
     }
 
     setSubmitting(true);
+    setError('');
+
     try {
       const payload = {
-        ...form,
+        citizen_name: form.citizen_name,
+        citizen_mobile: form.citizen_mobile,
+        citizen_address_line: form.citizen_address_line,
+        citizen_city: form.citizen_city,
         category_id: parseInt(form.category_id, 10),
-        department_forwarded_to_id: form.department_forwarded_to_id ? parseInt(form.department_forwarded_to_id, 10) : null,
+        forwarded_department_id: form.forwarded_department_id ? parseInt(form.forwarded_department_id, 10) : null,
+        subject: form.subject,
+        description: form.description,
+        priority: form.priority,
+        attachment_urls: form.attachment_urls ? [form.attachment_urls] : [],
       };
 
       await api.post('/nivedans', payload);
@@ -134,17 +143,17 @@ const NivedanFormModal = ({ isOpen, onClose, onSuccess }) => {
     <div className="nivedan-modal-overlay" onClick={onClose}>
       <div className="nivedan-modal-card wide" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h3 className="modal-title">
-            ➕ {isMr ? 'नवीन निवेदन व अर्ज नोंदणी' : 'New Petition Registration'}
+          <h3 className="modal-title" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+            <Plus size={18} /> {isMr ? 'नवीन निवेदन व अर्ज नोंदणी' : 'New Petition Registration'}
           </h3>
-          <button className="modal-close-btn" onClick={onClose}>✕</button>
+          <button className="modal-close-btn" onClick={onClose}><X size={18} /></button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="modal-body">
             {error && (
-              <div style={{ background: 'var(--error-bg, #FEF2F2)', color: 'var(--error, #DC2626)', padding: '10px 14px', borderRadius: '4px', fontSize: '13px', marginBottom: '14px' }}>
-                ⚠️ {error}
+              <div style={{ background: 'var(--error-bg, #FEF2F2)', color: 'var(--error, #DC2626)', padding: '10px 14px', borderRadius: '4px', fontSize: '13px', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <AlertTriangle size={16} /> {error}
               </div>
             )}
 
@@ -230,12 +239,12 @@ const NivedanFormModal = ({ isOpen, onClose, onSuccess }) => {
 
               <div className="nivedan-form-group">
                 <label className="nivedan-form-label">
-                  {isMr ? 'संबंधित शासकीय विभाग' : 'Forward to Department'}
+                  {isMr ? 'संबंधित शासकीय विभाग (Forward Dept)' : 'Forward Department'}
                 </label>
                 <select
-                  name="department_forwarded_to_id"
+                  name="forwarded_department_id"
                   className="nivedan-form-input"
-                  value={form.department_forwarded_to_id}
+                  value={form.forwarded_department_id}
                   onChange={handleChange}
                 >
                   <option value="">{isMr ? 'विभाग निवडा...' : 'Select Department...'}</option>
@@ -246,8 +255,8 @@ const NivedanFormModal = ({ isOpen, onClose, onSuccess }) => {
                   ))}
                 </select>
                 {autoDeptName && (
-                  <span style={{ fontSize: '11px', color: 'var(--primary)', marginTop: '2px' }}>
-                    💡 {isMr ? `वर्गवारीनुसार सुचवलेला विभाग: ${autoDeptName}` : `Suggested Department: ${autoDeptName}`}
+                  <span style={{ fontSize: '11px', color: 'var(--primary)', marginTop: '2px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                    <Lightbulb size={12} /> {isMr ? `वर्गवारीनुसार सुचवलेला विभाग: ${autoDeptName}` : `Suggested Department: ${autoDeptName}`}
                   </span>
                 )}
               </div>
@@ -290,10 +299,10 @@ const NivedanFormModal = ({ isOpen, onClose, onSuccess }) => {
                   value={form.priority}
                   onChange={handleChange}
                 >
-                  <option value="LOW">{isMr ? '🔵 सामान्य (Low)' : 'Low'}</option>
-                  <option value="MEDIUM">{isMr ? '🟡 मध्यम (Medium)' : 'Medium'}</option>
-                  <option value="HIGH">{isMr ? '🔴 उच्च (High)' : 'High'}</option>
-                  <option value="URGENT">{isMr ? '🔥 अतिअत्यंत (Urgent)' : 'Urgent'}</option>
+                  <option value="LOW">{isMr ? 'सामान्य (Low)' : 'Low'}</option>
+                  <option value="MEDIUM">{isMr ? 'मध्यम (Medium)' : 'Medium'}</option>
+                  <option value="HIGH">{isMr ? 'उच्च (High)' : 'High'}</option>
+                  <option value="URGENT">{isMr ? 'अतिअत्यंत (Urgent)' : 'Urgent'}</option>
                 </select>
               </div>
 
@@ -317,8 +326,8 @@ const NivedanFormModal = ({ isOpen, onClose, onSuccess }) => {
             <button type="button" className="btn btn-outline" onClick={onClose} disabled={submitting}>
               {isMr ? 'रद्द करा' : 'Cancel'}
             </button>
-            <button type="submit" className="btn btn-primary" disabled={submitting}>
-              {submitting ? (isMr ? 'नोंद होत आहे...' : 'Submitting...') : (isMr ? 'निवेदन नोंदवा & ट्रॅकिंग ID द्या' : 'Submit Petition & Generate ID')}
+            <button type="submit" className="btn btn-primary" disabled={submitting} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+              <Send size={14} /> {submitting ? (isMr ? 'नोंद होत आहे...' : 'Submitting...') : (isMr ? 'निवेदन नोंदवा & ट्रॅकिंग ID द्या' : 'Submit Petition & Generate ID')}
             </button>
           </div>
         </form>

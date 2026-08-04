@@ -203,22 +203,9 @@ const ReportsPage = () => {
           </p>
         </div>
 
-        {/* Segmented Language Toggle */}
-        <div className="segmented-switch">
-          <button
-            type="button"
-            className={lang === 'EN' ? 'active' : ''}
-            onClick={() => setLang('EN')}
-          >
-            EN
-          </button>
-          <button
-            type="button"
-            className={lang === 'MR' ? 'active' : ''}
-            onClick={() => setLang('MR')}
-            style={{ fontFamily: "'Noto Sans Devanagari', sans-serif" }}
-          >
-            मराठी
+        <div className="reports-actions">
+          <button className="btn-o" onClick={() => alert(isMr ? 'अहवाल एक्सपोर्ट होत आहे...' : 'Exporting reports...')}>
+            📥 {isMr ? 'एक्सपोर्ट' : 'Export'}
           </button>
         </div>
       </div>

@@ -7,7 +7,9 @@
 
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { Sun, Moon, Globe, Flag } from 'lucide-react';
 import useAuthStore from '../store/authStore.js';
+import useLangStore from '../store/langStore.js';
 import './LoginPage.css';
 
 // Translation Dictionary for English and Marathi
@@ -86,12 +88,12 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { login, isAuthenticated, isLoading } = useAuthStore();
+  const { lang, setLang } = useLangStore();
 
   const [form, setForm] = useState({ username: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
   const [theme, setTheme] = useState(() => localStorage.getItem('mla_theme') || 'light');
-  const [lang, setLang] = useState(() => localStorage.getItem('mla_lang') || 'EN');
   const [errorKey, setErrorKey] = useState('');
   const [customError, setCustomError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -104,11 +106,6 @@ const LoginPage = () => {
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('mla_theme', theme);
   }, [theme]);
-
-  // Sync language selection
-  useEffect(() => {
-    localStorage.setItem('mla_lang', lang);
-  }, [lang]);
 
   // Load remembered username if present
   useEffect(() => {
@@ -200,7 +197,7 @@ const LoginPage = () => {
             onClick={() => setTheme('light')}
             aria-label="Light Theme"
           >
-            ☀ Light
+            <Sun size={14} /> Light
           </button>
           <button
             type="button"
@@ -208,26 +205,30 @@ const LoginPage = () => {
             onClick={() => setTheme('dark')}
             aria-label="Dark Theme"
           >
-            🌙 Dark
+            <Moon size={14} /> Dark
           </button>
         </div>
 
         {/* Language Switch */}
-        <div className="segmented-switch">
+        <div className="segmented-switch" title="भाषा बदला / Change Language">
           <button
             type="button"
             className={lang === 'EN' ? 'active' : ''}
             onClick={() => setLang('EN')}
+            aria-label="English Language"
+            title="English"
           >
-            EN
+            <Globe size={14} /> EN
           </button>
           <button
             type="button"
             className={lang === 'MR' ? 'active' : ''}
             onClick={() => setLang('MR')}
             style={{ fontFamily: "'Noto Sans Devanagari', sans-serif" }}
+            aria-label="Marathi Language"
+            title="मराठी (Marathi)"
           >
-            मराठी
+            <Flag size={14} /> मराठी
           </button>
         </div>
       </div>

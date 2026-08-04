@@ -8,8 +8,10 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
+import { Phone, FileText, Paperclip, MessageSquare, Send, List, Edit, RotateCcw, Plus, Download, ArrowLeft } from 'lucide-react';
 import useLangStore from '../../store/langStore.js';
 import api from '../../services/api.js';
+import LucideIcon from '../../components/common/LucideIcon.jsx';
 import './NivedanListPage.css';
 
 const NivedanDetailPage = () => {
@@ -199,8 +201,8 @@ const NivedanDetailPage = () => {
           </div>
           <div className="meta-item">
             <span className="meta-label">{isMr ? 'मोबाईल' : 'Mobile'}</span>
-            <span className="meta-value" style={{ fontFamily: 'JetBrains Mono' }}>
-              📱 {entry.citizen_mobile}
+            <span className="meta-value" style={{ fontFamily: 'JetBrains Mono', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+              <Phone size={12} /> {entry.citizen_mobile}
             </span>
           </div>
           <div className="meta-item">
@@ -217,15 +219,15 @@ const NivedanDetailPage = () => {
             >
               {entry.priority === 'HIGH' || entry.priority === 'URGENT'
                 ? isMr
-                  ? '🔴 अतिमहत्त्वाचे (High)'
-                  : '🔴 High'
+                  ? 'अतिमहत्त्वाचे (High)'
+                  : 'High'
                 : entry.priority === 'MEDIUM'
                 ? isMr
-                  ? '🟡 मध्यम (Medium)'
-                  : '🟡 Medium'
+                  ? 'मध्यम (Medium)'
+                  : 'Medium'
                 : isMr
-                ? '🔵 सामान्य (Low)'
-                : '🔵 Low'}
+                ? 'सामान्य (Low)'
+                : 'Low'}
             </span>
           </div>
           <div className="meta-item">
@@ -286,8 +288,8 @@ const NivedanDetailPage = () => {
         <div>
           {/* Description Card */}
           <div className="detail-card">
-            <div className="detail-card-header">
-              📄 {isMr ? 'सविस्तर वर्णन (Description)' : 'Description'}
+            <div className="detail-card-header" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <FileText size={16} /> {isMr ? 'सविस्तर वर्णन (Description)' : 'Description'}
             </div>
             <div className="detail-card-body">
               <div className="description-text">
@@ -297,17 +299,17 @@ const NivedanDetailPage = () => {
               {/* Attachments List */}
               <div className="attach-list">
                 <div className="attach-item">
-                  <span>📄</span>
+                  <FileText size={16} />
                   <span className="name">nivedan_application_document.pdf</span>
                   <span className="size">1.2 MB</span>
-                  <span style={{ color: 'var(--primary)', fontWeight: 700, fontSize: '12px' }}>↓</span>
+                  <span style={{ color: 'var(--primary)', fontWeight: 700, fontSize: '12px' }}><Download size={14} /></span>
                 </div>
                 {entry.attachment_urls && (
                   <div className="attach-item">
-                    <span>🖼️</span>
+                    <Paperclip size={16} />
                     <span className="name">{entry.attachment_urls}</span>
                     <span className="size">Attachment</span>
-                    <span style={{ color: 'var(--primary)', fontWeight: 700, fontSize: '12px' }}>↓</span>
+                    <span style={{ color: 'var(--primary)', fontWeight: 700, fontSize: '12px' }}><Download size={14} /></span>
                   </div>
                 )}
               </div>
@@ -316,12 +318,12 @@ const NivedanDetailPage = () => {
 
           {/* WhatsApp Log Card */}
           <div className="detail-card">
-            <div className="detail-card-header">
-              💬 {isMr ? 'व्हॉट्सअॅप सूचना इतिहास (WhatsApp Notifications)' : 'WhatsApp Notifications'}
+            <div className="detail-card-header" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <MessageSquare size={16} /> {isMr ? 'व्हॉट्सअॅप सूचना इतिहास (WhatsApp Notifications)' : 'WhatsApp Notifications'}
             </div>
             <div className="detail-card-body">
               <div className="wa-item">
-                <span>📤</span>
+                <Send size={14} />
                 <div style={{ flex: 1 }}>
                   <strong style={{ color: 'var(--text-1)' }}>
                     {isMr ? 'पोहोच पावती संदेश (Acknowledgment)' : 'Acknowledgment SMS'}
@@ -338,7 +340,7 @@ const NivedanDetailPage = () => {
               </div>
 
               <div className="wa-item">
-                <span>📤</span>
+                <Send size={14} />
                 <div style={{ flex: 1 }}>
                   <strong style={{ color: 'var(--text-1)' }}>
                     {isMr ? 'स्थिती अपडेट संदेश (Status Update)' : 'Status Update Notice'}
@@ -359,15 +361,15 @@ const NivedanDetailPage = () => {
 
         {/* Right Column: Activity Timeline & Add Note */}
         <div className="detail-card">
-          <div className="detail-card-header">
-            📋 {isMr ? 'क्रिया टाइमलाइन (Activity Timeline)' : 'Activity Timeline'}
+          <div className="detail-card-header" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <List size={16} /> {isMr ? 'क्रिया टाइमलाइन (Activity Timeline)' : 'Activity Timeline'}
           </div>
           <div className="detail-card-body">
             <div className="timeline">
               {entry.timelines && entry.timelines.length > 0 ? (
                 entry.timelines.map((tl) => (
                   <div className="tl-item" key={tl.id}>
-                    <div className="tl-dot">📝</div>
+                    <div className="tl-dot"><Edit size={14} /></div>
                     <div className="tl-content">
                       <div className="tl-title">{tl.note}</div>
                       <div className="tl-desc">
@@ -382,7 +384,7 @@ const NivedanDetailPage = () => {
               ) : (
                 <>
                   <div className="tl-item">
-                    <div className="tl-dot" style={{ background: 'var(--warning-bg)', color: 'var(--warning)' }}>📝</div>
+                    <div className="tl-dot" style={{ background: 'var(--warning-bg)', color: 'var(--warning)' }}><Edit size={14} /></div>
                     <div className="tl-content">
                       <div className="tl-title">{isMr ? 'निवेदन नोंदवले (Nivedan Created)' : 'Nivedan Registered'}</div>
                       <div className="tl-desc">
@@ -395,7 +397,7 @@ const NivedanDetailPage = () => {
                   </div>
 
                   <div className="tl-item">
-                    <div className="tl-dot" style={{ background: 'var(--success-bg)', color: 'var(--success)' }}>💬</div>
+                    <div className="tl-dot" style={{ background: 'var(--success-bg)', color: 'var(--success)' }}><MessageSquare size={14} /></div>
                     <div className="tl-content">
                       <div className="tl-title">{isMr ? 'व्हॉट्सअॅप पाठवले' : 'WhatsApp Sent'}</div>
                       <div className="tl-desc">
@@ -408,7 +410,7 @@ const NivedanDetailPage = () => {
                   </div>
 
                   <div className="tl-item">
-                    <div className="tl-dot" style={{ background: 'var(--info-bg)', color: 'var(--info)' }}>🔄</div>
+                    <div className="tl-dot" style={{ background: 'var(--info-bg)', color: 'var(--info)' }}><RotateCcw size={14} /></div>
                     <div className="tl-content">
                       <div className="tl-title">{isMr ? 'ऑटो-रूट सुचवलेले' : 'Auto-Route Suggested'}</div>
                       <div className="tl-desc">
@@ -452,8 +454,8 @@ const NivedanDetailPage = () => {
                   <option value="RESOLVED">{isMr ? 'मार्गी लागले (Resolved)' : 'Resolved'}</option>
                   <option value="REJECTED">{isMr ? 'नाकारले (Rejected)' : 'Rejected'}</option>
                 </select>
-                <button className="btn btn-primary" type="submit" style={{ height: '32px', fontSize: '12px' }} disabled={updating}>
-                  + {isMr ? 'टीप जोडा' : 'Add Note'}
+                <button className="btn btn-primary" type="submit" style={{ height: '32px', fontSize: '12px', display: 'inline-flex', alignItems: 'center', gap: '4px' }} disabled={updating}>
+                  <Plus size={14} /> {isMr ? 'टीप जोडा' : 'Add Note'}
                 </button>
               </div>
             </form>

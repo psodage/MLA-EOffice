@@ -561,3 +561,23 @@
     display: none;
   }
 }
+
+@media (max-width: 639px) {
+  .calendar-page-container {
+    padding: 12px 8px;
+  }
+  .cal-header-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .cal-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .inward-modal-container {
+    max-width: 95vw;
+    margin: 8px;
+  }
+}
+

@@ -158,7 +158,9 @@ const DashboardPage = () => {
         <div>
           <h1 className="page-title">{text.title}</h1>
           <p className="page-subtitle">
-            {text.welcomeBack}, {username} · {text.lastUpdated}: {getFormattedDate()}
+            <span className="welcome-text">{text.welcomeBack}, {username}</span>
+            <span className="last-updated-sep"> · </span>
+            <span className="last-updated-text">{text.lastUpdated}: {getFormattedDate()}</span>
           </p>
         </div>
 
