@@ -64,9 +64,10 @@
   --transition-base: 250ms ease;
   --transition-slow: 350ms ease;
 
-  /* Sidebar width */
+  /* Sidebar & Layout Dimensions */
   --sidebar-width: 260px;
   --sidebar-collapsed: 72px;
+  --page-max-width: 1400px;
 }
 
 /* ── CSS Reset ──────────────────────────────────────────── */
@@ -83,6 +84,8 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  overflow-y: scroll;
+  scrollbar-gutter: stable;
 }
 
 body {
@@ -92,6 +95,7 @@ body {
   color: var(--color-text-primary);
   background-color: var(--color-bg-primary);
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 a {

@@ -5,8 +5,7 @@
    ============================================================ */
 
 .reports-page-container {
-  padding: 24px;
-  max-width: 1600px;
+  max-width: var(--page-max-width, 1400px);
   margin: 0 auto;
   font-family: 'Inter', -apple-system, sans-serif;
   color: var(--t1, #0f172a);
