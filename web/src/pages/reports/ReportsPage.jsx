@@ -1,12 +1,5 @@
-// src/pages/reports/ReportsPage.jsx
-// ============================================================
-// Reports & Analytics Dashboard — Module Redesign
-// Matching WIREFRAMES/reports.html
-// Features: 6 Report Suite Cards, Quick Generate Form Section,
-// Live Data Analytics Visualizations, Export (PDF/Excel/CSV) & Print Preview
-// ============================================================
-
 import { useState, useEffect, useCallback } from 'react';
+import { FileText, Mail, User, HardHat, Vote, MessageSquare, Download, Zap, BarChart2, Printer, ArrowRight } from 'lucide-react';
 import api from '../../services/api.js';
 import useLangStore from '../../store/langStore.js';
 import './ReportsPage.css';
@@ -16,7 +9,6 @@ const REPORT_SUITES = [
     id: 'NIVEDANS',
     titleEn: 'Nivedan Summary Report',
     titleMr: 'निवेदन सारांश',
-    icon: '📝',
     bg: 'var(--inb, #eff6ff)',
     color: 'var(--in, #2563eb)',
     descEn: 'Total, pending, resolved, rejected nivedans with category-wise breakdown. Filter by date range, ward, status.',
@@ -27,7 +19,6 @@ const REPORT_SUITES = [
     id: 'INWARD',
     titleEn: 'Inward/Outward Register',
     titleMr: 'आवक/जावक रजिस्टर',
-    icon: '📨',
     bg: 'var(--okb, #f0fdf4)',
     color: 'var(--ok, #16a34a)',
     descEn: 'Complete correspondence log with sender, department, dates, and status. Traditional register format for office records.',
@@ -38,7 +29,6 @@ const REPORT_SUITES = [
     id: 'VISITORS',
     titleEn: 'Visitor Daily Report',
     titleMr: 'अभ्यागत दैनिक अहवाल',
-    icon: '👤',
     bg: 'var(--pub, #f5f3ff)',
     color: 'var(--pu, #7c3aed)',
     descEn: 'Day-wise visitor count, purpose breakdown, average wait time, repeat visitor statistics, and peak hours.',
@@ -49,7 +39,6 @@ const REPORT_SUITES = [
     id: 'DEVWORKS',
     titleEn: 'Development Works Progress',
     titleMr: 'विकासकामे प्रगती',
-    icon: '🏗️',
     bg: 'var(--wrb, #fffbeb)',
     color: 'var(--wr, #d97706)',
     descEn: 'Project-wise status, budget vs spent, progress percentage, delayed projects, and contractor performance.',
@@ -60,7 +49,6 @@ const REPORT_SUITES = [
     id: 'BOOTH',
     titleEn: 'Booth-wise Worker Report',
     titleMr: 'बूथनिहाय कार्यकर्ता',
-    icon: '🗳️',
     bg: 'var(--orb, #fff7ed)',
     color: 'var(--or, #ea580c)',
     descEn: 'Taluka → Village → Booth hierarchy with pramukh names, worker counts, voter coverage, and vacancy status.',
@@ -71,7 +59,6 @@ const REPORT_SUITES = [
     id: 'WHATSAPP',
     titleEn: 'WhatsApp Message Log',
     titleMr: 'व्हॉट्सअॅप लॉग',
-    icon: '💬',
     bg: 'var(--erb, #fef2f2)',
     color: 'var(--er, #dc2626)',
     descEn: 'All sent messages, delivery status, template usage, and communication history per citizen/nivedan.',
@@ -80,8 +67,18 @@ const REPORT_SUITES = [
   },
 ];
 
+const renderSuiteIcon = (id) => {
+  if (id === 'NIVEDANS') return <FileText size={20} />;
+  if (id === 'INWARD') return <Mail size={20} />;
+  if (id === 'VISITORS') return <User size={20} />;
+  if (id === 'DEVWORKS') return <HardHat size={20} />;
+  if (id === 'BOOTH') return <Vote size={20} />;
+  if (id === 'WHATSAPP') return <MessageSquare size={20} />;
+  return <FileText size={20} />;
+};
+
 const ReportsPage = () => {
-  const { lang, setLang } = useLangStore();
+  const { lang } = useLangStore();
   const isMr = lang === 'MR';
 
   const [activeSuiteId, setActiveSuiteId] = useState('NIVEDANS');
@@ -193,8 +190,8 @@ const ReportsPage = () => {
       {/* ── Page Header ─────────────────────────────────────── */}
       <div className="reports-header">
         <div>
-          <h1 className="title">
-            Reports · <span className="mr" style={{ fontFamily: "'Noto Sans Devanagari', sans-serif" }}>अहवाल</span>
+          <h1 className="title" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <BarChart2 size={24} style={{ color: 'var(--primary)' }} /> Reports · <span className="mr" style={{ fontFamily: "'Noto Sans Devanagari', sans-serif" }}>अहवाल</span>
           </h1>
           <p className="sub">
             {isMr
@@ -204,8 +201,8 @@ const ReportsPage = () => {
         </div>
 
         <div className="reports-actions">
-          <button className="btn-o" onClick={() => alert(isMr ? 'अहवाल एक्सपोर्ट होत आहे...' : 'Exporting reports...')}>
-            📥 {isMr ? 'एक्सपोर्ट' : 'Export'}
+          <button className="btn-o" onClick={() => alert(isMr ? 'अहवाल एक्सपोर्ट होत आहे...' : 'Exporting reports...')} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+            <Download size={14} /> {isMr ? 'एक्सपोर्ट' : 'Export'}
           </button>
         </div>
       </div>
@@ -220,7 +217,7 @@ const ReportsPage = () => {
           >
             <div className="rc-header">
               <div className="rc-icon" style={{ background: suite.bg, color: suite.color }}>
-                {suite.icon}
+                {renderSuiteIcon(suite.id)}
               </div>
               <div className="rc-info">
                 <div className="rc-title">
@@ -236,15 +233,17 @@ const ReportsPage = () => {
                   <span key={idx} className="rc-fmt">{fmt}</span>
                 ))}
               </div>
-              <span className="rc-gen">{isMr ? 'तयार करा' : 'Generate'} →</span>
+              <span className="rc-gen" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                {isMr ? 'तयार करा' : 'Generate'} <ArrowRight size={14} />
+              </span>
             </div>
           </div>
         ))}
       </div>
 
       {/* ── ⚡ Quick Generate Form Section ────────────────────── */}
-      <div className="section-title">
-        ⚡ {isMr ? 'जलद अहवाल निर्मिती' : 'Quick Generate'} · <span className="mr" style={{ fontFamily: "'Noto Sans Devanagari', sans-serif" }}>जलद अहवाल</span>
+      <div className="section-title" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+        <Zap size={16} style={{ color: 'var(--amber)' }} /> {isMr ? 'जलद अहवाल निर्मिती' : 'Quick Generate'} · <span className="mr" style={{ fontFamily: "'Noto Sans Devanagari', sans-serif" }}>जलद अहवाल</span>
       </div>
 
       <div className="quick-form">
@@ -301,11 +300,11 @@ const ReportsPage = () => {
           </select>
         </div>
 
-        <button className="btn-p" onClick={handleGenerateReport}>
-          📊 {isMr ? 'अहवाल डाउनलोड करा' : 'Generate Report'}
+        <button className="btn-p" onClick={handleGenerateReport} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+          <BarChart2 size={15} /> {isMr ? 'अहवाल डाउनलोड करा' : 'Generate Report'}
         </button>
-        <button className="btn-o" onClick={handlePrintPreview}>
-          🖨️ {isMr ? 'प्रिंट प्रीव्ह्यू' : 'Print Preview'}
+        <button className="btn-o" onClick={handlePrintPreview} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+          <Printer size={15} /> {isMr ? 'प्रिंट प्रीव्ह्यू' : 'Print Preview'}
         </button>
       </div>
 
@@ -319,8 +318,8 @@ const ReportsPage = () => {
           <>
             {activeSuiteId === 'NIVEDANS' && (
               <div>
-                <h3 className="report-section-title">
-                  📝 {isMr ? 'निवेदने सद्यस्थिती व वर्गवारी अहवाल प्रीव्ह्यू' : 'Nivedan Summary Analytics Preview'}
+                <h3 className="report-section-title" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <FileText size={18} /> {isMr ? 'निवेदने सद्यस्थिती व वर्गवारी अहवाल प्रीव्ह्यू' : 'Nivedan Summary Analytics Preview'}
                 </h3>
                 <div className="reports-stat-grid">
                   <div className="report-metric-card">
@@ -361,8 +360,8 @@ const ReportsPage = () => {
 
             {activeSuiteId === 'DEVWORKS' && (
               <div>
-                <h3 className="report-section-title">
-                  🏗️ {isMr ? 'विकासकामे व अर्थसंकल्प अहवाल प्रीव्ह्यू' : 'Development Works Budget Analytics Preview'}
+                <h3 className="report-section-title" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <HardHat size={18} /> {isMr ? 'विकासकामे व अर्थसंकल्प अहवाल प्रीव्ह्यू' : 'Development Works Budget Analytics Preview'}
                 </h3>
                 <div className="reports-stat-grid">
                   <div className="report-metric-card">
@@ -408,8 +407,8 @@ const ReportsPage = () => {
 
             {activeSuiteId === 'VISITORS' && (
               <div>
-                <h3 className="report-section-title">
-                  👤 {isMr ? 'अभ्यागत नागरिक भेट सांख्यिकी प्रीव्ह्यू' : 'Visitor Statistics Analytics Preview'}
+                <h3 className="report-section-title" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <User size={18} /> {isMr ? 'अभ्यागत नागरिक भेट सांख्यिकी प्रीव्ह्यू' : 'Visitor Statistics Analytics Preview'}
                 </h3>
                 <div className="reports-stat-grid">
                   <div className="report-metric-card">
@@ -438,8 +437,8 @@ const ReportsPage = () => {
 
             {(activeSuiteId === 'INWARD' || activeSuiteId === 'BOOTH' || activeSuiteId === 'WHATSAPP') && (
               <div>
-                <h3 className="report-section-title">
-                  📊 {isMr ? 'शासकीय पत्रव्यवहार व बूथ व्याप्ती अहवाल प्रीव्ह्यू' : 'Correspondence & Booth Coverage Summary'}
+                <h3 className="report-section-title" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <BarChart2 size={18} /> {isMr ? 'शासकीय पत्रव्यवहार व बूथ व्याप्ती अहवाल प्रीव्ह्यू' : 'Correspondence & Booth Coverage Summary'}
                 </h3>
                 <div className="reports-stat-grid">
                   <div className="report-metric-card">
