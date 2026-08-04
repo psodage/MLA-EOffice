@@ -1,11 +1,5 @@
-// src/pages/karyakarta/KaryakartaImportModal.jsx
-// ============================================================
-// Modal for Bulk Excel / JSON Karyakarta Import
-// Validates 10-digit mobile uniqueness & designation mapping.
-// Returns { totalRows, importedCount, skippedCount, errors }
-// ============================================================
-
 import { useState } from 'react';
+import { Upload, X, AlertTriangle, FileText, BarChart2 } from 'lucide-react';
 import api from '../../services/api.js';
 
 const SAMPLE_IMPORT_JSON = [
@@ -87,21 +81,23 @@ const KaryakartaImportModal = ({ isOpen, onClose, onSuccess }) => {
       <div className="inward-modal-container" onClick={(e) => e.stopPropagation()}>
         <div className="inward-modal-header">
           <div className="modal-title-group">
-            <h3>📥 बल्क कार्यकर्ता इन्पोर्ट (Bulk Import Excel / JSON)</h3>
+            <h3 style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+              <Upload size={18} /> बल्क कार्यकर्ता इन्पोर्ट (Bulk Import Excel / JSON)
+            </h3>
             <span className="modal-subtitle-en">Import hundreds of karyakartas with mobile & booth validation</span>
           </div>
-          <button className="modal-close-btn" onClick={onClose}>✕</button>
+          <button className="modal-close-btn" onClick={onClose}><X size={18} /></button>
         </div>
 
         <form onSubmit={handleSubmit} className="inward-form">
-          {error && <div className="form-error-banner">⚠️ {error}</div>}
+          {error && <div className="form-error-banner" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><AlertTriangle size={16} /> {error}</div>}
 
           <div style={{ marginBottom: '0.85rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <span style={{ fontSize: '0.82rem', color: '#94a3b8' }}>
               Excel किंवा JSON मधील कार्यकर्त्यांची माहिती खालील बाक्समध्ये पेस्ट करा:
             </span>
-            <button type="button" className="btn-secondary" onClick={handleFillSample} style={{ fontSize: '0.75rem', padding: '0.3rem 0.6rem' }}>
-              📋 सॅम्पल डेटा भरा (Fill Sample)
+            <button type="button" className="btn-secondary" onClick={handleFillSample} style={{ fontSize: '0.75rem', padding: '0.3rem 0.6rem', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+              <FileText size={13} /> सॅम्पल डेटा भरा (Fill Sample)
             </button>
           </div>
 
@@ -119,7 +115,9 @@ const KaryakartaImportModal = ({ isOpen, onClose, onSuccess }) => {
           {/* Import Execution Result */}
           {result && (
             <div className="import-result-summary-box" style={{ background: 'rgba(30, 41, 59, 0.8)', padding: '1rem', borderRadius: '10px', border: '1px solid #ff9933', marginTop: '1rem' }}>
-              <h4 style={{ color: '#ff9933', margin: '0 0 0.5rem 0', fontSize: '0.95rem' }}>📊 इन्पोर्ट रिपोर्ट (Import Results):</h4>
+              <h4 style={{ color: '#ff9933', margin: '0 0 0.5rem 0', fontSize: '0.95rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <BarChart2 size={16} /> इन्पोर्ट रिपोर्ट (Import Results):
+              </h4>
               <div style={{ display: 'flex', gap: '1.5rem', fontSize: '0.88rem', marginBottom: '0.5rem' }}>
                 <span style={{ color: '#f8fafc' }}>एकूण ओळी: <strong>{result.totalRows}</strong></span>
                 <span style={{ color: '#4ade80' }}>यशस्वी जोडलेले: <strong>{result.importedCount}</strong></span>
@@ -143,8 +141,8 @@ const KaryakartaImportModal = ({ isOpen, onClose, onSuccess }) => {
             <button type="button" className="btn-secondary" onClick={onClose}>
               बंद करा (Close)
             </button>
-            <button type="submit" className="btn-primary" disabled={submitting}>
-              {submitting ? 'इन्पोर्ट होत आहे...' : '📥 बल्क इन्पोर्ट सुरू करा (Import)'}
+            <button type="submit" className="btn-primary" disabled={submitting} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+              <Upload size={16} /> {submitting ? 'इन्पोर्ट होत आहे...' : 'बल्क इन्पोर्ट सुरू करा (Import)'}
             </button>
           </div>
         </form>

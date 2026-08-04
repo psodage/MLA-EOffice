@@ -1,10 +1,5 @@
-// src/pages/karyakarta/KaryakartaFormModal.jsx
-// ============================================================
-// Form Modal for Registering a Single Party Worker (Karyakarta)
-// Inputs: Name, 10-digit Mobile, DOB, Address, Designation, Booth
-// ============================================================
-
 import { useState, useEffect } from 'react';
+import { X, UserPlus, AlertTriangle, UserCheck } from 'lucide-react';
 import api from '../../services/api.js';
 
 const DESIGNATION_OPTIONS = [
@@ -87,14 +82,16 @@ const KaryakartaFormModal = ({ isOpen, onClose, onSuccess }) => {
       <div className="inward-modal-container" onClick={(e) => e.stopPropagation()}>
         <div className="inward-modal-header">
           <div className="modal-title-group">
-            <h3>🚩 नवीन कार्यकर्ता नोंदणी (Add Karyakarta)</h3>
+            <h3 style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+              <UserPlus size={18} /> नवीन कार्यकर्ता नोंदणी (Add Karyakarta)
+            </h3>
             <span className="modal-subtitle-en">Register Party Worker, Booth Assignment & Birth Date</span>
           </div>
-          <button className="modal-close-btn" onClick={onClose}>✕</button>
+          <button className="modal-close-btn" onClick={onClose}><X size={18} /></button>
         </div>
 
         <form onSubmit={handleSubmit} className="inward-form">
-          {error && <div className="form-error-banner">⚠️ {error}</div>}
+          {error && <div className="form-error-banner" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><AlertTriangle size={16} /> {error}</div>}
 
           <div className="form-grid">
             {/* Full Name */}
@@ -204,8 +201,8 @@ const KaryakartaFormModal = ({ isOpen, onClose, onSuccess }) => {
             <button type="button" className="btn-secondary" onClick={onClose}>
               रद्द करा (Cancel)
             </button>
-            <button type="submit" className="btn-primary" disabled={submitting}>
-              {submitting ? 'नोंदणी होत आहे...' : '🚩 कार्यकर्ता जतन करा (Save)'}
+            <button type="submit" className="btn-primary" disabled={submitting} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+              <UserCheck size={16} /> {submitting ? 'नोंदणी होत आहे...' : 'कार्यकर्ता जतन करा (Save)'}
             </button>
           </div>
         </form>
