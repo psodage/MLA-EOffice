@@ -285,6 +285,7 @@ const MainLayout = ({ children }) => {
   const [isSearchingApi, setIsSearchingApi] = useState(false);
   const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth < 1024);
   const searchContainerRef = useRef(null);
+  const mobileSearchInputRef = useRef(null);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -311,15 +312,27 @@ const MainLayout = ({ children }) => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  // Auto focus mobile search input when opened
+  useEffect(() => {
+    if (mobileSearchOpen && mobileSearchInputRef.current) {
+      mobileSearchInputRef.current.focus();
+    }
+  }, [mobileSearchOpen]);
+
   // Handle clicking outside of search bar container to close search dropdown
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (searchContainerRef.current && !searchContainerRef.current.contains(event.target)) {
         setIsSearchFocused(false);
+        setMobileSearchOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
   }, []);
 
   // Fetch live API content results dynamically when search query changes
@@ -587,13 +600,211 @@ const MainLayout = ({ children }) => {
 
       {/* ── Top Navbar ────────────────────────────────────────── */}
       <header className={`top-navbar ${mobileSearchOpen && isMobile ? 'mobile-search-active' : ''}`}>
-        {mobileSearchOpen && isMobile ? (
-          /* Wide Header Search Bar inside Mobile Header */
+        <div className="navbar-left">
+          <button
+            type="button"
+            className="mobile-menu-btn"
+            onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label="Toggle navigation"
+          >
+            ☰
+          </button>
+          <button
+            type="button"
+            className="topbar-toggle-btn"
+            onClick={() => setCollapsed(!collapsed)}
+            title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          >
+            ☰
+          </button>
+        </div>
+
+        {/* Wide Centered Universal Search Bar (Desktop) */}
+        <div className="topbar-search-container desktop-search-container" ref={searchContainerRef}>
+          <span className="topbar-search-icon">
+            <LucideIcon name="search" size={16} />
+          </span>
+          <input
+            type="text"
+            className="topbar-search-input"
+            placeholder={
+              lang === 'MR'
+                ? 'निवेदने, पत्रे, नागरिक, विकासकामे किंवा मॉड्यूल्स शोधा...'
+                : 'Search petitions, letters, visitors, dev works or pages...'
+            }
+            value={searchQuery}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              setIsSearchFocused(true);
+            }}
+            onFocus={() => setIsSearchFocused(true)}
+            onKeyDown={handleSearchKeyDown}
+          />
+          {searchQuery && (
+            <button
+              type="button"
+              className="topbar-search-clear"
+              onClick={() => {
+                setSearchQuery('');
+                setIsSearchFocused(false);
+              }}
+              title="Clear search"
+            >
+              <X size={14} />
+            </button>
+          )}
+
+          {/* Universal Search Overlay Results */}
+          {isSearchFocused && (searchQuery.trim().length > 0 || totalResultsCount > 0) && (
+            <div className="topbar-search-results">
+              {/* Group 1: Page Content & Entity Records */}
+              {combinedContentResults.length > 0 && (
+                <div className="search-group">
+                  <div className="search-group-header">
+                    <span>
+                      {lang === 'MR' ? '📄 पृष्ठ सामग्री व नोंदी' : '📄 Page Content & Entity Records'}
+                    </span>
+                    <span className="search-group-count">{combinedContentResults.length}</span>
+                  </div>
+                  {combinedContentResults.map((item) => (
+                    <div
+                      key={item.id}
+                      className="search-result-item content-result"
+                      onClick={() => handleSelectSearchResult(item.path, searchQuery)}
+                    >
+                      <div className="search-result-icon">
+                        <LucideIcon name={item.iconKey} size={18} />
+                      </div>
+                      <div className="search-result-info">
+                        <div className="search-result-title">
+                          {lang === 'MR' ? item.titleMr : item.titleEn}
+                        </div>
+                        <div className="search-result-subtitle">
+                          {lang === 'MR' ? item.subtitleMr : item.subtitleEn}
+                        </div>
+                      </div>
+                      <span className={`search-result-badge ${item.badgeClass || ''}`}>
+                        {lang === 'MR' ? item.badgeMr : item.badgeEn}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Group 2: System Modules & Pages */}
+              {filteredModules.length > 0 && (
+                <div className="search-group">
+                  <div className="search-group-header">
+                    <span>
+                      {lang === 'MR' ? '📌 मुख्य मॉड्यूल्स व पृष्ठे' : '📌 System Modules & Navigation'}
+                    </span>
+                    <span className="search-group-count">{filteredModules.length}</span>
+                  </div>
+                  {filteredModules.map((item) => (
+                    <div
+                      key={item.path}
+                      className="search-result-item"
+                      onClick={() => handleSelectSearchResult(item.path)}
+                    >
+                      <div className="search-result-icon">
+                        <LucideIcon name={item.iconKey} size={18} />
+                      </div>
+                      <div className="search-result-info">
+                        <div className="search-result-title">
+                          {lang === 'MR' ? item.labelMr : item.labelEn}
+                        </div>
+                        <div className="search-result-subtitle">
+                          {lang === 'MR' ? item.labelEn : item.labelMr}
+                        </div>
+                      </div>
+                      <span className="search-result-category">
+                        {lang === 'MR' ? item.categoryMr : item.categoryEn}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* No results placeholder */}
+              {totalResultsCount === 0 && (
+                <div className="search-no-results">
+                  {lang === 'MR'
+                    ? 'कोणतीही जुळणारी माहिती, निवेदने किंवा पृष्ठे सापडली नाहीत'
+                    : 'No matching records, petitions, or pages found'}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Segmented Controls, Profile & Actions */}
+        <div className="navbar-right">
+          {/* Mobile Search Icon Button */}
+          <button
+            type="button"
+            className="mobile-search-trigger"
+            onClick={() => {
+              setMobileSearchOpen(true);
+              setIsSearchFocused(true);
+            }}
+            aria-label="Search"
+            title={lang === 'MR' ? 'शोधा' : 'Search'}
+          >
+            <LucideIcon name="search" size={16} />
+          </button>
+
+          {/* Theme Segmented Switch */}
+          <div className="segmented-switch">
+            <button
+              type="button"
+              className={theme === 'light' ? 'active' : ''}
+              onClick={() => setTheme('light')}
+              aria-label="Light Theme"
+            >
+              <Sun size={14} /> <span className="switch-label">Light</span>
+            </button>
+            <button
+              type="button"
+              className={theme === 'dark' ? 'active' : ''}
+              onClick={() => setTheme('dark')}
+              aria-label="Dark Theme"
+            >
+              <Moon size={14} /> <span className="switch-label">Dark</span>
+            </button>
+          </div>
+
+          {/* Language Segmented Switch */}
+          <div className="segmented-switch" title="भाषा बदला / Change Language">
+            <button
+              type="button"
+              className={lang === 'EN' ? 'active' : ''}
+              onClick={() => setLang('EN')}
+              aria-label="English Language"
+              title="English"
+            >
+              <Globe size={14} /> EN
+            </button>
+            <button
+              type="button"
+              className={lang === 'MR' ? 'active' : ''}
+              onClick={() => setLang('MR')}
+              style={{ fontFamily: "'Noto Sans Devanagari', sans-serif" }}
+              aria-label="Marathi Language"
+              title="मराठी (Marathi)"
+            >
+              <Flag size={14} /> मराठी
+            </button>
+          </div>
+        </div>
+
+        {/* Extended Searchbar Overlay for Mobile */}
+        {mobileSearchOpen && isMobile && (
           <div className="mobile-header-search-container" ref={searchContainerRef}>
             <span className="mobile-header-search-icon">
               <LucideIcon name="search" size={16} />
             </span>
             <input
+              ref={mobileSearchInputRef}
               type="text"
               className="mobile-header-search-input"
               placeholder={
@@ -724,206 +935,6 @@ const MainLayout = ({ children }) => {
               </div>
             )}
           </div>
-        ) : (
-          <>
-            <div className="navbar-left">
-              <button
-                type="button"
-                className="mobile-menu-btn"
-                onClick={() => setMobileOpen(!mobileOpen)}
-                aria-label="Toggle navigation"
-              >
-                ☰
-              </button>
-              <button
-                type="button"
-                className="topbar-toggle-btn"
-                onClick={() => setCollapsed(!collapsed)}
-                title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-              >
-                ☰
-              </button>
-            </div>
-
-            {/* Wide Centered Universal Search Bar (Desktop) */}
-            <div className="topbar-search-container desktop-search-container" ref={searchContainerRef}>
-              <span className="topbar-search-icon">
-                <LucideIcon name="search" size={16} />
-              </span>
-              <input
-                type="text"
-                className="topbar-search-input"
-                placeholder={
-                  lang === 'MR'
-                    ? 'निवेदने, पत्रे, नागरिक, विकासकामे किंवा मॉड्यूल्स शोधा...'
-                    : 'Search petitions, letters, visitors, dev works or pages...'
-                }
-                value={searchQuery}
-                onChange={(e) => {
-                  setSearchQuery(e.target.value);
-                  setIsSearchFocused(true);
-                }}
-                onFocus={() => setIsSearchFocused(true)}
-                onKeyDown={handleSearchKeyDown}
-              />
-              {searchQuery && (
-                <button
-                  type="button"
-                  className="topbar-search-clear"
-                  onClick={() => {
-                    setSearchQuery('');
-                    setIsSearchFocused(false);
-                  }}
-                  title="Clear search"
-                >
-                  <X size={14} />
-                </button>
-              )}
-
-              {/* Universal Search Overlay Results */}
-              {isSearchFocused && (searchQuery.trim().length > 0 || totalResultsCount > 0) && (
-                <div className="topbar-search-results">
-
-                  {/* Group 1: Page Content & Entity Records */}
-                  {combinedContentResults.length > 0 && (
-                    <div className="search-group">
-                      <div className="search-group-header">
-                        <span>
-                          {lang === 'MR' ? '📄 पृष्ठ सामग्री व नोंदी' : '📄 Page Content & Entity Records'}
-                        </span>
-                        <span className="search-group-count">{combinedContentResults.length}</span>
-                      </div>
-                      {combinedContentResults.map((item) => (
-                        <div
-                          key={item.id}
-                          className="search-result-item content-result"
-                          onClick={() => handleSelectSearchResult(item.path, searchQuery)}
-                        >
-                          <div className="search-result-icon">
-                            <LucideIcon name={item.iconKey} size={18} />
-                          </div>
-                          <div className="search-result-info">
-                            <div className="search-result-title">
-                              {lang === 'MR' ? item.titleMr : item.titleEn}
-                            </div>
-                            <div className="search-result-subtitle">
-                              {lang === 'MR' ? item.subtitleMr : item.subtitleEn}
-                            </div>
-                          </div>
-                          <span className={`search-result-badge ${item.badgeClass || ''}`}>
-                            {lang === 'MR' ? item.badgeMr : item.badgeEn}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  {/* Group 2: System Modules & Pages */}
-                  {filteredModules.length > 0 && (
-                    <div className="search-group">
-                      <div className="search-group-header">
-                        <span>
-                          {lang === 'MR' ? '📌 मुख्य मॉड्यूल्स व पृष्ठे' : '📌 System Modules & Navigation'}
-                        </span>
-                        <span className="search-group-count">{filteredModules.length}</span>
-                      </div>
-                      {filteredModules.map((item) => (
-                        <div
-                          key={item.path}
-                          className="search-result-item"
-                          onClick={() => handleSelectSearchResult(item.path)}
-                        >
-                          <div className="search-result-icon">
-                            <LucideIcon name={item.iconKey} size={18} />
-                          </div>
-                          <div className="search-result-info">
-                            <div className="search-result-title">
-                              {lang === 'MR' ? item.labelMr : item.labelEn}
-                            </div>
-                            <div className="search-result-subtitle">
-                              {lang === 'MR' ? item.labelEn : item.labelMr}
-                            </div>
-                          </div>
-                          <span className="search-result-category">
-                            {lang === 'MR' ? item.categoryMr : item.categoryEn}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  {/* No results placeholder */}
-                  {totalResultsCount === 0 && (
-                    <div className="search-no-results">
-                      {lang === 'MR'
-                        ? 'कोणतीही जुळणारी माहिती, निवेदने किंवा पृष्ठे सापडली नाहीत'
-                        : 'No matching records, petitions, or pages found'}
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-
-            {/* Segmented Controls, Profile & Actions */}
-            <div className="navbar-right">
-              {/* Mobile Search Icon Button */}
-              <button
-                type="button"
-                className="mobile-search-trigger"
-                onClick={() => {
-                  setMobileSearchOpen(true);
-                  setIsSearchFocused(true);
-                }}
-                aria-label="Search"
-                title={lang === 'MR' ? 'शोधा' : 'Search'}
-              >
-                <LucideIcon name="search" size={16} />
-              </button>
-
-              {/* Theme Segmented Switch */}
-              <div className="segmented-switch">
-                <button
-                  type="button"
-                  className={theme === 'light' ? 'active' : ''}
-                  onClick={() => setTheme('light')}
-                  aria-label="Light Theme"
-                >
-                  <Sun size={14} /> <span className="switch-label">Light</span>
-                </button>
-                <button
-                  type="button"
-                  className={theme === 'dark' ? 'active' : ''}
-                  onClick={() => setTheme('dark')}
-                  aria-label="Dark Theme"
-                >
-                  <Moon size={14} /> <span className="switch-label">Dark</span>
-                </button>
-              </div>
-
-              {/* Language Segmented Switch */}
-              <div className="segmented-switch" title="भाषा बदला / Change Language">
-                <button
-                  type="button"
-                  className={lang === 'EN' ? 'active' : ''}
-                  onClick={() => setLang('EN')}
-                  aria-label="English Language"
-                  title="English"
-                >
-                  <Globe size={14} /> EN
-                </button>
-                <button
-                  type="button"
-                  className={lang === 'MR' ? 'active' : ''}
-                  onClick={() => setLang('MR')}
-                  style={{ fontFamily: "'Noto Sans Devanagari', sans-serif" }}
-                  aria-label="Marathi Language"
-                  title="मराठी (Marathi)"
-                >
-                  <Flag size={14} /> मराठी
-                </button>
-              </div>
-            </div>
-          </>
         )}
       </header>
 
