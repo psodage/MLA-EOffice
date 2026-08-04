@@ -168,3 +168,62 @@ h1, h2, h3, h4, h5, h6 {
   white-space: nowrap;
   border: 0;
 }
+
+/* ── Darker Border Styling for White & Outlined Buttons ─────────── */
+.btn-o,
+.btn-outline,
+.btn-secondary,
+.btn-default,
+.btn-white,
+.btn-cancel,
+button.btn-o,
+button.btn-outline,
+button.btn-secondary,
+button.btn-cancel {
+  border: 1.5px solid #64748b !important;
+  color: #1e293b;
+}
+
+.btn-o:hover,
+.btn-outline:hover,
+.btn-secondary:hover,
+.btn-default:hover,
+.btn-white:hover,
+.btn-cancel:hover,
+button.btn-o:hover,
+button.btn-outline:hover,
+button.btn-secondary:hover,
+button.btn-cancel:hover {
+  border-color: #334155 !important;
+  background-color: #f1f5f9;
+}
+
+[data-theme="dark"] .btn-o,
+[data-theme="dark"] .btn-outline,
+[data-theme="dark"] .btn-secondary,
+[data-theme="dark"] .btn-default,
+[data-theme="dark"] .btn-white,
+[data-theme="dark"] .btn-cancel,
+[data-theme="dark"] button.btn-o,
+[data-theme="dark"] button.btn-outline,
+[data-theme="dark"] button.btn-secondary,
+[data-theme="dark"] button.btn-cancel {
+  border: 1.5px solid #64748b !important;
+  color: #f1f5f9;
+  background-color: #1e293b;
+}
+
+[data-theme="dark"] .btn-o:hover,
+[data-theme="dark"] .btn-outline:hover,
+[data-theme="dark"] .btn-secondary:hover,
+[data-theme="dark"] .btn-default:hover,
+[data-theme="dark"] .btn-white:hover,
+[data-theme="dark"] .btn-cancel:hover,
+[data-theme="dark"] button.btn-o:hover,
+[data-theme="dark"] button.btn-outline:hover,
+[data-theme="dark"] button.btn-secondary:hover,
+[data-theme="dark"] button.btn-cancel:hover {
+  border-color: #94a3b8 !important;
+  background-color: #334155;
+}
+
