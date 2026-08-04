@@ -1,12 +1,5 @@
-// src/pages/calendar/CalendarPage.jsx
-// ============================================================
-// Calendar & Schedule Page — Module 11
-// Month grid matrix matching WIREFRAMES/calendar.html,
-// color-coded event chips, Today's events & Upcoming 7-day schedule.
-// Clean Language Toggle (EN / MR) Support
-// ============================================================
-
 import { useState, useEffect, useCallback } from 'react';
+import { Download, Plus, ChevronLeft, ChevronRight, Calendar as CalendarIcon, Clock, MapPin } from 'lucide-react';
 import api from '../../services/api.js';
 import useLangStore from '../../store/langStore.js';
 import CalendarFormModal from './CalendarFormModal.jsx';
@@ -37,7 +30,7 @@ const MONTHS_MR = [
 ];
 
 const CalendarPage = () => {
-  const { lang, setLang } = useLangStore();
+  const { lang } = useLangStore();
   const isMr = lang === 'MR';
 
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -139,25 +132,25 @@ const CalendarPage = () => {
         </div>
 
         <div className="page-actions">
-          <button className="btn-o" onClick={() => alert(isMr ? 'दिनदर्शिका एक्सपोर्ट होत आहे...' : 'Exporting calendar...')}>
-            📥 {isMr ? 'एक्सपोर्ट' : 'Export'}
+          <button className="btn-o" onClick={() => alert(isMr ? 'दिनदर्शिका एक्सपोर्ट होत आहे...' : 'Exporting calendar...')} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+            <Download size={14} /> {isMr ? 'एक्सपोर्ट' : 'Export'}
           </button>
-          <button className="btn-p" onClick={() => openFormForDate(todayDayNum)}>
-            + {isMr ? 'नवीन कार्यक्रम' : 'New Event'}
+          <button className="btn-p" onClick={() => openFormForDate(todayDayNum)} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+            <Plus size={14} /> {isMr ? 'नवीन कार्यक्रम' : 'New Event'}
           </button>
         </div>
       </div>
 
       {/* ── Calendar Navigation Toolbar ────────────────────── */}
       <div className="cal-nav">
-        <button className="cal-nav-btn" onClick={handlePrevMonth} title="Previous Month">
-          ‹
+        <button className="cal-nav-btn" onClick={handlePrevMonth} title="Previous Month" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+          <ChevronLeft size={16} />
         </button>
         <span className="cal-month">
           {isMr ? MONTHS_MR[month] : MONTHS_EN[month]} {year}
         </span>
-        <button className="cal-nav-btn" onClick={handleNextMonth} title="Next Month">
-          ›
+        <button className="cal-nav-btn" onClick={handleNextMonth} title="Next Month" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+          <ChevronRight size={16} />
         </button>
         <button className="cal-today" onClick={handleTodayClick}>
           {isMr ? 'आज' : 'Today'}
@@ -255,8 +248,8 @@ const CalendarPage = () => {
           {/* Today's Schedule Card */}
           <div className="side-widget-card">
             <div className="widget-header">
-              <h3>
-                📅 {isMr ? 'आजचे कार्यक्रम' : "Today's Schedule"} ({todayEvents.length})
+              <h3 style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <CalendarIcon size={16} /> {isMr ? 'आजचे कार्यक्रम' : "Today's Schedule"} ({todayEvents.length})
               </h3>
             </div>
 
@@ -271,8 +264,14 @@ const CalendarPage = () => {
                       </span>
                       <h4 className="widget-event-title">{ev.title}</h4>
                       <div className="widget-event-meta">
-                        <span>⏱️ {ev.start_time ? ev.start_time.slice(0, 5) : '—'}</span>
-                        {ev.location && <span>📍 {ev.location}</span>}
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                          <Clock size={12} /> {ev.start_time ? ev.start_time.slice(0, 5) : '—'}
+                        </span>
+                        {ev.location && (
+                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                            <MapPin size={12} /> {ev.location}
+                          </span>
+                        )}
                       </div>
                     </div>
                   );
@@ -288,8 +287,8 @@ const CalendarPage = () => {
           {/* Upcoming 7 Days Events Card */}
           <div className="side-widget-card">
             <div className="widget-header">
-              <h3>
-                🗓️ {isMr ? 'पुढील ७ दिवसांतील कार्यक्रम' : 'Upcoming 7 Days'} ({upcomingEvents.length})
+              <h3 style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <CalendarIcon size={16} /> {isMr ? 'पुढील ७ दिवसांतील कार्यक्रम' : 'Upcoming 7 Days'} ({upcomingEvents.length})
               </h3>
             </div>
 
@@ -303,14 +302,20 @@ const CalendarPage = () => {
                         <span className={`widget-event-badge ${cfg.class}`}>
                           {isMr ? cfg.mr : cfg.en}
                         </span>
-                        <span style={{ fontSize: '11px', color: 'var(--text-3)', fontFamily: 'JetBrains Mono' }}>
-                          📅 {ev.event_date}
+                        <span style={{ fontSize: '11px', color: 'var(--text-3)', fontFamily: 'JetBrains Mono', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                          <CalendarIcon size={11} /> {ev.event_date}
                         </span>
                       </div>
                       <h4 className="widget-event-title" style={{ marginTop: '4px' }}>{ev.title}</h4>
                       <div className="widget-event-meta">
-                        <span>⏱️ {ev.start_time ? ev.start_time.slice(0, 5) : '—'}</span>
-                        {ev.location && <span>📍 {ev.location}</span>}
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                          <Clock size={12} /> {ev.start_time ? ev.start_time.slice(0, 5) : '—'}
+                        </span>
+                        {ev.location && (
+                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                            <MapPin size={12} /> {ev.location}
+                          </span>
+                        )}
                       </div>
                     </div>
                   );

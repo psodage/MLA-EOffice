@@ -1,10 +1,5 @@
-// src/pages/booth/BoothFormModal.jsx
-// ============================================================
-// Form Modal for Adding a New Polling Booth
-// Clean Language Toggle (EN / MR) Support
-// ============================================================
-
 import { useState, useEffect } from 'react';
+import { Vote, X, Save } from 'lucide-react';
 import useLangStore from '../../store/langStore.js';
 
 const BoothFormModal = ({ isOpen, onClose, onSuccess, initialArea }) => {
@@ -55,10 +50,10 @@ const BoothFormModal = ({ isOpen, onClose, onSuccess, initialArea }) => {
     <div className="nivedan-modal-overlay" onClick={onClose}>
       <div className="nivedan-modal-card" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h3 className="modal-title">
-            🗳️ {isMr ? 'नवीन मतदान केंद्र (बूथ) नोंदवा' : 'Add New Polling Booth'}
+          <h3 className="modal-title" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+            <Vote size={18} /> {isMr ? 'नवीन मतदान केंद्र (बूथ) नोंदवा' : 'Add New Polling Booth'}
           </h3>
-          <button className="modal-close-btn" onClick={onClose}>✕</button>
+          <button className="modal-close-btn" onClick={onClose}><X size={18} /></button>
         </div>
 
         <form onSubmit={handleSubmit}>
@@ -162,8 +157,8 @@ const BoothFormModal = ({ isOpen, onClose, onSuccess, initialArea }) => {
             <button type="button" className="btn btn-outline" onClick={onClose} disabled={submitting}>
               {isMr ? 'रद्द करा' : 'Cancel'}
             </button>
-            <button type="submit" className="btn btn-primary" disabled={submitting}>
-              {submitting ? (isMr ? 'नोंद होत आहे...' : 'Saving...') : (isMr ? 'बूथ जोडून सेव्ह करा' : 'Save Booth')}
+            <button type="submit" className="btn btn-primary" disabled={submitting} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+              <Save size={16} /> {submitting ? (isMr ? 'नोंद होत आहे...' : 'Saving...') : (isMr ? 'बूथ जोडून सेव्ह करा' : 'Save Booth')}
             </button>
           </div>
         </form>
