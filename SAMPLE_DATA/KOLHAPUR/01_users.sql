@@ -1,27 +1,11 @@
 -- ============================================================
 -- SAMPLE DATA (KOLHAPUR) — 01_users.sql
--- 7 System User Accounts (all 7 roles covered)
--- Fictional constituency: Kolhapur South (Kolhapur District)
---
--- ⚠️  Passwords are bcrypt hashes (12 salt rounds)
---     Plain-text → bcrypt hash mapping:
---       Mla@2026#Kolhapur  → hash below (mla_rajesh)
---       Pa@2026#Kolhapur   → hash below (pa_sunita)
---       Clerk@2026#Kolh    → hash below (clerk_suresh)
---       Audit@2026#Kolh    → hash below (auditor_meera)
---       Booth@2026#Kolh    → hash below (bp_ganpat)
---       Citizen@2026       → same as Pune set
---       Admin@MLA2026      → same as Pune set
+-- 7 System User Accounts
 -- ============================================================
-
--- Clear existing (dev only)
--- TRUNCATE TABLE users;  -- Uncomment only if safe to wipe
 
 INSERT INTO users
   (full_name, username, password_hash, role, mobile, email, accessible_modules, is_active, password_changed_at, created_at, updated_at)
 VALUES
-
--- 1. MLA — Full access (Kolhapur South)
 (
   'आ. राजेश नाईक',
   'mla_rajesh',
@@ -35,8 +19,6 @@ VALUES
   '2026-01-10 09:00:00',
   '2026-01-10 09:00:00'
 ),
-
--- 2. PA (Personal Assistant)
 (
   'सुनीता शिंदे',
   'pa_sunita',
@@ -50,8 +32,6 @@ VALUES
   '2026-01-10 09:05:00',
   '2026-01-10 09:05:00'
 ),
-
--- 3. Receptionist / Front Desk Clerk
 (
   'सुरेश कांबळे',
   'clerk_suresh',
@@ -65,8 +45,6 @@ VALUES
   '2026-01-10 09:10:00',
   '2026-01-10 09:10:00'
 ),
-
--- 4. Field Auditor / Assessor
 (
   'मीरा पाटील',
   'auditor_meera',
@@ -80,8 +58,6 @@ VALUES
   '2026-01-10 09:15:00',
   '2026-01-10 09:15:00'
 ),
-
--- 5. Booth Pramukh — Ground-level (from actual Excel data)
 (
   'गणपत चौगले',
   'bp_ganpat',
@@ -95,8 +71,6 @@ VALUES
   '2026-01-10 09:20:00',
   '2026-01-10 09:20:00'
 ),
-
--- 6. Citizen — Public tracking portal only
 (
   'विकास पाटील (Test Citizen)',
   'citizen_kolhapur',
@@ -110,8 +84,6 @@ VALUES
   '2026-01-10 09:25:00',
   '2026-01-10 09:25:00'
 ),
-
--- 7. System Administrator (shared)
 (
   'System Admin',
   'admin_kolhapur',
