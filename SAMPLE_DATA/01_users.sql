@@ -20,19 +20,21 @@
 -- TRUNCATE TABLE users;  -- Uncomment only if safe to wipe
 
 INSERT INTO users
-  (full_name, username, password_hash, role, mobile, email, accessible_modules, is_active, created_at, updated_at)
+  (full_name, username, password_hash, role, mobile, email, accessible_modules, is_active, password_changed_at, created_at, updated_at)
 VALUES
+
 
 -- 1. MLA — Full access
 (
   'आ. सुरेश पाटील',
   'mla_suresh',
-  '$2b$12$K9bQ3mZvX7wN2pYcRtHeLu8sJdF4nVoA1kGiU0MhEy6WqBxPcTzrI',
+  '$2a$12$mprpqKSuufy9Ovt5P57w6Oc9N14VB16tB5Sc3dxW1mdX4AnivVQEi',
   'MLA',
   '9800000001',
   'suresh.patil.mla@example.com',
   '["inward","outward","nivedan","visitor","devworks","karyakarta","booth","geography","calendar","whatsapp","dashboard","reports","notifications","users"]',
   TRUE,
+  '2026-01-10 09:00:00',
   '2026-01-10 09:00:00',
   '2026-01-10 09:00:00'
 ),
@@ -41,12 +43,13 @@ VALUES
 (
   'मीना देशमुख',
   'pa_meena',
-  '$2b$12$R4cT7nZpW9vM3qYbStIeLv8rKfG5oUhB2lHjV1NkFx7XsCyQaDzwJ',
+  '$2a$12$kJHiroLqLAYN5/iLT1qvSuPmRe7mbIsBz9HUnt5v1rIISzygK91Re',
   'PA',
   '9800000002',
   'meena.deshmukh.pa@example.com',
   '["inward","outward","nivedan","visitor","devworks","karyakarta","booth","geography","calendar","whatsapp","dashboard","reports","notifications"]',
   TRUE,
+  '2026-01-10 09:05:00',
   '2026-01-10 09:05:00',
   '2026-01-10 09:05:00'
 ),
@@ -55,12 +58,13 @@ VALUES
 (
   'रमेश जाधव',
   'clerk_ramesh',
-  '$2b$12$S5dU8oApX0wN4rZcTuJfMw9sLgH6pViC3mIkW2OlGy8YtDzRbEaqK',
+  '$2a$12$RBAxDdSfHoDY/Yvfx//Rv.iR6f4bBobdmZG6ZlngYH2ZzsbKhgZTS',
   'RECEPTIONIST',
   '9800000003',
   'ramesh.jadhav.clerk@example.com',
   '["visitor","nivedan","inward","dashboard","notifications"]',
   TRUE,
+  '2026-01-10 09:10:00',
   '2026-01-10 09:10:00',
   '2026-01-10 09:10:00'
 ),
@@ -69,12 +73,13 @@ VALUES
 (
   'प्रिया मोरे',
   'auditor_priya',
-  '$2b$12$T6eV9pBqY1xO5sAdUvKgNx0tMhI7qWjD4nJlX3PmHz9ZuEaScFbrL',
+  '$2a$12$dGUgFfZ/UhndwFcIAIpS4OUxkkgO36/nPEFVxu49MfLywZ561yzca',
   'AUDITOR',
   '9800000004',
   'priya.more.auditor@example.com',
   '["devworks","booth","geography","dashboard","notifications"]',
   TRUE,
+  '2026-01-10 09:15:00',
   '2026-01-10 09:15:00',
   '2026-01-10 09:15:00'
 ),
@@ -83,12 +88,13 @@ VALUES
 (
   'गणेश शिंदे',
   'bp_ganesh',
-  '$2b$12$U7fW0qCrZ2yP6tBeVwLhOy1uNiJ8rXkE5oKmY4QnIa0AvFbTdGcsM',
+  '$2a$12$mrc3QWXFnJ04Y90qvWqrO.9GNlQXv/IAlh5ek1h3rgwxwTBeWQAdq',
   'BOOTH_PRAMUKH',
   '9800000005',
   NULL,
   '["karyakarta","booth","geography","notifications"]',
   TRUE,
+  '2026-01-10 09:20:00',
   '2026-01-10 09:20:00',
   '2026-01-10 09:20:00'
 ),
@@ -97,12 +103,13 @@ VALUES
 (
   'अजय कांबळे (Test Citizen)',
   'citizen_test',
-  '$2b$12$V8gX1rDsA3zQ7uCfWxMiPz2vOjK9sYlF6pLnZ5RoJb1BwGcUeHdtN',
+  '$2a$12$Q3m2relpGhQrte6Bl0DGoeDckzAcGc01BiyvFpUxoQvYqMQacJoDG',
   'CITIZEN',
   '9800000006',
   NULL,
   '[]',
   TRUE,
+  '2026-01-10 09:25:00',
   '2026-01-10 09:25:00',
   '2026-01-10 09:25:00'
 ),
@@ -111,12 +118,15 @@ VALUES
 (
   'System Admin',
   'admin',
-  '$2b$12$W9hY2sEtB4aR8vDgXyNjQa3wPkL0tZmG7qMoA6SpKc2CxHdVfIeuO',
+  '$2a$12$g8MCfkuzOcNbB2foJ0iXYe/R2nt7pjFAYWkeUZZpkLVvutcmIOnUi',
   'ADMIN',
+
   '9800000007',
   'admin@mlaeoffice.local',
   '["inward","outward","nivedan","visitor","devworks","karyakarta","booth","geography","calendar","whatsapp","dashboard","reports","notifications","users","settings","audit"]',
   TRUE,
   '2026-01-10 09:00:00',
+  '2026-01-10 09:00:00',
   '2026-01-10 09:00:00'
 );
+
