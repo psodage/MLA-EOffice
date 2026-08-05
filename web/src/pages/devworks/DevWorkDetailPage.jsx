@@ -48,18 +48,100 @@ const DEFAULT_MILESTONES = [
   { id: 6, title: 'Handover & Inauguration', desc: 'Official inauguration ceremony', date: 'ETA: 15 Oct 2026', status: 'PENDING' },
 ];
 
+const SAMPLE_PROJECTS = [
+  {
+    id: 1,
+    project_name: 'NH-4 Junction Road Widening',
+    category: 'ROAD',
+    location: 'Pimpri-Chinchwad · Ward 5',
+    geo_latitude: 18.6298,
+    geo_longitude: 73.7997,
+    funding_source: 'State PWD',
+    budget_allocated: 24500000.0,
+    budget_spent: 17640000.0,
+    contractor_name: 'Patel Infra Pvt Ltd',
+    contractor_contact: '98765 00123',
+    start_date: '01 Mar 2026',
+    expected_completion_date: '15 Oct 2026',
+    status: 'IN_PROGRESS',
+    progress_percentage: 72,
+    photos: [
+      { id: 101, photo_url: 'https://images.unsplash.com/photo-1541888946425-d0fbb186a5b7?w=800', photo_stage: 'BEFORE', caption: 'कामापूर्वीची परिस्थिती', created_at: '2026-03-01' },
+      { id: 102, photo_url: 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=800', photo_stage: 'DURING', caption: 'काम सुरू असताना', created_at: '2026-07-15' },
+    ],
+  },
+  {
+    id: 2,
+    project_name: 'Wadgaon Village Water Tank',
+    category: 'WATER_PIPELINE',
+    location: 'Wadgaon · Karveer Taluka',
+    geo_latitude: 18.6654,
+    geo_longitude: 73.7712,
+    funding_source: 'MLALAD',
+    budget_allocated: 8500000.0,
+    budget_spent: 8500000.0,
+    contractor_name: 'Mahalaxmi Waterworks',
+    contractor_contact: '98220 99887',
+    start_date: '10 Jan 2026',
+    expected_completion_date: '30 Jun 2026',
+    actual_completion_date: '25 Jun 2026',
+    status: 'COMPLETED',
+    progress_percentage: 100,
+    photos: [
+      { id: 103, photo_url: 'https://images.unsplash.com/photo-1574482620826-40685ca5ebd2?w=800', photo_stage: 'AFTER', caption: 'पूर्ण झालेली पाणी टाकी (जून २०२६)', created_at: '2026-06-25' },
+    ],
+  },
+  {
+    id: 3,
+    project_name: 'Sub-District Hospital Extension',
+    category: 'HOSPITAL',
+    location: 'Chinchwad City Hospital Road',
+    geo_latitude: 18.6255,
+    geo_longitude: 73.8055,
+    funding_source: 'State Grant',
+    budget_allocated: 45000000.0,
+    budget_spent: 12000000.0,
+    contractor_name: 'Apex Health Constructions',
+    contractor_contact: '94220 11223',
+    start_date: '01 Nov 2025',
+    expected_completion_date: '01 May 2026',
+    status: 'DELAYED',
+    progress_percentage: 35,
+    photos: [],
+  },
+  {
+    id: 4,
+    project_name: 'Zilla Parishad Primary School Solarization',
+    category: 'ELECTRIFICATION',
+    location: 'Rahata Town',
+    geo_latitude: 19.6465,
+    geo_longitude: 74.4842,
+    funding_source: 'ZP Fund',
+    budget_allocated: 3200000.0,
+    budget_spent: 0.0,
+    contractor_name: 'Green Grid Power',
+    contractor_contact: '91580 44332',
+    start_date: '15 Jul 2026',
+    expected_completion_date: '30 Nov 2026',
+    status: 'SANCTIONED',
+    progress_percentage: 0,
+    photos: [],
+  },
+];
+
 const DevWorkDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  const { lang, setLang } = useLangStore();
+  const { lang } = useLangStore();
   const isMr = lang === 'MR';
 
-  const [entry, setEntry] = useState(location.state?.entry || null);
-  const [loading, setLoading] = useState(!location.state?.entry);
-  const [progressVal, setProgressVal] = useState(0);
-  const [spentVal, setSpentVal] = useState(0);
-  const [statusVal, setStatusVal] = useState('SANCTIONED');
+  const initialEntry = location.state?.entry || null;
+  const [entry, setEntry] = useState(initialEntry);
+  const [loading, setLoading] = useState(!initialEntry);
+  const [progressVal, setProgressVal] = useState(initialEntry?.progress_percentage || 0);
+  const [spentVal, setSpentVal] = useState(initialEntry?.budget_spent || 0);
+  const [statusVal, setStatusVal] = useState(initialEntry?.status || 'SANCTIONED');
   const [activePhotoStage, setActivePhotoStage] = useState('ALL');
   const [showEditSection, setShowEditSection] = useState(false);
   const [updating, setUpdating] = useState(false);
@@ -73,7 +155,6 @@ const DevWorkDetailPage = () => {
 
   const fetchProjectDetails = useCallback(async () => {
     if (!id) return;
-    setLoading(true);
     try {
       const { data } = await api.get(`/devworks/${id}`);
       const project = data.data || data;
@@ -83,40 +164,19 @@ const DevWorkDetailPage = () => {
       setStatusVal(project.status || 'SANCTIONED');
     } catch (err) {
       console.warn('Failed to fetch project detail from API, using fallback state:', err);
-      if (!entry) {
-        setEntry({
-          id: id || 1,
-          project_name: 'NH-4 Junction Road Widening',
-          category: 'ROAD',
-          location: 'Kolhapur City, Ward 5 · Karveer Taluka',
-          geo_latitude: 18.6298,
-          geo_longitude: 73.7997,
-          funding_source: 'State PWD',
-          budget_allocated: 24500000.0,
-          budget_spent: 17640000.0,
-          contractor_name: 'Patel Infra Pvt Ltd',
-          contractor_contact: '98765 00123',
-          start_date: '01 Mar 2026',
-          expected_completion_date: '15 Oct 2026',
-          status: 'IN_PROGRESS',
-          progress_percentage: 72,
-          photos: [
-            { id: 101, photo_url: 'https://images.unsplash.com/photo-1541888946425-d0fbb186a5b7?w=800', photo_stage: 'BEFORE', caption: 'कामापूर्वीची परिस्थिती', created_at: '2026-03-01' },
-            { id: 102, photo_url: 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=800', photo_stage: 'DURING', caption: 'काम सुरू असताना', created_at: '2026-07-15' },
-          ],
-        });
-        setProgressVal(72);
-        setSpentVal(17640000);
-        setStatusVal('IN_PROGRESS');
-      }
+      const fallback = SAMPLE_PROJECTS.find((p) => String(p.id) === String(id)) || SAMPLE_PROJECTS[0];
+      setEntry((prev) => prev || fallback);
+      setProgressVal((prev) => (prev !== 0 ? prev : fallback.progress_percentage || 0));
+      setSpentVal((prev) => (prev !== 0 ? prev : fallback.budget_spent || 0));
+      setStatusVal((prev) => (prev !== 'SANCTIONED' ? prev : fallback.status || 'SANCTIONED'));
     } finally {
       setLoading(false);
     }
-  }, [id, entry]);
+  }, [id]);
 
   useEffect(() => {
     fetchProjectDetails();
-  }, [id, fetchProjectDetails]);
+  }, [fetchProjectDetails]);
 
   if (loading) {
     return (
