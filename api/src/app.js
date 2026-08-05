@@ -71,8 +71,20 @@ if (!config.app.isProduction) {
   app.use(morgan('dev'));
 }
 
-// ── Health Check ─────────────────────────────────────────────
+// ── Health Check (both /health and /api/v1/health for cloud health checks) ──
+app.use('/health', healthRoutes);
 app.use('/api/v1/health', healthRoutes);
+
+// ── Root Route ───────────────────────────────────────────────
+app.get('/', (req, res) => {
+  res.json({
+    success: true,
+    message: 'MLA E-Office API Server',
+    status: 'online',
+    health: '/api/v1/health',
+  });
+});
+
 
 // ── API Routes ───────────────────────────────────────────────
 app.use('/api/v1/auth', authRoutes);
