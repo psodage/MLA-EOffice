@@ -103,13 +103,18 @@ const t = {
   },
 };
 
-const UserManagementPage = () => {
+const UserManagementPage = ({ defaultTab }) => {
   const { user: currentUser } = useAuthStore();
   const isAdmin = currentUser?.role === 'ADMIN';
   const { lang } = useLangStore();
   const text = t[lang] || t.EN;
 
-  const [activeTab, setActiveTab] = useState(isAdmin ? 'USERS' : 'DEPARTMENTS');
+  const initialTab = defaultTab
+    ? (defaultTab === 'USERS' && !isAdmin ? 'DEPARTMENTS' : defaultTab)
+    : (isAdmin ? 'USERS' : 'DEPARTMENTS');
+
+  const [activeTab, setActiveTab] = useState(initialTab);
+
   const [users, setUsers] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [greetings, setGreetings] = useState([]);

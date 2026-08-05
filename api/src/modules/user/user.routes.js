@@ -24,15 +24,17 @@ import {
   getCategorySettingsController,
 } from './user.controller.js';
 import authMiddleware from '../../middlewares/auth.middleware.js';
+import authorize from '../../middlewares/rbac.middleware.js';
 
 const router = Router();
 
-// Protected User Management routes (Admin access)
-router.get('/users', authMiddleware, getUsersListController);
-router.post('/users', authMiddleware, createUserController);
-router.patch('/users/:id/active', authMiddleware, toggleUserActiveController);
-router.patch('/users/:id/password', authMiddleware, resetUserPasswordController);
-router.patch('/users/:id/modules', authMiddleware, updateAccessibleModulesController);
+// Protected User Management routes (Admin access ONLY)
+router.get('/users', authMiddleware, authorize('ADMIN'), getUsersListController);
+router.post('/users', authMiddleware, authorize('ADMIN'), createUserController);
+router.patch('/users/:id/active', authMiddleware, authorize('ADMIN'), toggleUserActiveController);
+router.patch('/users/:id/password', authMiddleware, authorize('ADMIN'), resetUserPasswordController);
+router.patch('/users/:id/modules', authMiddleware, authorize('ADMIN'), updateAccessibleModulesController);
+
 
 // Protected Office Settings routes (PA / Admin access)
 router.get('/settings/departments', authMiddleware, getDepartmentSettingsController);

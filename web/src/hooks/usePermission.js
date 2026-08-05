@@ -53,7 +53,8 @@ export const usePermission = () => {
   /** Check if current role can access a module */
   const canAccess = (module) => {
     if (!role) return false;
-    // Also check accessible_modules from JWT (dynamic per user)
+    // Strict restriction: User Management ('users' module) is restricted exclusively to ADMIN
+    if (module === 'users' && role !== 'ADMIN') return false;
     const userModules = user?.accessible_modules || [];
     const roleModules = ROLE_PERMISSIONS[role]?.modules || [];
     return userModules.includes(module) || roleModules.includes(module);

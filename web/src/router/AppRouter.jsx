@@ -360,17 +360,30 @@ const AppRouter = () => {
           }
         />
 
-        {/* User Management & Settings Module */}
+        {/* User Management Module (ADMIN access ONLY) */}
+        <Route
+          path="/user-mgmt/*"
+          element={
+            <ProtectedRoute module="users" roles={['ADMIN']}>
+              <MainLayout>
+                <UserManagementPage defaultTab="USERS" />
+              </MainLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Office Settings Module */}
         <Route
           path="/settings/*"
           element={
             <ProtectedRoute>
               <MainLayout>
-                <UserManagementPage />
+                <UserManagementPage defaultTab="DEPARTMENTS" />
               </MainLayout>
             </ProtectedRoute>
           }
         />
+
 
         {/* ── Utility routes ── */}
         <Route path="/unauthorized" element={<UnauthorizedPage />} />
