@@ -87,7 +87,9 @@ app.get('/', (req, res) => {
 
 
 // ── API Routes ───────────────────────────────────────────────
+app.use('/auth', authRoutes); // Fallback alias
 app.use('/api/v1/auth', authRoutes);
+
 app.use('/api/v1/dashboard', dashboardRoutes);
 app.use('/api/v1/inward', inwardRoutes);
 app.use('/api/v1/departments', departmentRoutes);
