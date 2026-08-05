@@ -11,7 +11,7 @@ const BoothFormModal = ({ isOpen, onClose, onSuccess, initialArea }) => {
     booth_name: '',
     location: '',
     taluka: 'Karveer Taluka',
-    area_name: 'Pimpri (Ward 5)',
+    area_name: 'Uchgaon (Gram Panchayat)',
     pramukh_name: '',
     pramukh_mobile: '',
     total_voters: '',
@@ -86,8 +86,9 @@ const BoothFormModal = ({ isOpen, onClose, onSuccess, initialArea }) => {
                   onChange={handleChange}
                 >
                   <option value="Karveer Taluka">{isMr ? 'करवीर तालुका' : 'Karveer Taluka'}</option>
-                  <option value="Maval Taluka">{isMr ? 'मावळ तालुका' : 'Maval Taluka'}</option>
-                  <option value="Shirur Taluka">{isMr ? 'शिरूर तालुका' : 'Shirur Taluka'}</option>
+                  <option value="Kagal Taluka">{isMr ? 'कागल तालुका' : 'Kagal Taluka'}</option>
+                  <option value="Radhanagari Taluka">{isMr ? 'राधानगरी तालुका' : 'Radhanagari Taluka'}</option>
+                  <option value="Hatkanangale Taluka">{isMr ? 'हातकणंगले तालुका' : 'Hatkanangale Taluka'}</option>
                 </select>
               </div>
 
@@ -101,7 +102,7 @@ const BoothFormModal = ({ isOpen, onClose, onSuccess, initialArea }) => {
                   className="nivedan-form-input"
                   value={form.booth_name}
                   onChange={handleChange}
-                  placeholder={isMr ? 'उदा. जिल्हा परिषद प्राथमिक शाळा, पिंपरी' : 'e.g. ZP Primary School, Pimpri'}
+                  placeholder={isMr ? 'उदा. जिल्हा परिषद प्राथमिक शाळा, उचगाव' : 'e.g. ZP Primary School, Uchgaon'}
                   required
                 />
               </div>
@@ -116,7 +117,7 @@ const BoothFormModal = ({ isOpen, onClose, onSuccess, initialArea }) => {
                   className="nivedan-form-input"
                   value={form.pramukh_name}
                   onChange={handleChange}
-                  placeholder={isMr ? 'उदा. रमेश पाटील' : 'e.g. Ramesh Patil'}
+                  placeholder={isMr ? 'उदा. आनंदा पाटील' : 'e.g. Ananda Patil'}
                 />
               </div>
 

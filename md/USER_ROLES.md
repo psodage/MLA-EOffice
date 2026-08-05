@@ -658,8 +658,13 @@ sequenceDiagram
 
 ---
 
-👑 MLA	mla	Pa@12345	Executive Owner (Full Dashboard & Governance)
-👨‍💼 PA	pa	  	Senior Office Manager (Pending Nivedans, Inward, AI Outward)
-🖥️ RECEPTIONIST	receptionist	Pa@12345	Front Desk Clerk (Today's Visitors, Nivedan Registration)
-🕵️‍♂️ AUDITOR	auditor	Pa@12345	Field Inspector (DevWorks Progress & Booth Verification)
-⚙️ ADMIN	admin	Pa@12345	System Administrator (User & Audit Management)
+🔑 Test User Credentials (Kolhapur Division)
+Role	Username	  Password	     Full Name
+MLA	  mla_rajesh	Mla@2026#Pune	 आ. राजेश नाईक
+PA	  pa_sunita	  Pa@2026#Pune	 सुनीता शिंदे
+RECEPTIONIST	clerk_suresh	 Clerk@2026#Pune	 सुरेश कांबळे
+AUDITOR	 auditor_meera	  Audit@2026#Pune 	मीरा पाटील
+BOOTH PRAMUKH	bp_ganpat	 Booth@2026#Pune	गणपत चौगले
+CITIZEN	 citizen_kolhapur	 Citizen@2026	  विकास पाटील (Test Citizen)
+ADMIN	 admin_kolhapur	  Admin@MLA2026	 System Admin
+

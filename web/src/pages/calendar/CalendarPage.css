@@ -260,7 +260,7 @@
 
 .cal-header {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(7, minmax(0, 1fr));
   border-bottom: 2px solid var(--border, #DDE3EB);
   background: var(--bg-page, #F5F7FA);
 }
@@ -278,6 +278,8 @@
   text-transform: uppercase;
   letter-spacing: 0.6px;
   text-align: center;
+  min-width: 0;
+  overflow: hidden;
 }
 
 [data-theme="dark"] .cal-day-name {
@@ -286,7 +288,7 @@
 
 .cal-body {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(7, minmax(0, 1fr));
 }
 
 .cal-cell {
@@ -297,6 +299,9 @@
   transition: background 120ms ease;
   cursor: pointer;
   position: relative;
+  min-width: 0;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 [data-theme="dark"] .cal-cell {
@@ -356,6 +361,12 @@
   color: #0F1419;
 }
 
+.cal-events-wrapper {
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+}
+
 /* Event Chips matching wireframe */
 .cal-event {
   display: block;
@@ -368,6 +379,8 @@
   overflow: hidden;
   text-overflow: ellipsis;
   cursor: pointer;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .ev-meeting {

@@ -218,7 +218,7 @@ const CalendarPage = () => {
                   >
                     <span className="cal-date">{dayNum}</span>
 
-                    <div>
+                    <div className="cal-events-wrapper">
                       {dayEvents.slice(0, 3).map((e) => {
                         const cfg = EVENT_TYPE_CLASS[e.event_type] || EVENT_TYPE_CLASS.MEETING;
                         return (

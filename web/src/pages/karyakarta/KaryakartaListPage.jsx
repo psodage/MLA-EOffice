@@ -26,47 +26,91 @@ const DESIGNATION_MAP = {
 const SAMPLE_FALLBACK_WORKERS = [
   {
     id: 1,
-    full_name: 'Ramesh Patil · रमेश पाटील',
+    full_name: 'अजित सौदागर शिंदे',
     designation: 'BOOTH_PRAMUKH',
-    mobile: '98765 43210',
-    booth_id: '145',
-    ward: 'Ward 5, Pimpri',
+    mobile: '98225 00050',
+    booth_id: '34',
+    ward: 'Ward 5',
     taluka: 'Karveer Taluka',
-    address: 'Pimpri-Chinchwad',
+    address: 'Karveer',
     date_of_birth: '1985-08-15',
   },
   {
     id: 2,
-    full_name: 'Sunil More · सुनील मोरे',
-    designation: 'WARD_HEAD',
-    mobile: '87654 32109',
-    booth_id: '110',
-    ward: 'Ward 1, Shivaji Nagar',
+    full_name: 'अज्ञात',
+    designation: 'BOOTH_PRAMUKH',
+    mobile: '94238 88809',
+    booth_id: '45',
+    ward: 'Ward 5',
     taluka: 'Karveer Taluka',
-    address: 'Shivaji Nagar, Rahata',
+    address: 'Karveer',
     date_of_birth: '1988-11-20',
   },
   {
     id: 3,
-    full_name: 'Priya Deshmukh · प्रिया देशमुख',
-    designation: 'KARYAKARTA',
-    mobile: '76543 21098',
-    booth_id: '148',
-    ward: 'Ward 5, Pimpri',
+    full_name: 'अतिश बाळू सांगवकर',
+    designation: 'BOOTH_PRAMUKH',
+    mobile: '89991 48101',
+    booth_id: '131',
+    ward: 'Ward 5',
     taluka: 'Karveer Taluka',
-    address: 'Pimpri Town',
+    address: 'Karveer',
     date_of_birth: '1992-04-10',
   },
   {
     id: 4,
-    full_name: 'Vikas Jagtap · विकास जगताप',
-    designation: 'VOLUNTEER',
-    mobile: '65432 10987',
-    booth_id: '102',
-    ward: 'Wadgaon Village',
+    full_name: 'अतुल पोवार',
+    designation: 'BOOTH_PRAMUKH',
+    mobile: '81494 41214',
+    booth_id: '46',
+    ward: 'Ward 5',
     taluka: 'Karveer Taluka',
-    address: 'Wadgaon',
+    address: 'Karveer',
     date_of_birth: '1995-09-05',
+  },
+  {
+    id: 5,
+    full_name: 'अमृत भालकर',
+    designation: 'BOOTH_PRAMUKH',
+    mobile: '91307 66755',
+    booth_id: '77',
+    ward: 'Ward 5',
+    taluka: 'Karveer Taluka',
+    address: 'Karveer',
+    date_of_birth: '1990-03-12',
+  },
+  {
+    id: 6,
+    full_name: 'अथर्व राजू कदम',
+    designation: 'BOOTH_PRAMUKH',
+    mobile: '91720 91177',
+    booth_id: '130',
+    ward: 'Ward 5',
+    taluka: 'Karveer Taluka',
+    address: 'Karveer',
+    date_of_birth: '1996-07-24',
+  },
+  {
+    id: 7,
+    full_name: 'अनिकेत अशोक देसाई',
+    designation: 'BOOTH_PRAMUKH',
+    mobile: '98717 47544',
+    booth_id: '158',
+    ward: 'Ward 5',
+    taluka: 'Karveer Taluka',
+    address: 'Karveer',
+    date_of_birth: '1987-12-05',
+  },
+  {
+    id: 8,
+    full_name: 'अनिकेत रवींद्र मुत्गी',
+    designation: 'BOOTH_PRAMUKH',
+    mobile: '81497 66649',
+    booth_id: '119',
+    ward: 'Ward 5',
+    taluka: 'Karveer Taluka',
+    address: 'Karveer',
+    date_of_birth: '1993-01-18',
   },
 ];
 
@@ -309,9 +353,10 @@ const KaryakartaListPage = () => {
           <span className="fl">{isMr ? 'तालुका' : 'Taluka'}</span>
           <select className="fi" name="taluka" value={filters.taluka} onChange={handleFilterChange}>
             <option value="ALL">{isMr ? 'सर्व तालुके' : 'All Talukas'}</option>
-            <option value="Karveer">Karveer</option>
-            <option value="Maval">Maval</option>
-            <option value="Shirur">Shirur</option>
+            <option value="Karveer">Karveer (करवीर)</option>
+            <option value="Kagal">Kagal (कागल)</option>
+            <option value="Radhanagari">Radhanagari (राधानगरी)</option>
+            <option value="Hatkanangale">Hatkanangale (हातकणंगले)</option>
           </select>
         </div>
 
@@ -319,9 +364,10 @@ const KaryakartaListPage = () => {
           <span className="fl">{isMr ? 'गाव / वॉर्ड' : 'Village/Ward'}</span>
           <select className="fi" name="village_ward" value={filters.village_ward} onChange={handleFilterChange}>
             <option value="ALL">{isMr ? 'सर्व भाग' : 'All Areas'}</option>
-            <option value="Ward 1">Ward 1</option>
-            <option value="Ward 5">Ward 5</option>
-            <option value="Wadgaon">Wadgaon</option>
+            <option value="Rajarampuri">Rajarampuri (राजारामपूरी)</option>
+            <option value="Uchgaon">Uchgaon (उचगाव)</option>
+            <option value="Gokul Shirgaon">Gokul Shirgaon (गोकुळ शिरगाव)</option>
+            <option value="Pachgaon">Pachgaon (पाचगाव)</option>
           </select>
         </div>
 
@@ -383,17 +429,15 @@ const KaryakartaListPage = () => {
                         {isMr ? desigCfg.mr : desigCfg.en}
                       </span>
                       <div className="wc-detail">
-                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                          <Phone size={11} /> <strong style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '11px' }}>{worker.mobile}</strong>
-                        </span>
-                        <br />
-                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                          <MapPin size={11} /> Booth {worker.booth_id || 101} · {worker.ward || 'Ward 5'}
-                        </span>
-                        <br />
-                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                          <Building size={11} /> {worker.taluka || 'Karveer Taluka'}
-                        </span>
+                        <div className="wc-detail-line">
+                          <Phone size={12} className="wc-icon" /> <span className="wc-phone-num">{worker.mobile}</span>
+                        </div>
+                        <div className="wc-detail-line">
+                          <MapPin size={12} className="wc-icon" /> <span>Booth {worker.booth_id || 101} · {worker.ward || 'Ward 5'}</span>
+                        </div>
+                        <div className="wc-detail-line">
+                          <Building size={12} className="wc-icon" /> <span>{worker.taluka || 'Karveer Taluka'}</span>
+                        </div>
                       </div>
                       <div className="wc-actions">
                         <button
@@ -551,6 +595,95 @@ const KaryakartaListPage = () => {
           fetchBirthdays();
         }}
       />
+
+      {/* ── Worker Detail View Modal ────────────────────── */}
+      {selectedWorkerForDetail && (
+        <div className="inward-modal-overlay" onClick={() => setSelectedWorkerForDetail(null)}>
+          <div className="inward-modal-container" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '480px' }}>
+            <div className="inward-modal-header">
+              <div className="modal-title-group">
+                <h3>{selectedWorkerForDetail.full_name}</h3>
+                <span className="modal-subtitle-en">
+                  {DESIGNATION_MAP[selectedWorkerForDetail.designation]?.[isMr ? 'mr' : 'en'] || selectedWorkerForDetail.designation}
+                </span>
+              </div>
+              <button className="modal-close-btn" onClick={() => setSelectedWorkerForDetail(null)}>&times;</button>
+            </div>
+
+            <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '14px', fontSize: '13px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div className="wc-avatar" style={{ width: '54px', height: '54px', fontSize: '20px' }}>
+                  {getInitials(selectedWorkerForDetail.full_name)}
+                </div>
+                <div>
+                  <h4 style={{ margin: 0, fontSize: '16px', color: 'var(--t1)' }}>{selectedWorkerForDetail.full_name}</h4>
+                  <span className={`wc-role ${DESIGNATION_MAP[selectedWorkerForDetail.designation]?.class || 'role-kw'}`} style={{ marginTop: '4px' }}>
+                    {DESIGNATION_MAP[selectedWorkerForDetail.designation]?.[isMr ? 'mr' : 'en']}
+                  </span>
+                </div>
+              </div>
+
+              <hr style={{ border: 'none', borderTop: '1px solid var(--b)', margin: '4px 0' }} />
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                <div>
+                  <div style={{ fontSize: '11px', color: 'var(--t4)', textTransform: 'uppercase' }}>{isMr ? 'मोबाईल' : 'Mobile'}</div>
+                  <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 600, color: 'var(--t1)', marginTop: '2px' }}>{selectedWorkerForDetail.mobile}</div>
+                </div>
+
+                <div>
+                  <div style={{ fontSize: '11px', color: 'var(--t4)', textTransform: 'uppercase' }}>{isMr ? 'पर्यायी मोबाईल' : 'Alt Mobile'}</div>
+                  <div style={{ fontFamily: 'var(--font-mono)', color: 'var(--t2)', marginTop: '2px' }}>{selectedWorkerForDetail.alt_mobile || '-'}</div>
+                </div>
+
+                <div>
+                  <div style={{ fontSize: '11px', color: 'var(--t4)', textTransform: 'uppercase' }}>{isMr ? 'बूथ क्र.' : 'Booth No.'}</div>
+                  <div style={{ color: 'var(--t1)', fontWeight: 600, marginTop: '2px' }}>Booth {selectedWorkerForDetail.booth_id || 101}</div>
+                </div>
+
+                <div>
+                  <div style={{ fontSize: '11px', color: 'var(--t4)', textTransform: 'uppercase' }}>{isMr ? 'वार्ड / भाग' : 'Ward / Area'}</div>
+                  <div style={{ color: 'var(--t1)', marginTop: '2px' }}>{selectedWorkerForDetail.ward || 'Ward 5'}</div>
+                </div>
+
+                <div>
+                  <div style={{ fontSize: '11px', color: 'var(--t4)', textTransform: 'uppercase' }}>{isMr ? 'तालुका' : 'Taluka'}</div>
+                  <div style={{ color: 'var(--t1)', marginTop: '2px' }}>{selectedWorkerForDetail.taluka || 'Karveer Taluka'}</div>
+                </div>
+
+                <div>
+                  <div style={{ fontSize: '11px', color: 'var(--t4)', textTransform: 'uppercase' }}>{isMr ? 'जन्मतारीख' : 'Date of Birth'}</div>
+                  <div style={{ color: 'var(--pu)', fontWeight: 600, marginTop: '2px' }}>{selectedWorkerForDetail.date_of_birth || '-'}</div>
+                </div>
+              </div>
+
+              {selectedWorkerForDetail.address && (
+                <div>
+                  <div style={{ fontSize: '11px', color: 'var(--t4)', textTransform: 'uppercase' }}>{isMr ? 'पत्ता' : 'Address'}</div>
+                  <div style={{ color: 'var(--t2)', marginTop: '2px' }}>{selectedWorkerForDetail.address}</div>
+                </div>
+              )}
+
+              <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+                <button
+                  className="btn-p"
+                  style={{ flex: 1, justifyContent: 'center' }}
+                  onClick={() => window.location.href = `tel:${selectedWorkerForDetail.mobile.replace(/\s+/g, '')}`}
+                >
+                  <Phone size={14} /> {isMr ? 'कॉलिंग करा' : 'Call Worker'}
+                </button>
+                <button
+                  className="btn-whatsapp-wish"
+                  style={{ flex: 1, justifyContent: 'center', height: '36px' }}
+                  onClick={() => sendWhatsAppWish(selectedWorkerForDetail)}
+                >
+                  <MessageSquare size={14} /> WhatsApp
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -10,102 +10,164 @@ const INITIAL_TREE_DATA = {
   nameEn: 'Kolhapur South Constituency',
   nameMr: 'कोल्हापूर दक्षिण विधानसभा मतदारसंघ',
   type: 'constituency',
-  totalBooths: 156,
+  totalBooths: 284,
   children: [
     {
-      id: 'taluka-1',
+      id: 'taluka-karveer',
       nameEn: 'Karveer Taluka',
       nameMr: 'करवीर तालुका',
       type: 'taluka',
-      totalBooths: 92,
+      totalBooths: 156,
       children: [
         {
-          id: 'ward-5',
-          nameEn: 'Pimpri (Ward 5)',
-          nameMr: 'पिंपरी (वॉर्ड ५)',
+          id: 'ward-rajarampuri',
+          nameEn: 'Rajarampuri (Ward 5)',
+          nameMr: 'राजारामपूरी (वॉर्ड ५)',
           type: 'ward',
           totalBooths: 12,
           totalVoters: 10245,
           pramukhsCount: 12,
           booths: [
-            { id: 145, number: '145', name: 'Booth 145 — ZP School, Pimpri', pramukh: 'Ramesh Patil', workersCount: 3, voters: 845 },
-            { id: 146, number: '146', name: 'Booth 146 — Gram Panchayat Office', pramukh: 'Mangesh Jadhav', workersCount: 5, voters: 912 },
-            { id: 147, number: '147', name: 'Booth 147 — Community Hall', pramukh: 'Sachin Kale', workersCount: 4, voters: 738 },
-            { id: 148, number: '148', name: 'Booth 148 — Primary School', pramukh: 'Priya Deshmukh', workersCount: 2, voters: 801 },
-            { id: 149, number: '149', name: 'Booth 149 — High School Hall', pramukh: 'Vikas Thorat', workersCount: 4, voters: 890 },
-            { id: 150, number: '150', name: 'Booth 150 — Samaj Mandir', pramukh: 'Santosh More', workersCount: 3, voters: 760 },
+            { id: 145, number: '145', name: 'Booth 145 — Rajarampuri High School', pramukh: 'Ajit Shinde · अजित शिंदे', workersCount: 5, voters: 895 },
+            { id: 146, number: '146', name: 'Booth 146 — Tarabai Park Library Hall', pramukh: 'Aniket Desai · अनिकेत देसाई', workersCount: 4, voters: 912 },
+            { id: 147, number: '147', name: 'Booth 147 — Commerce College Hall', pramukh: 'Amol Gurav · अमोल गुरव', workersCount: 4, voters: 738 },
+            { id: 148, number: '148', name: 'Booth 148 — Kasaba Bawada Primary School', pramukh: 'Abhijit Jadhav · अभिजित जाधव', workersCount: 6, voters: 801 },
+            { id: 149, number: '149', name: 'Booth 149 — Ramanand Nagar Samaj Mandir', pramukh: 'Atish Sangavkar · अतिश सांगवकर', workersCount: 4, voters: 890 },
+            { id: 150, number: '150', name: 'Booth 150 — Phulewadi Community Center', pramukh: 'Atul Powar · अतुल पोवार', workersCount: 3, voters: 760 },
           ],
         },
         {
-          id: 'ward-1',
-          nameEn: 'Shivaji Nagar (Ward 1)',
-          nameMr: 'शिवाजी नगर (वॉर्ड १)',
-          type: 'ward',
-          totalBooths: 8,
-          totalVoters: 6850,
-          pramukhsCount: 8,
-          booths: [
-            { id: 101, number: '101', name: 'Booth 101 — Town Hall', pramukh: 'Anand Shinde', workersCount: 4, voters: 820 },
-            { id: 102, number: '102', name: 'Booth 102 — Govt Library', pramukh: 'Kiran Mane', workersCount: 3, voters: 790 },
-          ],
-        },
-        {
-          id: 'village-wadgaon',
-          nameEn: 'Wadgaon Village',
-          nameMr: 'वडगाव गाव',
+          id: 'ward-uchgaon',
+          nameEn: 'Uchgaon (Gram Panchayat)',
+          nameMr: 'उचगाव (ग्रामपंचायत)',
           type: 'village',
-          totalBooths: 6,
-          totalVoters: 4812,
-          pramukhsCount: 6,
+          totalBooths: 14,
+          totalVoters: 12450,
+          pramukhsCount: 14,
           booths: [
-            { id: 12, number: '12', name: 'Booth 12 — ZP Primary School', pramukh: 'Vishnu Gaikwad', workersCount: 4, voters: 845 },
-            { id: 13, number: '13', name: 'Booth 13 — Gram Panchayat Office', pramukh: 'Anil Shinde', workersCount: 3, voters: 912 },
-            { id: 14, number: '14', name: 'Booth 14 — Community Center', pramukh: 'Suresh Pawar', workersCount: 5, voters: 738 },
+            { id: 101, number: '101', name: 'Booth 101 — ZP Central School, Uchgaon', pramukh: 'Ananda Patil · आनंदा पाटील', workersCount: 5, voters: 920 },
+            { id: 102, number: '102', name: 'Booth 102 — High School Hall, Uchgaon', pramukh: 'Kiran Mane · किरण माने', workersCount: 4, voters: 880 },
+            { id: 103, number: '103', name: 'Booth 103 — Gram Panchayat Office', pramukh: 'Sachin Kamble · सचिन कांबळे', workersCount: 6, voters: 950 },
+            { id: 104, number: '104', name: 'Booth 104 — Samaj Mandir, Uchgaon', pramukh: 'Maruti Todkar · मारुती तोडकर', workersCount: 4, voters: 840 },
           ],
         },
         {
-          id: 'village-ambegaon',
-          nameEn: 'Ambegaon Village',
-          nameMr: 'आंबेगाव गाव',
-          type: 'village',
-          totalBooths: 4,
-          totalVoters: 3400,
-          pramukhsCount: 4,
-          booths: [
-            { id: 21, number: '21', name: 'Booth 21 — ZP School Ambegaon', pramukh: 'Ganesh Raut', workersCount: 3, voters: 850 },
-            { id: 22, number: '22', name: 'Booth 22 — Anganwadi Hall', pramukh: 'Nitin Kadam', workersCount: 2, voters: 810 },
-          ],
-        },
-      ],
-    },
-    {
-      id: 'taluka-2',
-      nameEn: 'Maval Taluka',
-      nameMr: 'मावळ तालुका',
-      type: 'taluka',
-      totalBooths: 38,
-      children: [
-        {
-          id: 'village-lonavala',
-          nameEn: 'Lonavala Rural',
-          nameMr: 'लोणावळा ग्रामीण',
+          id: 'village-gokul-shirgaon',
+          nameEn: 'Gokul Shirgaon (MIDC)',
+          nameMr: 'गोकुळ शिरगाव (एम.आय.डी.सी.)',
           type: 'village',
           totalBooths: 10,
-          totalVoters: 7500,
+          totalVoters: 8412,
           pramukhsCount: 10,
           booths: [
-            { id: 51, number: '51', name: 'Booth 51 — High School Lonavala', pramukh: 'Ajay Jagtap', workersCount: 4, voters: 780 },
+            { id: 115, number: '115', name: 'Booth 115 — ZP Marathi School, Gokul Shirgaon', pramukh: 'Vikram Jadhav · विक्रम जाधव', workersCount: 4, voters: 845 },
+            { id: 116, number: '116', name: 'Booth 116 — Industrial Community Hall', pramukh: 'Sandeep Chavan · संदीप चव्हाण', workersCount: 3, voters: 912 },
+            { id: 117, number: '117', name: 'Booth 117 — Gram Panchayat Sabha Griha', pramukh: 'Rahul More · राहुल मोरे', workersCount: 5, voters: 738 },
+          ],
+        },
+        {
+          id: 'village-pachgaon',
+          nameEn: 'Pachgaon & Morewadi',
+          nameMr: 'पाचगाव व मोरेवाडी',
+          type: 'village',
+          totalBooths: 8,
+          totalVoters: 6800,
+          pramukhsCount: 8,
+          booths: [
+            { id: 130, number: '130', name: 'Booth 130 — ZP School Pachgaon', pramukh: 'Atharva Kadam · अथर्व कदम', workersCount: 4, voters: 850 },
+            { id: 131, number: '131', name: 'Booth 131 — Morewadi Primary School', pramukh: 'Amrut Bhalkar · अमृत भालकर', workersCount: 5, voters: 810 },
+          ],
+        },
+        {
+          id: 'village-kaneri',
+          nameEn: 'Kaneri & Kaneriwadi',
+          nameMr: 'कानेरी व कानेरीवाडी',
+          type: 'village',
+          totalBooths: 6,
+          totalVoters: 5200,
+          pramukhsCount: 6,
+          booths: [
+            { id: 160, number: '160', name: 'Booth 160 — Siddhagiri School, Kaneri', pramukh: 'Mahesh Khade · महेश खाडे', workersCount: 3, voters: 820 },
+            { id: 161, number: '161', name: 'Booth 161 — ZP School Kaneriwadi', pramukh: 'Anil Kamat · अनिल कामत', workersCount: 4, voters: 790 },
           ],
         },
       ],
     },
     {
-      id: 'taluka-3',
-      nameEn: 'Shirur Taluka',
-      nameMr: 'शिरूर तालुका',
+      id: 'taluka-kagal',
+      nameEn: 'Kagal Taluka',
+      nameMr: 'कागल तालुका',
       type: 'taluka',
-      totalBooths: 26,
-      children: [],
+      totalBooths: 64,
+      children: [
+        {
+          id: 'village-kagal-town',
+          nameEn: 'Kagal Municipal Area',
+          nameMr: 'कागल नगरपरिषद क्षेत्र',
+          type: 'ward',
+          totalBooths: 16,
+          totalVoters: 14200,
+          pramukhsCount: 16,
+          booths: [
+            { id: 201, number: '201', name: 'Booth 201 — Kagal Municipal School No. 1', pramukh: 'Deepak Patil · दिपक पाटील', workersCount: 6, voters: 910 },
+            { id: 202, number: '202', name: 'Booth 202 — Chhatrapati Shahu Community Hall', pramukh: 'Balaso Bhosale · बाळासो भोसले', workersCount: 5, voters: 860 },
+          ],
+        },
+        {
+          id: 'village-vathar',
+          nameEn: 'Vathar Gram Panchayat',
+          nameMr: 'वाठार ग्रामपंचायत',
+          type: 'village',
+          totalBooths: 8,
+          totalVoters: 6500,
+          pramukhsCount: 8,
+          booths: [
+            { id: 210, number: '210', name: 'Booth 210 — ZP Primary School Vathar', pramukh: 'Suryakant Ghadge · सूर्यकांत घाडगे', workersCount: 4, voters: 820 },
+          ],
+        },
+      ],
+    },
+    {
+      id: 'taluka-radhanagari',
+      nameEn: 'Radhanagari Taluka',
+      nameMr: 'राधानगरी तालुका',
+      type: 'taluka',
+      totalBooths: 42,
+      children: [
+        {
+          id: 'village-radhanagari-town',
+          nameEn: 'Radhanagari Central',
+          nameMr: 'राधानगरी मध्यवर्ती',
+          type: 'village',
+          totalBooths: 10,
+          totalVoters: 7800,
+          pramukhsCount: 10,
+          booths: [
+            { id: 240, number: '240', name: 'Booth 240 — Irrigation Dept Colony School', pramukh: 'Vishwas Nalawade · विश्वास नलवडे', workersCount: 4, voters: 790 },
+          ],
+        },
+      ],
+    },
+    {
+      id: 'taluka-hatkanangale',
+      nameEn: 'Hatkanangale Taluka',
+      nameMr: 'हातकणंगले तालुका',
+      type: 'taluka',
+      totalBooths: 22,
+      children: [
+        {
+          id: 'village-shiroli',
+          nameEn: 'Shiroli Pulachi',
+          nameMr: 'शिरोली पुलाची',
+          type: 'village',
+          totalBooths: 8,
+          totalVoters: 6900,
+          pramukhsCount: 8,
+          booths: [
+            { id: 260, number: '260', name: 'Booth 260 — ZP High School Shiroli', pramukh: 'Balkrishna Mane · बाळकृष्ण माने', workersCount: 5, voters: 870 },
+          ],
+        },
+      ],
     },
   ],
 };
@@ -119,19 +181,19 @@ const renderTypeIcon = (type) => {
 };
 
 const BoothPage = () => {
-  const { lang, setLang } = useLangStore();
+  const { lang } = useLangStore();
   const isMr = lang === 'MR';
 
-  const [treeData, setTreeData] = useState(INITIAL_TREE_DATA);
+  const [treeData] = useState(INITIAL_TREE_DATA);
   const [searchQuery, setSearchQuery] = useState('');
   const [expandedNodes, setExpandedNodes] = useState({
     'constituency-1': true,
-    'taluka-1': true,
-    'ward-5': true,
+    'taluka-karveer': true,
+    'ward-rajarampuri': true,
   });
 
   const [selectedNode, setSelectedNode] = useState(
-    INITIAL_TREE_DATA.children[0].children[0] // Pimpri (Ward 5)
+    INITIAL_TREE_DATA.children[0].children[0] // Rajarampuri (Ward 5)
   );
 
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -252,7 +314,7 @@ const BoothPage = () => {
               <Vote size={16} /> {isMr ? 'मतदारसंघ वृक्ष' : 'Constituency Tree'}
             </span>
             <span style={{ fontSize: '11px', color: 'var(--text-4)' }}>
-              156 {isMr ? 'एकूण बूथ' : 'booths'}
+              284 {isMr ? 'एकूण बूथ' : 'booths'}
             </span>
           </div>
 
@@ -278,7 +340,7 @@ const BoothPage = () => {
               </span>
             </div>
             <div className="dp-sub">
-              {isMr ? 'करवीर तालुका' : 'Karveer Taluka'} · {selectedNode?.totalBooths || selectedNode?.booths?.length || 0} {isMr ? 'बूथ' : 'Booths'} ·{' '}
+              {isMr ? 'करवीर तालुका · कोल्हापूर विभाग' : 'Karveer Taluka · Kolhapur Division'} · {selectedNode?.totalBooths || selectedNode?.booths?.length || 0} {isMr ? 'बूथ' : 'Booths'} ·{' '}
               {(selectedNode?.totalVoters || 10245).toLocaleString(isMr ? 'mr-IN' : 'en-US')} {isMr ? 'एकूण मतदार' : 'Total Voters'}
             </div>
 

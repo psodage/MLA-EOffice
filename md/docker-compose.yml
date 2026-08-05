@@ -1,0 +1,74 @@
+services:
+  # ── MySQL 8.0 Database Service ──────────────────────────────
+  db:
+    image: mysql:8.0
+    container_name: mla-eoffice-db
+    restart: always
+    command: >
+      --default-authentication-plugin=mysql_native_password
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password_dev
+      MYSQL_DATABASE: mla_eoffice_dev
+      MYSQL_USER: eoffice_user
+      MYSQL_PASSWORD: eoffice_pass_dev
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot_password_dev"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+  # ── Node.js Express Backend API ─────────────────────────────
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: mla-eoffice-api
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "5000:5000"
+    environment:
+      NODE_ENV: production
+      PORT: 5000
+      FRONTEND_URL: http://localhost
+      API_BASE_URL: http://localhost:5000
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_NAME: mla_eoffice_dev
+      DB_USER: eoffice_user
+      DB_PASSWORD: eoffice_pass_dev
+      DB_SSL: "false"
+      JWT_SECRET: docker_dev_jwt_secret_change_in_production_environment_12345
+      JWT_ACCESS_EXPIRY: 24h
+      JWT_REFRESH_EXPIRY: 7d
+      BCRYPT_SALT_ROUNDS: 12
+
+  # ── React Vite + Nginx Frontend ─────────────────────────────
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+      args:
+        VITE_API_BASE_URL: http://localhost:5000/api/v1
+        VITE_APP_NAME: "MLA E-Office"
+        VITE_DEFAULT_LOCALE: mr
+    container_name: mla-eoffice-web
+    restart: unless-stopped
+    depends_on:
+      - api
+    ports:
+      - "80:80"
+
+# ── Persistent Storage Volumes ───────────────────────────────
+volumes:
+  mysql_data:
+    driver: local
