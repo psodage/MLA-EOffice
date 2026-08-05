@@ -119,12 +119,12 @@ The letterhead is populated from the `constituency_profile` settings table (to b
 | `{mla_name_en}` | `constituency_profile.mla_name_en` | Hon. Rajesh Sharma |
 | `{party_abbreviation}` | `constituency_profile.party_short` | BJP / NCP / SS etc. |
 | `{party_logo}` | `constituency_profile.party_logo_url` | Cloudinary URL |
-| `{constituency_name}` | `constituency_profile.constituency_name_mr` | हवेली |
-| `{constituency_name_en}` | `constituency_profile.constituency_name_en` | Haveli |
-| `{office_address_mr}` | `constituency_profile.office_address_mr` | प्लॉट नं. ४५, शिवाजी नगर, पुणे - ४११००५ |
-| `{office_address_en}` | `constituency_profile.office_address_en` | Plot No. 45, Shivaji Nagar, Pune - 411005 |
+| `{constituency_name}` | `constituency_profile.constituency_name_mr` | कोल्हापूर दक्षिण |
+| `{constituency_name_en}` | `constituency_profile.constituency_name_en` | Kolhapur South |
+| `{office_address_mr}` | `constituency_profile.office_address_mr` | प्लॉट नं. ४५, राजारामपुरी, कोल्हापूर - ४१६००८ |
+| `{office_address_en}` | `constituency_profile.office_address_en` | Plot No. 45, Rajarampuri, Kolhapur - 416008 |
 | `{office_phone}` | `constituency_profile.phone` | 020-25512345 |
-| `{office_email}` | `constituency_profile.email` | mla.haveli@gov.in |
+| `{office_email}` | `constituency_profile.email` | mla.kolhapursouth@gov.in |
 
 ### 4B. Letter Body Structure
 
@@ -370,12 +370,12 @@ Response Body:
   "success": true,
   "draft": {
     "referenceLine": "संदर्भ: आवक क्र. INW/2026/0042, दि. 15/07/2026",
-    "toBlock": "माननीय जिल्हाधिकारी,\nश्री. अमित कुलकर्णी,\nजिल्हाधिकारी कार्यालय, पुणे.",
+    "toBlock": "माननीय जिल्हाधिकारी,\nश्री. अमित कुलकर्णी,\nजिल्हाधिकारी कार्यालय, कोल्हापूर.",
     "subjectLine": "विषय: मौजे वडगाव येथील पाणीपुरवठा समस्या — तक्रार क्र. NIV-2026-01247",
     "salutation": "महोदय,",
     "body": "... (full letter body) ...",
     "closingLine": "तरी सदर प्रकरणी योग्य ती कार्यवाही करावी ही विनंती.",
-    "signature": "आपला विश्वासू,\n\nश्री. राजेश शर्मा\nआमदार, हवेली विधानसभा मतदारसंघ",
+    "signature": "आपला विश्वासू,\n\nश्री. राजेश शर्मा\nआमदार, कोल्हापूर दक्षिण विधानसभा मतदारसंघ",
     "fullText": "... (complete letter as single string) ..."
   },
   "metadata": {
@@ -431,7 +431,7 @@ Response Body:
 
 ```
 प्रत / CC:
-१) विभागीय आयुक्त, पुणे विभाग
+१) विभागीय आयुक्त, कोल्हापूर विभाग
 २) जिल्हा परिषद, मुख्य कार्यकारी अधिकारी
 ३) तक्रारदार: श्री. सुरेश जाधव (प्रत)
 ```
@@ -440,7 +440,7 @@ Response Body:
 
 ## 7. Sample Input → Output Pairs (8 Examples)
 
-> **Note:** All examples use a fictional MLA — **श्री. राजेश शर्मा, आमदार, हवेली विधानसभा मतदारसंघ** — for illustration. In production, these values come from `constituency_profile`.
+> **Note:** All examples use a fictional MLA — **श्री. राजेश शर्मा, आमदार, कोल्हापूर दक्षिण विधानसभा मतदारसंघ** — for illustration. In production, these values come from `constituency_profile`.
 
 ---
 
@@ -467,13 +467,13 @@ Response Body:
 प्रति,
 कार्यकारी अभियंता,
 पाणीपुरवठा विभाग,
-जिल्हा परिषद, पुणे.
+जिल्हा परिषद, कोल्हापूर.
 
-विषय: मौजे वडगाव (ता. हवेली) येथील अनियमित पाणीपुरवठा समस्या — तक्रार क्र. NIV-2026-01247
+विषय: मौजे वडगाव (ता. करवीर) येथील अनियमित पाणीपुरवठा समस्या — तक्रार क्र. NIV-2026-01247
 
 महोदय,
 
-    सदर विषयाबाबत आपणास विनंती करण्यात येत आहे की, हवेली तालुक्यातील मौजे वडगाव 
+    सदर विषयाबाबत आपणास विनंती करण्यात येत आहे की, करवीर तालुक्यातील मौजे वडगाव 
     येथील नागरिकांकडून पाणीपुरवठ्याबाबत तक्रार प्राप्त झाली आहे. श्री. सुरेश जाधव 
     यांनी सदर तक्रार या कार्यालयाकडे नोंदवली आहे (तक्रार क्र. NIV-2026-01247).
 
@@ -489,7 +489,7 @@ Response Body:
                                               आपला विश्वासू,
 
                                               श्री. राजेश शर्मा
-                                              आमदार, हवेली विधानसभा मतदारसंघ
+                                              आमदार, कोल्हापूर दक्षिण विधानसभा मतदारसंघ
 ```
 
 ---
@@ -517,7 +517,7 @@ Response Body:
 प्रति,
 कार्यकारी अभियंता,
 सार्वजनिक बांधकाम विभाग,
-पुणे विभाग.
+कोल्हापूर विभाग.
 
 विषय: वडगाव-आंबेगाव रस्ता दुरुस्ती — तिसरा पाठपुरावा
 
@@ -539,7 +539,7 @@ Response Body:
                                               आपला विश्वासू,
 
                                               श्री. राजेश शर्मा
-                                              आमदार, हवेली विधानसभा मतदारसंघ
+                                              आमदार, कोल्हापूर दक्षिण विधानसभा मतदारसंघ
 ```
 
 ---
@@ -565,7 +565,7 @@ Response Body:
 प्रति,
 अधीक्षक अभियंता,
 महावितरण (MSEDCL),
-पुणे परिमंडल.
+कोल्हापूर परिमंडल.
 
 विषय: शिरूर तालुक्यातील सतत वीज खंडित होण्याबाबत — गंभीर तक्रार व एस्केलेशन
 
@@ -588,7 +588,7 @@ Response Body:
                                               आपला विश्वासू,
 
                                               श्री. राजेश शर्मा
-                                              आमदार, हवेली विधानसभा मतदारसंघ
+                                              आमदार, कोल्हापूर दक्षिण विधानसभा मतदारसंघ
 ```
 
 ---
@@ -613,13 +613,13 @@ Response Body:
 प्रति,
 माननीय जिल्हाधिकारी,
 जिल्हाधिकारी कार्यालय,
-पुणे.
+कोल्हापूर.
 
 विषय: प्रधानमंत्री आवास योजना (ग्रामीण) अंतर्गत श्रीमती अनिता कांबळे यांच्यासाठी शिफारसपत्र
 
 महोदय,
 
-    सदर पत्राद्वारे हवेली तालुक्यातील मौजे आंबेगाव येथील रहिवासी श्रीमती अनिता 
+    सदर पत्राद्वारे करवीर तालुक्यातील मौजे आंबेगाव येथील रहिवासी श्रीमती अनिता 
     कांबळे यांच्या प्रधानमंत्री आवास योजना (ग्रामीण) अंतर्गत घरकुल मंजुरीसाठी 
     शिफारस करण्यात येत आहे.
 
@@ -634,7 +634,7 @@ Response Body:
                                               आपला विश्वासू,
 
                                               श्री. राजेश शर्मा
-                                              आमदार, हवेली विधानसभा मतदारसंघ
+                                              आमदार, कोल्हापूर दक्षिण विधानसभा मतदारसंघ
 ```
 
 ---
@@ -649,8 +649,8 @@ Response Body:
 | Language | `ENGLISH` |
 | Department | Education Department |
 | Recipient | District Education Officer |
-| Subject | Status of teacher recruitment — ZP Schools in Haveli Taluka |
-| Context | 12 ZP schools in Haveli have teacher vacancies for 8+ months. Parents complaining that classes not held. Need status update on recruitment. |
+| Subject | Status of teacher recruitment — ZP Schools in Karveer Taluka |
+| Context | 12 ZP schools in Karveer have teacher vacancies for 8+ months. Parents complaining that classes not held. Need status update on recruitment. |
 
 **Output:**
 
@@ -658,14 +658,14 @@ Response Body:
 To,
 The District Education Officer,
 Education Department,
-Zilla Parishad, Pune.
+Zilla Parishad, Kolhapur.
 
-Subject: Status of Teacher Recruitment for ZP Schools in Haveli Taluka — Request for Information
+Subject: Status of Teacher Recruitment for ZP Schools in Karveer Taluka — Request for Information
 
 Respected Sir/Madam,
 
     This is to inquire about the current status of teacher recruitment for Zilla 
-    Parishad schools in Haveli Taluka. It has come to the attention of this office 
+    Parishad schools in Karveer Taluka. It has come to the attention of this office 
     that approximately 12 ZP schools in the taluka have been operating with 
     significant teacher vacancies for over 8 months.
 
@@ -675,7 +675,7 @@ Respected Sir/Madam,
     particularly those in Classes 5 through 10.
 
     Kindly provide the following information at the earliest:
-    1. Total number of sanctioned vs. filled teaching positions in Haveli Taluka ZP schools
+    1. Total number of sanctioned vs. filled teaching positions in Karveer Taluka ZP schools
     2. Current status of the recruitment process for vacant positions
     3. Expected timeline for appointment of new teachers
     4. Interim arrangements being made to ensure continuity of education
@@ -685,7 +685,7 @@ Respected Sir/Madam,
                                               Yours faithfully,
 
                                               Hon. Rajesh Sharma
-                                              MLA, Haveli Vidhan Sabha Constituency
+                                              MLA, Kolhapur South Vidhan Sabha Constituency
 ```
 
 ---
@@ -711,7 +711,7 @@ Respected Sir/Madam,
 प्रति,
 तहसीलदार,
 तहसील कार्यालय,
-हवेली, पुणे.
+करवीर, कोल्हापूर.
 
 विषय: जमीन फेरफार प्रकरणी अहवाल प्राप्ती — पोहोचपावती
 
@@ -729,7 +729,7 @@ Respected Sir/Madam,
                                               आपला विश्वासू,
 
                                               श्री. राजेश शर्मा
-                                              आमदार, हवेली विधानसभा मतदारसंघ
+                                              आमदार, कोल्हापूर दक्षिण विधानसभा मतदारसंघ
 ```
 
 ---
@@ -753,7 +753,7 @@ Respected Sir/Madam,
 प्रति,
 आयुक्त,
 पिंपरी-चिंचवड महानगरपालिका,
-पिंपरी, पुणे.
+कोल्हापूर शहर, कोल्हापूर.
 
 विषय: पिंपरी वॉर्ड ५ — मुख्य गटार तुंबणे — तात्काळ सफाई कार्यवाही आदेश
 
@@ -776,7 +776,7 @@ Respected Sir/Madam,
                                               आपला विश्वासू,
 
                                               श्री. राजेश शर्मा
-                                              आमदार, हवेली विधानसभा मतदारसंघ
+                                              आमदार, कोल्हापूर दक्षिण विधानसभा मतदारसंघ
 ```
 
 ---
@@ -800,7 +800,7 @@ Respected Sir/Madam,
 To,
 The District Health Officer,
 Health Department,
-Zilla Parishad, Pune.
+Zilla Parishad, Kolhapur.
 
 Subject: Appreciation for Successful Vaccination Drive in Maval Taluka
 
@@ -825,7 +825,7 @@ Respected Sir/Madam,
                                               Yours faithfully,
 
                                               Hon. Rajesh Sharma
-                                              MLA, Haveli Vidhan Sabha Constituency
+                                              MLA, Kolhapur South Vidhan Sabha Constituency
 ```
 
 ---

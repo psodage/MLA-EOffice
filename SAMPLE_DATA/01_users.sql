@@ -1,19 +1,19 @@
 -- ============================================================
 -- SAMPLE DATA — 01_users.sql
 -- 7 System User Accounts (all 7 roles covered)
--- Fictional constituency: Pune Cantonment (Pune District)
+-- Fictional constituency: Kolhapur Cantonment (Kolhapur District)
 --
 -- ⚠️  Passwords are bcrypt hashes (12 salt rounds)
 --     Plain-text → bcrypt hash mapping:
---       Mla@2026#Pune    → hash below
---       Pa@2026#Pune     → hash below
---       Clerk@2026#Pune  → hash below
---       Audit@2026#Pune  → hash below
---       Booth@2026#Pune  → hash below
+--       Mla@2026#Kolhapur    → hash below
+--       Pa@2026#Kolhapur     → hash below
+--       Clerk@2026#Kolhapur  → hash below
+--       Audit@2026#Kolhapur  → hash below
+--       Booth@2026#Kolhapur  → hash below
 --       Citizen@2026     → hash below
 --       Admin@MLA2026    → hash below
 --
---     To regenerate: node -e "const b=require('bcryptjs'); console.log(b.hashSync('Pa@2026#Pune',12))"
+--     To regenerate: node -e "const b=require('bcryptjs'); console.log(b.hashSync('Pa@2026#Kolhapur',12))"
 -- ============================================================
 
 -- Clear existing (dev only)

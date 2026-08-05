@@ -277,8 +277,8 @@ Get current authenticated user profile.
 {
   "citizenName": "राम शिंदे",
   "citizenMobile": "9876543210",
-  "citizenAddressLine": "गाव - वडगाव, ता. हवेली",
-  "citizenCity": "पुणे",
+  "citizenAddressLine": "गाव - वडगाव, ता. करवीर",
+  "citizenCity": "कोल्हापूर",
   "citizenPincode": "411041",
   "citizenState": "Maharashtra",
   "citizenDob": "1985-05-15",
@@ -304,14 +304,14 @@ Get current authenticated user profile.
     "trackingId": "NIV-2026-00143",
     "citizenName": "राम शिंदे",
     "citizenMobile": "9876543210",
-    "citizenAddressLine": "गाव - वडगाव, ता. हवेली",
-    "citizenCity": "पुणे",
+    "citizenAddressLine": "गाव - वडगाव, ता. करवीर",
+    "citizenCity": "कोल्हापूर",
     "citizenPincode": "411041",
     "citizenState": "Maharashtra",
     "citizenDob": "1985-05-15",
     "village": { "id": 42, "nameEn": "Vadgaon", "nameMr": "वडगाव" },
     "ward": null,
-    "taluka": { "id": 3, "nameEn": "Haveli", "nameMr": "हवेली" },
+    "taluka": { "id": 3, "nameEn": "Karveer", "nameMr": "करवीर" },
     "category": { "id": 1, "nameEn": "Water Supply", "nameMr": "पाणीपुरवठा", "code": "WATER_SUPPLY" },
     "subCategory": { "id": 4, "nameEn": "Pipeline leak / burst", "nameMr": "पाइपलाइन गळती / फुटणे" },
     "subject": "गावात गेल्या ५ दिवसांपासून पाणी पुरवठा बंद",
@@ -421,12 +421,12 @@ GET /api/v1/nivedans?status=PENDING,IN_PROGRESS&category_id=1&sort=created_at:de
     "trackingId": "NIV-2026-00143",
     "citizenName": "राम शिंदे",
     "citizenMobile": "9876543210",
-    "citizenAddressLine": "गाव - वडगाव, ता. हवेली",
-    "citizenCity": "पुणे",
+    "citizenAddressLine": "गाव - वडगाव, ता. करवीर",
+    "citizenCity": "कोल्हापूर",
     "citizenPincode": "411041",
     "citizenDob": "1985-05-15",
     "village": { "id": 42, "nameEn": "Vadgaon", "nameMr": "वडगाव" },
-    "taluka": { "id": 3, "nameEn": "Haveli", "nameMr": "हवेली" },
+    "taluka": { "id": 3, "nameEn": "Karveer", "nameMr": "करवीर" },
     "category": { "id": 1, "nameEn": "Water Supply", "nameMr": "पाणीपुरवठा", "code": "WATER_SUPPLY" },
     "subCategory": { "id": 4, "nameEn": "Pipeline leak / burst", "nameMr": "पाइपलाइन गळती / फुटणे" },
     "subject": "गावात गेल्या ५ दिवसांपासून पाणी पुरवठा बंद",
@@ -611,7 +611,7 @@ GET /api/v1/nivedans/citizen/9876543210
 ```json
 {
   "dateReceived": "2026-08-01",
-  "senderName": "जिल्हाधिकारी, पुणे",
+  "senderName": "जिल्हाधिकारी, कोल्हापूर",
   "senderDesignation": "जिल्हाधिकारी",
   "senderDepartmentId": 1,
   "subject": "आमदार निधी वापर बाबत माहिती",
@@ -630,7 +630,7 @@ GET /api/v1/nivedans/citizen/9876543210
     "id": 78,
     "inwardNumber": "INW/2026/0078",
     "dateReceived": "2026-08-01",
-    "senderName": "जिल्हाधिकारी, पुणे",
+    "senderName": "जिल्हाधिकारी, कोल्हापूर",
     "senderDesignation": "जिल्हाधिकारी",
     "senderDepartment": { "id": 1, "nameEn": "District Collector Office", "nameMr": "जिल्हाधिकारी कार्यालय" },
     "subject": "आमदार निधी वापर बाबत माहिती",
@@ -688,7 +688,7 @@ GET /api/v1/nivedans/citizen/9876543210
 {
   "success": true,
   "data": {
-    "draftText": "सेवेशी,\nमा. जिल्हाधिकारी,\nपुणे.\n\nविषय: आमदार स्थानिक क्षेत्र विकास निधी वापर तपशील बाबत.\n\nसंदर्भ: आपले पत्र क्र. INW/2026/0078, दिनांक 01/08/2026.\n\nमहोदय,\n\nउपरोक्त संदर्भित पत्रान्वये आमदार स्थानिक क्षेत्र विकास निधीच्या वापराबाबत खालीलप्रमाणे माहिती सादर करत आहे...\n\nआपला विश्वासू,\n\n(सही)\nमा. आमदार\nउदाहरण मतदारसंघ",
+    "draftText": "सेवेशी,\nमा. जिल्हाधिकारी,\nकोल्हापूर.\n\nविषय: आमदार स्थानिक क्षेत्र विकास निधी वापर तपशील बाबत.\n\nसंदर्भ: आपले पत्र क्र. INW/2026/0078, दिनांक 01/08/2026.\n\nमहोदय,\n\nउपरोक्त संदर्भित पत्रान्वये आमदार स्थानिक क्षेत्र विकास निधीच्या वापराबाबत खालीलप्रमाणे माहिती सादर करत आहे...\n\nआपला विश्वासू,\n\n(सही)\nमा. आमदार\nउदाहरण मतदारसंघ",
     "referenceInward": { "id": 78, "inwardNumber": "INW/2026/0078", "subject": "आमदार निधी वापर बाबत माहिती" },
     "isEditable": true
   }
@@ -704,7 +704,7 @@ GET /api/v1/nivedans/citizen/9876543210
 **Request:**
 ```json
 {
-  "bodyText": "सेवेशी,\nमा. जिल्हाधिकारी,\nपुणे.\n\n(edited AI draft text)...",
+  "bodyText": "सेवेशी,\nमा. जिल्हाधिकारी,\nकोल्हापूर.\n\n(edited AI draft text)...",
   "recipientName": "मा. जिल्हाधिकारी",
   "recipientDesignation": "जिल्हाधिकारी",
   "recipientDepartmentId": 1,
@@ -809,7 +809,7 @@ GET /api/v1/visitors/check-repeat/9123456789
 {
   "projectName": "वडगाव - आंबेगाव CC रस्ता बांधकाम",
   "category": "ROAD",
-  "location": "वडगाव ते आंबेगाव रस्ता, ता. हवेली",
+  "location": "वडगाव ते आंबेगाव रस्ता, ता. करवीर",
   "villageId": 42,
   "talukaId": 3,
   "fundingSource": "MLALAD",
@@ -830,7 +830,7 @@ GET /api/v1/visitors/check-repeat/9123456789
     "id": 28,
     "projectName": "वडगाव - आंबेगाव CC रस्ता बांधकाम",
     "category": "ROAD",
-    "location": "वडगाव ते आंबेगाव रस्ता, ता. हवेली",
+    "location": "वडगाव ते आंबेगाव रस्ता, ता. करवीर",
     "village": { "id": 42, "nameMr": "वडगाव" },
     "fundingSource": "MLALAD",
     "budgetAllocated": 1500000,

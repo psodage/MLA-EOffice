@@ -336,7 +336,7 @@ These terms are used in AI-drafted outward letters and formal templates.
 | Urgently | तातडीने | "तातडीने कार्यवाही करावी" |
 | As per rules | नियमानुसार | "नियमानुसार कार्यवाही करावी" |
 | Signed / True copy | सही (स.) | Certification mark |
-| Copy to | प्रत — | "प्रत — मा. तहसीलदार, पुणे" |
+| Copy to | प्रत — | "प्रत — मा. तहसीलदार, कोल्हापूर" |
 | Enclosure | जोडपत्र | Attached documents list |
 
 ### Letter Template Placeholders

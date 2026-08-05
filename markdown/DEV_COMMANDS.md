@@ -103,7 +103,7 @@ curl http://localhost:5000/api/v1/health
 # Login
 curl -X POST http://localhost:5000/api/v1/auth/login \
   -H "Content-Type: application/json" \
-  -d '{"username":"pa_meena","password":"Pa@2026#Pune"}'
+  -d '{"username":"pa_meena","password":"Pa@2026#Kolhapur"}'
 
 # Get current user (replace TOKEN)
 curl http://localhost:5000/api/v1/auth/me \
@@ -283,10 +283,10 @@ s:\MLA E - Office\
 
 | Username | Password | Role |
 |----------|----------|------|
-| `pa_meena` | `Pa@2026#Pune` | PA — **use this most** |
-| `mla_suresh` | `Mla@2026#Pune` | MLA |
-| `clerk_ramesh` | `Clerk@2026#Pune` | Receptionist |
-| `auditor_priya` | `Audit@2026#Pune` | Auditor |
+| `pa_meena` | `Pa@2026#Kolhapur` | PA — **use this most** |
+| `mla_suresh` | `Mla@2026#Kolhapur` | MLA |
+| `clerk_ramesh` | `Clerk@2026#Kolhapur` | Receptionist |
+| `auditor_priya` | `Audit@2026#Kolhapur` | Auditor |
 | `admin` | `Admin@MLA2026` | Admin |
 
 > 🔴 Dev passwords only — change before staging/production!

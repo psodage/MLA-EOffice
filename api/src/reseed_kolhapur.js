@@ -75,7 +75,7 @@ const run = async () => {
 
     // ── STEP 1: Clear existing data ──────────────────────────────────────────
     console.log('\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    console.log('🗑️  STEP 1: Clearing existing (Pune) data...');
+    console.log('🗑️  STEP 1: Clearing existing data...');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
 
     // Disable FK checks to allow truncation in any order
@@ -153,11 +153,11 @@ const run = async () => {
 
     console.log('\n🎉 Kolhapur data seeded successfully!');
     console.log('\n🔑 Login credentials:');
-    console.log('   mla_rajesh        → Mla@2026#Pune');
-    console.log('   pa_sunita         → Pa@2026#Pune');
-    console.log('   clerk_suresh      → Clerk@2026#Pune');
-    console.log('   auditor_meera     → Audit@2026#Pune');
-    console.log('   bp_ganpat         → Booth@2026#Pune');
+    console.log('   mla_rajesh        → Mla@2026#Kolhapur');
+    console.log('   pa_sunita         → Pa@2026#Kolhapur');
+    console.log('   clerk_suresh      → Clerk@2026#Kolhapur');
+    console.log('   auditor_meera     → Audit@2026#Kolhapur');
+    console.log('   bp_ganpat         → Booth@2026#Kolhapur');
     console.log('   citizen_kolhapur  → Citizen@2026');
     console.log('   admin_kolhapur    → Admin@MLA2026');
 

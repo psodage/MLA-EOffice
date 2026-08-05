@@ -2,7 +2,7 @@
 
 > **Realistic Test Data for Development, Demo, and Testing**
 >
-> This directory contains ready-to-execute SQL INSERT scripts with fictional but realistic data modeled on a **Pune district constituency** in Maharashtra.
+> This directory contains ready-to-execute SQL INSERT scripts with fictional but realistic data modeled on a **Kolhapur district constituency** in Maharashtra.
 >
 > ⚠️ **This is fictional data.** All names, phone numbers, and addresses are made up. Do NOT use in production.
 >
@@ -15,11 +15,11 @@
 | Property | Value |
 |----------|-------|
 | **MLA Name** | आ. सुरेश पाटील (Hon. Suresh Patil) |
-| **Constituency** | पुणे कॅन्टोन्मेंट (Pune Cantonment — Assembly No. 214) |
-| **District** | पुणे (Pune) |
+| **Constituency** | कोल्हापूर दक्षिण (Kolhapur South — Assembly No. 274) |
+| **District** | कोल्हापूर (Kolhapur) |
 | **Type** | Mixed (Rural + Urban) |
-| **Talukas** | Haveli, Mulshi |
-| **Cities** | Pune (Municipal Corporation) |
+| **Talukas** | Karveer |
+| **Cities** | Kolhapur (Municipal Corporation) |
 | **Party** | Fictional — राष्ट्रवादी (Rashtrawadi) |
 
 ---
@@ -94,11 +94,11 @@ geography (from master data)
 
 | # | Username | Password | Role | What to Test |
 |:-:|----------|----------|------|--------------|
-| 1 | `mla_suresh` | `Mla@2026#Pune` | MLA | Dashboard, reports, approvals |
-| 2 | `pa_meena` | `Pa@2026#Pune` | PA | All modules, AI drafting, assignments |
-| 3 | `clerk_ramesh` | `Clerk@2026#Pune` | RECEPTIONIST | Visitor book, nivedan registration |
-| 4 | `auditor_priya` | `Audit@2026#Pune` | AUDITOR | DevWorks audit, booth verification |
-| 5 | `bp_ganesh` | `Booth@2026#Pune` | BOOTH_PRAMUKH | Booth-scoped view, local issues |
+| 1 | `mla_suresh` | `Mla@2026#Kolhapur` | MLA | Dashboard, reports, approvals |
+| 2 | `pa_meena` | `Pa@2026#Kolhapur` | PA | All modules, AI drafting, assignments |
+| 3 | `clerk_ramesh` | `Clerk@2026#Kolhapur` | RECEPTIONIST | Visitor book, nivedan registration |
+| 4 | `auditor_priya` | `Audit@2026#Kolhapur` | AUDITOR | DevWorks audit, booth verification |
+| 5 | `bp_ganesh` | `Booth@2026#Kolhapur` | BOOTH_PRAMUKH | Booth-scoped view, local issues |
 | 6 | `citizen_test` | `Citizen@2026` | CITIZEN | Public tracking portal |
 | 7 | `admin` | `Admin@MLA2026` | ADMIN | User management, system settings |
 

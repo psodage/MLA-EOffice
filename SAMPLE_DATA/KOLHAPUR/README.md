@@ -59,15 +59,15 @@
 
 | # | Username | Password | Role | What to Test |
 |:-:|----------|----------|------|--------------|
-| 1 | `mla_rajesh` | `Mla@2026#Pune` | MLA | Dashboard, reports, approvals |
-| 2 | `pa_sunita` | `Pa@2026#Pune` | PA | All modules, AI drafting, assignments |
-| 3 | `clerk_suresh` | `Clerk@2026#Pune` | RECEPTIONIST | Visitor book, nivedan registration |
-| 4 | `auditor_meera` | `Audit@2026#Pune` | AUDITOR | DevWorks audit, booth verification |
-| 5 | `bp_ganpat` | `Booth@2026#Pune` | BOOTH_PRAMUKH | Booth-scoped view, local issues |
+| 1 | `mla_rajesh` | `Mla@2026#Kolhapur` | MLA | Dashboard, reports, approvals |
+| 2 | `pa_sunita` | `Pa@2026#Kolhapur` | PA | All modules, AI drafting, assignments |
+| 3 | `clerk_suresh` | `Clerk@2026#Kolhapur` | RECEPTIONIST | Visitor book, nivedan registration |
+| 4 | `auditor_meera` | `Audit@2026#Kolhapur` | AUDITOR | DevWorks audit, booth verification |
+| 5 | `bp_ganpat` | `Booth@2026#Kolhapur` | BOOTH_PRAMUKH | Booth-scoped view, local issues |
 | 6 | `citizen_kolhapur` | `Citizen@2026` | CITIZEN | Public tracking portal |
 | 7 | `admin_kolhapur` | `Admin@MLA2026` | ADMIN | User management, system settings |
 
-> 🔴 Use same bcrypt hashes as Pune set — passwords are the same strings.
+> 🔴 Use same bcrypt hashes as Kolhapur set — passwords are the same strings.
 
 ---
 
