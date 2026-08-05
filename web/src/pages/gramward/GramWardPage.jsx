@@ -14,8 +14,8 @@ import './GramWardPage.css';
 
 const SAMPLE_TALUKAS = [
   {
-    nameEn: 'Haveli Taluka',
-    nameMr: 'हवेली तालुका',
+    nameEn: 'Karveer Taluka',
+    nameMr: 'करवीर तालुका',
     countText: '22 areas · 92 booths',
     areas: [
       {
@@ -23,7 +23,7 @@ const SAMPLE_TALUKAS = [
         nameEn: 'Wadgaon',
         nameMr: 'वडगाव',
         type: 'village',
-        parent: 'GP: Wadgaon · Haveli Taluka',
+        parent: 'GP: Wadgaon · Karveer Taluka',
         complaints: 8,
         resolved: 5,
         devWorks: 3,
@@ -59,7 +59,7 @@ const SAMPLE_TALUKAS = [
         nameEn: 'Pimpri (Ward 5)',
         nameMr: 'पिंपरी (वॉर्ड ५)',
         type: 'ward',
-        parent: 'Haveli Taluka · Urban',
+        parent: 'Karveer Taluka · Urban',
         complaints: 14,
         resolved: 9,
         devWorks: 5,
@@ -90,7 +90,7 @@ const SAMPLE_TALUKAS = [
         nameEn: 'Shivaji Nagar (Ward 1)',
         nameMr: 'शिवाजी नगर (वॉर्ड १)',
         type: 'ward',
-        parent: 'Haveli Taluka · Urban',
+        parent: 'Karveer Taluka · Urban',
         complaints: 6,
         resolved: 4,
         devWorks: 2,
@@ -116,7 +116,7 @@ const SAMPLE_TALUKAS = [
         nameEn: 'Ambegaon',
         nameMr: 'आंबेगाव',
         type: 'village',
-        parent: 'GP: Ambegaon · Haveli Taluka',
+        parent: 'GP: Ambegaon · Karveer Taluka',
         complaints: 3,
         resolved: 2,
         devWorks: 1,
@@ -325,9 +325,9 @@ const GramWardPage = () => {
           <span className="fl">{isMr ? 'तालुका' : 'Taluka'}</span>
           <select className="fi" name="taluka" value={filters.taluka} onChange={handleFilterChange}>
             <option value="ALL">{isMr ? 'सर्व तालुके' : 'All Talukas'}</option>
-            <option value="Haveli">Haveli</option>
-            <option value="Maval">Maval</option>
-            <option value="Shirur">Shirur</option>
+            <option value="Karveer">Karveer</option>
+            <option value="Kagal">Kagal</option>
+            <option value="Radhanagari">Radhanagari</option>
           </select>
         </div>
 

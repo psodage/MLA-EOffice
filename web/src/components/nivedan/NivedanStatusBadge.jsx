@@ -1,8 +1,4 @@
-// src/components/nivedan/NivedanStatusBadge.jsx
-// ============================================================
-// Status Badge Component for Nivedan (8 Statuses)
-// PENDING | IN_PROGRESS | FORWARDED | AWAITING_RESPONSE | RESOLVED | REJECTED | CANCELLED | ARCHIVED
-// ============================================================
+import useLangStore from '../../store/langStore.js';
 
 const STATUS_CONFIG = {
   PENDING: {
@@ -72,6 +68,7 @@ const STATUS_CONFIG = {
 };
 
 const NivedanStatusBadge = ({ status }) => {
+  const { lang } = useLangStore();
   const config = STATUS_CONFIG[status] || STATUS_CONFIG.PENDING;
 
   return (
@@ -87,7 +84,6 @@ const NivedanStatusBadge = ({ status }) => {
         color: config.color,
         fontSize: '0.78rem',
         fontWeight: 600,
-        fontFamily: "'Noto Sans Devanagari', sans-serif",
         lineHeight: 1.2,
       }}
     >
@@ -100,8 +96,7 @@ const NivedanStatusBadge = ({ status }) => {
           boxShadow: `0 0 6px ${config.dot}`,
         }}
       />
-      <span>{config.mr}</span>
-      <span style={{ opacity: 0.7, fontSize: '0.68rem' }}>({config.en})</span>
+      <span>{lang === 'MR' ? config.mr : config.en}</span>
     </span>
   );
 };

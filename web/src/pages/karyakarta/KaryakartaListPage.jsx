@@ -31,7 +31,7 @@ const SAMPLE_FALLBACK_WORKERS = [
     mobile: '98765 43210',
     booth_id: '145',
     ward: 'Ward 5, Pimpri',
-    taluka: 'Haveli Taluka',
+    taluka: 'Karveer Taluka',
     address: 'Pimpri-Chinchwad',
     date_of_birth: '1985-08-15',
   },
@@ -42,7 +42,7 @@ const SAMPLE_FALLBACK_WORKERS = [
     mobile: '87654 32109',
     booth_id: '110',
     ward: 'Ward 1, Shivaji Nagar',
-    taluka: 'Haveli Taluka',
+    taluka: 'Karveer Taluka',
     address: 'Shivaji Nagar, Rahata',
     date_of_birth: '1988-11-20',
   },
@@ -53,7 +53,7 @@ const SAMPLE_FALLBACK_WORKERS = [
     mobile: '76543 21098',
     booth_id: '148',
     ward: 'Ward 5, Pimpri',
-    taluka: 'Haveli Taluka',
+    taluka: 'Karveer Taluka',
     address: 'Pimpri Town',
     date_of_birth: '1992-04-10',
   },
@@ -64,7 +64,7 @@ const SAMPLE_FALLBACK_WORKERS = [
     mobile: '65432 10987',
     booth_id: '102',
     ward: 'Wadgaon Village',
-    taluka: 'Haveli Taluka',
+    taluka: 'Karveer Taluka',
     address: 'Wadgaon',
     date_of_birth: '1995-09-05',
   },
@@ -309,7 +309,7 @@ const KaryakartaListPage = () => {
           <span className="fl">{isMr ? 'तालुका' : 'Taluka'}</span>
           <select className="fi" name="taluka" value={filters.taluka} onChange={handleFilterChange}>
             <option value="ALL">{isMr ? 'सर्व तालुके' : 'All Talukas'}</option>
-            <option value="Haveli">Haveli</option>
+            <option value="Karveer">Karveer</option>
             <option value="Maval">Maval</option>
             <option value="Shirur">Shirur</option>
           </select>
@@ -392,7 +392,7 @@ const KaryakartaListPage = () => {
                         </span>
                         <br />
                         <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                          <Building size={11} /> {worker.taluka || 'Haveli Taluka'}
+                          <Building size={11} /> {worker.taluka || 'Karveer Taluka'}
                         </span>
                       </div>
                       <div className="wc-actions">
@@ -481,7 +481,7 @@ const KaryakartaListPage = () => {
                         </td>
                         <td>
                           <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                            <Building size={12} /> {worker.taluka || 'Haveli Taluka'}
+                            <Building size={12} /> {worker.taluka || 'Karveer Taluka'}
                           </span>
                         </td>
                         <td style={{ textAlign: 'right' }}>

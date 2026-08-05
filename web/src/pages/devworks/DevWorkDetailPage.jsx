@@ -88,7 +88,7 @@ const DevWorkDetailPage = () => {
           id: id || 1,
           project_name: 'NH-4 Junction Road Widening',
           category: 'ROAD',
-          location: 'Pimpri-Chinchwad, Ward 5 · Haveli Taluka',
+          location: 'Kolhapur City, Ward 5 · Karveer Taluka',
           geo_latitude: 18.6298,
           geo_longitude: 73.7997,
           funding_source: 'State PWD',

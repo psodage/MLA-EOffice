@@ -182,7 +182,11 @@ const DashboardPage = () => {
           <div className="kpi-value">
             {nivedanStat ? nivedanStat.count?.toLocaleString() : dist.total?.toLocaleString() ?? 0}
           </div>
-          <div className="kpi-trend up">{nivedanStat?.trend || 'Live DB Count'}</div>
+          <div className="kpi-trend up">
+            {lang === 'MR'
+              ? (nivedanStat?.trend || 'थेट डेटा जोडला')
+              : (nivedanStat?.trendEn || `${nivedanStat?.count ?? 0} entries recorded`)}
+          </div>
         </div>
 
         <div className="kpi-card">
@@ -195,7 +199,11 @@ const DashboardPage = () => {
           <div className="kpi-value">
             {pendingStat ? pendingStat.count?.toLocaleString() : dist.pending?.toLocaleString() ?? 0}
           </div>
-          <div className="kpi-trend down">{pendingStat?.trend || 'Live Action Pending'}</div>
+          <div className="kpi-trend down">
+            {lang === 'MR'
+              ? (pendingStat?.trend || 'सर्व पूर्ण')
+              : (pendingStat?.trendEn || `${pendingStat?.count ?? 0} pending`)}
+          </div>
         </div>
 
         <div className="kpi-card">
@@ -208,7 +216,11 @@ const DashboardPage = () => {
           <div className="kpi-value">
             {visitorStat ? visitorStat.count?.toLocaleString() : 0}
           </div>
-          <div className="kpi-trend up">{visitorStat?.trend || "Today's Visitors"}</div>
+          <div className="kpi-trend up">
+            {lang === 'MR'
+              ? (visitorStat?.trend || 'नवीन नोंदणी उपलब्ध')
+              : (visitorStat?.trendEn || `${visitorStat?.count ?? 0} visits today`)}
+          </div>
         </div>
 
         <div className="kpi-card">
@@ -221,7 +233,11 @@ const DashboardPage = () => {
           <div className="kpi-value">
             {devWorkStat ? devWorkStat.count?.toLocaleString() : 0}
           </div>
-          <div className="kpi-trend up">{devWorkStat?.trend || 'Active Projects'}</div>
+          <div className="kpi-trend up">
+            {lang === 'MR'
+              ? (devWorkStat?.trend || 'काम नोंदणी उपलब्ध')
+              : (devWorkStat?.trendEn || `${devWorkStat?.count ?? 0} active projects`)}
+          </div>
         </div>
       </div>
 

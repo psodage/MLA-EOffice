@@ -7,15 +7,15 @@ import './BoothPage.css';
 
 const INITIAL_TREE_DATA = {
   id: 'constituency-1',
-  nameEn: 'Haveli Constituency',
-  nameMr: 'हवेली विधानसभा मतदारसंघ',
+  nameEn: 'Kolhapur South Constituency',
+  nameMr: 'कोल्हापूर दक्षिण विधानसभा मतदारसंघ',
   type: 'constituency',
   totalBooths: 156,
   children: [
     {
       id: 'taluka-1',
-      nameEn: 'Haveli Taluka',
-      nameMr: 'हवेली तालुका',
+      nameEn: 'Karveer Taluka',
+      nameMr: 'करवीर तालुका',
       type: 'taluka',
       totalBooths: 92,
       children: [
@@ -278,7 +278,7 @@ const BoothPage = () => {
               </span>
             </div>
             <div className="dp-sub">
-              {isMr ? 'हवेली तालुका' : 'Haveli Taluka'} · {selectedNode?.totalBooths || selectedNode?.booths?.length || 0} {isMr ? 'बूथ' : 'Booths'} ·{' '}
+              {isMr ? 'करवीर तालुका' : 'Karveer Taluka'} · {selectedNode?.totalBooths || selectedNode?.booths?.length || 0} {isMr ? 'बूथ' : 'Booths'} ·{' '}
               {(selectedNode?.totalVoters || 10245).toLocaleString(isMr ? 'mr-IN' : 'en-US')} {isMr ? 'एकूण मतदार' : 'Total Voters'}
             </div>
 

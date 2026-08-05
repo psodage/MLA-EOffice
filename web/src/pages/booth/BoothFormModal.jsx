@@ -10,7 +10,7 @@ const BoothFormModal = ({ isOpen, onClose, onSuccess, initialArea }) => {
     booth_number: '',
     booth_name: '',
     location: '',
-    taluka: 'Haveli Taluka',
+    taluka: 'Karveer Taluka',
     area_name: 'Pimpri (Ward 5)',
     pramukh_name: '',
     pramukh_mobile: '',
@@ -85,7 +85,7 @@ const BoothFormModal = ({ isOpen, onClose, onSuccess, initialArea }) => {
                   value={form.taluka}
                   onChange={handleChange}
                 >
-                  <option value="Haveli Taluka">{isMr ? 'हवेली तालुका' : 'Haveli Taluka'}</option>
+                  <option value="Karveer Taluka">{isMr ? 'करवीर तालुका' : 'Karveer Taluka'}</option>
                   <option value="Maval Taluka">{isMr ? 'मावळ तालुका' : 'Maval Taluka'}</option>
                   <option value="Shirur Taluka">{isMr ? 'शिरूर तालुका' : 'Shirur Taluka'}</option>
                 </select>

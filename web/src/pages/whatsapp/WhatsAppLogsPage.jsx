@@ -37,7 +37,7 @@ const MOCK_RECENT_LOGS = [
   {
     id: 3,
     iconType: 'broadcast',
-    recipientName: 'Broadcast: Haveli Taluka Workers',
+    recipientName: 'Broadcast: Karveer Taluka Workers',
     recipientMobile: '156 recipients',
     templateCode: 'EVENT_INVITE',
     templateDesc: 'ग्रामसभा कार्यक्रम, वडगाव · 05/08/2026',
@@ -148,7 +148,7 @@ const WhatsAppLogsPage = () => {
     recipient_type: 'WORKERS',
     template_code: 'EVENT_INVITE',
     custom_message: '',
-    target_group: 'Haveli Taluka Workers',
+    target_group: 'Karveer Taluka Workers',
   });
   const [sendingBroadcast, setSendingBroadcast] = useState(false);
 
@@ -512,7 +512,7 @@ const WhatsAppLogsPage = () => {
                       value={broadcastForm.target_group}
                       onChange={(e) => setBroadcastForm({ ...broadcastForm, target_group: e.target.value })}
                     >
-                      <option value="Haveli Taluka Workers">{isMr ? 'हवेली तालुका कार्यकर्ते (156)' : 'Haveli Workers (156)'}</option>
+                      <option value="Karveer Taluka Workers">{isMr ? 'करवीर तालुका कार्यकर्ते (156)' : 'Karveer Workers (156)'}</option>
                       <option value="Wadgaon Area Workers">{isMr ? 'वडगाव परिसर कार्यकर्ते (24)' : 'Wadgaon Workers (24)'}</option>
                       <option value="Booth Pramukhs">{isMr ? 'सर्व बूथ प्रमुख (156)' : 'All Booth Pramukhs (156)'}</option>
                     </select>

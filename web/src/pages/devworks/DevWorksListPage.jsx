@@ -58,7 +58,7 @@ const SAMPLE_FALLBACK_PROJECTS = [
     id: 2,
     project_name: 'Wadgaon Village Water Tank',
     category: 'WATER_PIPELINE',
-    location: 'Wadgaon · Haveli Taluka',
+    location: 'Wadgaon · Karveer Taluka',
     geo_latitude: 18.6654,
     geo_longitude: 73.7712,
     funding_source: 'MLALAD',

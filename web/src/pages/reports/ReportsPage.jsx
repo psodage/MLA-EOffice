@@ -243,7 +243,7 @@ const ReportsPage = () => {
 
       {/* ── ⚡ Quick Generate Form Section ────────────────────── */}
       <div className="section-title" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-        <Zap size={16} style={{ color: 'var(--amber)' }} /> {isMr ? 'जलद अहवाल निर्मिती' : 'Quick Generate'} · <span className="mr" style={{ fontFamily: "'Noto Sans Devanagari', sans-serif" }}>जलद अहवाल</span>
+        <Zap size={16} style={{ color: 'var(--amber)' }} /> {isMr ? 'जलद अहवाल निर्मिती' : 'Quick Generate'} · <span className="mr" style={{ fontFamily: isMr ? "'Noto Sans Devanagari', sans-serif" : 'inherit' }}>{isMr ? 'जलद अहवाल' : 'Quick Reports'}</span>
       </div>
 
       <div className="quick-form">

@@ -151,7 +151,7 @@ const OutwardFormModal = ({ isOpen, onClose, onSuccess, initialInwardData = null
     } catch (err) {
       console.error('AI drafting error:', err);
       // Fallback AI draft if server offline
-      const fallbackDraft = `महोदय,\n\nविषय: ${form.subject}\n\nसंदर्भ: कार्यालयीन टिपणी व नागरिक निवेदन\n\nउपरोक्त विषयान्वये, ${form.recipient_name || 'विभागीय अधिकारी'} यांना नम्रपणे कळविण्यात येते की, सदर बाबीवर तातडीने योग्य ती कार्यवाही करण्यात यावी व केलेल्या कार्यवाहीचा अहवाल या कार्यालयास सत्वर सादर करावा.\n\nआपला विश्वासू,\nआमदार, हवेली मतदारसंघ`;
+      const fallbackDraft = `महोदय,\n\nविषय: ${form.subject}\n\nसंदर्भ: कार्यालयीन टिपणी व नागरिक निवेदन\n\nउपरोक्त विषयान्वये, ${form.recipient_name || 'विभागीय अधिकारी'} यांना नम्रपणे कळविण्यात येते की, सदर बाबीवर तातडीने योग्य ती कार्यवाही करण्यात यावी व केलेल्या कार्यवाहीचा अहवाल या कार्यालयास सत्वर सादर करावा.\n\nआपला विश्वासू,\nआमदार, कोल्हापूर दक्षिण मतदारसंघ`;
       setForm((prev) => ({ ...prev, body_text: fallbackDraft }));
       setIsAiDrafted(true);
     } finally {
@@ -425,8 +425,8 @@ const OutwardFormModal = ({ isOpen, onClose, onSuccess, initialInwardData = null
 
               <div className="preview-body">
                 <div className="letter-header">
-                  <div className="office">🏛️ कार्यालय — आमदार, हवेली मतदारसंघ</div>
-                  <div className="mla">Office of MLA, Haveli Constituency</div>
+                  <div className="office">🏛️ कार्यालय — आमदार, कोल्हापूर दक्षिण मतदारसंघ</div>
+                  <div className="mla">Office of MLA, Kolhapur South Constituency</div>
                   <div style={{ fontSize: '10px', color: 'var(--inw-t4)', marginTop: '4px' }}>
                     Vidhan Bhavan, Constituency Office, Maharashtra — 411001
                   </div>
@@ -453,8 +453,8 @@ const OutwardFormModal = ({ isOpen, onClose, onSuccess, initialInwardData = null
                 </div>
 
                 <div className="letter-sign">
-                  <div className="name">आमदार, हवेली मतदारसंघ</div>
-                  <div className="desg">MLA, Haveli Constituency</div>
+                  <div className="name">आमदार, कोल्हापूर दक्षिण मतदारसंघ</div>
+                  <div className="desg">MLA, Kolhapur South Constituency</div>
                 </div>
               </div>
             </div>
