@@ -11,9 +11,9 @@ import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 import config from './config/env.config.js';
 import errorHandler from './middlewares/errorHandler.js';
-import { sendSuccess } from './utils/responseHelper.js';
 
 // ── Route Imports ────────────────────────────────────────────
+import healthRoutes from './modules/health/health.routes.js';
 import authRoutes from './modules/auth/auth.routes.js';
 import dashboardRoutes from './modules/dashboard/dashboard.routes.js';
 import inwardRoutes from './modules/inward/inward.routes.js';
@@ -34,8 +34,26 @@ const app = express();
 app.use(helmet());
 
 // ── CORS ─────────────────────────────────────────────────────
+const allowedOrigins = config.app.frontendUrl
+  .split(',')
+  .map((url) => url.trim())
+  .filter(Boolean);
+
 app.use(cors({
-  origin: config.app.frontendUrl,
+  origin: (origin, callback) => {
+    // Allow non-browser requests (e.g. mobile apps, curl, UptimeRobot)
+    if (!origin) return callback(null, true);
+
+    if (
+      allowedOrigins.includes(origin) ||
+      allowedOrigins.includes('*') ||
+      !config.app.isProduction ||
+      origin.endsWith('.vercel.app')
+    ) {
+      return callback(null, true);
+    }
+    return callback(new Error('CORS request blocked for origin: ' + origin), false);
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
@@ -54,17 +72,7 @@ if (!config.app.isProduction) {
 }
 
 // ── Health Check ─────────────────────────────────────────────
-app.get('/api/v1/health', (req, res) => {
-  sendSuccess(res, {
-    message: 'MLA E-Office API is running',
-    data: {
-      status: 'ok',
-      environment: config.app.env,
-      timestamp: new Date().toISOString(),
-      uptime: `${Math.floor(process.uptime())}s`,
-    },
-  });
-});
+app.use('/api/v1/health', healthRoutes);
 
 // ── API Routes ───────────────────────────────────────────────
 app.use('/api/v1/auth', authRoutes);

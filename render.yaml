@@ -1,0 +1,130 @@
+# Render Blueprint deployment configuration
+# See DEPLOYMENT_GUIDE.md Section 6 for full deployment manual
+
+services:
+  - type: web
+    name: mla-eoffice-api
+    runtime: node
+    region: singapore
+    plan: free
+    rootDir: api
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/v1/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: FRONTEND_URL
+        sync: false
+      - key: API_BASE_URL
+        sync: false
+      - key: DB_HOST
+        sync: false
+      - key: DB_PORT
+        sync: false
+      - key: DB_NAME
+        sync: false
+      - key: DB_USER
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_POOL_MIN
+        value: 2
+      - key: DB_POOL_MAX
+        value: 10
+      - key: DB_SSL
+        value: "true"
+      - key: JWT_SECRET
+        sync: false
+      - key: JWT_ACCESS_EXPIRY
+        value: 1h
+      - key: JWT_REFRESH_EXPIRY
+        value: 7d
+      - key: BCRYPT_SALT_ROUNDS
+        value: 12
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: CLOUDINARY_UPLOAD_PRESET
+        value: mla_eoffice
+      - key: FILE_MAX_SIZE_MB
+        value: 10
+      - key: FILE_ALLOWED_TYPES
+        value: image/jpeg,image/png,application/pdf,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_MODEL
+        value: gemini-2.0-flash
+      - key: GEMINI_MAX_TOKENS
+        value: 2048
+      - key: GEMINI_TEMPERATURE
+        value: 0.7
+      - key: WHATSAPP_PHONE_NUMBER_ID
+        sync: false
+      - key: WHATSAPP_ACCESS_TOKEN
+        sync: false
+      - key: WHATSAPP_VERIFY_TOKEN
+        sync: false
+      - key: WHATSAPP_WABA_ID
+        sync: false
+      - key: WHATSAPP_API_VERSION
+        value: v21.0
+      - key: WHATSAPP_MAX_RETRIES
+        value: 2
+      - key: SMTP_HOST
+        value: smtp.gmail.com
+      - key: SMTP_PORT
+        value: 587
+      - key: SMTP_SECURE
+        value: "false"
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASSWORD
+        sync: false
+      - key: SMTP_FROM_NAME
+        value: MLA E-Office
+      - key: SMTP_FROM_EMAIL
+        sync: false
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: OFFICE_HOURS_START
+        value: "10:00"
+      - key: OFFICE_HOURS_END
+        value: "18:00"
+      - key: TIMEZONE
+        value: Asia/Kolkata
+      - key: OFFICE_HOURS_ENABLED
+        value: "true"
+      - key: RATE_LIMIT_WINDOW_MS
+        value: 900000
+      - key: RATE_LIMIT_MAX_REQUESTS
+        value: 100
+      - key: LOGIN_RATE_LIMIT_MAX
+        value: 5
+      - key: LOGIN_LOCKOUT_MINUTES
+        value: 15
+      - key: LOG_LEVEL
+        value: warn
+      - key: LOG_FILE_PATH
+        value: logs/app.log
+      - key: LOG_MAX_SIZE
+        value: 20m
+      - key: LOG_MAX_FILES
+        value: 14d
+      - key: CRON_BIRTHDAY_GREETING
+        value: "0 8 * * *"
+      - key: CRON_ESCALATION_CHECK
+        value: "0 9 * * 1-6"
+      - key: CRON_WHATSAPP_QUEUE
+        value: "*/30 * * * * *"
+      - key: BACKUP_ENABLED
+        value: "true"
+      - key: BACKUP_CRON
+        value: "0 2 * * *"
+      - key: BACKUP_RETENTION_DAYS
+        value: 30
