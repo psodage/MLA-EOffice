@@ -4,6 +4,8 @@
 // and Performing Status Updates or Assigning to PA
 // ============================================================
 
+import { useState } from 'react';
+import { X, Calendar, User, FileText, Tag, Paperclip, ExternalLink, Users, Zap, Check } from 'lucide-react';
 import useLangStore from '../../store/langStore.js';
 import getLangText from '../../utils/langHelper.js';
 import InwardStatusBadge from '../../components/inward/InwardStatusBadge.jsx';

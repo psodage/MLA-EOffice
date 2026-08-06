@@ -82,8 +82,8 @@ VALUES
   'rajesh.naik.mla@example.com',
   '["inward","outward","nivedan","visitor","devworks","karyakarta","booth","geography","calendar","whatsapp","dashboard","reports","notifications"]',
   TRUE,
-  '2026-01-10 09:00:00',
-  '2026-01-10 09:00:00',
+  '2026-07-01 09:00:00',
+  '2026-07-01 09:00:00',
   '2026-01-10 09:00:00'
 ),
 (

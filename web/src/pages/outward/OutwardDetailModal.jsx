@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { X, Landmark, CheckCircle2, Printer, Check } from 'lucide-react';
 import useLangStore from '../../store/langStore.js';
 import getLangText from '../../utils/langHelper.js';
 import api from '../../services/api.js';
