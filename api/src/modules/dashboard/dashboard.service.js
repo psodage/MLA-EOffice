@@ -61,13 +61,13 @@ export const getDashboardSummary = async (user) => {
       const recentNivedans = await Nivedan.findAll({
         order: [['created_at', 'DESC']],
         limit: 5,
-        attributes: ['id', 'tracking_id', 'subject', 'citizen_name', 'status', 'created_at'],
+        attributes: ['id', 'tracking_id', 'subject', 'subject_en', 'citizen_name', 'citizen_name_en', 'status', 'created_at'],
       });
 
       dbActivities = recentNivedans.map((n) => {
         const timeAgo = formatTimeAgo(n.created_at);
         let statusColor = 'warning';
-        let statusText = 'প্রलंबित / Pending';
+        let statusText = 'प्रलंबित / Pending';
 
         if (n.status === 'RESOLVED') {
           statusColor = 'success';
@@ -84,6 +84,7 @@ export const getDashboardSummary = async (user) => {
           id: `niv-${n.id}`,
           type: 'nivedan',
           title: n.subject || 'नवीन निवेदन नोंदवले',
+          title_en: n.subject_en || n.subject || 'New Nivedan Registered',
           subtitle: `नागरिक: ${n.citizen_name || 'Anonymous'}`,
           referenceId: n.tracking_id || `NIV-2026-${n.id}`,
           time: timeAgo,
@@ -113,6 +114,7 @@ export const getDashboardSummary = async (user) => {
             day,
             month,
             title: e.title || 'कार्यक्रम',
+            title_en: e.title_en || e.title || 'Program',
             meta: `${e.start_time || '10:00 AM'} · ${e.location || 'MLA Office'}`,
             badge: e.event_type || 'Program',
             badgeColor: e.event_type === 'MEETING' ? '#2563EB' : '#16A34A',

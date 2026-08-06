@@ -21,7 +21,15 @@ CalendarEvent.init(
       type: DataTypes.STRING(300),
       allowNull: false,
     },
+    title_en: {
+      type: DataTypes.STRING(300),
+      allowNull: true,
+    },
     description: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
+    description_en: {
       type: DataTypes.TEXT,
       allowNull: true,
     },

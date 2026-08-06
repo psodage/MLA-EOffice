@@ -6,7 +6,7 @@
 // ============================================================
 
 import { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Download, Printer, Plus, Folder, Clock, CheckCircle2, AlertTriangle, Send, FileText, Phone, RotateCcw, Eye, ChevronLeft, ChevronRight } from 'lucide-react';
 import api from '../../services/api.js';
 import useLangStore from '../../store/langStore.js';
@@ -22,8 +22,9 @@ const STATUS_TABS = [
   { id: 'RESOLVED', labelEn: 'Resolved', labelMr: 'मार्गी लागलेले', Icon: CheckCircle2, tabClass: 'tab-resolved' },
 ];
 
-const NivedanListPage = () => {
+const NivedanListPage = ({ openFormOnLoad = false }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { lang, setLang } = useLangStore();
   const isMr = lang === 'MR';
 
@@ -44,7 +45,22 @@ const NivedanListPage = () => {
   });
 
   // Modal State
-  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isFormOpen, setIsFormOpen] = useState(() => {
+    return Boolean(openFormOnLoad || location.state?.openForm || location.pathname.endsWith('/new'));
+  });
+
+  useEffect(() => {
+    if (openFormOnLoad || location.state?.openForm || location.pathname.endsWith('/new')) {
+      setIsFormOpen(true);
+    }
+  }, [openFormOnLoad, location]);
+
+  const handleCloseForm = () => {
+    setIsFormOpen(false);
+    if (location.pathname.endsWith('/new')) {
+      navigate('/nivedan', { replace: true });
+    }
+  };
 
   // Fetch Categories
   useEffect(() => {
@@ -367,7 +383,7 @@ const NivedanListPage = () => {
       {/* ── Modals ─────────────────────────────────────────── */}
       <NivedanFormModal
         isOpen={isFormOpen}
-        onClose={() => setIsFormOpen(false)}
+        onClose={handleCloseForm}
         onSuccess={fetchNivedans}
       />
     </div>

@@ -1,132 +1,99 @@
 -- ============================================================
--- SAMPLE DATA — 01_users.sql
--- 7 System User Accounts (all 7 roles covered)
--- Fictional constituency: Kolhapur Cantonment (Kolhapur District)
---
--- ⚠️  Passwords are bcrypt hashes (12 salt rounds)
---     Plain-text → bcrypt hash mapping:
---       Mla@2026#Kolhapur    → hash below
---       Pa@2026#Kolhapur     → hash below
---       Clerk@2026#Kolhapur  → hash below
---       Audit@2026#Kolhapur  → hash below
---       Booth@2026#Kolhapur  → hash below
---       Citizen@2026     → hash below
---       Admin@MLA2026    → hash below
---
---     To regenerate: node -e "const b=require('bcryptjs'); console.log(b.hashSync('Pa@2026#Kolhapur',12))"
+-- SAMPLE DATA (KOLHAPUR) — 01_users.sql
+-- 7 System User Accounts (Supports Marathi & English)
 -- ============================================================
-
--- Clear existing (dev only)
--- TRUNCATE TABLE users;  -- Uncomment only if safe to wipe
 
 INSERT INTO users
   (full_name, username, password_hash, role, mobile, email, accessible_modules, is_active, password_changed_at, created_at, updated_at)
 VALUES
-
-
--- 1. MLA — Full access
 (
-  'आ. सुरेश पाटील',
-  'mla_suresh',
-  '$2a$12$mprpqKSuufy9Ovt5P57w6Oc9N14VB16tB5Sc3dxW1mdX4AnivVQEi',
+  'आ. राजेश नाईक',
+  'mla_rajesh',
+  '$2a$12$ntOn3s63UZdRBsNU4hAtjepnOMP.90bGvclDZGQSr78xgsuFbWoki',
   'MLA',
-  '9800000001',
-  'suresh.patil.mla@example.com',
-  '["inward","outward","nivedan","visitor","devworks","karyakarta","booth","geography","calendar","whatsapp","dashboard","reports","notifications","users"]',
-  TRUE,
-  '2026-01-10 09:00:00',
-  '2026-01-10 09:00:00',
-  '2026-01-10 09:00:00'
-),
-
--- 2. PA (Personal Assistant) — Operational manager
-(
-  'मीना देशमुख',
-  'pa_meena',
-  '$2a$12$kJHiroLqLAYN5/iLT1qvSuPmRe7mbIsBz9HUnt5v1rIISzygK91Re',
-  'PA',
-  '9800000002',
-  'meena.deshmukh.pa@example.com',
+  '9700000001',
+  'rajesh.naik.mla@example.com',
   '["inward","outward","nivedan","visitor","devworks","karyakarta","booth","geography","calendar","whatsapp","dashboard","reports","notifications"]',
   TRUE,
-  '2026-01-10 09:05:00',
+  '2026-07-01 09:00:00',
+  '2026-07-01 09:00:00',
+  '2026-01-10 09:00:00'
+),
+(
+  'सुनीता शिंदे',
+  'pa_sunita',
+  '$2a$12$ck3o4Z50HXYS9l5UydhjhO2u7ouTKW7DkOwerjU1qDIEw.aJLtwu.',
+  'PA',
+  '9700000002',
+  'sunita.shinde.pa@example.com',
+  '["inward","outward","nivedan","visitor","devworks","karyakarta","booth","geography","calendar","whatsapp","dashboard","reports","notifications"]',
+  TRUE,
+  '2026-07-01 09:00:00',
   '2026-01-10 09:05:00',
   '2026-01-10 09:05:00'
 ),
-
--- 3. Receptionist / Front Desk Clerk
 (
-  'रमेश जाधव',
-  'clerk_ramesh',
-  '$2a$12$RBAxDdSfHoDY/Yvfx//Rv.iR6f4bBobdmZG6ZlngYH2ZzsbKhgZTS',
+  'सुरेश कांबळे',
+  'clerk_suresh',
+  '$2a$12$awUt/fdpIaeYFs/zHXVwa.iv4q750oQkm8tO.F7vRV8d.XJeDSFpa',
   'RECEPTIONIST',
-  '9800000003',
-  'ramesh.jadhav.clerk@example.com',
+  '9700000003',
+  'suresh.kamble.clerk@example.com',
   '["visitor","nivedan","inward","dashboard","notifications"]',
   TRUE,
-  '2026-01-10 09:10:00',
+  '2026-07-01 09:00:00',
   '2026-01-10 09:10:00',
   '2026-01-10 09:10:00'
 ),
-
--- 4. Field Auditor / Assessor
 (
-  'प्रिया मोरे',
-  'auditor_priya',
-  '$2a$12$dGUgFfZ/UhndwFcIAIpS4OUxkkgO36/nPEFVxu49MfLywZ561yzca',
+  'मीरा पाटील',
+  'auditor_meera',
+  '$2a$12$u3P7o5CTBefBRKmx9XuV1OJdc7N33C7LSjjI67wtjkEB3gpV14ZQC',
   'AUDITOR',
-  '9800000004',
-  'priya.more.auditor@example.com',
+  '9700000004',
+  'meera.patil.auditor@example.com',
   '["devworks","booth","geography","dashboard","notifications"]',
   TRUE,
-  '2026-01-10 09:15:00',
+  '2026-07-01 09:00:00',
   '2026-01-10 09:15:00',
   '2026-01-10 09:15:00'
 ),
-
--- 5. Booth Pramukh — Ground-level party worker
 (
-  'गणेश शिंदे',
-  'bp_ganesh',
-  '$2a$12$mrc3QWXFnJ04Y90qvWqrO.9GNlQXv/IAlh5ek1h3rgwxwTBeWQAdq',
+  'गणपत चौगले',
+  'bp_ganpat',
+  '$2a$12$vGj.BfvtXjecprxSo8I8Ou2kvi132mJu5mY/3ZPnmbh2WBpAuWsV6',
   'BOOTH_PRAMUKH',
-  '9800000005',
+  '9700000005',
   NULL,
   '["karyakarta","booth","geography","notifications"]',
   TRUE,
-  '2026-01-10 09:20:00',
+  '2026-07-01 09:00:00',
   '2026-01-10 09:20:00',
   '2026-01-10 09:20:00'
 ),
-
--- 6. Citizen — Public tracking portal only
 (
-  'अजय कांबळे (Test Citizen)',
-  'citizen_test',
-  '$2a$12$Q3m2relpGhQrte6Bl0DGoeDckzAcGc01BiyvFpUxoQvYqMQacJoDG',
+  'विकास पाटील (Test Citizen)',
+  'citizen_kolhapur',
+  '$2a$12$S2OBpPFQNXrv0WnZnoln/e2mJFDr8we22HxdJ55dMUy7TzvoRkjDC',
   'CITIZEN',
-  '9800000006',
+  '9700000006',
   NULL,
   '[]',
   TRUE,
-  '2026-01-10 09:25:00',
+  '2026-07-01 09:00:00',
   '2026-01-10 09:25:00',
   '2026-01-10 09:25:00'
 ),
-
--- 7. System Administrator
 (
   'System Admin',
-  'admin',
-  '$2a$12$g8MCfkuzOcNbB2foJ0iXYe/R2nt7pjFAYWkeUZZpkLVvutcmIOnUi',
+  'admin_kolhapur',
+  '$2a$12$hxLyogSXdwuy07.WYfeuRuCL8QPkwezfsUG6uA6kr4xyGipyv35FC',
   'ADMIN',
-
-  '9800000007',
-  'admin@mlaeoffice.local',
+  '9700000007',
+  'admin.kolhapur@mlaeoffice.local',
   '["inward","outward","nivedan","visitor","devworks","karyakarta","booth","geography","calendar","whatsapp","dashboard","reports","notifications","users","settings","audit"]',
   TRUE,
-  '2026-01-10 09:00:00',
+  '2026-07-01 09:00:00',
   '2026-01-10 09:00:00',
   '2026-01-10 09:00:00'
 );
-

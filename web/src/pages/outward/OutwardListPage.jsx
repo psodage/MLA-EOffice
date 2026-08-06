@@ -7,6 +7,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Send, Plus, Sparkles, Edit, CheckCircle2, Clock, FileText, Link as LinkIcon, RotateCcw, ChevronLeft, ChevronRight } from 'lucide-react';
 import useLangStore from '../../store/langStore.js';
+import getLangText from '../../utils/langHelper.js';
 import api from '../../services/api.js';
 import OutwardFormModal from './OutwardFormModal.jsx';
 import OutwardDetailModal from './OutwardDetailModal.jsx';
@@ -269,7 +270,7 @@ const OutwardListPage = () => {
                     <td className="col-inward-no">{item.outward_number}</td>
                     <td className="col-date">{item.date_sent}</td>
                     <td className="col-sender">
-                      <div className="sender-name-primary">{item.recipient_name}</div>
+                      <div className="sender-name-primary">{getLangText(item, 'recipient_name', lang)}</div>
                       {item.recipientDepartment && (
                         <span className="dept-tag">
                           {lang === 'MR'
@@ -279,7 +280,7 @@ const OutwardListPage = () => {
                       )}
                     </td>
                     <td className="col-subject">
-                      <div className="subject-line">{item.subject}</div>
+                      <div className="subject-line">{getLangText(item, 'subject', lang)}</div>
                       {item.referenceInward && (
                         <span className="ref-inward-tag" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
                           <LinkIcon size={12} /> {text.refInward} {item.referenceInward.inward_number}

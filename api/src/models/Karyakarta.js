@@ -21,6 +21,10 @@ Karyakarta.init(
       type: DataTypes.STRING(200),
       allowNull: false,
     },
+    full_name_en: {
+      type: DataTypes.STRING(200),
+      allowNull: true,
+    },
     mobile: {
       type: DataTypes.STRING(15),
       allowNull: false,

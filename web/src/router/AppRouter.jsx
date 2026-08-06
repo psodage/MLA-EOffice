@@ -194,6 +194,26 @@ const AppRouter = () => {
 
         {/* Nivedan / Petitions Module */}
         <Route
+          path="/nivedan/new"
+          element={
+            <ProtectedRoute module="nivedan">
+              <MainLayout>
+                <NivedanListPage openFormOnLoad={true} />
+              </MainLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/nivedans/new"
+          element={
+            <ProtectedRoute module="nivedan">
+              <MainLayout>
+                <NivedanListPage openFormOnLoad={true} />
+              </MainLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/nivedan/:id"
           element={
             <ProtectedRoute module="nivedan">

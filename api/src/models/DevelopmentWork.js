@@ -47,6 +47,10 @@ DevelopmentWork.init(
       type: DataTypes.STRING(500),
       allowNull: false,
     },
+    location_en: {
+      type: DataTypes.STRING(500),
+      allowNull: true,
+    },
     village_id: {
       type: DataTypes.INTEGER,
       allowNull: true,

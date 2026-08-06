@@ -278,7 +278,7 @@ const DevWorkDetailPage = () => {
             </span>
             <div className="dh-title">{getLangText(entry, 'project_name', lang) || getLangText(entry, 'work_title', lang)}</div>
             <div className="dh-loc" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-              <MapPin size={14} /> {entry.location}
+              <MapPin size={14} /> {getLangText(entry, 'location', lang)}
             </div>
           </div>
 

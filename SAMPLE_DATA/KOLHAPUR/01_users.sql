@@ -1,6 +1,6 @@
 -- ============================================================
 -- SAMPLE DATA (KOLHAPUR) — 01_users.sql
--- 7 System User Accounts
+-- 7 System User Accounts (Supports Marathi & English)
 -- ============================================================
 
 INSERT INTO users
@@ -28,7 +28,7 @@ VALUES
   'sunita.shinde.pa@example.com',
   '["inward","outward","nivedan","visitor","devworks","karyakarta","booth","geography","calendar","whatsapp","dashboard","reports","notifications"]',
   TRUE,
-  '2026-01-10 09:05:00',
+  '2026-07-01 09:00:00',
   '2026-01-10 09:05:00',
   '2026-01-10 09:05:00'
 ),
@@ -41,7 +41,7 @@ VALUES
   'suresh.kamble.clerk@example.com',
   '["visitor","nivedan","inward","dashboard","notifications"]',
   TRUE,
-  '2026-01-10 09:10:00',
+  '2026-07-01 09:00:00',
   '2026-01-10 09:10:00',
   '2026-01-10 09:10:00'
 ),
@@ -54,7 +54,7 @@ VALUES
   'meera.patil.auditor@example.com',
   '["devworks","booth","geography","dashboard","notifications"]',
   TRUE,
-  '2026-01-10 09:15:00',
+  '2026-07-01 09:00:00',
   '2026-01-10 09:15:00',
   '2026-01-10 09:15:00'
 ),
@@ -67,7 +67,7 @@ VALUES
   NULL,
   '["karyakarta","booth","geography","notifications"]',
   TRUE,
-  '2026-01-10 09:20:00',
+  '2026-07-01 09:00:00',
   '2026-01-10 09:20:00',
   '2026-01-10 09:20:00'
 ),
@@ -80,7 +80,7 @@ VALUES
   NULL,
   '[]',
   TRUE,
-  '2026-01-10 09:25:00',
+  '2026-07-01 09:00:00',
   '2026-01-10 09:25:00',
   '2026-01-10 09:25:00'
 ),
@@ -93,7 +93,7 @@ VALUES
   'admin.kolhapur@mlaeoffice.local',
   '["inward","outward","nivedan","visitor","devworks","karyakarta","booth","geography","calendar","whatsapp","dashboard","reports","notifications","users","settings","audit"]',
   TRUE,
-  '2026-01-10 09:00:00',
+  '2026-07-01 09:00:00',
   '2026-01-10 09:00:00',
   '2026-01-10 09:00:00'
 );

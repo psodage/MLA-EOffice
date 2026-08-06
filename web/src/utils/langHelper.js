@@ -26,6 +26,7 @@ export const getLangText = (item, field, lang = 'EN') => {
     if (field === 'title') return item.title_en || item.title || '';
     if (field === 'body_text') return item.body_text_en || item.body_text || '';
     if (field === 'full_name') return item.full_name_en || item.full_name || '';
+    if (field === 'location') return item.location_en || item.location || '';
 
     return item[`${field}_en`] || item[field] || '';
   }
