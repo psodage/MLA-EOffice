@@ -550,7 +550,7 @@ const KaryakartaListPage = () => {
 
           {/* Pagination Bar */}
           {!loading && meta.totalPages > 1 && (
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 16px', background: 'var(--c)', border: '1px solid var(--b)', borderRadius: '4px', marginTop: '16px', fontSize: '12px' }}>
+            <div className="karyakarta-pagination">
               <span>
                 {isMr
                   ? `एकूण ${meta.totalItems} पैकी पान ${meta.page}`

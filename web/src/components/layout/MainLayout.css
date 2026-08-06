@@ -866,14 +866,20 @@
 /* ── Main Content Area ─────────────────────────────────────── */
 .main-content-wrapper {
   margin-left: 240px;
+  width: calc(100% - 240px);
+  max-width: calc(100% - 240px);
+  min-width: 0;
   flex: 1;
   padding: 24px;
   min-height: calc(100vh - 64px);
-  transition: margin-left 250ms ease;
+  transition: margin-left 250ms ease, width 250ms ease, max-width 250ms ease;
+  box-sizing: border-box;
 }
 
 .sidebar-collapsed .main-content-wrapper {
   margin-left: 72px;
+  width: calc(100% - 72px);
+  max-width: calc(100% - 72px);
 }
 
 /* ── Responsive Overlay & Media Queries ────────────────────── */

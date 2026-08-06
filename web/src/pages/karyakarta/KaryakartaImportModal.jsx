@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Upload, X, AlertTriangle, FileText, BarChart2 } from 'lucide-react';
 import api from '../../services/api.js';
+import './KaryakartaFormModal.css';
 
 const SAMPLE_IMPORT_JSON = [
   {

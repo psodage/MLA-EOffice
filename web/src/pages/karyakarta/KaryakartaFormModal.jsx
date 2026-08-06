@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { X, UserPlus, AlertTriangle, UserCheck } from 'lucide-react';
 import api from '../../services/api.js';
 import useLangStore from '../../store/langStore.js';
+import './KaryakartaFormModal.css';
 
 const DESIGNATION_OPTIONS = [
   { value: 'BOOTH_PRAMUKH', labelEn: 'Booth Pramukh', labelMr: 'बूथ प्रमुख' },

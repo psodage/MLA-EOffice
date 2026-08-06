@@ -25,10 +25,12 @@ const SQL_FILES = [
   '06_visitors.sql',
   '07_karyakartas.sql',
   '08_calendar_events.sql',
+  '09_outward_entries.sql',
 ];
 
 // Tables to truncate — ORDER matters (child → parent to avoid FK errors)
 const TABLES_TO_CLEAR = [
+  'outward_entries',
   'nivedan_timeline',
   'calendar_events',
   'visitors',
@@ -127,7 +129,7 @@ const run = async () => {
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
 
     const verifyTables = [
-      'users', 'inward_entries', 'nivedans', 'nivedan_timeline',
+      'users', 'inward_entries', 'outward_entries', 'nivedans', 'nivedan_timeline',
       'development_works', 'visitors', 'karyakartas', 'calendar_events',
     ];
 

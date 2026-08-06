@@ -540,17 +540,19 @@ select.fi {
   border: 1px solid var(--b, #dde3eb);
   border-radius: 4px;
   box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
-  overflow: hidden;
   position: sticky;
   top: 80px;
   max-height: calc(100vh - 100px);
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .dp-header {
-  padding: 20px;
+  padding: 16px 20px;
   border-bottom: 1px solid var(--b, #dde3eb);
   position: relative;
+  flex-shrink: 0;
 }
 
 .dp-title {
@@ -609,7 +611,18 @@ select.fi {
 }
 
 .dp-body {
-  padding: 20px;
+  padding: 16px 20px 24px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.dp-footer {
+  padding: 12px 20px;
+  background: var(--c, #ffffff);
+  border-top: 1px solid var(--b, #dde3eb);
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
 }
 
 .dp-section-title {
