@@ -4,13 +4,14 @@
 // and Performing Status Updates or Assigning to PA
 // ============================================================
 
-import { useState } from 'react';
-import { X, Calendar, User, FileText, Tag, Paperclip, ExternalLink, Users, Zap, Check } from 'lucide-react';
+import useLangStore from '../../store/langStore.js';
+import getLangText from '../../utils/langHelper.js';
 import InwardStatusBadge from '../../components/inward/InwardStatusBadge.jsx';
 import PriorityBadge from '../../components/inward/PriorityBadge.jsx';
 import api from '../../services/api.js';
 
 const InwardDetailModal = ({ isOpen, onClose, entry, onUpdateSuccess }) => {
+  const { lang } = useLangStore();
   const [updating, setUpdating] = useState(false);
   const [assignedUser, setAssignedUser] = useState(entry?.assigned_to_user_id || '');
 
@@ -82,9 +83,9 @@ const InwardDetailModal = ({ isOpen, onClose, entry, onUpdateSuccess }) => {
               <User size={16} /> पाठवणाऱ्याची माहिती (Sender Details)
             </h4>
             <div className="info-grid">
-              <div><strong>नाव (Sender):</strong> {entry.sender_name}</div>
+              <div><strong>नाव (Sender):</strong> {getLangText(entry, 'sender_name', lang)}</div>
               <div><strong>पदनाम (Designation):</strong> {entry.sender_designation || '—'}</div>
-              <div><strong>विभाग (Department):</strong> {entry.department?.name_mr || '—'}</div>
+              <div><strong>विभाग (Department):</strong> {lang === 'MR' ? (entry.department?.name_mr || '—') : (entry.department?.name_en || entry.department?.name_mr || '—')}</div>
             </div>
           </div>
 
@@ -93,11 +94,11 @@ const InwardDetailModal = ({ isOpen, onClose, entry, onUpdateSuccess }) => {
               <FileText size={16} /> विषय व तपशील (Subject & Description)
             </h4>
             <div className="subject-box">
-              <strong>विषय:</strong> {entry.subject}
+              <strong>विषय:</strong> {getLangText(entry, 'subject', lang)}
             </div>
-            {entry.description && (
+            {(entry.description || entry.body_text_en) && (
               <div className="description-box">
-                <strong>तपशील:</strong> {entry.description}
+                <strong>तपशील:</strong> {getLangText(entry, 'body_text', lang) || entry.description}
               </div>
             )}
           </div>

@@ -10,6 +10,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Phone, FileText, Paperclip, MessageSquare, Send, List, Edit, RotateCcw, Plus, Download, ArrowLeft } from 'lucide-react';
 import useLangStore from '../../store/langStore.js';
+import getLangText from '../../utils/langHelper.js';
 import api from '../../services/api.js';
 import LucideIcon from '../../components/common/LucideIcon.jsx';
 import './NivedanListPage.css';
@@ -161,7 +162,7 @@ const NivedanDetailPage = () => {
         <div className="dh-top-row">
           <div>
             <div className="dh-id-title">{entry.tracking_id}</div>
-            <div className="dh-sub-title">{entry.subject}</div>
+            <div className="dh-sub-title">{getLangText(entry, 'subject', lang)}</div>
           </div>
           <div className="dh-action-buttons">
             {getStatusBadge(entry.status)}
@@ -197,7 +198,7 @@ const NivedanDetailPage = () => {
         <div className="dh-meta-grid">
           <div className="meta-item">
             <span className="meta-label">{isMr ? 'नागरिक नाव' : 'Citizen Name'}</span>
-            <span className="meta-value">👤 {entry.citizen_name}</span>
+            <span className="meta-value">👤 {getLangText(entry, 'citizen_name', lang)}</span>
           </div>
           <div className="meta-item">
             <span className="meta-label">{isMr ? 'मोबाईल' : 'Mobile'}</span>
@@ -293,7 +294,7 @@ const NivedanDetailPage = () => {
             </div>
             <div className="detail-card-body">
               <div className="description-text">
-                {entry.description || (isMr ? 'नागरिकाने मांडलेली तक्रार/निवेदन सविस्तर नोंदवलेले आहे.' : 'Detailed grievance petition filed by citizen.')}
+                {getLangText(entry, 'description', lang) || (isMr ? 'नागरिकाने मांडलेली तक्रार/निवेदन सविस्तर नोंदवलेले आहे.' : 'Detailed grievance petition filed by citizen.')}
               </div>
 
               {/* Attachments List */}

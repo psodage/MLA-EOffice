@@ -8,6 +8,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Download, Printer, Plus, Folder, Clock, CheckCircle2, AlertTriangle, Send, FileText, Phone, RotateCcw, Eye, ChevronLeft, ChevronRight } from 'lucide-react';
+import api from '../../services/api.js';
 import useLangStore from '../../store/langStore.js';
 import getLangText from '../../utils/langHelper.js';
 import NivedanFormModal from './NivedanFormModal.jsx';

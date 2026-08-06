@@ -11,6 +11,7 @@ import { Download, Plus } from 'lucide-react';
 import api from '../services/api.js';
 import useAuthStore from '../store/authStore.js';
 import useLangStore from '../store/langStore.js';
+import getLangText from '../utils/langHelper.js';
 import LucideIcon from '../components/common/LucideIcon.jsx';
 import './DashboardPage.css';
 
@@ -381,7 +382,7 @@ const DashboardPage = () => {
                   />
                   <div>
                     <div className="activity-text">
-                      <strong>{act.referenceId}</strong> — {act.title}
+                      <strong>{act.referenceId}</strong> — {getLangText(act, 'title', lang)}
                     </div>
                     <div className="activity-time">{act.timeAgo || act.time}</div>
                   </div>
@@ -417,7 +418,7 @@ const DashboardPage = () => {
                     <span className="month">{evt.month}</span>
                   </div>
                   <div className="event-info">
-                    <div className="event-title">{evt.title}</div>
+                    <div className="event-title">{getLangText(evt, 'title', lang)}</div>
                     <div className="event-meta">{evt.meta}</div>
                   </div>
                   <span

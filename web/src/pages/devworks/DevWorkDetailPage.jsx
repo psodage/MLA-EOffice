@@ -11,6 +11,7 @@ import { useParams, useNavigate, useLocation, Link } from 'react-router-dom';
 import { ArrowLeft, MapPin, Edit, Camera, BarChart2, Save, FileText, Check, ArrowRight, Circle, Plus } from 'lucide-react';
 import api from '../../services/api.js';
 import useLangStore from '../../store/langStore.js';
+import getLangText from '../../utils/langHelper.js';
 import './DevWorksListPage.css';
 
 const CATEGORY_MAP = {
@@ -265,7 +266,7 @@ const DevWorkDetailPage = () => {
         <span style={{ color: 'var(--t4)' }}>/</span>
         <Link to="/devworks">{isMr ? 'विकासकामे' : 'Development Works'}</Link>
         <span style={{ color: 'var(--t4)' }}>/</span>
-        <span>{entry.project_name}</span>
+        <span>{getLangText(entry, 'project_name', lang) || getLangText(entry, 'work_title', lang)}</span>
       </div>
 
       {/* ── Detailed Header ────────────────────────────────── */}
@@ -275,7 +276,7 @@ const DevWorkDetailPage = () => {
             <span className="dh-cat" style={{ background: catConfig.bg, color: catConfig.color }}>
               {isMr ? catConfig.mr : catConfig.en}
             </span>
-            <div className="dh-title">{entry.project_name}</div>
+            <div className="dh-title">{getLangText(entry, 'project_name', lang) || getLangText(entry, 'work_title', lang)}</div>
             <div className="dh-loc" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
               <MapPin size={14} /> {entry.location}
             </div>

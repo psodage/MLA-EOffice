@@ -7,6 +7,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { Download, Plus, Inbox, Send, RotateCcw, Paperclip, FileText, Eye, Edit, Sparkles, CheckCircle2, Clock, ChevronLeft, ChevronRight } from 'lucide-react';
+import api from '../../services/api.js';
 import useLangStore from '../../store/langStore.js';
 import getLangText from '../../utils/langHelper.js';
 import InwardFormModal from './InwardFormModal.jsx';

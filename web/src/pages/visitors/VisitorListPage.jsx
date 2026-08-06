@@ -7,6 +7,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { Download, Printer, Plus, Users, CheckCircle2, Clock, RotateCcw, FileText, Zap, Phone, Sparkles, LogOut, Eye, ChevronLeft, ChevronRight, X, Landmark } from 'lucide-react';
+import api from '../../services/api.js';
 import useLangStore from '../../store/langStore.js';
 import getLangText from '../../utils/langHelper.js';
 import VisitorCheckInModal from './VisitorCheckInModal.jsx';
@@ -494,10 +495,10 @@ const VisitorListPage = () => {
             <div className="modal-body">
               <div className="visitor-cell" style={{ paddingBottom: '12px', borderBottom: '1px solid var(--border)' }}>
                 <div className="visitor-avatar" style={{ width: '42px', height: '42px', fontSize: '15px' }}>
-                  {getInitials(selectedDetail.visitor_name)}
+                  {getInitials(getLangText(selectedDetail, 'visitor_name', lang))}
                 </div>
                 <div className="visitor-meta">
-                  <span className="visitor-name" style={{ fontSize: '16px' }}>{selectedDetail.visitor_name}</span>
+                  <span className="visitor-name" style={{ fontSize: '16px' }}>{getLangText(selectedDetail, 'visitor_name', lang)}</span>
                   <span className="visitor-contact" style={{ fontSize: '13px' }}>
                     <span style={{ fontFamily: 'JetBrains Mono', display: 'inline-flex', alignItems: 'center', gap: '4px' }}><Phone size={13} /> {selectedDetail.mobile}</span> · {selectedDetail.address_line || 'राहाता'}
                   </span>

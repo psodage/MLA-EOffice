@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Download, Plus, ChevronLeft, ChevronRight, Calendar as CalendarIcon, Clock, MapPin } from 'lucide-react';
 import api from '../../services/api.js';
 import useLangStore from '../../store/langStore.js';
+import getLangText from '../../utils/langHelper.js';
 import CalendarFormModal from './CalendarFormModal.jsx';
 import LucideIcon from '../../components/common/LucideIcon.jsx';
 import './CalendarPage.css';
@@ -225,9 +226,9 @@ const CalendarPage = () => {
                           <span
                             key={e.id}
                             className={`cal-event ${cfg.class}`}
-                            title={`${e.title} (${e.start_time || ''})`}
+                            title={`${getLangText(e, 'title', lang)} (${e.start_time || ''})`}
                           >
-                            {e.title}
+                            {getLangText(e, 'title', lang)}
                           </span>
                         );
                       })}
@@ -261,7 +262,7 @@ const CalendarPage = () => {
                       <span className={`widget-event-badge ${cfg.class}`}>
                         {isMr ? cfg.mr : cfg.en}
                       </span>
-                      <h4 className="widget-event-title">{ev.title}</h4>
+                      <h4 className="widget-event-title">{getLangText(ev, 'title', lang)}</h4>
                       <div className="widget-event-meta">
                         <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
                           <Clock size={12} /> {ev.start_time ? ev.start_time.slice(0, 5) : '—'}
@@ -305,7 +306,7 @@ const CalendarPage = () => {
                           <CalendarIcon size={11} /> {ev.event_date}
                         </span>
                       </div>
-                      <h4 className="widget-event-title" style={{ marginTop: '4px' }}>{ev.title}</h4>
+                      <h4 className="widget-event-title" style={{ marginTop: '4px' }}>{getLangText(ev, 'title', lang)}</h4>
                       <div className="widget-event-meta">
                         <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
                           <Clock size={12} /> {ev.start_time ? ev.start_time.slice(0, 5) : '—'}

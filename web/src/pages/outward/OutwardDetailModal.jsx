@@ -1,9 +1,10 @@
-import { useState } from 'react';
-import { X, Landmark, CheckCircle2, Printer, Check } from 'lucide-react';
+import useLangStore from '../../store/langStore.js';
+import getLangText from '../../utils/langHelper.js';
 import api from '../../services/api.js';
 import './OutwardLetterPrint.css';
 
 const OutwardDetailModal = ({ isOpen, onClose, entry, onUpdateSuccess }) => {
+  const { lang } = useLangStore();
   const [approving, setApproving] = useState(false);
 
   if (!isOpen || !entry) return null;
@@ -70,7 +71,7 @@ const OutwardDetailModal = ({ isOpen, onClose, entry, onUpdateSuccess }) => {
 
           {/* Letter Body Content */}
           <div className="letter-body-content">
-            <pre className="letter-pre-text">{entry.body_text}</pre>
+            <pre className="letter-pre-text">{getLangText(entry, 'body_text', lang)}</pre>
           </div>
 
           {/* Signature Block */}
