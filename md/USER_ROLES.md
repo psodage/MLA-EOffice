@@ -660,11 +660,11 @@ sequenceDiagram
 
 🔑 Test User Credentials (Kolhapur Division)
 Role	Username	  Password	     Full Name
-MLA	  mla_rajesh	Mla@2026#Pune	 आ. राजेश नाईक
-PA	  pa_sunita	  Pa@2026#Pune	 सुनीता शिंदे
-RECEPTIONIST	clerk_suresh	 Clerk@2026#Pune	 सुरेश कांबळे
-AUDITOR	 auditor_meera	  Audit@2026#Pune 	मीरा पाटील
-BOOTH PRAMUKH	bp_ganpat	 Booth@2026#Pune	गणपत चौगले
-CITIZEN	 citizen_kolhapur	 Citizen@2026	  विकास पाटील (Test Citizen)
-ADMIN	 admin_kolhapur	  Admin@MLA2026	 System Admin
+MLA	  mla_rajesh	Mla@2026#Kolhapur	 आ. राजेश नाईक
+PA	  pa_sunita	  Pa@2026#Kolhapur	 सुनीता शिंदे
+RECEPTIONIST	clerk_suresh	 Clerk@2026#Kolhapur	 सुरेश कांबळे
+AUDITOR	 auditor_meera	  Audit@2026#Kolhapur 	मीरा पाटील
+BOOTH PRAMUKH	bp_ganpat	 Booth@2026#Kolhapur	गणपत चौगले
+CITIZEN	 citizen_kolhapur	 Citizen@2026#Kolhapur	  विकास पाटील (Test Citizen)
+ADMIN	 admin_kolhapur	  Admin@2026#Kolhapur	 System Admin
 

@@ -158,8 +158,8 @@ const run = async () => {
     console.log('   clerk_suresh      → Clerk@2026#Kolhapur');
     console.log('   auditor_meera     → Audit@2026#Kolhapur');
     console.log('   bp_ganpat         → Booth@2026#Kolhapur');
-    console.log('   citizen_kolhapur  → Citizen@2026');
-    console.log('   admin_kolhapur    → Admin@MLA2026');
+    console.log('   citizen_kolhapur  → Citizen@2026#Kolhapur');
+    console.log('   admin_kolhapur    → Admin@2026#Kolhapur');
 
     process.exit(0);
   } catch (error) {

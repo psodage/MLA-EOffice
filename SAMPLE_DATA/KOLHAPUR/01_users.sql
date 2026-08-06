@@ -9,7 +9,7 @@ VALUES
 (
   'आ. राजेश नाईक',
   'mla_rajesh',
-  '$2a$12$mprpqKSuufy9Ovt5P57w6Oc9N14VB16tB5Sc3dxW1mdX4AnivVQEi',
+  '$2a$12$ntOn3s63UZdRBsNU4hAtjepnOMP.90bGvclDZGQSr78xgsuFbWoki',
   'MLA',
   '9700000001',
   'rajesh.naik.mla@example.com',
@@ -22,7 +22,7 @@ VALUES
 (
   'सुनीता शिंदे',
   'pa_sunita',
-  '$2a$12$kJHiroLqLAYN5/iLT1qvSuPmRe7mbIsBz9HUnt5v1rIISzygK91Re',
+  '$2a$12$ck3o4Z50HXYS9l5UydhjhO2u7ouTKW7DkOwerjU1qDIEw.aJLtwu.',
   'PA',
   '9700000002',
   'sunita.shinde.pa@example.com',
@@ -35,7 +35,7 @@ VALUES
 (
   'सुरेश कांबळे',
   'clerk_suresh',
-  '$2a$12$RBAxDdSfHoDY/Yvfx//Rv.iR6f4bBobdmZG6ZlngYH2ZzsbKhgZTS',
+  '$2a$12$awUt/fdpIaeYFs/zHXVwa.iv4q750oQkm8tO.F7vRV8d.XJeDSFpa',
   'RECEPTIONIST',
   '9700000003',
   'suresh.kamble.clerk@example.com',
@@ -48,7 +48,7 @@ VALUES
 (
   'मीरा पाटील',
   'auditor_meera',
-  '$2a$12$dGUgFfZ/UhndwFcIAIpS4OUxkkgO36/nPEFVxu49MfLywZ561yzca',
+  '$2a$12$u3P7o5CTBefBRKmx9XuV1OJdc7N33C7LSjjI67wtjkEB3gpV14ZQC',
   'AUDITOR',
   '9700000004',
   'meera.patil.auditor@example.com',
@@ -61,7 +61,7 @@ VALUES
 (
   'गणपत चौगले',
   'bp_ganpat',
-  '$2a$12$mrc3QWXFnJ04Y90qvWqrO.9GNlQXv/IAlh5ek1h3rgwxwTBeWQAdq',
+  '$2a$12$vGj.BfvtXjecprxSo8I8Ou2kvi132mJu5mY/3ZPnmbh2WBpAuWsV6',
   'BOOTH_PRAMUKH',
   '9700000005',
   NULL,
@@ -74,7 +74,7 @@ VALUES
 (
   'विकास पाटील (Test Citizen)',
   'citizen_kolhapur',
-  '$2a$12$Q3m2relpGhQrte6Bl0DGoeDckzAcGc01BiyvFpUxoQvYqMQacJoDG',
+  '$2a$12$S2OBpPFQNXrv0WnZnoln/e2mJFDr8we22HxdJ55dMUy7TzvoRkjDC',
   'CITIZEN',
   '9700000006',
   NULL,
@@ -87,7 +87,7 @@ VALUES
 (
   'System Admin',
   'admin_kolhapur',
-  '$2a$12$g8MCfkuzOcNbB2foJ0iXYe/R2nt7pjFAYWkeUZZpkLVvutcmIOnUi',
+  '$2a$12$hxLyogSXdwuy07.WYfeuRuCL8QPkwezfsUG6uA6kr4xyGipyv35FC',
   'ADMIN',
   '9700000007',
   'admin.kolhapur@mlaeoffice.local',

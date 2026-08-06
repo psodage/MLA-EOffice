@@ -64,8 +64,8 @@
 | 3 | `clerk_suresh` | `Clerk@2026#Kolhapur` | RECEPTIONIST | Visitor book, nivedan registration |
 | 4 | `auditor_meera` | `Audit@2026#Kolhapur` | AUDITOR | DevWorks audit, booth verification |
 | 5 | `bp_ganpat` | `Booth@2026#Kolhapur` | BOOTH_PRAMUKH | Booth-scoped view, local issues |
-| 6 | `citizen_kolhapur` | `Citizen@2026` | CITIZEN | Public tracking portal |
-| 7 | `admin_kolhapur` | `Admin@MLA2026` | ADMIN | User management, system settings |
+| 6 | `citizen_kolhapur` | `Citizen@2026#Kolhapur` | CITIZEN | Public tracking portal |
+| 7 | `admin_kolhapur` | `Admin@2026#Kolhapur` | ADMIN | User management, system settings |
 
 > 🔴 Use same bcrypt hashes as Kolhapur set — passwords are the same strings.
 
