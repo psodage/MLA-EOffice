@@ -1,107 +1,144 @@
 /* src/pages/settings/UserManagementPage.css */
 /* ============================================================
-   MLA E-Office — User Management & Settings Styling
+   MLA E-Office — User Management & Office Settings Styling
+   100% Matching Existing Pages (Inward, Visitor, Nivedan)
    ============================================================ */
 
-.settings-section-title {
-  font-size: 1.15rem;
-  color: #ff9933;
+/* Import shared Inward & Outward Register styles */
+@import '../inward/InwardListPage.css';
+
+/* ── Module Specific Customization ─────────────────────────── */
+.user-mgmt-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.settings-sec-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--inw-p);
   margin-top: 0;
-  margin-bottom: 1.25rem;
+  margin-bottom: 14px;
   font-family: 'Noto Sans Devanagari', sans-serif;
-  border-bottom: 1px solid #334155;
-  padding-bottom: 0.65rem;
+  border-bottom: 1px solid var(--inw-b);
+  padding-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+[data-theme="dark"] .settings-sec-title {
+  color: #5A9BD5;
+  border-bottom-color: var(--inw-b);
 }
 
 .user-role-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 3px;
+  background: var(--inw-inb, #EFF6FF);
+  border: 1px solid var(--inw-inr, #BFDBFE);
+  color: var(--inw-in, #2563EB);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.user-role-badge[data-role="ADMIN"] {
+  background: rgba(220, 38, 38, 0.1);
+  border-color: rgba(220, 38, 38, 0.3);
+  color: #DC2626;
+}
+
+.user-role-badge[data-role="PA"] {
+  background: var(--inw-wrb, #FFFBEB);
+  border-color: var(--inw-wrr, #FDE68A);
+  color: var(--inw-wr, #D97706);
+}
+
+.module-chip {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: var(--inw-bg);
+  border: 1px solid var(--inw-b);
+  color: var(--inw-t2);
   display: inline-block;
-  font-size: 0.75rem;
-  font-weight: 800;
-  padding: 0.2rem 0.65rem;
-  border-radius: 6px;
-  background: rgba(56, 189, 248, 0.18);
-  border: 1px solid rgba(56, 189, 248, 0.35);
-  color: #38bdf8;
+  margin: 1px;
+  font-family: 'Noto Sans Devanagari', sans-serif;
 }
 
-.module-tag-chip {
-  font-size: 0.68rem;
-  font-weight: 700;
-  padding: 0.1rem 0.45rem;
-  border-radius: 4px;
-  background: rgba(148, 163, 184, 0.15);
-  border: 1px solid rgba(148, 163, 184, 0.3);
-  color: #cbd5e1;
-}
-
-.user-active-toggle-btn {
-  padding: 0.25rem 0.65rem;
-  border-radius: 9999px;
-  font-size: 0.75rem;
-  font-weight: 700;
+.status-toggle-btn {
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
   cursor: pointer;
   font-family: 'Noto Sans Devanagari', sans-serif;
   border: none;
-  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.15s ease;
 }
 
-.user-active-toggle-btn.active {
-  background: rgba(34, 197, 94, 0.2);
-  color: #4ade80;
-  border: 1px solid rgba(34, 197, 94, 0.4);
+.status-toggle-btn.active {
+  background: var(--inw-okb, #F0FDF4);
+  color: var(--inw-ok, #16A34A);
+  border: 1px solid var(--inw-okr, #BBF7D0);
 }
 
-.user-active-toggle-btn.inactive {
-  background: rgba(239, 68, 68, 0.2);
-  color: #f87171;
-  border: 1px solid rgba(239, 68, 68, 0.4);
+.status-toggle-btn.inactive {
+  background: rgba(220, 38, 38, 0.1);
+  color: #DC2626;
+  border: 1px solid rgba(220, 38, 38, 0.3);
 }
 
-.modules-checkbox-grid {
+.modules-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 0.75rem;
-  background: var(--bg, #f5f7fa);
-  padding: 1rem;
-  border-radius: 8px;
-  border: 1px solid var(--b, #dde3eb);
+  gap: 10px;
+  background: var(--inw-bg);
+  padding: 14px;
+  border-radius: var(--inw-r);
+  border: 1px solid var(--inw-b);
 }
 
-.module-checkbox-label {
+.module-checkbox-row {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-  font-size: 0.85rem;
-  color: var(--t1, #0f172a);
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--inw-t1);
   cursor: pointer;
   font-family: 'Noto Sans Devanagari', sans-serif;
+  padding: 6px 8px;
+  border-radius: 4px;
+  transition: background 0.12s ease;
 }
 
-.module-checkbox-label input[type='checkbox'] {
-  width: 18px;
-  height: 18px;
-  accent-color: #ff9933;
+.module-checkbox-row:hover {
+  background: var(--inw-pl);
+}
+
+.module-checkbox-row input[type='checkbox'] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--inw-p);
   cursor: pointer;
 }
 
 @media (max-width: 639px) {
-  .modules-checkbox-grid {
+  .modules-grid {
     grid-template-columns: 1fr;
   }
 }
-
-/* ── Dark Mode Overrides ────────────────────────────────────── */
-[data-theme="dark"] .modules-checkbox-grid {
-  background: var(--bg, #0f1419) !important;
-  border-color: var(--b, #2a364f) !important;
-}
-
-[data-theme="dark"] .module-checkbox-label {
-  color: var(--t1, #f8fafc) !important;
-}
-
-[data-theme="dark"] .settings-section-title {
-  border-bottom-color: var(--b, #2a364f) !important;
-}
-
-

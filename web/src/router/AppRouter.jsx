@@ -204,7 +204,27 @@ const AppRouter = () => {
           }
         />
         <Route
+          path="/nivedans/:id"
+          element={
+            <ProtectedRoute module="nivedan">
+              <MainLayout>
+                <NivedanDetailPage />
+              </MainLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/nivedan/*"
+          element={
+            <ProtectedRoute module="nivedan">
+              <MainLayout>
+                <NivedanListPage />
+              </MainLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/nivedans/*"
           element={
             <ProtectedRoute module="nivedan">
               <MainLayout>

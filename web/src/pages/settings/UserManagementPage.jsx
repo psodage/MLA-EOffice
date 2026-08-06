@@ -2,34 +2,36 @@
 // ============================================================
 // User Management & Office Settings Page — Module 14
 // RBAC User administration, Accessible Modules Editor, Soft Deactivation, & Directory Settings
+// 100% Matching Design System with InwardListPage, VisitorListPage & NivedanListPage
 // ============================================================
 
 import { useState, useEffect, useCallback } from 'react';
+import { Settings, UserPlus, Building2, Calendar, Tag, Shield, Key, Phone, Mail, Edit, CheckCircle2, XCircle, X, Save, Plus, Users } from 'lucide-react';
 import useLangStore from '../../store/langStore.js';
 import api from '../../services/api.js';
 import useAuthStore from '../../store/authStore.js';
 import './UserManagementPage.css';
 
 const MODULE_OPTIONS_EN = [
-  { id: 'inward', label: '📫 Inward Register' },
-  { id: 'outward', label: '📤 Outward Register' },
-  { id: 'nivedan', label: '📋 Petitions & Complaints' },
-  { id: 'visitor', label: '👥 Visitor Book' },
-  { id: 'devworks', label: '🏗️ Development Works' },
-  { id: 'karyakarta', label: '🚩 Karyakarta Directory' },
-  { id: 'calendar', label: '📅 Calendar & Schedule' },
-  { id: 'reports', label: '📊 Reports & Analytics' },
+  { id: 'inward', label: 'Inward Register' },
+  { id: 'outward', label: 'Outward Register' },
+  { id: 'nivedan', label: 'Petitions & Complaints' },
+  { id: 'visitor', label: 'Visitor Book' },
+  { id: 'devworks', label: 'Development Works' },
+  { id: 'karyakarta', label: 'Karyakarta Directory' },
+  { id: 'calendar', label: 'Calendar & Schedule' },
+  { id: 'reports', label: 'Reports & Analytics' },
 ];
 
 const MODULE_OPTIONS_MR = [
-  { id: 'inward', label: '📫 आवक नोंदवही' },
-  { id: 'outward', label: '📤 जावक नोंदवही' },
-  { id: 'nivedan', label: '📋 तक्रार निवारण' },
-  { id: 'visitor', label: '👥 नागरिक भेट' },
-  { id: 'devworks', label: '🏗️ विकासकामे' },
-  { id: 'karyakarta', label: '🚩 कार्यकर्ता नोंदवही' },
-  { id: 'calendar', label: '📅 दिनदर्शिका' },
-  { id: 'reports', label: '📊 अहवाल व विश्लेषण' },
+  { id: 'inward', label: 'आवक नोंदवही' },
+  { id: 'outward', label: 'जावक नोंदवही' },
+  { id: 'nivedan', label: 'तक्रार निवारण' },
+  { id: 'visitor', label: 'नागरिक भेट' },
+  { id: 'devworks', label: 'विकासकामे' },
+  { id: 'karyakarta', label: 'कार्यकर्ता नोंदवही' },
+  { id: 'calendar', label: 'दिनदर्शिका' },
+  { id: 'reports', label: 'अहवाल व विश्लेषण' },
 ];
 
 const t = {
@@ -37,31 +39,31 @@ const t = {
     title: 'User Management & Office Settings',
     subtitle: 'Manage system users, role-based access permissions, department directory, and greeting calendars',
     addUser: 'Add New User',
-    tabUsers: '⚙️ User Management',
-    tabDepartments: '🏢 Department Directory',
-    tabGreetings: '🎂 Greetings Calendar',
-    tabCategories: '🏷️ Petition Categories',
-    secUsers: '⚙️ System Users & Module Permissions',
+    tabUsers: 'User Management',
+    tabDepartments: 'Department Directory',
+    tabGreetings: 'Greetings Calendar',
+    tabCategories: 'Petition Categories',
+    secUsers: 'System Users & Module Permissions',
     colUser: 'User & Username',
     colRole: 'Role',
     colMobile: 'Mobile',
     colModules: 'Accessible Modules',
     colStatus: 'Status',
     colActions: 'Actions',
-    active: '🟢 Active',
-    inactive: '🔴 Inactive',
-    editModules: '✏️ Modules',
-    resetPassword: '🔑 Password',
-    secDept: '🏢 Government Departments & Head Officers',
+    active: 'Active',
+    inactive: 'Inactive',
+    editModules: 'Modules',
+    resetPassword: 'Password',
+    secDept: 'Government Departments & Head Officers',
     colDept: 'Department Name',
     colHead: 'Head Officer Name',
     colContact: 'Contact Mobile',
     colEmail: 'Email',
-    secGreet: '🎂 Festival & Birthday Greeting Presets',
+    secGreet: 'Festival & Birthday Greeting Presets',
     colOccasion: 'Occasion / Event',
     colDate: 'Scheduled Date',
     colTemplate: 'Message Template (WhatsApp)',
-    secCat: '🏷️ Petition Classification & Priority System',
+    secCat: 'Petition Classification & Priority System',
     colCatName: 'Category Name',
     colSla: 'Default SLA (Days)',
     colDeptAssigned: 'Assigned Dept',
@@ -71,31 +73,31 @@ const t = {
     title: 'वापरकर्ता व्यवस्थापन व सेटिंग्ज',
     subtitle: 'प्रणाली वापरकर्ते, रोल-बेस्ड ॲक्सेस परवानग्या, विभाग मार्गदर्शिका व व्हॉट्सॲप कॅलेंडर',
     addUser: 'नवीन वापरकर्ता जोडा',
-    tabUsers: '⚙️ वापरकर्ता व्यवस्थापन',
-    tabDepartments: '🏢 विभाग मार्गदर्शिका',
-    tabGreetings: '🎂 सण व वाढदिवस कॅलेंडर',
-    tabCategories: '🏷️ तक्रार वर्गवारी',
-    secUsers: '⚙️ प्रणाली वापरकर्ते व मॉड्युल्स ॲक्सेस',
+    tabUsers: 'वापरकर्ता व्यवस्थापन',
+    tabDepartments: 'विभाग मार्गदर्शिका',
+    tabGreetings: 'सण व वाढदिवस कॅलेंडर',
+    tabCategories: 'तक्रार वर्गवारी',
+    secUsers: 'प्रणाली वापरकर्ते व मॉड्युल्स ॲक्सेस',
     colUser: 'वापरकर्त्याचे नाव व युझरनेम',
     colRole: 'रोल',
     colMobile: 'मोबाईल',
     colModules: 'ॲक्सेस असलेले मॉड्युल्स',
     colStatus: 'स्थिती',
     colActions: 'कृती',
-    active: '🟢 सक्रिय',
-    inactive: '🔴 निष्क्रिय',
-    editModules: '✏️ मॉड्युल्स',
-    resetPassword: '🔑 पासवर्ड',
-    secDept: '🏢 शासन विभाग अधिकारी मार्गदर्शिका',
+    active: 'सक्रिय',
+    inactive: 'निष्क्रिय',
+    editModules: 'मॉड्युल्स',
+    resetPassword: 'पासवर्ड',
+    secDept: 'शासन विभाग अधिकारी मार्गदर्शिका',
     colDept: 'विभाग नाव',
     colHead: 'प्रमुख अधिकारी नाव व पद',
     colContact: 'संपर्क क्रमांक',
     colEmail: 'ईमेल',
-    secGreet: '🎂 सण व दिनविशेष शुभेच्छा संदेश कॅलेंडर',
+    secGreet: 'सण व दिनविशेष शुभेच्छा संदेश कॅलेंडर',
     colOccasion: 'प्रसंग / सण',
     colDate: 'दिनांक',
     colTemplate: 'शुभेच्छा संदेश (WhatsApp Template)',
-    secCat: '🏷️ तक्रार/निवेदन वर्गवारी रचना',
+    secCat: 'तक्रार/निवेदन वर्गवारी रचना',
     colCatName: 'वर्गवारी नाव',
     colSla: 'SLA कालावधी (दिवस)',
     colDeptAssigned: 'संबंधित विभाग',
@@ -230,269 +232,312 @@ const UserManagementPage = ({ defaultTab }) => {
     }
   };
 
+  const moduleOptions = lang === 'MR' ? MODULE_OPTIONS_MR : MODULE_OPTIONS_EN;
+
   return (
     <div className="inward-page-container">
-      {/* ── Page Header ─────────────────────────────────────── */}
-      <div className="inward-page-header">
-        <div className="title-group">
-          <h1 className="page-title-mr">⚙️ {text.title}</h1>
-          <p className="page-subtitle">{text.subtitle}</p>
+      {/* ── Page Header (Matching Inward/Visitor Page Design) ── */}
+      <div className="ph">
+        <div>
+          <h1 className={`title ${lang === 'MR' ? 'mr' : ''}`}>{text.title}</h1>
+          <p className={`sub ${lang === 'MR' ? 'mr' : ''}`}>{text.subtitle}</p>
         </div>
 
         {isAdmin && activeTab === 'USERS' && (
-          <button className="create-inward-btn" onClick={() => setShowAddUserModal(true)}>
-            <span>➕</span>
-            <span>{text.addUser}</span>
-          </button>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <button
+              type="button"
+              className="btn btn-p"
+              onClick={() => setShowAddUserModal(true)}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+            >
+              <UserPlus size={15} />
+              <span>{text.addUser}</span>
+            </button>
+          </div>
         )}
       </div>
 
-      {/* ── Tab Switcher ────────────────────────────────────── */}
-      <div className="status-tabs-container" style={{ marginBottom: '1.25rem' }}>
+      {/* ── Tab Switcher (Matching Inward/Outward Tab Design) ── */}
+      <div className="tabs">
         {isAdmin && (
-          <button
-            className={`status-tab-btn ${activeTab === 'USERS' ? 'active' : ''}`}
+          <div
+            className={`tab ${activeTab === 'USERS' ? 'active' : ''}`}
             onClick={() => setActiveTab('USERS')}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', cursor: 'pointer' }}
           >
-            {text.tabUsers}
-          </button>
+            <Settings size={14} />
+            <span>{text.tabUsers}</span>
+          </div>
         )}
-        <button
-          className={`status-tab-btn ${activeTab === 'DEPARTMENTS' ? 'active' : ''}`}
+        <div
+          className={`tab ${activeTab === 'DEPARTMENTS' ? 'active' : ''}`}
           onClick={() => setActiveTab('DEPARTMENTS')}
+          style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', cursor: 'pointer' }}
         >
-          {text.tabDepartments}
-        </button>
-        <button
-          className={`status-tab-btn ${activeTab === 'GREETINGS' ? 'active' : ''}`}
+          <Building2 size={14} />
+          <span>{text.tabDepartments}</span>
+        </div>
+        <div
+          className={`tab ${activeTab === 'GREETINGS' ? 'active' : ''}`}
           onClick={() => setActiveTab('GREETINGS')}
+          style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', cursor: 'pointer' }}
         >
-          {text.tabGreetings}
-        </button>
-        <button
-          className={`status-tab-btn ${activeTab === 'CATEGORIES' ? 'active' : ''}`}
+          <Calendar size={14} />
+          <span>{text.tabGreetings}</span>
+        </div>
+        <div
+          className={`tab ${activeTab === 'CATEGORIES' ? 'active' : ''}`}
           onClick={() => setActiveTab('CATEGORIES')}
+          style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', cursor: 'pointer' }}
         >
-          {text.tabCategories}
-        </button>
+          <Tag size={14} />
+          <span>{text.tabCategories}</span>
+        </div>
       </div>
 
-      {/* ── Main Work Area ──────────────────────────────────── */}
-      <div className="inward-table-card" style={{ padding: '1.5rem' }}>
+      {/* ── Main Work Area Table Card ────────────────────────── */}
+      <div className="table-wrap">
         {loading ? (
-          <div className="table-loading-box">
-            <div className="mini-spinner"></div>
+          <div style={{ padding: '60px 0', textAlign: 'center', color: 'var(--inw-t3)' }}>
             <p>{text.loading}</p>
           </div>
         ) : (
           <>
-            {/* 1. User Management (Admin Only) */}
+            {/* 1. User Management Table */}
             {activeTab === 'USERS' && isAdmin && (
-              <div>
-                <h3 className="settings-section-title">{text.secUsers}</h3>
-
-                <div className="table-responsive">
-                  <table className="inward-table">
-                    <thead>
-                      <tr>
-                        <th>{text.colUser}</th>
-                        <th>{text.colRole}</th>
-                        <th>{text.colMobile}</th>
-                        <th>{text.colModules}</th>
-                        <th>{text.colStatus}</th>
-                        <th style={{ textAlign: 'right' }}>{text.colActions}</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {users.map((u) => (
-                        <tr key={u.id}>
-                          <td className="col-sender">
-                            <div className="sender-name-primary">{u.full_name}</div>
-                            <div className="mobile-sub">👤 @{u.username}</div>
-                          </td>
-                          <td>
-                            <span className="user-role-badge">{u.role}</span>
-                          </td>
-                          <td>📱 {u.mobile}</td>
-                          <td>
-                            <div style={{ display: 'flex', gap: '0.25rem', flexWrap: 'wrap' }}>
-                              {(u.accessible_modules || []).map((m) => (
-                                <span key={m} className="module-tag-chip">{m}</span>
-                              ))}
-                            </div>
-                          </td>
-                          <td>
-                            <button
-                              className={`user-active-toggle-btn ${u.is_active ? 'active' : 'inactive'}`}
-                              onClick={() => handleToggleActive(u.id)}
-                            >
-                              {u.is_active ? text.active : text.inactive}
-                            </button>
-                          </td>
-                          <td style={{ textAlign: 'right' }}>
-                            <div style={{ display: 'flex', gap: '0.4rem', justifyContent: 'flex-end' }}>
-                              <button
-                                className="btn-secondary"
-                                style={{ fontSize: '0.75rem', padding: '0.3rem 0.6rem' }}
-                                onClick={() => openModuleEditor(u)}
-                              >
-                                {text.editModules}
-                              </button>
-                              <button
-                                className="btn-secondary"
-                                style={{ fontSize: '0.75rem', padding: '0.3rem 0.6rem', color: '#f87171' }}
-                                onClick={() => handleResetPassword(u.id)}
-                              >
-                                {text.resetPassword}
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+              <table>
+                <thead>
+                  <tr>
+                    <th>{text.colUser}</th>
+                    <th>{text.colRole}</th>
+                    <th>{text.colMobile}</th>
+                    <th>{text.colModules}</th>
+                    <th>{text.colStatus}</th>
+                    <th style={{ textAlign: 'right' }}>{text.colActions}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {users.map((u) => (
+                    <tr key={u.id}>
+                      <td>
+                        <div style={{ fontWeight: 600, color: 'var(--inw-t1)' }}>{u.full_name}</div>
+                        <div style={{ fontSize: '11px', color: 'var(--inw-t3)', fontFamily: 'monospace' }}>@{u.username}</div>
+                      </td>
+                      <td>
+                        <span className="user-role-badge" data-role={u.role}>
+                          <Shield size={11} /> {u.role}
+                        </span>
+                      </td>
+                      <td style={{ fontFamily: 'monospace' }}>
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                          <Phone size={12} /> {u.mobile}
+                        </span>
+                      </td>
+                      <td>
+                        <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
+                          {(u.accessible_modules || []).map((m) => (
+                            <span key={m} className="module-chip">{m}</span>
+                          ))}
+                        </div>
+                      </td>
+                      <td>
+                        <button
+                          type="button"
+                          className={`status-toggle-btn ${u.is_active ? 'active' : 'inactive'}`}
+                          onClick={() => handleToggleActive(u.id)}
+                        >
+                          {u.is_active ? <CheckCircle2 size={12} /> : <XCircle size={12} />}
+                          <span>{u.is_active ? text.active : text.inactive}</span>
+                        </button>
+                      </td>
+                      <td style={{ textAlign: 'right' }}>
+                        <div style={{ display: 'flex', gap: '6px', justifyContent: 'flex-end' }}>
+                          <button
+                            type="button"
+                            className="btn btn-o"
+                            style={{ fontSize: '11px', height: '28px', padding: '0 8px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}
+                            onClick={() => openModuleEditor(u)}
+                          >
+                            <Edit size={12} /> {text.editModules}
+                          </button>
+                          <button
+                            type="button"
+                            className="btn btn-o"
+                            style={{ fontSize: '11px', height: '28px', padding: '0 8px', color: 'var(--inw-er)', borderColor: 'rgba(220,38,38,0.3)', display: 'inline-flex', alignItems: 'center', gap: '4px' }}
+                            onClick={() => handleResetPassword(u.id)}
+                          >
+                            <Key size={12} /> {text.resetPassword}
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             )}
 
-            {/* 2. Department Directory */}
+            {/* 2. Department Directory Table */}
             {activeTab === 'DEPARTMENTS' && (
-              <div>
-                <h3 className="settings-section-title">{text.secDept}</h3>
-                <div className="table-responsive">
-                  <table className="inward-table">
-                    <thead>
-                      <tr>
-                        <th>{text.colDept}</th>
-                        <th>{text.colHead}</th>
-                        <th>{text.colContact}</th>
-                        <th>{text.colEmail}</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {departments.map((d) => (
-                        <tr key={d.id}>
-                          <td className="sender-name-primary">🏢 {lang === 'MR' ? d.name_mr : d.name_en || d.name_mr}</td>
-                          <td>{d.head_officer_name || '—'}</td>
-                          <td>📱 {d.contact_number || '—'}</td>
-                          <td>✉️ {d.email || '—'}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+              <table>
+                <thead>
+                  <tr>
+                    <th>{text.colDept}</th>
+                    <th>{text.colHead}</th>
+                    <th>{text.colContact}</th>
+                    <th>{text.colEmail}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {departments.map((d) => (
+                    <tr key={d.id}>
+                      <td style={{ fontWeight: 600, color: 'var(--inw-t1)' }}>
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                          <Building2 size={14} color="var(--inw-p)" />
+                          {lang === 'MR' ? d.name_mr : d.name_en || d.name_mr}
+                        </span>
+                      </td>
+                      <td>{d.head_officer_name || '—'}</td>
+                      <td style={{ fontFamily: 'monospace' }}>
+                        {d.contact_number ? (
+                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                            <Phone size={12} /> {d.contact_number}
+                          </span>
+                        ) : '—'}
+                      </td>
+                      <td>
+                        {d.email ? (
+                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                            <Mail size={12} /> {d.email}
+                          </span>
+                        ) : '—'}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             )}
 
-            {/* 3. WhatsApp Greeting Calendar */}
+            {/* 3. WhatsApp Greeting Calendar Table */}
             {activeTab === 'GREETINGS' && (
-              <div>
-                <h3 className="settings-section-title">{text.secGreet}</h3>
-                <div className="table-responsive">
-                  <table className="inward-table">
-                    <thead>
-                      <tr>
-                        <th>{text.colOccasion}</th>
-                        <th>{text.colDate}</th>
-                        <th>{text.colTemplate}</th>
-                        <th>{text.colStatus}</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {greetings.map((g) => (
-                        <tr key={g.id}>
-                          <td className="sender-name-primary">🎉 {g.event_name}</td>
-                          <td>📅 {g.event_date}</td>
-                          <td style={{ fontFamily: 'monospace', color: '#38bdf8' }}>{g.template_name}</td>
-                          <td><span className="user-active-toggle-btn active">{text.active}</span></td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+              <table>
+                <thead>
+                  <tr>
+                    <th>{text.colOccasion}</th>
+                    <th>{text.colDate}</th>
+                    <th>{text.colTemplate}</th>
+                    <th>{text.colStatus}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {greetings.map((g) => (
+                    <tr key={g.id}>
+                      <td style={{ fontWeight: 600, color: 'var(--inw-t1)' }}>
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                          <Calendar size={14} color="var(--inw-in)" /> {g.event_name}
+                        </span>
+                      </td>
+                      <td style={{ fontFamily: 'monospace' }}>📅 {g.event_date}</td>
+                      <td style={{ fontFamily: 'monospace', color: 'var(--inw-in)', fontWeight: 600 }}>{g.template_name}</td>
+                      <td>
+                        <span className="badge b-comp" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                          <CheckCircle2 size={12} /> {text.active}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             )}
 
-            {/* 4. Nivedan Categories */}
+            {/* 4. Nivedan Categories Table */}
             {activeTab === 'CATEGORIES' && (
-              <div>
-                <h3 className="settings-section-title">{text.secCat}</h3>
-                <div className="table-responsive">
-                  <table className="inward-table">
-                    <thead>
-                      <tr>
-                        <th>{text.colCatName} (Marathi)</th>
-                        <th>{text.colCatName} (English)</th>
-                        <th>{text.colDeptAssigned}</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {categories.map((c) => (
-                        <tr key={c.id}>
-                          <td className="sender-name-primary">🏷️ {c.name_mr}</td>
-                          <td>{c.name_en}</td>
-                          <td>{lang === 'MR' ? `विभाग #${c.default_department_id || 1}` : `Department #${c.default_department_id || 1}`}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+              <table>
+                <thead>
+                  <tr>
+                    <th>{text.colCatName} (Marathi)</th>
+                    <th>{text.colCatName} (English)</th>
+                    <th>{text.colDeptAssigned}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {categories.map((c) => (
+                    <tr key={c.id}>
+                      <td style={{ fontWeight: 600, color: 'var(--inw-t1)' }}>
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                          <Tag size={14} color="var(--inw-wr)" /> {c.name_mr}
+                        </span>
+                      </td>
+                      <td>{c.name_en}</td>
+                      <td>{lang === 'MR' ? `विभाग #${c.default_department_id || 1}` : `Department #${c.default_department_id || 1}`}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             )}
           </>
         )}
       </div>
 
-      {/* ── Add User Modal ───────────────────────────────────── */}
+      {/* ── Add User Modal (Matching Inward/Visitor Form Modal Style) ── */}
       {showAddUserModal && (
         <div className="inward-modal-overlay" onClick={() => setShowAddUserModal(false)}>
-          <div className="inward-modal-container" onClick={(e) => e.stopPropagation()}>
+          <div className="inward-modal-container" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '520px' }}>
             <div className="inward-modal-header">
-              <h3>➕ नवीन वापरकर्ता जोडा (Create System User)</h3>
-              <button className="modal-close-btn" onClick={() => setShowAddUserModal(false)}>✕</button>
+              <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <UserPlus size={18} color="var(--inw-p)" />
+                {lang === 'MR' ? 'नवीन वापरकर्ता जोडा' : 'Create System User'}
+              </h3>
+              <button className="modal-close-btn" onClick={() => setShowAddUserModal(false)}>
+                <X size={18} />
+              </button>
             </div>
 
             <form onSubmit={handleCreateUser} className="inward-form">
               <div className="form-grid">
                 <div className="form-group">
-                  <label>युझरनेम (Username) <span className="req">*</span></label>
+                  <label>{lang === 'MR' ? 'युझरनेम (Username)' : 'Username'} <span className="req">*</span></label>
                   <input
                     type="text"
+                    className="fi"
                     value={newUserForm.username}
                     onChange={(e) => setNewUserForm({ ...newUserForm, username: e.target.value })}
-                    placeholder="उदा. receptionist2"
+                    placeholder="receptionist2"
                     required
                   />
                 </div>
 
                 <div className="form-group">
-                  <label>वापरकर्त्याचे पूर्ण नाव (Full Name) <span className="req">*</span></label>
+                  <label>{lang === 'MR' ? 'पूर्ण नाव (Full Name)' : 'Full Name'} <span className="req">*</span></label>
                   <input
                     type="text"
+                    className="fi"
                     value={newUserForm.full_name}
                     onChange={(e) => setNewUserForm({ ...newUserForm, full_name: e.target.value })}
-                    placeholder="उदा. राहुल शिंदे"
+                    placeholder="Rahul Shinde"
                     required
                   />
                 </div>
 
                 <div className="form-group">
-                  <label>रोल (Role) <span className="req">*</span></label>
+                  <label>{lang === 'MR' ? 'रोल (Role)' : 'Role'} <span className="req">*</span></label>
                   <select
+                    className="fi"
                     value={newUserForm.role}
                     onChange={(e) => setNewUserForm({ ...newUserForm, role: e.target.value })}
                   >
-                    <option value="PA">PA (पर्सनल असिस्टंट)</option>
-                    <option value="RECEPTIONIST">RECEPTIONIST (रिसेप्सनिस्ट)</option>
-                    <option value="AUDITOR">AUDITOR (ऑडिटर)</option>
-                    <option value="ADMIN">ADMIN (प्रणाली व्यवस्थापक)</option>
+                    <option value="PA">PA (Personal Assistant)</option>
+                    <option value="RECEPTIONIST">RECEPTIONIST</option>
+                    <option value="AUDITOR">AUDITOR</option>
+                    <option value="ADMIN">ADMIN</option>
                   </select>
                 </div>
 
                 <div className="form-group">
-                  <label>मोबाईल क्रमांक (Mobile)</label>
+                  <label>{lang === 'MR' ? 'मोबाईल (Mobile)' : 'Mobile'}</label>
                   <input
                     type="tel"
+                    className="fi"
                     value={newUserForm.mobile}
                     onChange={(e) => setNewUserForm({ ...newUserForm, mobile: e.target.value })}
                     placeholder="98220XXXXX"
@@ -500,9 +545,10 @@ const UserManagementPage = ({ defaultTab }) => {
                 </div>
 
                 <div className="form-group col-span-2">
-                  <label>सुरवातीचा पासवर्ड (Initial Password)</label>
+                  <label>{lang === 'MR' ? 'तात्पुरता पासवर्ड (Initial Password)' : 'Initial Password'}</label>
                   <input
                     type="password"
+                    className="fi"
                     value={newUserForm.password}
                     onChange={(e) => setNewUserForm({ ...newUserForm, password: e.target.value })}
                     placeholder="Pa@12345"
@@ -510,12 +556,12 @@ const UserManagementPage = ({ defaultTab }) => {
                 </div>
               </div>
 
-              <div className="modal-actions">
-                <button type="button" className="btn-secondary" onClick={() => setShowAddUserModal(false)}>
-                  रद्द करा
+              <div className="modal-actions" style={{ marginTop: '16px', display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
+                <button type="button" className="btn btn-o" onClick={() => setShowAddUserModal(false)}>
+                  {lang === 'MR' ? 'रद्द करा' : 'Cancel'}
                 </button>
-                <button type="submit" className="btn-primary">
-                  वापरकर्ता जोडा (Save User)
+                <button type="submit" className="btn btn-p" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                  <UserPlus size={15} /> {lang === 'MR' ? 'वापरकर्ता जोडा' : 'Save User'}
                 </button>
               </div>
             </form>
@@ -523,25 +569,30 @@ const UserManagementPage = ({ defaultTab }) => {
         </div>
       )}
 
-      {/* ── Accessible Modules Checkbox Modal ───────────────── */}
+      {/* ── Accessible Modules Checkbox Modal ── */}
       {showModulesModal && selectedUserForModules && (
         <div className="inward-modal-overlay" onClick={() => setShowModulesModal(false)}>
-          <div className="inward-modal-container" onClick={(e) => e.stopPropagation()}>
+          <div className="inward-modal-container" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '480px' }}>
             <div className="inward-modal-header">
-              <h3>✏️ मॉड्युल्स परवानग्या संपादक (Module Permissions)</h3>
-              <button className="modal-close-btn" onClick={() => setShowModulesModal(false)}>✕</button>
+              <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <Edit size={18} color="var(--inw-p)" />
+                {lang === 'MR' ? 'मॉड्युल्स परवानग्या संपादक' : 'Module Access Permissions'}
+              </h3>
+              <button className="modal-close-btn" onClick={() => setShowModulesModal(false)}>
+                <X size={18} />
+              </button>
             </div>
 
-            <div style={{ padding: '1.25rem' }}>
-              <p style={{ color: '#ff9933', fontWeight: 700, marginBottom: '1rem' }}>
-                वापरकर्ता: {selectedUserForModules.full_name} ({selectedUserForModules.role})
+            <div style={{ padding: '16px' }}>
+              <p style={{ color: 'var(--inw-p)', fontWeight: 600, marginBottom: '12px', fontSize: '13px' }}>
+                {selectedUserForModules.full_name} ({selectedUserForModules.role})
               </p>
 
-              <div className="modules-checkbox-grid">
-                {MODULE_OPTIONS.map((m) => {
+              <div className="modules-grid">
+                {moduleOptions.map((m) => {
                   const isChecked = selectedModules.includes(m.id);
                   return (
-                    <label key={m.id} className="module-checkbox-label">
+                    <label key={m.id} className="module-checkbox-row">
                       <input
                         type="checkbox"
                         checked={isChecked}
@@ -553,18 +604,18 @@ const UserManagementPage = ({ defaultTab }) => {
                           }
                         }}
                       />
-                      <span>{m.labelMr}</span>
+                      <span>{m.label}</span>
                     </label>
                   );
                 })}
               </div>
 
-              <div className="modal-actions" style={{ marginTop: '1.5rem' }}>
-                <button className="btn-secondary" onClick={() => setShowModulesModal(false)}>
-                  रद्द करा
+              <div className="modal-actions" style={{ marginTop: '16px', display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
+                <button type="button" className="btn btn-o" onClick={() => setShowModulesModal(false)}>
+                  {lang === 'MR' ? 'रद्द करा' : 'Cancel'}
                 </button>
-                <button className="btn-primary" onClick={handleSaveModules}>
-                  💾 परवानग्या जतन करा (Save Permissions)
+                <button type="button" className="btn btn-p" onClick={handleSaveModules} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                  <Save size={15} /> {lang === 'MR' ? 'परवानग्या जतन करा' : 'Save Permissions'}
                 </button>
               </div>
             </div>
