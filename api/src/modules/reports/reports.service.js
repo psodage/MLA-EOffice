@@ -61,11 +61,11 @@ export const getNivedanReport = async (query = {}) => {
       REJECTED: 3,
     },
     byCategory: [
-      { category: 'पाणीपुरवठा (Water Supply)', count: 38 },
-      { category: 'रस्ते व पूल (Roads & Bridges)', count: 32 },
-      { category: 'वीज / महावितरण (Electricity)', count: 24 },
-      { category: 'आरोग्य (Health)', count: 18 },
-      { category: 'शिक्षण (Education)', count: 16 },
+      { category: 'पाणीपुरवठा', categoryMr: 'पाणीपुरवठा', categoryEn: 'Water Supply Improvement', count: 38 },
+      { category: 'रस्ते व पूल', categoryMr: 'रस्ते व पूल निर्माण', categoryEn: 'Roads & Bridges Construction', count: 32 },
+      { category: 'वीज / महावितरण', categoryMr: 'विद्युतीकरण व स्ट्रीट लाईट', categoryEn: 'Electrification & Streetlights', count: 24 },
+      { category: 'आरोग्य', categoryMr: 'शाळा / आरोग्य केंद्र', categoryEn: 'Schools & Health Centers', count: 18 },
+      { category: 'शिक्षण', categoryMr: 'वैयक्तिक योजना व इतर', categoryEn: 'Individual Schemes & Others', count: 16 },
     ],
   };
 };
@@ -99,10 +99,10 @@ export const getDevWorksReport = async () => {
   return {
     totalProjects: 24,
     byFunding: {
-      MLALAD: { sourceName: 'आमदार निधी (MLALAD)', allocated: 25000000.0, spent: 18500000.0, count: 10 },
-      ZP_FUND: { sourceName: 'जिल्हा परिषद निधी (ZP Fund)', allocated: 15000000.0, spent: 11000000.0, count: 6 },
-      STATE_GRANT: { sourceName: 'राज्य शासन अनुदान (State Grant)', allocated: 40000000.0, spent: 22000000.0, count: 5 },
-      CENTRAL_GRANT: { sourceName: 'केंद्र शासन अनुदान (Central Grant)', allocated: 20000000.0, spent: 8000000.0, count: 3 },
+      MLALAD: { sourceName: 'आमदार निधी', sourceNameMr: 'आमदार निधी', sourceNameEn: 'MLALAD Fund', allocated: 25000000.0, spent: 18500000.0, count: 10 },
+      ZP_FUND: { sourceName: 'जिल्हा परिषद निधी', sourceNameMr: 'जिल्हा परिषद निधी', sourceNameEn: 'ZP Fund', allocated: 15000000.0, spent: 11000000.0, count: 6 },
+      STATE_GRANT: { sourceName: 'राज्य शासन अनुदान', sourceNameMr: 'राज्य शासन अनुदान', sourceNameEn: 'State Grant', allocated: 40000000.0, spent: 22000000.0, count: 5 },
+      CENTRAL_GRANT: { sourceName: 'केंद्र शासन अनुदान', sourceNameMr: 'केंद्र शासन अनुदान', sourceNameEn: 'Central Grant', allocated: 20000000.0, spent: 8000000.0, count: 3 },
     },
   };
 };

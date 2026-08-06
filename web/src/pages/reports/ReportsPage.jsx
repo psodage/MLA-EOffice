@@ -8,7 +8,7 @@ const REPORT_SUITES = [
   {
     id: 'NIVEDANS',
     titleEn: 'Nivedan Summary Report',
-    titleMr: 'निवेदन सारांश',
+    titleMr: 'निवेदन सारांश अहवाल',
     bg: 'var(--inb, #eff6ff)',
     color: 'var(--in, #2563eb)',
     descEn: 'Total, pending, resolved, rejected nivedans with category-wise breakdown. Filter by date range, ward, status.',
@@ -18,7 +18,7 @@ const REPORT_SUITES = [
   {
     id: 'INWARD',
     titleEn: 'Inward/Outward Register',
-    titleMr: 'आवक/जावक रजिस्टर',
+    titleMr: 'आवक/जावक नोंदवही',
     bg: 'var(--okb, #f0fdf4)',
     color: 'var(--ok, #16a34a)',
     descEn: 'Complete correspondence log with sender, department, dates, and status. Traditional register format for office records.',
@@ -38,7 +38,7 @@ const REPORT_SUITES = [
   {
     id: 'DEVWORKS',
     titleEn: 'Development Works Progress',
-    titleMr: 'विकासकामे प्रगती',
+    titleMr: 'विकासकामे प्रगती अहवाल',
     bg: 'var(--wrb, #fffbeb)',
     color: 'var(--wr, #d97706)',
     descEn: 'Project-wise status, budget vs spent, progress percentage, delayed projects, and contractor performance.',
@@ -48,7 +48,7 @@ const REPORT_SUITES = [
   {
     id: 'BOOTH',
     titleEn: 'Booth-wise Worker Report',
-    titleMr: 'बूथनिहाय कार्यकर्ता',
+    titleMr: 'बूथनिहाय कार्यकर्ता अहवाल',
     bg: 'var(--orb, #fff7ed)',
     color: 'var(--or, #ea580c)',
     descEn: 'Taluka → Village → Booth hierarchy with pramukh names, worker counts, voter coverage, and vacancy status.',
@@ -58,7 +58,7 @@ const REPORT_SUITES = [
   {
     id: 'WHATSAPP',
     titleEn: 'WhatsApp Message Log',
-    titleMr: 'व्हॉट्सअॅप लॉग',
+    titleMr: 'व्हॉट्सअॅप संदेश लॉग',
     bg: 'var(--erb, #fef2f2)',
     color: 'var(--er, #dc2626)',
     descEn: 'All sent messages, delivery status, template usage, and communication history per citizen/nivedan.',
@@ -99,11 +99,11 @@ const ReportsPage = () => {
       inProgress: 64,
       pending: 30,
       byCategory: [
-        { category: 'रस्ते व पूल निर्माण', count: 112 },
-        { category: 'पाणीपुरवठा सुधारणा', count: 86 },
-        { category: 'विद्युतीकरण व स्ट्रीट लाईट', count: 64 },
-        { category: 'शाळा / आरोग्य केंद्र', count: 48 },
-        { category: 'वैयक्तिक योजना व इतर', count: 32 },
+        { categoryEn: 'Roads & Bridges Construction', categoryMr: 'रस्ते व पूल निर्माण', count: 112 },
+        { categoryEn: 'Water Supply Improvement', categoryMr: 'पाणीपुरवठा सुधारणा', count: 86 },
+        { categoryEn: 'Electrification & Streetlights', categoryMr: 'विद्युतीकरण व स्ट्रीट लाईट', count: 64 },
+        { categoryEn: 'Schools / Health Centers', categoryMr: 'शाळा / आरोग्य केंद्र', count: 48 },
+        { categoryEn: 'Individual Schemes & Others', categoryMr: 'वैयक्तिक योजना व इतर', count: 32 },
       ],
     },
     devworks: {
@@ -111,18 +111,18 @@ const ReportsPage = () => {
       allocated: 38400000,
       spent: 27610000,
       byFunding: [
-        { sourceName: 'MLALAD (आमदार निधी)', allocated: 15000000, spent: 11200000 },
-        { sourceName: 'ZP Fund (जिल्हा परिषद)', allocated: 12000000, spent: 9400000 },
-        { sourceName: 'State Grant (राज्य शासन)', allocated: 11400000, spent: 7010000 },
+        { sourceNameEn: 'MLALAD Fund', sourceNameMr: 'आमदार निधी', allocated: 15000000, spent: 11200000 },
+        { sourceNameEn: 'ZP Fund', sourceNameMr: 'जिल्हा परिषद निधी', allocated: 12000000, spent: 9400000 },
+        { sourceNameEn: 'State Grant', sourceNameMr: 'राज्य शासन अनुदान', allocated: 11400000, spent: 7010000 },
       ],
     },
     visitors: {
       totalVisitors: 890,
       byPurpose: [
-        { purpose: 'तक्रार व निवेदन सादर करणे', count: 420 },
-        { purpose: 'सत्कार व सदिच्छा भेट', count: 260 },
-        { purpose: 'विकासकामे पाठपुरावा', count: 140 },
-        { purpose: 'इतर कार्यालयीन काम', count: 70 },
+        { purposeEn: 'Submitting Complaint / Nivedan', purposeMr: 'तक्रार व निवेदन सादर करणे', count: 420 },
+        { purposeEn: 'Felicitation & Courtesy Visit', purposeMr: 'सत्कार व सदिच्छा भेट', count: 260 },
+        { purposeEn: 'Development Works Follow-up', purposeMr: 'विकासकामे पाठपुरावा', count: 140 },
+        { purposeEn: 'Other Office Work', purposeMr: 'इतर कार्यालयीन काम', count: 70 },
       ],
     },
     inward: {
@@ -138,6 +138,25 @@ const ReportsPage = () => {
       coveragePercentage: 73,
     },
   });
+
+  const formatText = (item, keyMr, keyEn, fallbackKey) => {
+    if (!item) return '';
+    if (isMr) {
+      if (item[keyMr]) return item[keyMr];
+      if (item[fallbackKey]) {
+        const match = item[fallbackKey].match(/^(.*?)\s*\(.*?\)$/);
+        return match ? match[1].trim() : item[fallbackKey];
+      }
+      return '';
+    } else {
+      if (item[keyEn]) return item[keyEn];
+      if (item[fallbackKey]) {
+        const match = item[fallbackKey].match(/\((.*?)\)/);
+        return match ? match[1].trim() : item[fallbackKey];
+      }
+      return '';
+    }
+  };
 
   const fetchAnalytics = useCallback(async () => {
     setLoading(true);
@@ -221,7 +240,7 @@ const ReportsPage = () => {
               </div>
               <div className="rc-info">
                 <div className="rc-title">
-                  {suite.titleEn} · <span className="mr" style={{ fontFamily: "'Noto Sans Devanagari', sans-serif" }}>{suite.titleMr}</span>
+                  {isMr ? suite.titleMr : suite.titleEn}
                 </div>
                 <div className="rc-desc">{isMr ? suite.descMr : suite.descEn}</div>
               </div>
@@ -243,7 +262,7 @@ const ReportsPage = () => {
 
       {/* ── ⚡ Quick Generate Form Section ────────────────────── */}
       <div className="section-title" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-        <Zap size={16} style={{ color: 'var(--amber)' }} /> {isMr ? 'जलद अहवाल निर्मिती' : 'Quick Generate'} · <span className="mr" style={{ fontFamily: isMr ? "'Noto Sans Devanagari', sans-serif" : 'inherit' }}>{isMr ? 'जलद अहवाल' : 'Quick Reports'}</span>
+        <Zap size={16} style={{ color: 'var(--amber)' }} /> {isMr ? 'जलद अहवाल निर्मिती' : 'Quick Generate Reports'}
       </div>
 
       <div className="quick-form">
@@ -255,12 +274,12 @@ const ReportsPage = () => {
             value={quickForm.reportType}
             onChange={handleQuickFormChange}
           >
-            <option value="Nivedan Summary">Nivedan Summary (निवेदन सारांश)</option>
-            <option value="Inward/Outward Register">Inward/Outward Register (आवक/जावक)</option>
-            <option value="Visitor Daily">Visitor Daily (अभ्यागत दैनिक)</option>
-            <option value="Dev Works Progress">Dev Works Progress (विकासकामे प्रगती)</option>
-            <option value="Booth Worker Report">Booth Worker Report (बूथनिहाय)</option>
-            <option value="WhatsApp Log">WhatsApp Message Log (व्हॉट्सअॅप लॉग)</option>
+            <option value="Nivedan Summary">{isMr ? 'निवेदन सारांश अहवाल' : 'Nivedan Summary Report'}</option>
+            <option value="Inward/Outward Register">{isMr ? 'आवक/जावक नोंदवही' : 'Inward/Outward Register'}</option>
+            <option value="Visitor Daily">{isMr ? 'अभ्यागत दैनिक अहवाल' : 'Visitor Daily Report'}</option>
+            <option value="Dev Works Progress">{isMr ? 'विकासकामे प्रगती अहवाल' : 'Development Works Progress'}</option>
+            <option value="Booth Worker Report">{isMr ? 'बूथनिहाय कार्यकर्ता अहवाल' : 'Booth-wise Worker Report'}</option>
+            <option value="WhatsApp Log">{isMr ? 'व्हॉट्सअॅप संदेश लॉग' : 'WhatsApp Message Log'}</option>
           </select>
         </div>
 
@@ -301,7 +320,7 @@ const ReportsPage = () => {
         </div>
 
         <button className="btn-p" onClick={handleGenerateReport} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-          <BarChart2 size={15} /> {isMr ? 'अहवाल डाउनलोड करा' : 'Generate Report'}
+          <BarChart2 size={15} /> {isMr ? 'अहवाल तयार करा' : 'Generate Report'}
         </button>
         <button className="btn-o" onClick={handlePrintPreview} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
           <Printer size={15} /> {isMr ? 'प्रिंट प्रीव्ह्यू' : 'Print Preview'}
@@ -319,7 +338,7 @@ const ReportsPage = () => {
             {activeSuiteId === 'NIVEDANS' && (
               <div>
                 <h3 className="report-section-title" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <FileText size={18} /> {isMr ? 'निवेदने सद्यस्थिती व वर्गवारी अहवाल प्रीव्ह्यू' : 'Nivedan Summary Analytics Preview'}
+                  <FileText size={18} /> {isMr ? 'निवेदन सारांश अहवाल प्रीव्ह्यू' : 'Nivedan Summary Analytics Preview'}
                 </h3>
                 <div className="reports-stat-grid">
                   <div className="report-metric-card">
@@ -328,24 +347,24 @@ const ReportsPage = () => {
                   </div>
                   <div className="report-metric-card">
                     <span className="metric-val" style={{ color: 'var(--ok, #16a34a)' }}>{suiteData.nivedans.resolved}</span>
-                    <span className="metric-lbl">{isMr ? 'मार्गी लावलेली (Resolved)' : 'Resolved'}</span>
+                    <span className="metric-lbl">{isMr ? 'मार्गी लावलेली' : 'Resolved'}</span>
                   </div>
                   <div className="report-metric-card">
                     <span className="metric-val" style={{ color: 'var(--in, #2563eb)' }}>{suiteData.nivedans.inProgress}</span>
-                    <span className="metric-lbl">{isMr ? 'कार्यवाही सुरू (In Progress)' : 'In Progress'}</span>
+                    <span className="metric-lbl">{isMr ? 'कार्यवाही सुरू' : 'In Progress'}</span>
                   </div>
                   <div className="report-metric-card">
                     <span className="metric-val" style={{ color: 'var(--wr, #d97706)' }}>{suiteData.nivedans.pending}</span>
-                    <span className="metric-lbl">{isMr ? 'प्रलंबित (Pending)' : 'Pending'}</span>
+                    <span className="metric-lbl">{isMr ? 'प्रलंबित' : 'Pending'}</span>
                   </div>
                 </div>
 
                 <h4 style={{ color: 'var(--t1)', marginBottom: '10px', fontSize: '13px', fontWeight: 600 }}>
-                  {isMr ? 'वर्गवारीनुसार वितरण (Category Breakdown):' : 'Category Breakdown:'}
+                  {isMr ? 'वर्गवारीनुसार वितरण:' : 'Category Breakdown:'}
                 </h4>
                 {suiteData.nivedans.byCategory.map((cat, idx) => (
                   <div key={idx} className="chart-row-item">
-                    <span className="chart-label-col">{cat.category}</span>
+                    <span className="chart-label-col">{formatText(cat, 'categoryMr', 'categoryEn', 'category')}</span>
                     <div className="chart-bar-bg">
                       <div
                         className="chart-bar-fill"
@@ -370,26 +389,26 @@ const ReportsPage = () => {
                   </div>
                   <div className="report-metric-card">
                     <span className="metric-val" style={{ color: 'var(--ok, #16a34a)' }}>
-                      ₹ {(suiteData.devworks.allocated / 10000000).toFixed(2)} Cr
+                      ₹ {(suiteData.devworks.allocated / 10000000).toFixed(2)} {isMr ? 'कोटी' : 'Cr'}
                     </span>
                     <span className="metric-lbl">{isMr ? 'मंजूर अर्थसंकल्प' : 'Allocated Budget'}</span>
                   </div>
                   <div className="report-metric-card">
                     <span className="metric-val" style={{ color: 'var(--wr, #d97706)' }}>
-                      ₹ {(suiteData.devworks.spent / 10000000).toFixed(2)} Cr
+                      ₹ {(suiteData.devworks.spent / 10000000).toFixed(2)} {isMr ? 'कोटी' : 'Cr'}
                     </span>
                     <span className="metric-lbl">{isMr ? 'खर्च झालेली रक्कम' : 'Spent Amount'}</span>
                   </div>
                 </div>
 
                 <h4 style={{ color: 'var(--t1)', marginBottom: '10px', fontSize: '13px', fontWeight: 600 }}>
-                  {isMr ? 'निधी स्रोतानुसार वापर (Funding Utilization):' : 'Funding Source Utilization:'}
+                  {isMr ? 'निधी स्रोतानुसार वापर:' : 'Funding Source Utilization:'}
                 </h4>
                 {suiteData.devworks.byFunding.map((fund, idx) => {
                   const spentPct = Math.round((fund.spent / fund.allocated) * 100);
                   return (
                     <div key={idx} className="chart-row-item">
-                      <span className="chart-label-col">{fund.sourceName}</span>
+                      <span className="chart-label-col">{formatText(fund, 'sourceNameMr', 'sourceNameEn', 'sourceName')}</span>
                       <div className="chart-bar-bg">
                         <div
                           className="chart-bar-fill"
@@ -397,7 +416,7 @@ const ReportsPage = () => {
                         />
                       </div>
                       <span className="chart-value-col">
-                        ₹ {(fund.spent / 100000).toFixed(2)} L / ₹ {(fund.allocated / 100000).toFixed(2)} L ({spentPct}%)
+                        ₹ {(fund.spent / 100000).toFixed(2)} {isMr ? 'लाख' : 'L'} / ₹ {(fund.allocated / 100000).toFixed(2)} {isMr ? 'लाख' : 'L'} ({spentPct}%)
                       </span>
                     </div>
                   );
@@ -422,7 +441,7 @@ const ReportsPage = () => {
                 </h4>
                 {suiteData.visitors.byPurpose.map((p, idx) => (
                   <div key={idx} className="chart-row-item">
-                    <span className="chart-label-col">{p.purpose}</span>
+                    <span className="chart-label-col">{formatText(p, 'purposeMr', 'purposeEn', 'purpose')}</span>
                     <div className="chart-bar-bg">
                       <div
                         className="chart-bar-fill"
@@ -464,4 +483,5 @@ const ReportsPage = () => {
 };
 
 export default ReportsPage;
+
 

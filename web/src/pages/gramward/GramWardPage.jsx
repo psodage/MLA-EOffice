@@ -9,12 +9,15 @@ const SAMPLE_TALUKAS = [
     nameEn: 'Karveer Taluka',
     nameMr: 'करवीर तालुका',
     countText: '22 areas · 92 booths',
+    countTextMr: '२२ क्षेत्रे · ९२ बूथ',
     areas: [
       {
         id: 'wadgaon',
         nameEn: 'Wadgaon',
         nameMr: 'वडगाव',
         type: 'village',
+        parentEn: 'GP: Wadgaon · Karveer Taluka',
+        parentMr: 'ग्रा.पं. वडगाव · करवीर तालुका',
         parent: 'GP: Wadgaon · Karveer Taluka',
         complaints: 8,
         resolved: 5,
@@ -51,6 +54,8 @@ const SAMPLE_TALUKAS = [
         nameEn: 'Rajarampuri (Ward 5)',
         nameMr: 'राजारामपूरी (वॉर्ड ५)',
         type: 'ward',
+        parentEn: 'Karveer Taluka · Urban',
+        parentMr: 'करवीर तालुका · शहरी',
         parent: 'Karveer Taluka · Urban',
         complaints: 14,
         resolved: 9,
@@ -82,6 +87,8 @@ const SAMPLE_TALUKAS = [
         nameEn: 'Shivaji Peth (Ward 1)',
         nameMr: 'शिवाजी पेठ (वॉर्ड १)',
         type: 'ward',
+        parentEn: 'Karveer Taluka · Urban',
+        parentMr: 'करवीर तालुका · शहरी',
         parent: 'Karveer Taluka · Urban',
         complaints: 6,
         resolved: 4,
@@ -110,6 +117,8 @@ const SAMPLE_TALUKAS = [
         nameEn: 'Uchgaon',
         nameMr: 'उचगाव',
         type: 'village',
+        parentEn: 'GP: Uchgaon · Karveer Taluka',
+        parentMr: 'ग्रा.पं. उचगाव · करवीर तालुका',
         parent: 'GP: Uchgaon · Karveer Taluka',
         complaints: 3,
         resolved: 2,
@@ -139,6 +148,8 @@ const SAMPLE_TALUKAS = [
         nameEn: 'Mudshingi',
         nameMr: 'मुडशिंगी',
         type: 'village',
+        parentEn: 'GP: Mudshingi · Karveer Taluka',
+        parentMr: 'ग्रा.पं. मुडशिंगी · करवीर तालुका',
         parent: 'GP: Mudshingi · Karveer Taluka',
         complaints: 5,
         resolved: 3,
@@ -168,12 +179,15 @@ const SAMPLE_TALUKAS = [
     nameEn: 'Kagal Taluka',
     nameMr: 'कागल तालुका',
     countText: '18 areas · 64 booths',
+    countTextMr: '१८ क्षेत्रे · ६४ बूथ',
     areas: [
       {
         id: 'kagal-town',
         nameEn: 'Kagal Municipal Area',
         nameMr: 'कागल नगरपरिषद क्षेत्र',
         type: 'ward',
+        parentEn: 'Kagal Town · Kagal Taluka',
+        parentMr: 'कागल शहर · कागल तालुका',
         parent: 'Kagal Town · Kagal Taluka',
         complaints: 7,
         resolved: 4,
@@ -202,6 +216,8 @@ const SAMPLE_TALUKAS = [
         nameEn: 'Vathar',
         nameMr: 'वाठार',
         type: 'village',
+        parentEn: 'GP: Vathar · Kagal Taluka',
+        parentMr: 'ग्रा.पं. वाठार · कागल तालुका',
         parent: 'GP: Vathar · Kagal Taluka',
         complaints: 4,
         resolved: 3,
@@ -229,12 +245,15 @@ const SAMPLE_TALUKAS = [
     nameEn: 'Radhanagari Taluka',
     nameMr: 'राधानगरी तालुका',
     countText: '17 areas · 58 booths',
+    countTextMr: '१७ क्षेत्रे · ५८ बूथ',
     areas: [
       {
         id: 'radhanagari-village',
         nameEn: 'Radhanagari',
         nameMr: 'राधानगरी',
         type: 'village',
+        parentEn: 'GP: Radhanagari · Radhanagari Taluka',
+        parentMr: 'ग्रा.पं. राधानगरी · राधानगरी तालुका',
         parent: 'GP: Radhanagari · Radhanagari Taluka',
         complaints: 5,
         resolved: 3,
@@ -263,6 +282,8 @@ const SAMPLE_TALUKAS = [
         nameEn: 'Rashivade',
         nameMr: 'राशीवडे',
         type: 'village',
+        parentEn: 'GP: Rashivade · Radhanagari Taluka',
+        parentMr: 'ग्रा.पं. राशीवडे · राधानगरी तालुका',
         parent: 'GP: Rashivade · Radhanagari Taluka',
         complaints: 3,
         resolved: 2,
@@ -330,7 +351,7 @@ const GramWardPage = () => {
       all: allAreasList.length,
       villages: allAreasList.filter((a) => a.type === 'village').length,
       wards: allAreasList.filter((a) => a.type === 'ward').length,
-      gps: allAreasList.filter((a) => a.parent.includes('GP:') || a.type === 'gp').length,
+      gps: allAreasList.filter((a) => (a.parentEn || a.parent).includes('GP:') || a.type === 'gp').length,
     };
   }, [allAreasList]);
 
@@ -346,21 +367,21 @@ const GramWardPage = () => {
         // Tab Filter
         if (activeTab === 'VILLAGES' && area.type !== 'village') return false;
         if (activeTab === 'WARDS' && area.type !== 'ward') return false;
-        if (activeTab === 'GPS' && !area.parent.includes('GP:') && area.type !== 'gp') return false;
+        if (activeTab === 'GPS' && !area.parentEn.includes('GP:') && area.type !== 'gp') return false;
 
         // Search Filter
         if (filters.search.trim()) {
           const q = filters.search.toLowerCase().trim();
           const matchEn = area.nameEn.toLowerCase().includes(q);
           const matchMr = area.nameMr.toLowerCase().includes(q);
-          const matchParent = area.parent.toLowerCase().includes(q);
+          const matchParent = (area.parentEn + ' ' + area.parentMr).toLowerCase().includes(q);
           if (!matchEn && !matchMr && !matchParent) return false;
         }
 
         // GP Filter
         if (filters.gp !== 'ALL') {
           const gpTarget = filters.gp.replace(' GP', '').toLowerCase();
-          if (!area.parent.toLowerCase().includes(gpTarget) && !area.nameEn.toLowerCase().includes(gpTarget)) {
+          if (!area.parentEn.toLowerCase().includes(gpTarget) && !area.nameEn.toLowerCase().includes(gpTarget)) {
             return false;
           }
         }
@@ -513,9 +534,9 @@ const GramWardPage = () => {
           <span className="fl">{isMr ? 'तालुका' : 'Taluka'}</span>
           <select className="fi" name="taluka" value={filters.taluka} onChange={handleFilterChange}>
             <option value="ALL">{isMr ? 'सर्व तालुके' : 'All Talukas'}</option>
-            <option value="Karveer">Karveer</option>
-            <option value="Kagal">Kagal</option>
-            <option value="Radhanagari">Radhanagari</option>
+            <option value="Karveer">{isMr ? 'करवीर' : 'Karveer'}</option>
+            <option value="Kagal">{isMr ? 'कागल' : 'Kagal'}</option>
+            <option value="Radhanagari">{isMr ? 'राधानगरी' : 'Radhanagari'}</option>
           </select>
         </div>
 
@@ -523,10 +544,10 @@ const GramWardPage = () => {
           <span className="fl">{isMr ? 'ग्रामपंचायत' : 'Gram Panchayat'}</span>
           <select className="fi" name="gp" value={filters.gp} onChange={handleFilterChange}>
             <option value="ALL">{isMr ? 'सर्व ग्रा.पं.' : 'All GPs'}</option>
-            <option value="Wadgaon GP">Wadgaon GP</option>
-            <option value="Uchgaon GP">Uchgaon GP</option>
-            <option value="Mudshingi GP">Mudshingi GP</option>
-            <option value="Radhanagari GP">Radhanagari GP</option>
+            <option value="Wadgaon GP">{isMr ? 'वडगाव ग्रा.पं.' : 'Wadgaon GP'}</option>
+            <option value="Uchgaon GP">{isMr ? 'उचगाव ग्रा.पं.' : 'Uchgaon GP'}</option>
+            <option value="Mudshingi GP">{isMr ? 'मुडशिंगी ग्रा.पं.' : 'Mudshingi GP'}</option>
+            <option value="Radhanagari GP">{isMr ? 'राधानगरी ग्रा.पं.' : 'Radhanagari GP'}</option>
           </select>
         </div>
 
@@ -534,8 +555,8 @@ const GramWardPage = () => {
           <span className="fl">{isMr ? 'क्षेत्र प्रकार' : 'Area Type'}</span>
           <select className="fi" name="areaType" value={filters.areaType} onChange={handleFilterChange}>
             <option value="ALL">{isMr ? 'सर्व प्रकार' : 'All Types'}</option>
-            <option value="village">Village (गाव)</option>
-            <option value="ward">Ward (वॉर्ड)</option>
+            <option value="village">{isMr ? 'गाव (Village)' : 'Village'}</option>
+            <option value="ward">{isMr ? 'वॉर्ड (Ward)' : 'Ward'}</option>
           </select>
         </div>
 
@@ -563,8 +584,7 @@ const GramWardPage = () => {
               <div key={tIdx} className="taluka-group">
                 <div className="taluka-header">
                   <div className="taluka-icon"><MapPin size={16} /></div>
-                  <span className="taluka-name">{talukaGroup.nameEn}</span>
-                  <span className="taluka-name-mr">{talukaGroup.nameMr}</span>
+                  <span className="taluka-name">{isMr ? talukaGroup.nameMr : talukaGroup.nameEn}</span>
                   <span className="taluka-count">{talukaGroup.areas.length} {isMr ? 'क्षेत्रे' : 'areas'}</span>
                 </div>
 
@@ -572,6 +592,8 @@ const GramWardPage = () => {
                   {talukaGroup.areas.map((area) => {
                     const isSelected = selectedArea?.id === area.id;
                     const resPct = area.complaints > 0 ? Math.round((area.resolved / area.complaints) * 100) : 100;
+                    const displayName = isMr ? area.nameMr : area.nameEn;
+                    const displayParent = isMr ? (area.parentMr || area.parent) : (area.parentEn || area.parent);
 
                     return (
                       <div
@@ -580,7 +602,7 @@ const GramWardPage = () => {
                         onClick={() => setSelectedArea(area)}
                       >
                         <span className={`area-type-badge type-${area.type}`}>
-                          {area.type}
+                          {area.type === 'village' ? (isMr ? 'गाव' : 'village') : (isMr ? 'वॉर्ड' : 'ward')}
                         </span>
 
                         <div className="area-card-header">
@@ -589,35 +611,35 @@ const GramWardPage = () => {
                           </div>
                           <div className="area-info">
                             <div className="area-name">
-                              {area.nameEn} · <span className="mr" style={{ fontFamily: "'Noto Sans Devanagari', sans-serif" }}>{area.nameMr}</span>
+                              {displayName}
                             </div>
-                            <div className="area-parent">{area.parent}</div>
+                            <div className="area-parent">{displayParent}</div>
                           </div>
                         </div>
 
                         <div className="area-stats">
                           <div className="area-stat">
                             <div className="area-stat-val" style={{ color: 'var(--er, #dc2626)' }}>{area.complaints}</div>
-                            <div className="area-stat-label">Complaints</div>
+                            <div className="area-stat-label">{isMr ? 'तक्रारी' : 'Complaints'}</div>
                           </div>
                           <div className="area-stat">
                             <div className="area-stat-val" style={{ color: 'var(--in, #2563eb)' }}>{area.devWorks}</div>
-                            <div className="area-stat-label">Dev Works</div>
+                            <div className="area-stat-label">{isMr ? 'विकास कामे' : 'Dev Works'}</div>
                           </div>
                           <div className="area-stat">
                             <div className="area-stat-val" style={{ color: 'var(--pu, #7c3aed)' }}>{area.workers}</div>
-                            <div className="area-stat-label">Workers</div>
+                            <div className="area-stat-label">{isMr ? 'कार्यकर्ते' : 'Workers'}</div>
                           </div>
                           <div className="area-stat">
                             <div className="area-stat-val" style={{ color: 'var(--ok, #16a34a)' }}>{area.booths}</div>
-                            <div className="area-stat-label">Booths</div>
+                            <div className="area-stat-label">{isMr ? 'बूथ' : 'Booths'}</div>
                           </div>
                         </div>
 
                         <div className="area-progress">
                           <div className="progress-header">
-                            <span>Nivedan Resolution</span>
-                            <span>{area.resolved} / {area.complaints} resolved</span>
+                            <span>{isMr ? 'निवेदन निवारण' : 'Nivedan Resolution'}</span>
+                            <span>{isMr ? `${area.resolved} / ${area.complaints} मार्गी` : `${area.resolved} / ${area.complaints} resolved`}</span>
                           </div>
                           <div className="progress-bar">
                             <div className="progress-fill-ok" style={{ width: `${resPct}%` }} />
@@ -627,13 +649,13 @@ const GramWardPage = () => {
 
                         <div className="area-footer">
                           <span className="area-booths" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                            <Vote size={14} /> <strong>{area.booths}</strong> booths · {area.voters.toLocaleString()} voters
+                            <Vote size={14} /> <strong>{area.booths}</strong> {isMr ? `बूथ · ${area.voters.toLocaleString()} मतदार` : `booths · ${area.voters.toLocaleString()} voters`}
                           </span>
                           <span className="area-pramukh">
                             <span className={`pramukh-dot ${area.allPramukhsAssigned ? 'pramukh-yes' : 'pramukh-no'}`} />
                             {area.allPramukhsAssigned
-                              ? 'All Pramukh assigned'
-                              : `${area.missingPramukhCount || 1} Pramukh missing`}
+                              ? (isMr ? 'सर्व प्रमुख नियुक्त' : 'All Pramukh assigned')
+                              : (isMr ? `${area.missingPramukhCount || 1} प्रमुख बाकी` : `${area.missingPramukhCount || 1} Pramukh missing`)}
                           </span>
                         </div>
                       </div>
@@ -666,9 +688,9 @@ const GramWardPage = () => {
             <div className="dp-header">
               <button className="dp-close" onClick={() => setSelectedArea(null)}><X size={16} /></button>
               <div className="dp-title" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                {selectedArea.type === 'village' ? <Home size={18} /> : <Building2 size={18} />} {selectedArea.nameEn} · <span className="mr" style={{ fontFamily: "'Noto Sans Devanagari', sans-serif" }}>{selectedArea.nameMr}</span>
+                {selectedArea.type === 'village' ? <Home size={18} /> : <Building2 size={18} />} {isMr ? selectedArea.nameMr : selectedArea.nameEn}
               </div>
-              <div className="dp-sub">{selectedArea.parent}</div>
+              <div className="dp-sub">{isMr ? (selectedArea.parentMr || selectedArea.parent) : (selectedArea.parentEn || selectedArea.parent)}</div>
 
               <div className="dp-stats">
                 <div className="dp-stat">
@@ -693,7 +715,7 @@ const GramWardPage = () => {
             <div className="dp-body">
               {/* Linked Booths */}
               <div className="dp-section-title" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <Vote size={16} /> Booths in {selectedArea.nameEn} ({selectedArea.booths})
+                <Vote size={16} /> {isMr ? `${selectedArea.nameMr} मधील बूथ (${selectedArea.booths})` : `Booths in ${selectedArea.nameEn} (${selectedArea.booths})`}
               </div>
               {selectedArea.boothsList && selectedArea.boothsList.length > 0 ? (
                 selectedArea.boothsList.map((b) => (
@@ -703,17 +725,17 @@ const GramWardPage = () => {
                     </div>
                     <div className="li-info">
                       <div className="li-title">{b.title}</div>
-                      <div className="li-meta">Pramukh: {b.pramukh} · {b.voters} voters</div>
+                      <div className="li-meta">{isMr ? `प्रमुख: ${b.pramukh} · ${b.voters} मतदार` : `Pramukh: ${b.pramukh} · ${b.voters} voters`}</div>
                     </div>
                   </div>
                 ))
               ) : (
-                <div style={{ fontSize: '12px', color: 'var(--t4)', padding: '6px 0' }}>No booth data available</div>
+                <div style={{ fontSize: '12px', color: 'var(--t4)', padding: '6px 0' }}>{isMr ? 'कोणताही बूथ डेटा उपलब्ध नाही' : 'No booth data available'}</div>
               )}
 
               {/* Recent Nivedans */}
               <div className="dp-section-title" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <ClipboardList size={16} /> Recent Nivedans ({selectedArea.recentNivedans?.length || 0})
+                <ClipboardList size={16} /> {isMr ? `अलीकडील निवेदने (${selectedArea.recentNivedans?.length || 0})` : `Recent Nivedans (${selectedArea.recentNivedans?.length || 0})`}
               </div>
               {selectedArea.recentNivedans && selectedArea.recentNivedans.length > 0 ? (
                 selectedArea.recentNivedans.map((n, idx) => (
@@ -723,16 +745,18 @@ const GramWardPage = () => {
                       <div className="li-title">{n.title}</div>
                       <div className="li-meta">{n.id} · {n.date}</div>
                     </div>
-                    <span className={`li-status status-${n.status}`}>{n.statusText}</span>
+                    <span className={`li-status status-${n.status}`}>
+                      {n.status === 'pending' ? (isMr ? 'प्रलंबित' : 'Pending') : n.status === 'progress' ? (isMr ? 'प्रगतीपथावर' : 'In Progress') : (isMr ? 'मार्गी लागले' : 'Resolved')}
+                    </span>
                   </div>
                 ))
               ) : (
-                <div style={{ fontSize: '12px', color: 'var(--t4)', padding: '6px 0' }}>No recent nivedans</div>
+                <div style={{ fontSize: '12px', color: 'var(--t4)', padding: '6px 0' }}>{isMr ? 'कोणतीही अलीकडील निवेदने नाहीत' : 'No recent nivedans'}</div>
               )}
 
               {/* Active Dev Works */}
               <div className="dp-section-title" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <HardHat size={16} /> Active Development Works ({selectedArea.activeDevWorks?.length || 0})
+                <HardHat size={16} /> {isMr ? `सुरू असलेली विकास कामे (${selectedArea.activeDevWorks?.length || 0})` : `Active Development Works (${selectedArea.activeDevWorks?.length || 0})`}
               </div>
               {selectedArea.activeDevWorks && selectedArea.activeDevWorks.length > 0 ? (
                 selectedArea.activeDevWorks.map((dw, idx) => (
@@ -740,13 +764,13 @@ const GramWardPage = () => {
                     <div className="li-icon" style={{ background: 'var(--wrb)' }}><HardHat size={14} /></div>
                     <div className="li-info">
                       <div className="li-title">{dw.title}</div>
-                      <div className="li-meta">{dw.fund} · {dw.budget} · {dw.progress} complete</div>
+                      <div className="li-meta">{dw.fund} · {dw.budget} · {dw.progress} {isMr ? 'पूर्ण' : 'complete'}</div>
                     </div>
-                    <span className="li-status status-progress">In Progress</span>
+                    <span className="li-status status-progress">{isMr ? 'प्रगतीवर' : 'In Progress'}</span>
                   </div>
                 ))
               ) : (
-                <div style={{ fontSize: '12px', color: 'var(--t4)', padding: '6px 0' }}>No active development works</div>
+                <div style={{ fontSize: '12px', color: 'var(--t4)', padding: '6px 0' }}>{isMr ? 'कोणतीही विकास कामे सुरू नाहीत' : 'No active development works'}</div>
               )}
 
               {/* Key Workers */}

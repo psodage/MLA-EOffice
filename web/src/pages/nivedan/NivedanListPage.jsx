@@ -15,12 +15,12 @@ import LucideIcon from '../../components/common/LucideIcon.jsx';
 import './NivedanListPage.css';
 
 const STATUS_TABS = [
-  { id: 'ALL', labelEn: 'All Petitions', labelMr: 'सर्व निवेदने', Icon: Folder },
-  { id: 'PENDING', labelEn: 'Pending', labelMr: 'प्रलंबित', Icon: Clock },
-  { id: 'IN_PROGRESS', labelEn: 'In Progress', labelMr: 'प्रगतीपथावर', Icon: Clock },
-  { id: 'FORWARDED', labelEn: 'Forwarded', labelMr: 'पाठवलेले', Icon: Send },
-  { id: 'ESCALATED', labelEn: 'Escalated', labelMr: 'कालावधी उलटलेले', Icon: AlertTriangle },
-  { id: 'RESOLVED', labelEn: 'Resolved', labelMr: 'मार्गी लागलेले', Icon: CheckCircle2 },
+  { id: 'ALL', labelEn: 'All Petitions', labelMr: 'सर्व निवेदने', Icon: Folder, tabClass: 'tab-all' },
+  { id: 'PENDING', labelEn: 'Pending', labelMr: 'प्रलंबित', Icon: Clock, tabClass: 'tab-pending' },
+  { id: 'IN_PROGRESS', labelEn: 'In Progress', labelMr: 'प्रगतीपथावर', Icon: Clock, tabClass: 'tab-progress' },
+  { id: 'FORWARDED', labelEn: 'Forwarded', labelMr: 'पाठवलेले', Icon: Send, tabClass: 'tab-forwarded' },
+  { id: 'ESCALATED', labelEn: 'Escalated', labelMr: 'कालावधी उलटलेले', Icon: AlertTriangle, tabClass: 'tab-escalated' },
+  { id: 'RESOLVED', labelEn: 'Resolved', labelMr: 'मार्गी लागलेले', Icon: CheckCircle2, tabClass: 'tab-resolved' },
 ];
 
 const NivedanListPage = () => {
@@ -130,15 +130,35 @@ const NivedanListPage = () => {
   const getStatusBadge = (status) => {
     switch (status) {
       case 'RESOLVED':
-        return <span className="badge-pill badge-resolved">{isMr ? 'मार्गी लागलेले' : 'Resolved'}</span>;
+        return (
+          <span className="badge-pill status-resolved badge-resolved">
+            <CheckCircle2 size={12} /> {isMr ? 'मार्गी लागलेले' : 'Resolved'}
+          </span>
+        );
       case 'IN_PROGRESS':
-        return <span className="badge-pill badge-progress">{isMr ? 'प्रगतीपथावर' : 'In Progress'}</span>;
+        return (
+          <span className="badge-pill status-progress badge-progress">
+            <Clock size={12} /> {isMr ? 'प्रगतीपथावर' : 'In Progress'}
+          </span>
+        );
       case 'FORWARDED':
-        return <span className="badge-pill badge-forwarded">{isMr ? 'पाठवलेले' : 'Forwarded'}</span>;
+        return (
+          <span className="badge-pill status-forwarded badge-forwarded">
+            <Send size={12} /> {isMr ? 'पाठवलेले' : 'Forwarded'}
+          </span>
+        );
       case 'ESCALATED':
-        return <span className="badge-pill badge-escalated">{isMr ? 'कालावधी उलटलेले' : 'Escalated'}</span>;
+        return (
+          <span className="badge-pill status-escalated badge-escalated">
+            <AlertTriangle size={12} /> {isMr ? 'कालावधी उलटलेले' : 'Escalated'}
+          </span>
+        );
       default:
-        return <span className="badge-pill badge-pending">{isMr ? 'प्रलंबित' : 'Pending'}</span>;
+        return (
+          <span className="badge-pill status-pending badge-pending">
+            <Clock size={12} /> {isMr ? 'प्रलंबित' : 'Pending'}
+          </span>
+        );
     }
   };
 
@@ -174,15 +194,16 @@ const NivedanListPage = () => {
       <div className="status-tabs-container">
         {STATUS_TABS.map((tab) => {
           const IconComp = tab.Icon;
+          const isActive = filters.status === tab.id;
           return (
             <button
               key={tab.id}
-              className={`status-tab-btn ${filters.status === tab.id ? 'active' : ''}`}
+              className={`status-tab-btn ${tab.tabClass} ${isActive ? 'active' : ''}`}
               onClick={() => handleTabChange(tab.id)}
-              style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
             >
-              <IconComp size={15} />
+              <IconComp size={15} className="tab-icon" />
               <span>{isMr ? tab.labelMr : tab.labelEn}</span>
+              <span className="tab-dot" />
             </button>
           );
         })}

@@ -135,6 +135,17 @@ const DashboardPage = () => {
   const activities = summaryData?.activities || [];
   const events = summaryData?.upcomingEvents || [];
 
+  if (loading) {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh', gap: '1rem' }}>
+        <div className="mini-spinner" style={{ width: '40px', height: '40px', borderWidth: '3px' }}></div>
+        <p style={{ fontFamily: 'Noto Sans Devanagari, sans-serif', fontSize: '1rem', color: '#64748b' }}>
+          {lang === 'MR' ? 'डॅशबोर्ड माहिती लोड होत आहे...' : 'Loading Dashboard Metrics...'}
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="dashboard-page-container">
       {/* ── Page Header & Quick Actions ─────────────────────── */}

@@ -429,7 +429,28 @@
   display: flex;
   gap: 12px;
   overflow-x: auto;
-  padding-bottom: 4px;
+  padding-bottom: 8px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(168, 85, 247, 0.35) rgba(168, 85, 247, 0.05);
+}
+
+.birthday-cards-scroll::-webkit-scrollbar {
+  height: 5px;
+}
+
+.birthday-cards-scroll::-webkit-scrollbar-track {
+  background: rgba(168, 85, 247, 0.06);
+  border-radius: 4px;
+}
+
+.birthday-cards-scroll::-webkit-scrollbar-thumb {
+  background: rgba(168, 85, 247, 0.35);
+  border-radius: 4px;
+  transition: background 0.15s ease;
+}
+
+.birthday-cards-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(168, 85, 247, 0.65);
 }
 
 .birthday-card {
@@ -694,6 +715,18 @@
 
 [data-theme="dark"] .birthday-sub {
   color: var(--t3, #94a3b8) !important;
+}
+
+[data-theme="dark"] .birthday-cards-scroll::-webkit-scrollbar-track {
+  background: rgba(124, 58, 237, 0.1);
+}
+
+[data-theme="dark"] .birthday-cards-scroll::-webkit-scrollbar-thumb {
+  background: rgba(236, 72, 153, 0.4);
+}
+
+[data-theme="dark"] .birthday-cards-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(236, 72, 153, 0.75);
 }
 
 [data-theme="dark"] .karyakarta-table th {
