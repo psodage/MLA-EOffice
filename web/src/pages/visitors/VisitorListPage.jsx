@@ -7,8 +7,8 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { Download, Printer, Plus, Users, CheckCircle2, Clock, RotateCcw, FileText, Zap, Phone, Sparkles, LogOut, Eye, ChevronLeft, ChevronRight, X, Landmark } from 'lucide-react';
-import api from '../../services/api.js';
 import useLangStore from '../../store/langStore.js';
+import getLangText from '../../utils/langHelper.js';
 import VisitorCheckInModal from './VisitorCheckInModal.jsx';
 import ConvertToNivedanModal from './ConvertToNivedanModal.jsx';
 import LucideIcon from '../../components/common/LucideIcon.jsx';
@@ -344,9 +344,9 @@ const VisitorListPage = () => {
 
                     <td>
                       <div className="visitor-cell">
-                        <div className="visitor-avatar">{getInitials(item.visitor_name)}</div>
+                        <div className="visitor-avatar">{getInitials(getLangText(item, 'visitor_name', lang))}</div>
                         <div className="visitor-meta">
-                          <span className="visitor-name">{item.visitor_name}</span>
+                          <span className="visitor-name">{getLangText(item, 'visitor_name', lang)}</span>
                           <span className="visitor-contact">
                             <span style={{ fontFamily: 'JetBrains Mono, monospace', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
                               <Phone size={12} /> {item.mobile}

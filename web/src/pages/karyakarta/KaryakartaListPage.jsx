@@ -8,8 +8,8 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { Download, Upload, Plus, Cake, User, Calendar, MessageSquare, LayoutGrid, Table, Users, Phone, MapPin, Building, Edit, Eye, ChevronLeft, ChevronRight } from 'lucide-react';
-import api from '../../services/api.js';
 import useLangStore from '../../store/langStore.js';
+import getLangText from '../../utils/langHelper.js';
 import KaryakartaFormModal from './KaryakartaFormModal.jsx';
 import KaryakartaImportModal from './KaryakartaImportModal.jsx';
 import './KaryakartaListPage.css';
@@ -418,13 +418,14 @@ const KaryakartaListPage = () => {
             <div className="worker-grid">
               {items.map((worker) => {
                 const desigCfg = DESIGNATION_MAP[worker.designation] || DESIGNATION_MAP.KARYAKARTA;
-                const initials = getInitials(worker.full_name);
+                const nameText = getLangText(worker, 'full_name', lang);
+                const initials = getInitials(nameText);
 
                 return (
                   <div key={worker.id} className="worker-card" onClick={() => setSelectedWorkerForDetail(worker)}>
                     <div className="wc-avatar">{initials}</div>
                     <div className="wc-info">
-                      <div className="wc-name">{worker.full_name}</div>
+                      <div className="wc-name">{nameText}</div>
                       <span className={`wc-role ${desigCfg.class}`}>
                         {isMr ? desigCfg.mr : desigCfg.en}
                       </span>
@@ -507,7 +508,7 @@ const KaryakartaListPage = () => {
                     const desigCfg = DESIGNATION_MAP[worker.designation] || DESIGNATION_MAP.KARYAKARTA;
                     return (
                       <tr key={worker.id} onClick={() => setSelectedWorkerForDetail(worker)}>
-                        <td style={{ fontWeight: 600, color: 'var(--t1)' }}>{worker.full_name}</td>
+                        <td style={{ fontWeight: 600, color: 'var(--t1)' }}>{getLangText(worker, 'full_name', lang)}</td>
                         <td>
                           <span className={`wc-role ${desigCfg.class}`}>
                             {isMr ? desigCfg.mr : desigCfg.en}

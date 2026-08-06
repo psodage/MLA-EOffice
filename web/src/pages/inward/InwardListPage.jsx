@@ -7,8 +7,8 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { Download, Plus, Inbox, Send, RotateCcw, Paperclip, FileText, Eye, Edit, Sparkles, CheckCircle2, Clock, ChevronLeft, ChevronRight } from 'lucide-react';
-import api from '../../services/api.js';
 import useLangStore from '../../store/langStore.js';
+import getLangText from '../../utils/langHelper.js';
 import InwardFormModal from './InwardFormModal.jsx';
 import InwardDetailModal from './InwardDetailModal.jsx';
 import OutwardFormModal from '../outward/OutwardFormModal.jsx';
@@ -424,11 +424,11 @@ const InwardListPage = () => {
                     <td style={{ fontSize: '12px', color: 'var(--inw-t3)', whiteSpace: 'nowrap' }}>
                       {item.date_received}
                     </td>
-                    <td style={{ fontWeight: 600 }}>{item.sender_name}</td>
+                    <td style={{ fontWeight: 600 }}>{getLangText(item, 'sender_name', lang)}</td>
                     <td style={{ fontSize: '12px' }}>
                       {lang === 'MR' ? (item.department?.name_mr || 'जिल्हाधिकारी कार्यालय') : (item.department?.name_en || 'Collector Office')}
                     </td>
-                    <td style={{ maxWidth: '300px' }}>{item.subject}</td>
+                    <td style={{ maxWidth: '300px' }}>{getLangText(item, 'subject', lang)}</td>
                     <td>
                       <span className={getPriorityDotClass(item.priority)} />
                     </td>
@@ -489,11 +489,11 @@ const InwardListPage = () => {
                     <td style={{ fontSize: '12px', color: 'var(--inw-t3)', whiteSpace: 'nowrap' }}>
                       {item.date_sent}
                     </td>
-                    <td style={{ fontWeight: 600 }}>{item.recipient_name}</td>
+                    <td style={{ fontWeight: 600 }}>{getLangText(item, 'recipient_name', lang)}</td>
                     <td style={{ fontSize: '12px' }}>
                       {lang === 'MR' ? (item.recipientDepartment?.name_mr || 'सार्वजनिक बांधकाम विभाग') : (item.recipientDepartment?.name_en || 'PWD')}
                     </td>
-                    <td style={{ maxWidth: '300px' }}>{item.subject}</td>
+                    <td style={{ maxWidth: '300px' }}>{getLangText(item, 'subject', lang)}</td>
                     <td>
                       {item.is_ai_drafted ? (
                         <span className="badge b-prog" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}><Sparkles size={12} /> Gemini AI</span>

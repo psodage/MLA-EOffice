@@ -107,13 +107,25 @@ Nivedan.init(
       allowNull: true,
       references: { model: 'categories', key: 'id' },
     },
+    citizen_name_en: {
+      type: DataTypes.STRING(200),
+      allowNull: true,
+    },
     subject: {
       type: DataTypes.STRING(500),
       allowNull: false,
     },
+    subject_en: {
+      type: DataTypes.STRING(500),
+      allowNull: true,
+    },
     description: {
       type: DataTypes.TEXT,
       allowNull: false,
+    },
+    description_en: {
+      type: DataTypes.TEXT,
+      allowNull: true,
     },
     attachment_urls: {
       type: DataTypes.JSON,

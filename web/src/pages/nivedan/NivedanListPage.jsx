@@ -8,11 +8,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Download, Printer, Plus, Folder, Clock, CheckCircle2, AlertTriangle, Send, FileText, Phone, RotateCcw, Eye, ChevronLeft, ChevronRight } from 'lucide-react';
-import api from '../../services/api.js';
 import useLangStore from '../../store/langStore.js';
+import getLangText from '../../utils/langHelper.js';
 import NivedanFormModal from './NivedanFormModal.jsx';
-import LucideIcon from '../../components/common/LucideIcon.jsx';
-import './NivedanListPage.css';
 
 const STATUS_TABS = [
   { id: 'ALL', labelEn: 'All Petitions', labelMr: 'सर्व निवेदने', Icon: Folder, tabClass: 'tab-all' },
@@ -294,7 +292,7 @@ const NivedanListPage = () => {
                     </td>
 
                     <td>
-                      <div style={{ fontWeight: 600 }}>{item.citizen_name}</div>
+                      <div style={{ fontWeight: 600 }}>{getLangText(item, 'citizen_name', lang)}</div>
                       <div style={{ fontSize: '11.5px', color: 'var(--text-3)', fontFamily: 'JetBrains Mono', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
                         <Phone size={11} /> {item.citizen_mobile}
                       </div>
@@ -308,7 +306,7 @@ const NivedanListPage = () => {
 
                     <td>
                       <div style={{ fontWeight: 500, maxWidth: '280px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                        {item.subject}
+                        {getLangText(item, 'subject', lang)}
                       </div>
                     </td>
 

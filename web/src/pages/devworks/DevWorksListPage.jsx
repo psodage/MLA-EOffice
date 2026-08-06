@@ -9,8 +9,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Download, Plus, LayoutGrid, Table, MapPin, RotateCcw, Building2, BarChart2, Camera, AlertTriangle, ChevronLeft, ChevronRight, Landmark, Map, HardHat } from 'lucide-react';
-import api from '../../services/api.js';
 import useLangStore from '../../store/langStore.js';
+import getLangText from '../../utils/langHelper.js';
 import DevWorkFormModal from './DevWorkFormModal.jsx';
 import './DevWorksListPage.css';
 
@@ -383,7 +383,7 @@ const DevWorksListPage = () => {
                           {isMr ? statusCfg.mr : statusCfg.en}
                         </span>
                       </div>
-                      <div className="pc-title">{item.project_name}</div>
+                      <div className="pc-title">{getLangText(item, 'project_name', lang) || getLangText(item, 'work_title', lang)}</div>
                       <div className="pc-loc" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
                         <MapPin size={12} /> {item.location}
                       </div>
@@ -472,7 +472,7 @@ const DevWorksListPage = () => {
                     return (
                       <tr key={item.id} onClick={() => openDetailPage(item)}>
                         <td>
-                          <div style={{ fontWeight: 600, color: 'var(--t1)' }}>{item.project_name}</div>
+                          <div style={{ fontWeight: 600, color: 'var(--t1)' }}>{getLangText(item, 'project_name', lang) || getLangText(item, 'work_title', lang)}</div>
                           <div style={{ fontSize: '12px', color: 'var(--t3)', marginTop: '2px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
                             <MapPin size={11} /> {item.location}
                           </div>

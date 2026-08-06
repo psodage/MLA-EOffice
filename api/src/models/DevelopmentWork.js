@@ -21,6 +21,10 @@ DevelopmentWork.init(
       type: DataTypes.STRING(300),
       allowNull: false,
     },
+    work_title_en: {
+      type: DataTypes.STRING(300),
+      allowNull: true,
+    },
     category: {
       type: DataTypes.ENUM(
         'ROAD',
